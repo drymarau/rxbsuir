@@ -3,6 +3,8 @@
     package="by.toggi.rxbsuir"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".RxBsuirApplication"
         android:allowBackup="true"

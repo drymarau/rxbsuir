@@ -5,6 +5,7 @@ import android.app.Application;
 import by.toggi.rxbsuir.component.AppComponent;
 import by.toggi.rxbsuir.component.DaggerAppComponent;
 import by.toggi.rxbsuir.module.AppModule;
+import by.toggi.rxbsuir.module.BsuirServiceModule;
 import timber.log.Timber;
 
 public class RxBsuirApplication extends Application {
@@ -22,7 +23,10 @@ public class RxBsuirApplication extends Application {
         }
 
         if (mAppComponent == null) {
-            mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+            mAppComponent = DaggerAppComponent.builder()
+                    .appModule(new AppModule(this))
+                    .bsuirServiceModule(new BsuirServiceModule(getString(R.string.schedule_endpoint)))
+                    .build();
         }
     }
 

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BSUIR Schedule</string>
+    <!-- bsuir.by endpoint for retrofit -->
+    <string name="schedule_endpoint">http://www.bsuir.by/schedule/rest</string>
 </resources>
