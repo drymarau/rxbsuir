@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.mvp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,17 +11,15 @@ import by.toggi.rxbsuir.rest.BsuirService;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import timber.log.Timber;
 
 public class SchedulePresenter implements Presenter {
 
-    private List<Schedule> mScheduleList;
+    private List<Schedule> mScheduleList = new ArrayList<>();
     private ScheduleView mScheduleView;
     private BsuirService mService;
 
     @Inject
-    public SchedulePresenter(List<Schedule> scheduleList, BsuirService service) {
-        mScheduleList = scheduleList;
+    public SchedulePresenter(BsuirService service) {
         mService = service;
     }
 
