@@ -17,6 +17,7 @@ import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
 import by.toggi.rxbsuir.model.Schedule;
 import by.toggi.rxbsuir.module.ActivityModule;
 import by.toggi.rxbsuir.module.ScheduleActivityModule;
+import by.toggi.rxbsuir.mvp.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.ScheduleView;
 
 
@@ -28,6 +29,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView 
     @Inject LinearLayoutManager mLayoutManager;
     @Inject ScheduleAdapter mAdapter;
     @Inject List<Schedule> mScheduleList;
+    @Inject SchedulePresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView 
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+
+        mPresenter.attachView(this);
+        mPresenter.onCreate();
     }
 
     private void initializeComponent() {
@@ -53,7 +58,12 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView 
 
     @Override
     public void showScheduleList(List<Schedule> scheduleList) {
-        mScheduleList.clear();
-        mScheduleList.addAll(scheduleList);
+        mAdapter.setScheduleList(scheduleList);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
     }
 }
