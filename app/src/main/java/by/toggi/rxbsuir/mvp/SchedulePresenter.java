@@ -25,20 +25,20 @@ public class SchedulePresenter implements Presenter {
 
     @Override
     public void onCreate() {
-        if (isViewAttached()) {
-            mService.getGroupSchedule(211801, new Callback<ScheduleXmlModels>() {
-                @Override
-                public void success(ScheduleXmlModels scheduleXmlModels, Response response) {
-                    mScheduleList = scheduleXmlModels.scheduleModelList.get(0).scheduleList;
+        mService.getGroupSchedule(211801, new Callback<ScheduleXmlModels>() {
+            @Override
+            public void success(ScheduleXmlModels scheduleXmlModels, Response response) {
+                mScheduleList = scheduleXmlModels.scheduleModelList.get(0).scheduleList;
+                if (isViewAttached()) {
                     mScheduleView.showScheduleList(mScheduleList);
                 }
+            }
 
-                @Override
-                public void failure(RetrofitError error) {
+            @Override
+            public void failure(RetrofitError error) {
 
-                }
-            });
-        }
+            }
+        });
     }
 
     @Override
