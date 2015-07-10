@@ -1,4 +1,4 @@
-package by.toggi.rxbsuir;
+package by.toggi.rxbsuir.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +12,8 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.adapter.ScheduleAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
 import by.toggi.rxbsuir.model.Schedule;
