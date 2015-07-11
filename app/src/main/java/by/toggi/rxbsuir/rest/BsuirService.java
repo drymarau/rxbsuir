@@ -1,13 +1,13 @@
 package by.toggi.rxbsuir.rest;
 
 import by.toggi.rxbsuir.model.ScheduleXmlModels;
-import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Path;
+import rx.Observable;
 
 public interface BsuirService {
 
     @GET("/schedule/{group}")
-    void getGroupSchedule(@Path("group") int group, Callback<ScheduleXmlModels> callback);
+    Observable<ScheduleXmlModels> getGroupSchedule(@Path("group") int group);
 
 }

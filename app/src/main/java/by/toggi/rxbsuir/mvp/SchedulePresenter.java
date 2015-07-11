@@ -6,11 +6,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import by.toggi.rxbsuir.model.Schedule;
-import by.toggi.rxbsuir.model.ScheduleXmlModels;
 import by.toggi.rxbsuir.rest.BsuirService;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class SchedulePresenter implements Presenter {
 
@@ -25,20 +24,18 @@ public class SchedulePresenter implements Presenter {
 
     @Override
     public void onCreate() {
-        mService.getGroupSchedule(211801, new Callback<ScheduleXmlModels>() {
-            @Override
-            public void success(ScheduleXmlModels scheduleXmlModels, Response response) {
-                mScheduleList = scheduleXmlModels.scheduleModelList.get(0).scheduleList;
-                if (isViewAttached()) {
-                    mScheduleView.showScheduleList(mScheduleList);
-                }
-            }
+        mService.getGroupSchedule(211801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
+                .flatMap(scheduleModel -> Observable.from(scheduleModel.scheduleList))
+                .filter(schedule -> schedule.weekNumberList.contains(1))
+                .toList()
+                .subscribe(scheduleList -> {
+                    mScheduleList = scheduleList;
+                    if (isViewAttached()) {
+                        mScheduleView.showScheduleList(mScheduleList);
+                    }
+                });
 
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
     }
 
     @Override
