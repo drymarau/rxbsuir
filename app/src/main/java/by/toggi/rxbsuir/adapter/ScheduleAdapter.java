@@ -35,8 +35,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.lessonType.setText(mScheduleList.get(position).lessonType);
-        viewHolder.subject.setText(mScheduleList.get(position).subject);
+        Schedule lesson = mScheduleList.get(position);
+        viewHolder.lessonType.setText(lesson.lessonType);
+        viewHolder.lessonSubjectSubgroup.setText(lesson.subject);
+        viewHolder.lessonClass.setText(lesson.auditory == null ? "" : lesson.auditory.toString());
+        viewHolder.lessonTime.setText(lesson.lessonTime);
     }
 
     @Override
@@ -47,7 +50,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.lesson_type) TextView lessonType;
-        @Bind(R.id.subject) TextView subject;
+        @Bind(R.id.lesson_subject_subgroup) TextView lessonSubjectSubgroup;
+        @Bind(R.id.lesson_class) TextView lessonClass;
+        @Bind(R.id.lesson_time) TextView lessonTime;
 
         public ViewHolder(View itemView) {
             super(itemView);

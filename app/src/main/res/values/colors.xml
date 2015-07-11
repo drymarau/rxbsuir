@@ -4,5 +4,10 @@
     <color name="primary_dark">#303F9F</color>
     <color name="accent">#FF9100</color>
 
+    <color name="black_12">#E0E0E0</color>
+    <color name="black_26">#BDBDBD</color>
+    <color name="black_54">#757575</color>
+    <color name="black_87">#212121</color>
+
     <color name="window_background">#E3E3E3</color>
 </resources>
