@@ -39,7 +39,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         viewHolder.lessonType.setText(lesson.lessonType);
         viewHolder.lessonSubjectSubgroup.setText(lesson.subject);
         viewHolder.lessonClass.setText(lesson.auditory == null ? "" : lesson.auditory.toString());
-        viewHolder.lessonTime.setText(lesson.lessonTime);
+        viewHolder.lessonTime.setText(lesson.lessonTime.replace("-", "\n"));
     }
 
     @Override
