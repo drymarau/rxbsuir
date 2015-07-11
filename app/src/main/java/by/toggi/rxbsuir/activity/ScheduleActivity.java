@@ -62,7 +62,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView 
             mPresenter = (SchedulePresenter) fragment.getPresenter();
             mPresenter.attachView(this);
         }
-
     }
 
     private void initializeComponent() {
