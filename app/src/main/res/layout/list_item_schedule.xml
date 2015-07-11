@@ -13,9 +13,11 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/keyline_first"
         android:layout_marginRight="@dimen/keyline_first"
+        android:background="@drawable/circle"
         android:gravity="center"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@android:color/white"
         tools:text="ЛР"/>
 
     <LinearLayout
