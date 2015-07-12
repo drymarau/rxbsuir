@@ -12,7 +12,6 @@
     <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">@color/primary</item>
         <item name="popupTheme">@style/Theme.AppCompat.Light</item>
-        <item name="android:elevation">4dp</item>
     </style>
 
 </resources>
