@@ -1,6 +1,7 @@
 package by.toggi.rxbsuir.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.WeekdayItemDecoration;
 import by.toggi.rxbsuir.adapter.ScheduleAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
 import by.toggi.rxbsuir.fragment.DataFragment;
@@ -31,6 +33,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView 
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
+    @Bind(R.id.tab_layout) TabLayout mTabLayout;
 
     @Inject LinearLayoutManager mLayoutManager;
     @Inject ScheduleAdapter mAdapter;
@@ -48,6 +51,29 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView 
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addItemDecoration(new WeekdayItemDecoration());
+
+        mTabLayout.addTab(mTabLayout.newTab().setText("Week 1").setTag(1));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Week 2").setTag(2));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Week 3").setTag(3));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Week 4").setTag(4));
+
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mPresenter.setWeekNumber((int) tab.getTag());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         FragmentManager manager = getSupportFragmentManager();
         DataFragment fragment = (DataFragment) manager.findFragmentByTag(TAG_DATA_FRAGMENT);
