@@ -22,7 +22,7 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.WeekdayItemDecoration;
 import by.toggi.rxbsuir.adapter.ScheduleAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleFragmentComponent;
-import by.toggi.rxbsuir.model.Schedule;
+import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.module.ScheduleFragmentModule;
 import by.toggi.rxbsuir.mvp.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.ScheduleView;
@@ -105,8 +105,8 @@ public class ScheduleFragment extends Fragment implements ScheduleView {
     }
 
     @Override
-    public void showScheduleList(List<Schedule> scheduleList) {
-        mAdapter.setScheduleList(scheduleList);
+    public void showLessonList(List<Lesson> lessonList) {
+        mAdapter.setLessonList(lessonList);
     }
 
     @Override

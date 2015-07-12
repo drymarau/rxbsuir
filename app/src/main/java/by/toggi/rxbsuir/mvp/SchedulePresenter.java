@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import by.toggi.rxbsuir.model.Schedule;
+import by.toggi.rxbsuir.model.ScheduleModel;
 import by.toggi.rxbsuir.rest.BsuirService;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -13,7 +14,7 @@ import rx.schedulers.Schedulers;
 
 public class SchedulePresenter implements Presenter {
 
-    private List<Schedule> mScheduleList = new ArrayList<>();
+    private List<by.toggi.rxbsuir.db.model.Lesson> mLessonList = new ArrayList<>();
     private ScheduleView mScheduleView;
     private BsuirService mService;
     private int mWeekNumber;
@@ -25,28 +26,29 @@ public class SchedulePresenter implements Presenter {
 
     public void setWeekNumber(int weekNumber) {
         mWeekNumber = weekNumber;
-        showFilteredScheduleList();
+        showFilteredLessonList();
     }
 
     @Override
     public void onCreate() {
         mService.getGroupSchedule(211801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
-                .flatMap(scheduleModel -> Observable.from(scheduleModel.scheduleList))
+                .map(this::transformScheduleToLesson)
+                .flatMap(Observable::from)
                 .toList()
-                .subscribe(scheduleList -> {
-                    mScheduleList = scheduleList;
-                    showFilteredScheduleList();
+                .subscribe(lessonList -> {
+                    mLessonList = lessonList;
+                    showFilteredLessonList();
                 });
     }
 
-    private void showFilteredScheduleList() {
-        Observable.from(mScheduleList).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.computation())
-                .filter(schedule -> schedule.weekNumberList.contains(mWeekNumber))
+    private void showFilteredLessonList() {
+        Observable.from(mLessonList).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.computation())
+                .filter(lesson -> lesson.getWeekNumberList().contains(mWeekNumber))
                 .toList()
                 .subscribe(scheduleList -> {
                     if (isViewAttached()) {
-                        mScheduleView.showScheduleList(scheduleList);
+                        mScheduleView.showLessonList(scheduleList);
                     }
                 });
     }
@@ -59,7 +61,7 @@ public class SchedulePresenter implements Presenter {
     @Override
     public void attachView(View view) {
         mScheduleView = (ScheduleView) view;
-        mScheduleView.showScheduleList(mScheduleList);
+        mScheduleView.showLessonList(mLessonList);
     }
 
     @Override
@@ -69,5 +71,13 @@ public class SchedulePresenter implements Presenter {
 
     private boolean isViewAttached() {
         return mScheduleView != null;
+    }
+
+    private List<by.toggi.rxbsuir.db.model.Lesson> transformScheduleToLesson(ScheduleModel model) {
+        List<by.toggi.rxbsuir.db.model.Lesson> lessonList = new ArrayList<>(model.scheduleList.size());
+        for (Schedule schedule : model.scheduleList) {
+            lessonList.add(new by.toggi.rxbsuir.db.model.Lesson(schedule, model.weekDay));
+        }
+        return lessonList;
     }
 }

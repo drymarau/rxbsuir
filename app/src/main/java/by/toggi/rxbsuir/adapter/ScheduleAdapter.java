@@ -11,18 +11,18 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.model.Schedule;
+import by.toggi.rxbsuir.db.model.Lesson;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
 
-    private List<Schedule> mScheduleList;
+    private List<Lesson> mLessonList;
 
-    public ScheduleAdapter(List<Schedule> scheduleList) {
-        mScheduleList = scheduleList;
+    public ScheduleAdapter(List<Lesson> lessonList) {
+        mLessonList = lessonList;
     }
 
-    public void setScheduleList(List<Schedule> scheduleList) {
-        mScheduleList = scheduleList;
+    public void setLessonList(List<Lesson> lessonList) {
+        mLessonList = lessonList;
         notifyDataSetChanged();
     }
 
@@ -35,16 +35,16 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Schedule lesson = mScheduleList.get(position);
-        viewHolder.lessonType.setText(lesson.lessonType);
-        viewHolder.lessonSubjectSubgroup.setText(lesson.subject);
-        viewHolder.lessonClass.setText(lesson.auditory == null ? "" : lesson.auditory.toString());
-        viewHolder.lessonTime.setText(lesson.lessonTime.replace("-", "\n"));
+        Lesson lesson = mLessonList.get(position);
+        viewHolder.lessonType.setText(lesson.getLessonType());
+        viewHolder.lessonSubjectSubgroup.setText(lesson.getSubject());
+        viewHolder.lessonClass.setText(lesson.getAuditoryList() == null ? "" : lesson.getAuditoryList().toString());
+        viewHolder.lessonTime.setText(lesson.getLessonTime().replace("-", "\n"));
     }
 
     @Override
     public int getItemCount() {
-        return mScheduleList.size();
+        return mLessonList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
