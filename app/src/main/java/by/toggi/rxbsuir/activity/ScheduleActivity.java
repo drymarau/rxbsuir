@@ -37,6 +37,7 @@ public class ScheduleActivity extends AppCompatActivity {
         getDelegate().setSupportActionBar(mToolbar);
 
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setOffscreenPageLimit(4);
         mTabLayout.setupWithViewPager(mViewPager);
 
     }
