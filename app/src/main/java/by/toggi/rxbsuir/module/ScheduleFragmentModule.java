@@ -6,8 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import java.util.ArrayList;
 
 import by.toggi.rxbsuir.Fragment;
+import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.WeekdayItemDecoration;
-import by.toggi.rxbsuir.adapter.ScheduleAdapter;
+import by.toggi.rxbsuir.adapter.LessonAdapter;
 import dagger.Module;
 import dagger.Provides;
 
@@ -28,14 +29,14 @@ public class ScheduleFragmentModule {
 
     @Provides
     @Fragment
-    ScheduleAdapter provideScheduleAdapter() {
-        return new ScheduleAdapter(new ArrayList<>());
+    LessonAdapter provideScheduleAdapter() {
+        return new LessonAdapter(new ArrayList<>());
     }
 
     @Provides
     @Fragment
     WeekdayItemDecoration provideWeekdayItemDecoration() {
-        return new WeekdayItemDecoration();
+        return new WeekdayItemDecoration(mContext.getResources().getDimensionPixelSize(R.dimen.list_item_weekday_margin));
     }
 
 }

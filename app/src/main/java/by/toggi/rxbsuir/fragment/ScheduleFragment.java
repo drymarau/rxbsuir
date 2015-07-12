@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.WeekdayItemDecoration;
-import by.toggi.rxbsuir.adapter.ScheduleAdapter;
+import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleFragmentComponent;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.module.ScheduleFragmentModule;
@@ -35,7 +35,7 @@ public class ScheduleFragment extends Fragment implements ScheduleView {
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
 
     @Inject LinearLayoutManager mLayoutManager;
-    @Inject ScheduleAdapter mAdapter;
+    @Inject LessonAdapter mAdapter;
     @Inject WeekdayItemDecoration mItemDecoration;
     @Inject SchedulePresenter mPresenter;
 

@@ -4,7 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 
 import by.toggi.rxbsuir.Fragment;
 import by.toggi.rxbsuir.WeekdayItemDecoration;
-import by.toggi.rxbsuir.adapter.ScheduleAdapter;
+import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.fragment.ScheduleFragment;
 import by.toggi.rxbsuir.module.ScheduleFragmentModule;
 import dagger.Component;
@@ -15,7 +15,7 @@ public interface ScheduleFragmentComponent {
 
     LinearLayoutManager linearLayoutManager();
 
-    ScheduleAdapter scheduleAdapter();
+    LessonAdapter scheduleAdapter();
 
     WeekdayItemDecoration weekdayItemDecoration();
 

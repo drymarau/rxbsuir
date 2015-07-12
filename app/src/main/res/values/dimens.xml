@@ -2,6 +2,8 @@
 <resources>
     <dimen name="keyline_first">16dp</dimen>
     <dimen name="keyline_second">72dp</dimen>
-    
+
     <dimen name="list_item_two_line_avatar">72dp</dimen>
+    <dimen name="list_item_weekday_margin">16dp</dimen>
+
 </resources>

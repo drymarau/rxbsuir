@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.adapter;
 
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,13 @@ import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.db.model.Lesson;
 
-public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
+public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> {
 
+    public static final int VIEW_TYPE_LESSON = 0;
+    public static final int VIEW_TYPE_LESSON_WITH_WEEKDAY = 1;
     private List<Lesson> mLessonList;
 
-    public ScheduleAdapter(List<Lesson> lessonList) {
+    public LessonAdapter(List<Lesson> lessonList) {
         mLessonList = lessonList;
     }
 
@@ -27,9 +30,33 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return VIEW_TYPE_LESSON_WITH_WEEKDAY;
+        }
+        String weekday = mLessonList.get(position).getWeekday();
+        if (weekday.equals(mLessonList.get(position - 1).getWeekday())) {
+            return VIEW_TYPE_LESSON;
+        } else {
+            return VIEW_TYPE_LESSON_WITH_WEEKDAY;
+        }
+    }
+
+    @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.list_item_schedule, viewGroup, false);
+        View view;
+        switch (viewType) {
+            case VIEW_TYPE_LESSON:
+                view = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.list_item_lesson, viewGroup, false);
+                break;
+            case VIEW_TYPE_LESSON_WITH_WEEKDAY:
+                view = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.list_item_lesson_with_weekday, viewGroup, false);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown view type: " + viewType);
+        }
         return new ViewHolder(view);
     }
 
@@ -40,6 +67,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         viewHolder.lessonSubjectSubgroup.setText(lesson.getSubject());
         viewHolder.lessonClass.setText(lesson.getAuditoryList() == null ? "" : lesson.getAuditoryList().toString());
         viewHolder.lessonTime.setText(lesson.getLessonTime().replace("-", "\n"));
+        if (viewHolder.lessonWeekday != null) {
+            viewHolder.lessonWeekday.setText(lesson.getWeekday());
+        }
     }
 
     @Override
@@ -53,6 +83,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         @Bind(R.id.lesson_subject_subgroup) TextView lessonSubjectSubgroup;
         @Bind(R.id.lesson_class) TextView lessonClass;
         @Bind(R.id.lesson_time) TextView lessonTime;
+
+        @Nullable @Bind(R.id.lesson_weekday) TextView lessonWeekday;
 
         public ViewHolder(View itemView) {
             super(itemView);
