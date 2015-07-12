@@ -21,7 +21,6 @@ public class SchedulePresenter implements Presenter {
     @Inject
     public SchedulePresenter(BsuirService service) {
         mService = service;
-        mWeekNumber = 1;
     }
 
     public void setWeekNumber(int weekNumber) {
@@ -31,7 +30,7 @@ public class SchedulePresenter implements Presenter {
 
     @Override
     public void onCreate() {
-        mService.getGroupSchedule(111801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+        mService.getGroupSchedule(211801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
                 .flatMap(scheduleModel -> Observable.from(scheduleModel.scheduleList))
                 .toList()

@@ -3,11 +3,13 @@ package by.toggi.rxbsuir.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import by.toggi.rxbsuir.mvp.Presenter;
+import java.util.HashMap;
+
+import by.toggi.rxbsuir.mvp.SchedulePresenter;
 
 public class DataFragment extends Fragment {
 
-    private Presenter mPresenter;
+    private final HashMap<String, SchedulePresenter> mPresenterMap = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -15,11 +17,11 @@ public class DataFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public Presenter getPresenter() {
-        return mPresenter;
+    public SchedulePresenter getPresenter(String tag) {
+        return mPresenterMap.get(tag);
     }
 
-    public void setPresenter(Presenter presenter) {
-        mPresenter = presenter;
+    public void setPresenter(String tag, SchedulePresenter presenter) {
+        mPresenterMap.put(tag, presenter);
     }
 }
