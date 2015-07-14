@@ -5,16 +5,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import by.toggi.rxbsuir.model.Schedule;
-import by.toggi.rxbsuir.model.ScheduleModel;
+import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.rest.BsuirService;
+import by.toggi.rxbsuir.rest.model.Schedule;
+import by.toggi.rxbsuir.rest.model.ScheduleModel;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class SchedulePresenter implements Presenter {
 
-    private List<by.toggi.rxbsuir.db.model.Lesson> mLessonList = new ArrayList<>();
+    private List<Lesson> mLessonList = new ArrayList<>();
     private ScheduleView mScheduleView;
     private BsuirService mService;
     private int mWeekNumber;
@@ -73,10 +74,10 @@ public class SchedulePresenter implements Presenter {
         return mScheduleView != null;
     }
 
-    private List<by.toggi.rxbsuir.db.model.Lesson> transformScheduleToLesson(ScheduleModel model) {
-        List<by.toggi.rxbsuir.db.model.Lesson> lessonList = new ArrayList<>(model.scheduleList.size());
+    private List<Lesson> transformScheduleToLesson(ScheduleModel model) {
+        List<Lesson> lessonList = new ArrayList<>(model.scheduleList.size());
         for (Schedule schedule : model.scheduleList) {
-            lessonList.add(new by.toggi.rxbsuir.db.model.Lesson(schedule, model.weekDay));
+            lessonList.add(new Lesson(schedule, model.weekDay));
         }
         return lessonList;
     }

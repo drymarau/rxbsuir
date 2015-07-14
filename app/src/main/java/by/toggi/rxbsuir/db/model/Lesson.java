@@ -2,8 +2,8 @@ package by.toggi.rxbsuir.db.model;
 
 import java.util.List;
 
-import by.toggi.rxbsuir.model.Employee;
-import by.toggi.rxbsuir.model.Schedule;
+import by.toggi.rxbsuir.rest.model.Employee;
+import by.toggi.rxbsuir.rest.model.Schedule;
 
 public class Lesson {
 

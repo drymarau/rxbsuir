@@ -1,4 +1,4 @@
-package by.toggi.rxbsuir.model;
+package by.toggi.rxbsuir.rest.model;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;

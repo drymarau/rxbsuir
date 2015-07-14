@@ -1,6 +1,6 @@
 package by.toggi.rxbsuir.rest;
 
-import by.toggi.rxbsuir.model.ScheduleXmlModels;
+import by.toggi.rxbsuir.rest.model.ScheduleXmlModels;
 import retrofit.http.GET;
 import retrofit.http.Path;
 import rx.Observable;
