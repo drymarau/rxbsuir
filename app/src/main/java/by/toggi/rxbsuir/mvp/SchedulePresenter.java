@@ -32,15 +32,15 @@ public class SchedulePresenter implements Presenter {
 
     @Override
     public void onCreate() {
+        if (isViewAttached()) {
+            mScheduleView.showLoading();
+        }
         mService.getGroupSchedule(211801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
                 .map(this::transformScheduleToLesson)
                 .flatMap(Observable::from)
                 .toList()
-                .subscribe(lessonList -> {
-                    mLessonList = lessonList;
-                    showFilteredLessonList();
-                });
+                .subscribe(this::onSuccess, this::onError);
     }
 
     private void showFilteredLessonList() {
@@ -68,6 +68,17 @@ public class SchedulePresenter implements Presenter {
     @Override
     public void detachView() {
         mScheduleView = null;
+    }
+
+    private void onSuccess(List<Lesson> lessonList) {
+        mLessonList = lessonList;
+        showFilteredLessonList();
+    }
+
+    private void onError(Throwable throwable) {
+        if (isViewAttached()) {
+            mScheduleView.showError(throwable);
+        }
     }
 
     private boolean isViewAttached() {

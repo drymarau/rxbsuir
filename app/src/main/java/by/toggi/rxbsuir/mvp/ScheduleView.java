@@ -8,4 +8,8 @@ public interface ScheduleView extends View {
 
     void showLessonList(List<Lesson> lessonList);
 
+    void showLoading();
+
+    void showError(Throwable t);
+
 }
