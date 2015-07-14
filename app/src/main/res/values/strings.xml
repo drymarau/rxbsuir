@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BSUIR Schedule</string>
     <!-- bsuir.by endpoint for retrofit -->
-    <string name="schedule_endpoint">http://www.bsuir.by/schedule/rest</string>
+    <string name="schedule_endpoint" translatable="false">http://www.bsuir.by/schedule/rest</string>
 
     <array name="tabs">
         <item>Week 1</item>
