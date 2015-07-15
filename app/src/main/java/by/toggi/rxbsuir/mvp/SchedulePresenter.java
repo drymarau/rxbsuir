@@ -37,8 +37,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         }
         mService.getGroupSchedule(211801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
-                .map(this::transformScheduleToLesson)
-                .flatMap(Observable::from)
+                .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
                 .toList()
                 .subscribe(this::onSuccess, this::onError);
     }
