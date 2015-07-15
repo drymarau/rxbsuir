@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import by.toggi.rxbsuir.mvp.SchedulePresenter;
 
 public class DataFragment extends Fragment {
 
-    private final HashMap<String, SchedulePresenter> mPresenterMap = new HashMap<>();
+    private final Map<String, SchedulePresenter> mPresenterMap = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

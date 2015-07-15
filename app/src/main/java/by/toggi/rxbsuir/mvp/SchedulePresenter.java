@@ -13,7 +13,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class SchedulePresenter implements Presenter {
+public class SchedulePresenter implements Presenter<ScheduleView> {
 
     private List<Lesson> mLessonList = new ArrayList<>();
     private ScheduleView mScheduleView;
@@ -60,8 +60,8 @@ public class SchedulePresenter implements Presenter {
     }
 
     @Override
-    public void attachView(View view) {
-        mScheduleView = (ScheduleView) view;
+    public void attachView(ScheduleView view) {
+        mScheduleView = view;
         mScheduleView.showLessonList(mLessonList);
     }
 

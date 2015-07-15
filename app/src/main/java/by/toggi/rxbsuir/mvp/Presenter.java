@@ -1,12 +1,12 @@
 package by.toggi.rxbsuir.mvp;
 
-public interface Presenter {
+public interface Presenter<V extends View> {
 
     void onCreate();
 
     void onDestroy();
 
-    void attachView(View view);
+    void attachView(V view);
 
     void detachView();
 
