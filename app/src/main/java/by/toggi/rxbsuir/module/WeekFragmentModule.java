@@ -1,6 +1,5 @@
 package by.toggi.rxbsuir.module;
 
-import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
@@ -9,22 +8,23 @@ import by.toggi.rxbsuir.Fragment;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.WeekdayItemDecoration;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
+import by.toggi.rxbsuir.fragment.WeekFragment;
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class ScheduleFragmentModule {
+public class WeekFragmentModule {
 
-    private final Context mContext;
+    private final WeekFragment mWeekFragment;
 
-    public ScheduleFragmentModule(Context context) {
-        mContext = context;
+    public WeekFragmentModule(WeekFragment weekFragment) {
+        mWeekFragment = weekFragment;
     }
 
     @Provides
     @Fragment
     LinearLayoutManager provideLinearLayoutManager() {
-        return new LinearLayoutManager(mContext);
+        return new LinearLayoutManager(mWeekFragment.getActivity());
     }
 
     @Provides
@@ -36,7 +36,13 @@ public class ScheduleFragmentModule {
     @Provides
     @Fragment
     WeekdayItemDecoration provideWeekdayItemDecoration() {
-        return new WeekdayItemDecoration(mContext.getResources().getDimensionPixelSize(R.dimen.list_item_weekday_margin));
+        return new WeekdayItemDecoration(mWeekFragment.getResources().getDimensionPixelSize(R.dimen.list_item_weekday_margin));
+    }
+
+    @Provides
+    @Fragment
+    int provideWeekNumber() {
+        return mWeekFragment.getWeekNumber();
     }
 
 }

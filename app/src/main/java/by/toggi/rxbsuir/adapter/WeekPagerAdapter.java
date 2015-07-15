@@ -6,21 +6,21 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import javax.inject.Inject;
 
-import by.toggi.rxbsuir.fragment.ScheduleFragment;
+import by.toggi.rxbsuir.fragment.WeekFragment;
 
-public class SchedulePagerAdapter extends FragmentStatePagerAdapter {
+public class WeekPagerAdapter extends FragmentStatePagerAdapter {
 
     private final String[] mTabs;
 
     @Inject
-    public SchedulePagerAdapter(FragmentManager fm, String[] tabs) {
+    public WeekPagerAdapter(FragmentManager fm, String[] tabs) {
         super(fm);
         mTabs = tabs;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return ScheduleFragment.newInstance(position + 1);
+        return WeekFragment.newInstance(position + 1);
     }
 
     @Override

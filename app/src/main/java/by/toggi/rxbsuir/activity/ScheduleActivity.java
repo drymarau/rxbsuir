@@ -13,10 +13,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.adapter.SchedulePagerAdapter;
+import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
 import by.toggi.rxbsuir.fragment.DataFragment;
-import by.toggi.rxbsuir.fragment.ScheduleFragment;
+import by.toggi.rxbsuir.fragment.WeekFragment;
 import by.toggi.rxbsuir.module.ActivityModule;
 import by.toggi.rxbsuir.module.ScheduleActivityModule;
 
@@ -27,7 +27,7 @@ public class ScheduleActivity extends AppCompatActivity {
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
     @Bind(R.id.view_pager) ViewPager mViewPager;
 
-    @Inject SchedulePagerAdapter mPagerAdapter;
+    @Inject WeekPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +35,11 @@ public class ScheduleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_schedule);
 
         FragmentManager manager = getSupportFragmentManager();
-        DataFragment fragment = (DataFragment) manager.findFragmentByTag(ScheduleFragment.TAG_DATA_FRAGMENT);
+        DataFragment fragment = (DataFragment) manager.findFragmentByTag(WeekFragment.TAG_DATA_FRAGMENT);
 
         if (fragment == null) {
             fragment = new DataFragment();
-            manager.beginTransaction().add(fragment, ScheduleFragment.TAG_DATA_FRAGMENT).commit();
+            manager.beginTransaction().add(fragment, WeekFragment.TAG_DATA_FRAGMENT).commit();
         }
 
         initializeComponent();

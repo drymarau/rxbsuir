@@ -5,20 +5,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import by.toggi.rxbsuir.Fragment;
 import by.toggi.rxbsuir.WeekdayItemDecoration;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
-import by.toggi.rxbsuir.fragment.ScheduleFragment;
-import by.toggi.rxbsuir.module.ScheduleFragmentModule;
+import by.toggi.rxbsuir.fragment.WeekFragment;
+import by.toggi.rxbsuir.module.WeekFragmentModule;
 import dagger.Component;
 
 @Fragment
-@Component(dependencies = AppComponent.class, modules = ScheduleFragmentModule.class)
-public interface ScheduleFragmentComponent {
+@Component(dependencies = AppComponent.class, modules = WeekFragmentModule.class)
+public interface WeekFragmentComponent {
 
     LinearLayoutManager linearLayoutManager();
 
-    LessonAdapter scheduleAdapter();
+    LessonAdapter lessonAdapter();
 
     WeekdayItemDecoration weekdayItemDecoration();
 
-    void inject(ScheduleFragment scheduleFragment);
+    void inject(WeekFragment weekFragment);
 
 }

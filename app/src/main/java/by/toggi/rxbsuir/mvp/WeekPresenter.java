@@ -13,29 +13,25 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class SchedulePresenter implements Presenter<ScheduleView> {
+public class WeekPresenter implements Presenter<WeekView> {
 
     private List<Lesson> mLessonList = new ArrayList<>();
-    private ScheduleView mScheduleView;
+    private WeekView mWeekView;
     private BsuirService mService;
     private int mWeekNumber;
 
     @Inject
-    public SchedulePresenter(BsuirService service) {
+    public WeekPresenter(BsuirService service, int weekNumber) {
         mService = service;
-    }
-
-    public void setWeekNumber(int weekNumber) {
         mWeekNumber = weekNumber;
-        showFilteredLessonList();
     }
 
     @Override
     public void onCreate() {
         if (isViewAttached()) {
-            mScheduleView.showLoading();
+            mWeekView.showLoading();
         }
-        mService.getGroupSchedule(211801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+        mService.getGroupSchedule(111801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
                 .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
                 .toList()
@@ -48,7 +44,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                 .toList()
                 .subscribe(scheduleList -> {
                     if (isViewAttached()) {
-                        mScheduleView.showLessonList(scheduleList);
+                        mWeekView.showLessonList(scheduleList);
                     }
                 });
     }
@@ -59,14 +55,14 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     }
 
     @Override
-    public void attachView(ScheduleView view) {
-        mScheduleView = view;
-        mScheduleView.showLessonList(mLessonList);
+    public void attachView(WeekView view) {
+        mWeekView = view;
+        showFilteredLessonList();
     }
 
     @Override
     public void detachView() {
-        mScheduleView = null;
+        mWeekView = null;
     }
 
     private void onSuccess(List<Lesson> lessonList) {
@@ -76,12 +72,12 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     private void onError(Throwable throwable) {
         if (isViewAttached()) {
-            mScheduleView.showError(throwable);
+            mWeekView.showError(throwable);
         }
     }
 
     private boolean isViewAttached() {
-        return mScheduleView != null;
+        return mWeekView != null;
     }
 
     private List<Lesson> transformScheduleToLesson(ScheduleModel model) {

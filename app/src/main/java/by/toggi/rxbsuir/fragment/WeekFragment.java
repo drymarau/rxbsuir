@@ -23,13 +23,13 @@ import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.WeekdayItemDecoration;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
-import by.toggi.rxbsuir.component.DaggerScheduleFragmentComponent;
+import by.toggi.rxbsuir.component.DaggerWeekFragmentComponent;
 import by.toggi.rxbsuir.db.model.Lesson;
-import by.toggi.rxbsuir.module.ScheduleFragmentModule;
-import by.toggi.rxbsuir.mvp.SchedulePresenter;
-import by.toggi.rxbsuir.mvp.ScheduleView;
+import by.toggi.rxbsuir.module.WeekFragmentModule;
+import by.toggi.rxbsuir.mvp.WeekPresenter;
+import by.toggi.rxbsuir.mvp.WeekView;
 
-public class ScheduleFragment extends Fragment implements ScheduleView {
+public class WeekFragment extends Fragment implements WeekView {
 
     public static final String ARGS_WEEK_NUMBER = "week_number";
     public static final String TAG_DATA_FRAGMENT = "data_fragment";
@@ -41,14 +41,14 @@ public class ScheduleFragment extends Fragment implements ScheduleView {
     @Inject LinearLayoutManager mLayoutManager;
     @Inject LessonAdapter mAdapter;
     @Inject WeekdayItemDecoration mItemDecoration;
-    @Inject SchedulePresenter mPresenter;
+    @Inject WeekPresenter mPresenter;
 
     private int mWeekNumber;
 
-    public static ScheduleFragment newInstance(int weekNumber) {
+    public static WeekFragment newInstance(int weekNumber) {
         Bundle args = new Bundle();
         args.putInt(ARGS_WEEK_NUMBER, weekNumber);
-        ScheduleFragment fragment = new ScheduleFragment();
+        WeekFragment fragment = new WeekFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,9 +61,9 @@ public class ScheduleFragment extends Fragment implements ScheduleView {
             mWeekNumber = args.getInt(ARGS_WEEK_NUMBER);
         }
 
-        DaggerScheduleFragmentComponent.builder()
+        DaggerWeekFragmentComponent.builder()
                 .appComponent(((RxBsuirApplication) getActivity().getApplication()).getAppComponent())
-                .scheduleFragmentModule(new ScheduleFragmentModule(activity))
+                .weekFragmentModule(new WeekFragmentModule(this))
                 .build().inject(this);
     }
 
@@ -81,11 +81,9 @@ public class ScheduleFragment extends Fragment implements ScheduleView {
                 fragment.setPresenter(getPresenterTag(), mPresenter);
                 mPresenter.attachView(this);
                 mPresenter.onCreate();
-                mPresenter.setWeekNumber(mWeekNumber);
             } else {
                 mPresenter = fragment.getPresenter(getPresenterTag());
                 mPresenter.attachView(this);
-                mPresenter.setWeekNumber(mWeekNumber);
             }
         }
     }
@@ -93,7 +91,7 @@ public class ScheduleFragment extends Fragment implements ScheduleView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_schedule, container, false);
+        View view = inflater.inflate(R.layout.fragment_week, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -145,5 +143,9 @@ public class ScheduleFragment extends Fragment implements ScheduleView {
 
     private String getPresenterTag() {
         return "week_" + mWeekNumber;
+    }
+
+    public int getWeekNumber() {
+        return mWeekNumber;
     }
 }

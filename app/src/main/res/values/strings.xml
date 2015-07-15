@@ -3,6 +3,8 @@
     <!-- bsuir.by endpoint for retrofit -->
     <string name="schedule_endpoint" translatable="false">http://www.bsuir.by/schedule/rest</string>
 
+    <string name="error_schedule">Something is wrong with schedule. Please try again later</string>
+
     <array name="tabs">
         <item>Week 1</item>
         <item>Week 2</item>

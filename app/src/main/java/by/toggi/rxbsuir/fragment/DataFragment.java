@@ -6,11 +6,11 @@ import android.support.v4.app.Fragment;
 import java.util.HashMap;
 import java.util.Map;
 
-import by.toggi.rxbsuir.mvp.SchedulePresenter;
+import by.toggi.rxbsuir.mvp.WeekPresenter;
 
 public class DataFragment extends Fragment {
 
-    private final Map<String, SchedulePresenter> mPresenterMap = new HashMap<>();
+    private final Map<String, WeekPresenter> mPresenterMap = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -18,11 +18,11 @@ public class DataFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public SchedulePresenter getPresenter(String tag) {
+    public WeekPresenter getPresenter(String tag) {
         return mPresenterMap.get(tag);
     }
 
-    public void setPresenter(String tag, SchedulePresenter presenter) {
+    public void setPresenter(String tag, WeekPresenter presenter) {
         mPresenterMap.put(tag, presenter);
     }
 }
