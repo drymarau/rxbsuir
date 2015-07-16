@@ -6,4 +6,6 @@ public interface ScheduleView extends View {
 
     void showError(Throwable throwable);
 
+    void showLoading();
+
 }

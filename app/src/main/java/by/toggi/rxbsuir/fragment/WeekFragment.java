@@ -10,8 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -35,8 +33,6 @@ public class WeekFragment extends Fragment implements WeekView {
     public static final String TAG_DATA_FRAGMENT = "data_fragment";
 
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
-    @Bind(R.id.progress_bar) ProgressBar mProgressBar;
-    @Bind(R.id.error_text_view) TextView mErrorTextView;
 
     @Inject LinearLayoutManager mLayoutManager;
     @Inject LessonAdapter mAdapter;
@@ -108,25 +104,7 @@ public class WeekFragment extends Fragment implements WeekView {
 
     @Override
     public void showLessonList(List<Lesson> lessonList) {
-        mErrorTextView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
         mAdapter.setLessonList(lessonList);
-    }
-
-    @Override
-    public void showLoading() {
-        mRecyclerView.setVisibility(View.GONE);
-        mErrorTextView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void showError(Throwable t) {
-        mRecyclerView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.GONE);
-        mErrorTextView.setVisibility(View.VISIBLE);
-        mErrorTextView.setText(t.getLocalizedMessage());
     }
 
     @Override

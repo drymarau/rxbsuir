@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -29,6 +32,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
     @Bind(R.id.view_pager) ViewPager mViewPager;
+    @Bind(R.id.progress_bar) ProgressBar mProgressBar;
+    @Bind(R.id.error_text_view) TextView mErrorTextView;
+    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
@@ -54,6 +60,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView 
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(4);
         mTabLayout.setupWithViewPager(mViewPager);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 
         mPresenter.attachView(this);
         mPresenter.onCreate();
@@ -75,6 +82,14 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView 
 
     @Override
     public void showError(Throwable throwable) {
-        Toast.makeText(this, throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+        mProgressBar.setVisibility(View.GONE);
+        mErrorTextView.setVisibility(View.VISIBLE);
+        mErrorTextView.setText(throwable.getLocalizedMessage());
+    }
+
+    @Override
+    public void showLoading() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mErrorTextView.setVisibility(View.GONE);
     }
 }

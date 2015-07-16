@@ -9,8 +9,4 @@ public interface WeekView extends View {
 
     void showLessonList(List<Lesson> lessonList);
 
-    void showLoading();
-
-    void showError(Throwable t);
-
 }

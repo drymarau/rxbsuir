@@ -25,9 +25,7 @@ public class WeekPresenter implements Presenter<WeekView> {
 
     @Override
     public void onCreate() {
-        if (isViewAttached()) {
-            mWeekView.showLoading();
-        }
+        showFilteredLessonList();
     }
 
     private void showFilteredLessonList() {
