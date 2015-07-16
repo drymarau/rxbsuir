@@ -1,8 +1,5 @@
 package by.toggi.rxbsuir.component;
 
-import android.content.Context;
-import android.support.v4.app.FragmentManager;
-
 import by.toggi.rxbsuir.Activity;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.module.ActivityModule;
@@ -15,12 +12,6 @@ import dagger.Component;
         ScheduleActivityModule.class
 })
 public interface ScheduleActivityComponent {
-
-    Context context();
-
-    String[] tabs();
-
-    FragmentManager supportFragmentManager();
 
     void inject(ScheduleActivity scheduleActivity);
 
