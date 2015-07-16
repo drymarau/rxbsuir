@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -19,15 +20,18 @@ import by.toggi.rxbsuir.fragment.DataFragment;
 import by.toggi.rxbsuir.fragment.WeekFragment;
 import by.toggi.rxbsuir.module.ActivityModule;
 import by.toggi.rxbsuir.module.ScheduleActivityModule;
+import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
+import by.toggi.rxbsuir.mvp.view.ScheduleView;
 
 
-public class ScheduleActivity extends AppCompatActivity {
+public class ScheduleActivity extends AppCompatActivity implements ScheduleView {
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
     @Bind(R.id.view_pager) ViewPager mViewPager;
 
     @Inject WeekPagerAdapter mPagerAdapter;
+    @Inject SchedulePresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,14 @@ public class ScheduleActivity extends AppCompatActivity {
         mViewPager.setOffscreenPageLimit(4);
         mTabLayout.setupWithViewPager(mViewPager);
 
+        mPresenter.attachView(this);
+        mPresenter.onCreate();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
     }
 
     private void initializeComponent() {
@@ -59,5 +71,10 @@ public class ScheduleActivity extends AppCompatActivity {
                 .scheduleActivityModule(new ScheduleActivityModule())
                 .appComponent(((RxBsuirApplication) getApplication()).getAppComponent())
                 .build().inject(this);
+    }
+
+    @Override
+    public void showError(Throwable throwable) {
+        Toast.makeText(this, throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
     }
 }
