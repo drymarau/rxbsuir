@@ -6,7 +6,7 @@ public interface Presenter<V extends View> {
 
     void onDestroy();
 
-    void attachView(V view);
+    void attachView(V v);
 
     void detachView();
 

@@ -1,11 +1,14 @@
-package by.toggi.rxbsuir.mvp;
+package by.toggi.rxbsuir.mvp.presenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import by.toggi.rxbsuir.db.RxBsuirOpenHelper;
 import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.mvp.Presenter;
+import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import by.toggi.rxbsuir.rest.BsuirService;
 import by.toggi.rxbsuir.rest.model.Schedule;
 import by.toggi.rxbsuir.rest.model.ScheduleModel;
@@ -13,40 +16,26 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class WeekPresenter implements Presenter<WeekView> {
+public class SchedulePresenter implements Presenter<ScheduleView> {
 
-    private List<Lesson> mLessonList = new ArrayList<>();
-    private WeekView mWeekView;
+    private ScheduleView mScheduleView;
     private BsuirService mService;
-    private int mWeekNumber;
+    private RxBsuirOpenHelper mOpenHelper;
+    private List<Lesson> mLessonList = new ArrayList<>();
 
     @Inject
-    public WeekPresenter(BsuirService service, int weekNumber) {
+    public SchedulePresenter(BsuirService service, RxBsuirOpenHelper openHelper) {
         mService = service;
-        mWeekNumber = weekNumber;
+        mOpenHelper = openHelper;
     }
 
     @Override
     public void onCreate() {
-        if (isViewAttached()) {
-            mWeekView.showLoading();
-        }
         mService.getGroupSchedule(111801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
                 .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
                 .toList()
                 .subscribe(this::onSuccess, this::onError);
-    }
-
-    private void showFilteredLessonList() {
-        Observable.from(mLessonList).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.computation())
-                .filter(lesson -> lesson.getWeekNumberList().contains(mWeekNumber))
-                .toList()
-                .subscribe(scheduleList -> {
-                    if (isViewAttached()) {
-                        mWeekView.showLessonList(scheduleList);
-                    }
-                });
     }
 
     @Override
@@ -55,29 +44,26 @@ public class WeekPresenter implements Presenter<WeekView> {
     }
 
     @Override
-    public void attachView(WeekView view) {
-        mWeekView = view;
-        showFilteredLessonList();
+    public void attachView(ScheduleView scheduleView) {
+        if (scheduleView == null) {
+            throw new NullPointerException("ScheduleView is null!");
+        }
+        mScheduleView = scheduleView;
     }
 
     @Override
     public void detachView() {
-        mWeekView = null;
+        mScheduleView = null;
     }
 
     private void onSuccess(List<Lesson> lessonList) {
         mLessonList = lessonList;
-        showFilteredLessonList();
     }
 
     private void onError(Throwable throwable) {
         if (isViewAttached()) {
-            mWeekView.showError(throwable);
+            mScheduleView.showError(throwable);
         }
-    }
-
-    private boolean isViewAttached() {
-        return mWeekView != null;
     }
 
     private List<Lesson> transformScheduleToLesson(ScheduleModel model) {
@@ -86,5 +72,9 @@ public class WeekPresenter implements Presenter<WeekView> {
             lessonList.add(new Lesson(schedule, model.weekDay));
         }
         return lessonList;
+    }
+
+    private boolean isViewAttached() {
+        return mScheduleView != null;
     }
 }
