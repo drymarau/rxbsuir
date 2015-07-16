@@ -26,8 +26,8 @@ import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.component.DaggerWeekFragmentComponent;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.module.WeekFragmentModule;
-import by.toggi.rxbsuir.mvp.WeekPresenter;
-import by.toggi.rxbsuir.mvp.WeekView;
+import by.toggi.rxbsuir.mvp.presenter.WeekPresenter;
+import by.toggi.rxbsuir.mvp.view.WeekView;
 
 public class WeekFragment extends Fragment implements WeekView {
 

@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import java.util.HashMap;
 import java.util.Map;
 
-import by.toggi.rxbsuir.mvp.WeekPresenter;
+import by.toggi.rxbsuir.mvp.presenter.WeekPresenter;
 
 public class DataFragment extends Fragment {
 
