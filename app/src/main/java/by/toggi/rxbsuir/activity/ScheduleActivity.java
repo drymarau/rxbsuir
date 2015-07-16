@@ -27,7 +27,7 @@ import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 
 
-public class ScheduleActivity extends AppCompatActivity implements ScheduleView {
+public class ScheduleActivity extends AppCompatActivity implements ScheduleView, SwipeRefreshLayout.OnRefreshListener {
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
@@ -61,6 +61,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView 
         mViewPager.setOffscreenPageLimit(4);
         mTabLayout.setupWithViewPager(mViewPager);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mPresenter.attachView(this);
         mPresenter.onCreate();
@@ -91,5 +92,16 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView 
     public void showLoading() {
         mProgressBar.setVisibility(View.VISIBLE);
         mErrorTextView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void finishRefresh() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        mPresenter.onCreate();
     }
 }

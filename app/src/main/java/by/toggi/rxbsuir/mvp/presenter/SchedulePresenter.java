@@ -61,11 +61,15 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     private void onSuccess(List<Lesson> lessonList) {
         mLessonList = lessonList;
+        if (isViewAttached()) {
+            mScheduleView.finishRefresh();
+        }
     }
 
     private void onError(Throwable throwable) {
         if (isViewAttached()) {
             mScheduleView.showError(throwable);
+            mScheduleView.finishRefresh();
         }
     }
 
