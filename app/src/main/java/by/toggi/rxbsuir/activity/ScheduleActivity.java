@@ -8,11 +8,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -42,6 +46,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
+
+    private List<String> mStudentGroupList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +100,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 .negativeText(android.R.string.cancel)
                 .build();
         AutoCompleteTextView textView = ButterKnife.findById(dialog, R.id.group_number_text_view);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mStudentGroupList);
+        textView.setAdapter(adapter);
         dialog.show();
     }
 
@@ -113,6 +121,12 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     public void finishRefresh() {
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void updateStudentGroupList(List<String> studentGroupList) {
+        mStudentGroupList.clear();
+        mStudentGroupList.addAll(studentGroupList);
     }
 
     @Override

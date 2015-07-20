@@ -1,17 +1,21 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.queries.Query;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import by.toggi.rxbsuir.db.RxBsuirOpenHelper;
+import by.toggi.rxbsuir.db.RxBsuirContract;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import by.toggi.rxbsuir.rest.BsuirService;
 import by.toggi.rxbsuir.rest.model.Schedule;
 import by.toggi.rxbsuir.rest.model.ScheduleModel;
+import by.toggi.rxbsuir.rest.model.StudentGroup;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -20,13 +24,12 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     private ScheduleView mScheduleView;
     private BsuirService mService;
-    private RxBsuirOpenHelper mOpenHelper;
-    private List<Lesson> mLessonList = new ArrayList<>();
+    private StorIOSQLite mStorIOSQLite;
 
     @Inject
-    public SchedulePresenter(BsuirService service, RxBsuirOpenHelper openHelper) {
+    public SchedulePresenter(BsuirService service, StorIOSQLite storIOSQLite) {
         mService = service;
-        mOpenHelper = openHelper;
+        mStorIOSQLite = storIOSQLite;
     }
 
     @Override
@@ -34,11 +37,55 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         if (isViewAttached()) {
             mScheduleView.showLoading();
         }
-        mService.getGroupSchedule(111801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-                .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
-                .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
+        Observable<List<StudentGroup>> disk = mStorIOSQLite.get()
+                .listOfObjects(StudentGroup.class)
+                .withQuery(Query.builder()
+                        .table(RxBsuirContract.StudentGroupEntry.TABLE_NAME)
+                        .build())
+                .prepare()
+                .createObservable()
+                .observeOn(AndroidSchedulers.mainThread());
+        disk.subscribe(studentGroups -> {
+            if (studentGroups == null || studentGroups.isEmpty()) {
+                getStudentGroupsFromNetwork();
+            } else {
+                updateStudentGroupListInView(studentGroups);
+            }
+        });
+//        mService.getGroupSchedule(111801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+//                .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
+//                .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
+//                .toList()
+//                .subscribe(this::onSuccess, this::onError);
+    }
+
+    private void updateStudentGroupListInView(List<StudentGroup> studentGroupList) {
+        Observable.from(studentGroupList)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(StudentGroup::toString)
                 .toList()
-                .subscribe(this::onSuccess, this::onError);
+                .subscribe(strings -> {
+                    if (isViewAttached()) {
+                        mScheduleView.updateStudentGroupList(strings);
+                    }
+                });
+    }
+
+    private void getStudentGroupsFromNetwork() {
+        Observable<List<StudentGroup>> network = mService.getStudentGroups()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .map(studentGroupXmlModels -> studentGroupXmlModels.studentGroupList);
+        network.subscribe(this::saveStudentGroupsToDisk);
+    }
+
+    private void saveStudentGroupsToDisk(List<StudentGroup> studentGroupList) {
+        mStorIOSQLite.put()
+                .objects(studentGroupList)
+                .prepare()
+                .createObservable()
+                .subscribe();
     }
 
     @Override
@@ -60,7 +107,6 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     }
 
     private void onSuccess(List<Lesson> lessonList) {
-        mLessonList = lessonList;
         if (isViewAttached()) {
             mScheduleView.finishRefresh();
         }

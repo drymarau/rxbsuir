@@ -12,20 +12,24 @@ public class StudentGroup {
 
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_ID, key = true)
     @Element(name = "id")
-    long id;
+    public long id;
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_NAME)
     @Element(name = "name")
-    int name;
+    public String name;
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_COURSE)
     @Element(name = "course")
-    int course;
+    public int course;
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_FACULTY_ID)
     @Element(name = "facultyId")
-    long facultyId;
+    public long facultyId;
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_SPECIALITY_DEPARTMENT_EDUCATION_FORM_ID)
     @Element(name = "specialityDepartmentEducationFormId")
-    long specialityDepartmentEducationFormId;
+    public long specialityDepartmentEducationFormId;
 
     StudentGroup() {}
 
+    @Override
+    public String toString() {
+        return String.valueOf(name);
+    }
 }

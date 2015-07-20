@@ -8,7 +8,7 @@ import java.util.List;
 @Root(name = "studentGroupXmlModels")
 public class StudentGroupXmlModels {
 
-    @ElementList(entry = "scheduleModel", inline = true)
-    List<StudentGroup> studentGroupList;
+    @ElementList(entry = "studentGroup", inline = true)
+    public List<StudentGroup> studentGroupList;
 
 }
