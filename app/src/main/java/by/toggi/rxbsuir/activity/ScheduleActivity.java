@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ import by.toggi.rxbsuir.module.ActivityModule;
 import by.toggi.rxbsuir.module.ScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
+import rx.android.view.ViewActions;
+import rx.android.widget.WidgetObservable;
 
 
 public class ScheduleActivity extends AppCompatActivity implements ScheduleView, SwipeRefreshLayout.OnRefreshListener {
@@ -93,16 +97,46 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @OnClick(R.id.floating_action_button)
     public void onFloatingActionButtonClick() {
+        TextInputLayout textInputLayout = (TextInputLayout) View.inflate(this, R.layout.dialog_edit_text, null);
+        AutoCompleteTextView textView = ButterKnife.findById(textInputLayout, R.id.group_number_text_view);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mStudentGroupList);
+        textView.setAdapter(adapter);
         MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .customView(R.layout.dialog_edit_text, true)
+                .customView(textInputLayout, true)
                 .title(R.string.title_add_group)
                 .positiveText(R.string.positive_add)
                 .negativeText(android.R.string.cancel)
+                .autoDismiss(false)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        String groupNumber = textView.getText().toString();
+                        if (mPresenter.isValidGroupNumber(groupNumber)) {
+                            mPresenter.setGroupNumber(groupNumber);
+                            dialog.dismiss();
+                        } else {
+                            textInputLayout.setErrorEnabled(true);
+                            textInputLayout.setError(getString(R.string.error_no_group));
+                        }
+                    }
+                })
                 .build();
-        AutoCompleteTextView textView = ButterKnife.findById(dialog, R.id.group_number_text_view);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mStudentGroupList);
-        textView.setAdapter(adapter);
         dialog.show();
+        // Input validation
+        WidgetObservable.text(textView)
+                .map(onTextChangeEvent -> onTextChangeEvent.text().toString())
+                .map(this::isValidInput)
+                .startWith(false)
+                .distinctUntilChanged()
+                .subscribe(ViewActions.setEnabled(dialog.getActionButton(DialogAction.POSITIVE)));
+        WidgetObservable.text(textView)
+                .subscribe(onTextChangeEvent -> textInputLayout.setErrorEnabled(false));
     }
 
     @Override
@@ -132,6 +166,10 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     public void onRefresh() {
         mSwipeRefreshLayout.setRefreshing(true);
-        mPresenter.onCreate();
+        mPresenter.getStudentGroupSchedule();
+    }
+
+    private boolean isValidInput(String input) {
+        return input.length() == 6;
     }
 }

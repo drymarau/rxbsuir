@@ -8,7 +8,9 @@
         android:id="@+id/group_number_text_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="@string/hint_group_number"/>
+        android:hint="@string/hint_group_number"
+        android:inputType="number"
+        android:singleLine="true"/>
 
 </android.support.design.widget.TextInputLayout>
 

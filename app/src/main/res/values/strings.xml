@@ -11,6 +11,7 @@
     <string name="hint_group_number">Group number</string>
     <string name="title_add_group">Add group</string>
     <string name="positive_add">Add</string>
+    <string name="error_no_group">No schedule is available for this group</string>
 
     <array name="tabs">
         <item>Week 1</item>

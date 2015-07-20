@@ -20,16 +20,59 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+/**
+ * The type Schedule presenter.
+ */
 public class SchedulePresenter implements Presenter<ScheduleView> {
 
     private ScheduleView mScheduleView;
     private BsuirService mService;
     private StorIOSQLite mStorIOSQLite;
+    private String mGroupNumber;
+    private List<String> mGroupNumberList;
 
+    /**
+     * Instantiates a new Schedule presenter.
+     *
+     * @param service the service
+     * @param storIOSQLite the stor iOSQ lite
+     */
     @Inject
     public SchedulePresenter(BsuirService service, StorIOSQLite storIOSQLite) {
         mService = service;
         mStorIOSQLite = storIOSQLite;
+    }
+
+    /**
+     * Sets group number and updates schedule list.
+     *
+     * @param groupNumber the group number
+     */
+    public void setGroupNumber(String groupNumber) {
+        mGroupNumber = groupNumber;
+        getStudentGroupSchedule();
+    }
+
+    /**
+     * Validates group number.
+     *
+     * @param groupNumber the group number
+     * @return true is group number is valid, false otherwise
+     */
+    public boolean isValidGroupNumber(String groupNumber) {
+        return mGroupNumberList.contains(groupNumber);
+    }
+
+    /**
+     * Gets student group schedule.
+     */
+    // TODO Implement schedule storage and retrieval from SQLite
+    public void getStudentGroupSchedule() {
+        mService.getGroupSchedule(mGroupNumber).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
+                .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
+                .toList()
+                .subscribe(this::onSuccess, this::onError);
     }
 
     @Override
@@ -52,11 +95,6 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                 updateStudentGroupListInView(studentGroups);
             }
         });
-//        mService.getGroupSchedule(111801).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-//                .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
-//                .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
-//                .toList()
-//                .subscribe(this::onSuccess, this::onError);
     }
 
     private void updateStudentGroupListInView(List<StudentGroup> studentGroupList) {
@@ -66,8 +104,9 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                 .map(StudentGroup::toString)
                 .toList()
                 .subscribe(strings -> {
+                    mGroupNumberList = strings;
                     if (isViewAttached()) {
-                        mScheduleView.updateStudentGroupList(strings);
+                        mScheduleView.updateStudentGroupList(mGroupNumberList);
                     }
                 });
     }
