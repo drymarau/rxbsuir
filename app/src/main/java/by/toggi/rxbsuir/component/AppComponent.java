@@ -1,5 +1,7 @@
 package by.toggi.rxbsuir.component;
 
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+
 import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.RxBsuirApplication;
@@ -23,5 +25,7 @@ public interface AppComponent {
     BsuirService service();
 
     RxBsuirOpenHelper openHelper();
+
+    StorIOSQLite storIOSQLite();
 
 }
