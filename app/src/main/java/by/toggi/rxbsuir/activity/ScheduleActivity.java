@@ -8,13 +8,17 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
@@ -79,6 +83,18 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 .scheduleActivityModule(new ScheduleActivityModule())
                 .appComponent(((RxBsuirApplication) getApplication()).getAppComponent())
                 .build().inject(this);
+    }
+
+    @OnClick(R.id.floating_action_button)
+    public void onFloatingActionButtonClick() {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .customView(R.layout.dialog_edit_text, true)
+                .title(R.string.title_add_group)
+                .positiveText(R.string.positive_add)
+                .negativeText(android.R.string.cancel)
+                .build();
+        AutoCompleteTextView textView = ButterKnife.findById(dialog, R.id.group_number_text_view);
+        dialog.show();
     }
 
     @Override

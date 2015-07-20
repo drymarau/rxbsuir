@@ -3,7 +3,14 @@
     <!-- bsuir.by endpoint for retrofit -->
     <string name="schedule_endpoint" translatable="false">http://www.bsuir.by/schedule/rest</string>
 
+    <!-- Error message when something went wrong with schedule -->
     <string name="error_schedule">Something is wrong with schedule. Please try again later</string>
+
+    <!-- ADD GROUP DIALOG -->
+    <!-- Group number hint in add group dialog -->
+    <string name="hint_group_number">Group number</string>
+    <string name="title_add_group">Add group</string>
+    <string name="positive_add">Add</string>
 
     <array name="tabs">
         <item>Week 1</item>
