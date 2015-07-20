@@ -131,7 +131,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         // Input validation
         WidgetObservable.text(textView)
                 .map(onTextChangeEvent -> onTextChangeEvent.text().toString())
-                .map(this::isValidInput)
+                .map(s -> s.length() == 6)
                 .startWith(false)
                 .distinctUntilChanged()
                 .subscribe(ViewActions.setEnabled(dialog.getActionButton(DialogAction.POSITIVE)));
@@ -169,7 +169,4 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         mPresenter.getStudentGroupSchedule();
     }
 
-    private boolean isValidInput(String input) {
-        return input.length() == 6;
-    }
 }
