@@ -9,7 +9,7 @@ import rx.Observable;
 public interface BsuirService {
 
     @GET("/schedule/{group}")
-    Observable<ScheduleXmlModels> getGroupSchedule(@Path("group") int group);
+    Observable<ScheduleXmlModels> getGroupSchedule(@Path("group") String group);
 
     @GET("/studentGroup")
     Observable<StudentGroupXmlModels> getStudentGroups();
