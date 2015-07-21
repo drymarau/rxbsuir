@@ -1,40 +1,46 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import javax.inject.Inject;
 
+import by.toggi.rxbsuir.db.RxBsuirContract;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.WeekView;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class WeekPresenter implements Presenter<WeekView> {
 
-    private List<Lesson> mLessonList = new ArrayList<>();
     private WeekView mWeekView;
     private int mWeekNumber;
+    private StorIOSQLite mStorIOSQLite;
 
     @Inject
-    public WeekPresenter(int weekNumber) {
+    public WeekPresenter(int weekNumber, StorIOSQLite storIOSQLite) {
         mWeekNumber = weekNumber;
+        mStorIOSQLite = storIOSQLite;
     }
 
     @Override
     public void onCreate() {
-        showFilteredLessonList();
+        showLessonList();
     }
 
-    private void showFilteredLessonList() {
-        Observable.from(mLessonList).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.computation())
-                .filter(lesson -> lesson.getWeekNumberList().contains(mWeekNumber))
-                .toList()
-                .subscribe(scheduleList -> {
+    private void showLessonList() {
+        mStorIOSQLite.get()
+                .listOfObjects(Lesson.class)
+                .withQuery(Query.builder()
+                        .table(RxBsuirContract.LessonEntry.TABLE_NAME)
+                        .where(RxBsuirContract.LessonEntry.COL_WEEK_NUMBER_LIST + " like '%" + mWeekNumber + "%'")
+                        .build())
+                .prepare()
+                .createObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lessonList -> {
                     if (isViewAttached()) {
-                        mWeekView.showLessonList(scheduleList);
+                        mWeekView.showLessonList(lessonList);
                     }
                 });
     }
@@ -47,7 +53,7 @@ public class WeekPresenter implements Presenter<WeekView> {
     @Override
     public void attachView(WeekView view) {
         mWeekView = view;
-        showFilteredLessonList();
+        showLessonList();
     }
 
     @Override
