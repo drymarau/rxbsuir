@@ -76,6 +76,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         mTabLayout.setupWithViewPager(mViewPager);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setEnabled(false);
 
         mPresenter.attachView(this);
         mPresenter.onCreate();
@@ -137,6 +138,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     public void finishRefresh() {
         mSwipeRefreshLayout.setRefreshing(false);
+        mProgressBar.setVisibility(View.GONE);
+        mErrorTextView.setVisibility(View.GONE);
     }
 
     @Override
