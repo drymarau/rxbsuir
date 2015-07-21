@@ -2,10 +2,10 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:elevation="2dp"
+    android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_two_line_avatar"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:elevation="2dp">
 
     <TextView
         android:id="@+id/lesson_type"

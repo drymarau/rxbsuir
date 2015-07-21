@@ -21,7 +21,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.WeekdayItemDecoration;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.component.DaggerWeekFragmentComponent;
 import by.toggi.rxbsuir.db.model.Lesson;
@@ -38,7 +37,6 @@ public class WeekFragment extends Fragment implements WeekView {
 
     @Inject LinearLayoutManager mLayoutManager;
     @Inject LessonAdapter mAdapter;
-    @Inject WeekdayItemDecoration mItemDecoration;
     @Inject WeekPresenter mPresenter;
 
     private int mWeekNumber;
@@ -100,7 +98,6 @@ public class WeekFragment extends Fragment implements WeekView {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(mItemDecoration);
 
     }
 
