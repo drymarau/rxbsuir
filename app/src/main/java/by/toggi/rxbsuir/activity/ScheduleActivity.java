@@ -97,46 +97,28 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @OnClick(R.id.floating_action_button)
     public void onFloatingActionButtonClick() {
-        TextInputLayout textInputLayout = (TextInputLayout) View.inflate(this, R.layout.dialog_edit_text, null);
+        TextInputLayout textInputLayout = (TextInputLayout) View.inflate(this, R.layout.dialog_add_group, null);
         AutoCompleteTextView textView = ButterKnife.findById(textInputLayout, R.id.group_number_text_view);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mStudentGroupList);
         textView.setAdapter(adapter);
-        MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .customView(textInputLayout, true)
+        MaterialDialog dialog = new MaterialDialog.Builder(this).customView(textInputLayout, true)
                 .title(R.string.title_add_group)
                 .positiveText(R.string.positive_add)
                 .negativeText(android.R.string.cancel)
-                .autoDismiss(false)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        dialog.dismiss();
-                    }
-
-                    @Override
                     public void onPositive(MaterialDialog dialog) {
-                        String groupNumber = textView.getText().toString();
-                        if (mPresenter.isValidGroupNumber(groupNumber)) {
-                            mPresenter.setGroupNumber(groupNumber);
-                            dialog.dismiss();
-                        } else {
-                            textInputLayout.setErrorEnabled(true);
-                            textInputLayout.setError(getString(R.string.error_no_group));
-                        }
+                        mPresenter.setGroupNumber(textView.getText().toString());
                     }
                 })
                 .build();
         dialog.show();
         // Input validation
-        WidgetObservable.text(textView)
-                .map(onTextChangeEvent -> onTextChangeEvent.text().toString())
-                .map(s -> s.length() == 6)
+        WidgetObservable.text(textView).map(onTextChangeEvent -> onTextChangeEvent.text().toString())
+                .map(mPresenter::isValidGroupNumber)
                 .startWith(false)
                 .distinctUntilChanged()
                 .subscribe(ViewActions.setEnabled(dialog.getActionButton(DialogAction.POSITIVE)));
-        WidgetObservable.text(textView)
-                .subscribe(onTextChangeEvent -> textInputLayout.setErrorEnabled(false));
     }
 
     @Override

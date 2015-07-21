@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:hint="@string/hint_group_number"
         android:inputType="number"
+        android:maxLength="6"
         android:singleLine="true"/>
 
 </android.support.design.widget.TextInputLayout>
