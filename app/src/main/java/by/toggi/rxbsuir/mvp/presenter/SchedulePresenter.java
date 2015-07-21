@@ -1,6 +1,7 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     /**
      * Instantiates a new Schedule presenter.
      *
-     * @param service the service
+     * @param service      the service
      * @param storIOSQLite the stor iOSQ lite
      */
     @Inject
@@ -60,7 +61,11 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      * @return true is group number is valid, false otherwise
      */
     public boolean isValidGroupNumber(String groupNumber) {
-        return mGroupNumberList.contains(groupNumber);
+        if (mGroupNumberList != null) {
+            return mGroupNumberList.contains(groupNumber);
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -146,22 +151,29 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     }
 
     private void onSuccess(List<Lesson> lessonList) {
-        if (isViewAttached()) {
-            mScheduleView.finishRefresh();
-        }
+        Observable.concat(
+                mStorIOSQLite.delete()
+                        .byQuery(DeleteQuery.builder().table(RxBsuirContract.LessonEntry.TABLE_NAME).build())
+                        .prepare()
+                        .createObservable(),
+                mStorIOSQLite.put()
+                        .objects(lessonList)
+                        .prepare()
+                        .createObservable()
+        ).subscribe();
     }
 
     private void onError(Throwable throwable) {
-        if (isViewAttached()) {
-            mScheduleView.showError(throwable);
-            mScheduleView.finishRefresh();
-        }
+//        if (isViewAttached()) {
+//            mScheduleView.showError(throwable);
+//            mScheduleView.finishRefresh();
+//        }
     }
 
     private List<Lesson> transformScheduleToLesson(ScheduleModel model) {
         List<Lesson> lessonList = new ArrayList<>(model.scheduleList.size());
         for (Schedule schedule : model.scheduleList) {
-            lessonList.add(new Lesson(schedule, model.weekDay));
+            lessonList.add(new Lesson(null, schedule, model.weekDay));
         }
         return lessonList;
     }
