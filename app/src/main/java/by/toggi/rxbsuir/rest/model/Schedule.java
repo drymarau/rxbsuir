@@ -22,7 +22,7 @@ public class Schedule {
     @Element(name = "numSubgroup", required = false)
     public int numSubgroup;
     @ElementList(entry = "studentGroup", inline = true, required = false)
-    public List<Integer> studentGroupList;
+    public List<String> studentGroupList;
     @Element(name = "subject", required = false)
     public String subject;
     @ElementList(entry = "weekNumber", inline = true, required = false)

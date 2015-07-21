@@ -18,4 +18,6 @@ public class Employee {
     @Element(name = "lastName")
     public String lastName;
 
+    Employee() {}
+
 }
