@@ -164,10 +164,6 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     }
 
     private void onError(Throwable throwable) {
-//        if (isViewAttached()) {
-//            mScheduleView.showError(throwable);
-//            mScheduleView.finishRefresh();
-//        }
     }
 
     private List<Lesson> transformScheduleToLesson(ScheduleModel model) {

@@ -124,22 +124,14 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void showError(Throwable throwable) {
-        mProgressBar.setVisibility(View.GONE);
-        mErrorTextView.setVisibility(View.VISIBLE);
-        mErrorTextView.setText(throwable.getLocalizedMessage());
     }
 
     @Override
     public void showLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mErrorTextView.setVisibility(View.GONE);
     }
 
     @Override
     public void finishRefresh() {
-        mSwipeRefreshLayout.setRefreshing(false);
-        mProgressBar.setVisibility(View.GONE);
-        mErrorTextView.setVisibility(View.GONE);
     }
 
     @Override
@@ -150,8 +142,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void onRefresh() {
-        mSwipeRefreshLayout.setRefreshing(true);
-        mPresenter.getStudentGroupSchedule();
     }
 
 }
