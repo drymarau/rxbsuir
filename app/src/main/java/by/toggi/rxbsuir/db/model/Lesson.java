@@ -1,5 +1,7 @@
 package by.toggi.rxbsuir.db.model;
 
+import android.support.annotation.Nullable;
+
 import java.util.List;
 
 import by.toggi.rxbsuir.rest.model.Employee;
@@ -7,18 +9,20 @@ import by.toggi.rxbsuir.rest.model.Schedule;
 
 public class Lesson {
 
+    private Long _id;
     private List<String> auditoryList;
     private List<Employee> employeeList;
     private String lessonTime;
     private String lessonType;
     private String note;
     private int numSubgroup;
-    private List<Integer> studentGroupList;
+    private List<String> studentGroupList;
     private String subject;
     private List<Integer> weekNumberList;
     private String weekday;
 
-    public Lesson(List<String> auditoryList, List<Employee> employeeList, String lessonTime, String lessonType, String note, int numSubgroup, List<Integer> studentGroupList, String subject, List<Integer> weekNumberList, String weekday) {
+    public Lesson(@Nullable Long _id, List<String> auditoryList, List<Employee> employeeList, String lessonTime, String lessonType, String note, int numSubgroup, List<String> studentGroupList, String subject, List<Integer> weekNumberList, String weekday) {
+        this._id = _id;
         this.auditoryList = auditoryList;
         this.employeeList = employeeList;
         this.lessonTime = lessonTime;
@@ -31,7 +35,8 @@ public class Lesson {
         this.weekday = weekday;
     }
 
-    public Lesson(Schedule schedule, String weekday) {
+    public Lesson(@Nullable Long _id, Schedule schedule, String weekday) {
+        this._id = _id;
         this.auditoryList = schedule.auditory;
         this.employeeList = schedule.employeeList;
         this.lessonTime = schedule.lessonTime;
@@ -42,6 +47,10 @@ public class Lesson {
         this.subject = schedule.subject;
         this.weekNumberList = schedule.weekNumberList;
         this.weekday = weekday;
+    }
+
+    public Long getId() {
+        return _id;
     }
 
     public List<String> getAuditoryList() {
@@ -68,7 +77,7 @@ public class Lesson {
         return numSubgroup;
     }
 
-    public List<Integer> getStudentGroupList() {
+    public List<String> getStudentGroupList() {
         return studentGroupList;
     }
 
