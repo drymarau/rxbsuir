@@ -39,7 +39,16 @@ public class WeekFragment extends Fragment implements WeekView {
 
     private int mWeekNumber;
 
+    /**
+     * Instantiates a new {@code WeekFragment}.
+     *
+     * @param weekNumber the week number
+     * @return the week fragment
+     */
     public static WeekFragment newInstance(int weekNumber) {
+        if (weekNumber < 1 || weekNumber > 4) {
+            throw new IllegalArgumentException("WeekFragment can only accept weekNumber from 1 to 4. Supplied weekNumber: " + weekNumber);
+        }
         Bundle args = new Bundle();
         args.putInt(ARGS_WEEK_NUMBER, weekNumber);
         WeekFragment fragment = new WeekFragment();
@@ -63,14 +72,6 @@ public class WeekFragment extends Fragment implements WeekView {
                 .build().inject(this);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        mPresenter.attachView(this);
-        mPresenter.onCreate();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,9 +84,11 @@ public class WeekFragment extends Fragment implements WeekView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mPresenter.attachView(this);
+        mPresenter.onCreate();
+
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-
     }
 
     @Override
