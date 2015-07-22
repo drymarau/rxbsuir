@@ -33,14 +33,22 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
+        Lesson lesson = mLessonList.get(position);
+
         if (position == 0) {
-            return VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY;
+            return lesson.getPrettyEmployeeList().isEmpty()
+                    ? VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY
+                    : VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY;
         }
-        String weekday = mLessonList.get(position).getWeekday();
-        if (weekday.equals(mLessonList.get(position - 1).getWeekday())) {
-            return VIEW_TYPE_LESSON_TWO_LINE;
+
+        if (lesson.getWeekday().equals(mLessonList.get(position - 1).getWeekday())) {
+            return lesson.getPrettyEmployeeList().isEmpty()
+                    ? VIEW_TYPE_LESSON_TWO_LINE
+                    : VIEW_TYPE_LESSON_THREE_LINE;
         } else {
-            return VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY;
+            return lesson.getPrettyEmployeeList().isEmpty()
+                    ? VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY
+                    : VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY;
         }
     }
 
@@ -55,6 +63,14 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
             case VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY:
                 view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.list_item_lesson_two_line_with_weekday, viewGroup, false);
+                break;
+            case VIEW_TYPE_LESSON_THREE_LINE:
+                view = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.list_item_lesson_three_line, viewGroup, false);
+                break;
+            case VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY:
+                view = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.list_item_lesson_three_line_with_weekday, viewGroup, false);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown view type: " + viewType);
@@ -71,6 +87,9 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         viewHolder.lessonTime.setText(lesson.getPrettyLessonTime());
         if (viewHolder.lessonWeekday != null) {
             viewHolder.lessonWeekday.setText(lesson.getWeekday());
+        }
+        if (viewHolder.lessonEmployee != null) {
+            viewHolder.lessonEmployee.setText(lesson.getPrettyEmployeeList());
         }
     }
 
