@@ -18,6 +18,11 @@ public class Employee {
     @Element(name = "lastName")
     public String lastName;
 
-    Employee() {}
+    Employee() {
+    }
 
+    @Override
+    public String toString() {
+        return String.format("%s %s.%s.", lastName, firstName.charAt(0), middleName.charAt(0));
+    }
 }
