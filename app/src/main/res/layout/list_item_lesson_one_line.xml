@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_two_line_avatar"
+    android:background="@android:color/white"
+    android:elevation="2dp">
+
+    <include layout="@layout/list_item_lesson_type"/>
+
+    <include
+        layout="@layout/list_item_lesson_subject_subgroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/keyline_second"/>
+
+    <include layout="@layout/list_item_lesson_time"/>
+
+</RelativeLayout>
