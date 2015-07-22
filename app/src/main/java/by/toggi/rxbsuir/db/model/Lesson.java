@@ -121,6 +121,19 @@ public class Lesson {
         return subject;
     }
 
+    /**
+     * Gets subject with subgroup ("ЭМАСиК (1)").
+     *
+     * @return the subject with subgroup
+     */
+    public String getSubjectWithSubgroup() {
+        if (lessonType.equals("ЛР")) {
+            return String.format("%s (%d)", subject, numSubgroup);
+        } else {
+            return subject;
+        }
+    }
+
     public List<Integer> getWeekNumberList() {
         return weekNumberList;
     }
