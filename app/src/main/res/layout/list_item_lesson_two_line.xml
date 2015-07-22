@@ -16,12 +16,7 @@
         android:orientation="vertical"
         android:paddingLeft="@dimen/keyline_second">
 
-        <TextView
-            android:id="@+id/lesson_subject_subgroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            tools:text="ПиСЭД (1)"/>
+        <include layout="@layout/list_item_lesson_subject_subgroup"/>
 
         <TextView
             android:id="@+id/lesson_class"
