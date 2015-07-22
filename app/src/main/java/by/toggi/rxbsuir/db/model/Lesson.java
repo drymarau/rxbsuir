@@ -92,6 +92,15 @@ public class Lesson {
         return lessonTime;
     }
 
+    /**
+     * Gets pretty lesson time (two-line time).
+     *
+     * @return the pretty lesson time
+     */
+    public String getPrettyLessonTime() {
+        return lessonTime.replace("-", "\n");
+    }
+
     public String getLessonType() {
         return lessonType;
     }

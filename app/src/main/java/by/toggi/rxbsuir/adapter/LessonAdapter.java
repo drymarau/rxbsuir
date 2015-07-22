@@ -66,7 +66,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         viewHolder.lessonType.setText(lesson.getLessonType());
         viewHolder.lessonSubjectSubgroup.setText(lesson.getSubject());
         viewHolder.lessonClass.setText(lesson.getPrettyAuditoryList());
-        viewHolder.lessonTime.setText(lesson.getLessonTime().replace("-", "\n"));
+        viewHolder.lessonTime.setText(lesson.getPrettyLessonTime());
         if (viewHolder.lessonWeekday != null) {
             viewHolder.lessonWeekday.setText(lesson.getWeekday());
         }
