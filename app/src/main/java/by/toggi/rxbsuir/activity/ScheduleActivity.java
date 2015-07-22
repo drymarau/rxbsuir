@@ -3,6 +3,7 @@ package by.toggi.rxbsuir.activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,8 @@ import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
+import by.toggi.rxbsuir.fragment.StorageFragment;
+import by.toggi.rxbsuir.fragment.WeekFragment;
 import by.toggi.rxbsuir.module.ActivityModule;
 import by.toggi.rxbsuir.module.ScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
@@ -58,6 +61,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         initializeComponent();
         ButterKnife.bind(this);
 
+        addStorageFragment();
+
         getDelegate().setSupportActionBar(mToolbar);
 
         mViewPager.setAdapter(mPagerAdapter);
@@ -69,6 +74,16 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         mPresenter.attachView(this);
         mPresenter.onCreate();
+    }
+
+    private void addStorageFragment() {
+        FragmentManager manager = getSupportFragmentManager();
+        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(WeekFragment.TAG_STORAGE_FRAGMENT);
+
+        if (fragment == null) {
+            fragment = new StorageFragment();
+            manager.beginTransaction().add(fragment, WeekFragment.TAG_STORAGE_FRAGMENT).commit();
+        }
     }
 
     @Override

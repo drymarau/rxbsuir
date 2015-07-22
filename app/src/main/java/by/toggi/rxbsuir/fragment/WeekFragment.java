@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import by.toggi.rxbsuir.mvp.view.WeekView;
 
 public class WeekFragment extends Fragment implements WeekView {
 
+    public static final String TAG_STORAGE_FRAGMENT = "storage_fragment";
     public static final String ARGS_WEEK_NUMBER = "week_number";
     private static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
 
@@ -85,8 +87,20 @@ public class WeekFragment extends Fragment implements WeekView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPresenter.attachView(this);
-        mPresenter.onCreate();
+        FragmentManager manager = getFragmentManager();
+        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(TAG_STORAGE_FRAGMENT);
+
+        if (fragment == null) {
+            throw new IllegalStateException("Storage fragment should already be added");
+        }
+        if (fragment.getPresenter(getPresenterTag()) == null) {
+            fragment.setPresenter(getPresenterTag(), mPresenter);
+            mPresenter.attachView(this);
+            mPresenter.onCreate();
+        } else {
+            mPresenter = fragment.getPresenter(getPresenterTag());
+            mPresenter.attachView(this);
+        }
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -132,6 +146,10 @@ public class WeekFragment extends Fragment implements WeekView {
         if (savedInstanceState != null) {
             mLayoutManagerState = savedInstanceState.getParcelable(KEY_LAYOUT_MANAGER_STATE);
         }
+    }
+
+    private String getPresenterTag() {
+        return "week_" + mWeekNumber;
     }
 
     /**
