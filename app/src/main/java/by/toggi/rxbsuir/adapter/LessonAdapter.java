@@ -37,16 +37,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     public int getItemViewType(int position) {
         Lesson lesson = mLessonList.get(position);
 
-        if (position == 0) {
-            if (lesson.getPrettyAuditoryList().isEmpty()) {
-                return VIEW_TYPE_LESSON_ONE_LINE_WITH_WEEKDAY;
-            }
-            return lesson.getPrettyEmployeeList().isEmpty()
-                    ? VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY
-                    : VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY;
-        }
-
-        if (lesson.getWeekday().equals(mLessonList.get(position - 1).getWeekday())) {
+        if (position != 0 && lesson.getWeekday().equals(mLessonList.get(position - 1).getWeekday())) {
             if (lesson.getPrettyAuditoryList().isEmpty()) {
                 return VIEW_TYPE_LESSON_ONE_LINE;
             }
