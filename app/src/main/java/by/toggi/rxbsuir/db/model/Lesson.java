@@ -58,7 +58,12 @@ public class Lesson {
         return auditoryList;
     }
 
-    public String getAuditoryListAsString() {
+    /**
+     * Gets pretty auditory list ("122-1, 135-1").
+     *
+     * @return pretty auditory list
+     */
+    public String getPrettyAuditoryList() {
         if (auditoryList != null) {
             return TextUtils.join(", ", auditoryList);
         } else {
