@@ -6,17 +6,7 @@
               android:elevation="2dp"
               android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/lesson_weekday"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/list_subheader_height"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/keyline_first"
-        android:paddingRight="@dimen/keyline_first"
-        android:text="Вторник"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@color/black_54"
-        tools:text="Понедельник"/>
+    <include layout="@layout/list_item_subheader"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
