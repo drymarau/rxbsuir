@@ -1,6 +1,7 @@
 package by.toggi.rxbsuir.db.model;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import java.util.List;
 
@@ -55,6 +56,14 @@ public class Lesson {
 
     public List<String> getAuditoryList() {
         return auditoryList;
+    }
+
+    public String getAuditoryListAsString() {
+        if (auditoryList != null) {
+            return TextUtils.join(", ", auditoryList);
+        } else {
+            return "";
+        }
     }
 
     public List<Employee> getEmployeeList() {
