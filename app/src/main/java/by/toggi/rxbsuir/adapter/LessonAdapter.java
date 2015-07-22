@@ -52,7 +52,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
                 break;
             case VIEW_TYPE_LESSON_WITH_WEEKDAY:
                 view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.list_item_lesson_with_weekday, viewGroup, false);
+                        .inflate(R.layout.list_item_lesson_two_line_with_weekday, viewGroup, false);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown view type: " + viewType);
