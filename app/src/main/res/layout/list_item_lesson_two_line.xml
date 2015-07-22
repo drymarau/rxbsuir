@@ -17,7 +17,9 @@
 
         <include layout="@layout/list_item_lesson_subject_subgroup"/>
 
-        <include layout="@layout/list_item_lesson_class"/>
+        <include
+            android:id="@+id/lesson_class"
+            layout="@layout/list_item_lesson_class_employee"/>
 
     </LinearLayout>
 
