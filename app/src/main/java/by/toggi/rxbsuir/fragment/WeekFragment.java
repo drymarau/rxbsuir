@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,7 +30,6 @@ import by.toggi.rxbsuir.mvp.view.WeekView;
 public class WeekFragment extends Fragment implements WeekView {
 
     public static final String ARGS_WEEK_NUMBER = "week_number";
-    public static final String TAG_DATA_FRAGMENT = "data_fragment";
 
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
 
@@ -48,6 +46,8 @@ public class WeekFragment extends Fragment implements WeekView {
         fragment.setArguments(args);
         return fragment;
     }
+
+    // TODO Save and restore scroll position on orientation change
 
     @Override
     public void onAttach(Activity activity) {
@@ -67,21 +67,8 @@ public class WeekFragment extends Fragment implements WeekView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FragmentManager manager = getActivity().getSupportFragmentManager();
-        DataFragment fragment = (DataFragment) manager.findFragmentByTag(TAG_DATA_FRAGMENT);
-
-        if (fragment == null) {
-            throw new IllegalStateException("Data fragment should be already created");
-        } else {
-            if (fragment.getPresenter(getPresenterTag()) == null) {
-                fragment.setPresenter(getPresenterTag(), mPresenter);
-                mPresenter.attachView(this);
-                mPresenter.onCreate();
-            } else {
-                mPresenter = fragment.getPresenter(getPresenterTag());
-                mPresenter.attachView(this);
-            }
-        }
+        mPresenter.attachView(this);
+        mPresenter.onCreate();
     }
 
     @Nullable
@@ -126,10 +113,11 @@ public class WeekFragment extends Fragment implements WeekView {
         mPresenter.onDestroy();
     }
 
-    private String getPresenterTag() {
-        return "week_" + mWeekNumber;
-    }
-
+    /**
+     * Gets week number of the fragment.
+     *
+     * @return the week number
+     */
     public int getWeekNumber() {
         return mWeekNumber;
     }

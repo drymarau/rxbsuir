@@ -3,7 +3,6 @@ package by.toggi.rxbsuir.activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -29,8 +28,6 @@ import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
-import by.toggi.rxbsuir.fragment.DataFragment;
-import by.toggi.rxbsuir.fragment.WeekFragment;
 import by.toggi.rxbsuir.module.ActivityModule;
 import by.toggi.rxbsuir.module.ScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
@@ -57,14 +54,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
-
-        FragmentManager manager = getSupportFragmentManager();
-        DataFragment fragment = (DataFragment) manager.findFragmentByTag(WeekFragment.TAG_DATA_FRAGMENT);
-
-        if (fragment == null) {
-            fragment = new DataFragment();
-            manager.beginTransaction().add(fragment, WeekFragment.TAG_DATA_FRAGMENT).commit();
-        }
 
         initializeComponent();
         ButterKnife.bind(this);

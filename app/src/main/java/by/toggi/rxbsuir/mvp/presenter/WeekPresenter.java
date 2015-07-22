@@ -5,17 +5,21 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import javax.inject.Inject;
 
-import by.toggi.rxbsuir.db.RxBsuirContract;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.WeekView;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
+
+import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 public class WeekPresenter implements Presenter<WeekView> {
 
     private WeekView mWeekView;
     private int mWeekNumber;
     private StorIOSQLite mStorIOSQLite;
+    private Subscription mSubscription;
 
     @Inject
     public WeekPresenter(int weekNumber, StorIOSQLite storIOSQLite) {
@@ -29,11 +33,11 @@ public class WeekPresenter implements Presenter<WeekView> {
     }
 
     private void showLessonList() {
-        mStorIOSQLite.get()
+        mSubscription = mStorIOSQLite.get()
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
-                        .table(RxBsuirContract.LessonEntry.TABLE_NAME)
-                        .where(RxBsuirContract.LessonEntry.COL_WEEK_NUMBER_LIST + " like '%" + mWeekNumber + "%'")
+                        .table(LessonEntry.TABLE_NAME)
+                        .where(LessonEntry.filterByWeekNumber(mWeekNumber))
                         .build())
                 .prepare()
                 .createObservable()
@@ -48,6 +52,10 @@ public class WeekPresenter implements Presenter<WeekView> {
     @Override
     public void onDestroy() {
         detachView();
+        if (!mSubscription.isUnsubscribed()) {
+            Timber.d(mSubscription.toString());
+            mSubscription.unsubscribe();
+        }
     }
 
     @Override
