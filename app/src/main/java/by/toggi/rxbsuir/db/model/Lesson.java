@@ -75,6 +75,19 @@ public class Lesson {
         return employeeList;
     }
 
+    /**
+     * Gets pretty employee list ("Дик С.К., Смирнов А.В.").
+     *
+     * @return the pretty employee list
+     */
+    public String getPrettyEmployeeList() {
+        if (employeeList != null) {
+            return TextUtils.join(", ", employeeList);
+        } else {
+            return "";
+        }
+    }
+
     public String getLessonTime() {
         return lessonTime;
     }
