@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_two_line_avatar"
     android:background="@android:color/white"
@@ -18,13 +17,7 @@
 
         <include layout="@layout/list_item_lesson_subject_subgroup"/>
 
-        <TextView
-            android:id="@+id/lesson_class"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/black_54"
-            tools:text="122-1"/>
+        <include layout="@layout/list_item_lesson_class"/>
 
     </LinearLayout>
 
