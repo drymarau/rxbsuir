@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +38,7 @@ public class WeekFragment extends Fragment implements WeekView {
     @Inject LessonAdapter mAdapter;
     @Inject WeekPresenter mPresenter;
 
+    private Parcelable mLayoutManagerState;
     private int mWeekNumber;
 
     /**
@@ -55,8 +57,6 @@ public class WeekFragment extends Fragment implements WeekView {
         fragment.setArguments(args);
         return fragment;
     }
-
-    // TODO Save and restore scroll position on orientation change
 
     @Override
     public void onAttach(Activity activity) {
@@ -102,6 +102,9 @@ public class WeekFragment extends Fragment implements WeekView {
             textView.setVisibility(View.GONE);
         }
         mAdapter.setLessonList(lessonList);
+        if (mLayoutManagerState != null) {
+            mLayoutManager.onRestoreInstanceState(mLayoutManagerState);
+        }
     }
 
     @Override
@@ -114,6 +117,20 @@ public class WeekFragment extends Fragment implements WeekView {
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("layout_manager_state", mLayoutManager.onSaveInstanceState());
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            mLayoutManagerState = savedInstanceState.getParcelable("layout_manager_state");
+        }
     }
 
     /**
