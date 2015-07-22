@@ -16,8 +16,10 @@ import by.toggi.rxbsuir.db.model.Lesson;
 
 public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> {
 
-    public static final int VIEW_TYPE_LESSON = 0;
-    public static final int VIEW_TYPE_LESSON_WITH_WEEKDAY = 1;
+    public static final int VIEW_TYPE_LESSON_TWO_LINE = 0;
+    public static final int VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY = 1;
+    public static final int VIEW_TYPE_LESSON_THREE_LINE = 2;
+    public static final int VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY = 3;
     private List<Lesson> mLessonList;
 
     public LessonAdapter(List<Lesson> lessonList) {
@@ -32,13 +34,13 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {
-            return VIEW_TYPE_LESSON_WITH_WEEKDAY;
+            return VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY;
         }
         String weekday = mLessonList.get(position).getWeekday();
         if (weekday.equals(mLessonList.get(position - 1).getWeekday())) {
-            return VIEW_TYPE_LESSON;
+            return VIEW_TYPE_LESSON_TWO_LINE;
         } else {
-            return VIEW_TYPE_LESSON_WITH_WEEKDAY;
+            return VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY;
         }
     }
 
@@ -46,11 +48,11 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view;
         switch (viewType) {
-            case VIEW_TYPE_LESSON:
+            case VIEW_TYPE_LESSON_TWO_LINE:
                 view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.list_item_lesson_two_line, viewGroup, false);
                 break;
-            case VIEW_TYPE_LESSON_WITH_WEEKDAY:
+            case VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY:
                 view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.list_item_lesson_two_line_with_weekday, viewGroup, false);
                 break;
