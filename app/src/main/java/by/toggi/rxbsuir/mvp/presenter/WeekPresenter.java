@@ -10,7 +10,6 @@ import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.WeekView;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
@@ -53,7 +52,6 @@ public class WeekPresenter implements Presenter<WeekView> {
     public void onDestroy() {
         detachView();
         if (!mSubscription.isUnsubscribed()) {
-            Timber.d(mSubscription.toString());
             mSubscription.unsubscribe();
         }
     }
