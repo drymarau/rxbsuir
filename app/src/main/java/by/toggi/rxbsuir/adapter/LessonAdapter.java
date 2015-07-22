@@ -87,6 +87,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         @Bind(R.id.lesson_time) TextView lessonTime;
 
         @Nullable @Bind(R.id.lesson_weekday) TextView lessonWeekday;
+        @Nullable @Bind(R.id.lesson_employee) TextView lessonEmployee;
 
         public ViewHolder(View itemView) {
             super(itemView);
