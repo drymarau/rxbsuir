@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_three_line_avatar"
+    android:background="@android:color/white"
+    android:elevation="2dp"
+    android:paddingTop="16dp">
+
+    <include
+        layout="@layout/list_item_lesson_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="false"
+        android:layout_marginLeft="@dimen/keyline_first"
+        android:layout_marginRight="@dimen/keyline_first"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/keyline_second">
+
+        <include layout="@layout/list_item_lesson_subject_subgroup"/>
+
+        <include layout="@layout/list_item_lesson_employee"/>
+
+        <include layout="@layout/list_item_lesson_class"/>
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/list_item_lesson_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="false"/>
+
+</RelativeLayout>
