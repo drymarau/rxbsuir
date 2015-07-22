@@ -31,6 +31,7 @@ import by.toggi.rxbsuir.mvp.view.WeekView;
 public class WeekFragment extends Fragment implements WeekView {
 
     public static final String ARGS_WEEK_NUMBER = "week_number";
+    private static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
 
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
 
@@ -122,14 +123,14 @@ public class WeekFragment extends Fragment implements WeekView {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("layout_manager_state", mLayoutManager.onSaveInstanceState());
+        outState.putParcelable(KEY_LAYOUT_MANAGER_STATE, mLayoutManager.onSaveInstanceState());
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            mLayoutManagerState = savedInstanceState.getParcelable("layout_manager_state");
+            mLayoutManagerState = savedInstanceState.getParcelable(KEY_LAYOUT_MANAGER_STATE);
         }
     }
 
