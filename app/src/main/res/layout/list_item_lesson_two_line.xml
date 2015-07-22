@@ -45,16 +45,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/lesson_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:paddingEnd="@dimen/keyline_first"
-        android:paddingRight="@dimen/keyline_first"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-        tools:text="11:40\n13:15"/>
+    <include layout="@layout/list_item_lesson_time"/>
 
 </RelativeLayout>

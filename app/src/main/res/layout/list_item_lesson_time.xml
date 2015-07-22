@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:id="@+id/lesson_time"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:layout_centerVertical="true"
+    android:paddingEnd="@dimen/keyline_first"
+    android:paddingRight="@dimen/keyline_first"
+    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+    tools:text="11:40\n13:15"/>
