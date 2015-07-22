@@ -48,7 +48,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         switch (viewType) {
             case VIEW_TYPE_LESSON:
                 view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.list_item_lesson, viewGroup, false);
+                        .inflate(R.layout.list_item_lesson_two_line, viewGroup, false);
                 break;
             case VIEW_TYPE_LESSON_WITH_WEEKDAY:
                 view = LayoutInflater.from(viewGroup.getContext())
