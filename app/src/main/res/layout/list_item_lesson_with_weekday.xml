@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:elevation="2dp"
@@ -8,52 +7,6 @@
 
     <include layout="@layout/list_item_subheader"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_two_line_avatar"
-        android:background="@android:color/white"
-        android:elevation="2dp">
-
-        <TextView
-            android:id="@+id/lesson_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/keyline_first"
-            android:layout_marginRight="@dimen/keyline_first"
-            android:background="@drawable/circle"
-            android:gravity="center"
-            android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            android:textColor="@android:color/white"
-            tools:text="ЛР"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/keyline_second">
-
-            <TextView
-                android:id="@+id/lesson_subject_subgroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                tools:text="ПиСЭД (1)"/>
-
-            <TextView
-                android:id="@+id/lesson_class"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/black_54"
-                tools:text="122-1"/>
-
-        </LinearLayout>
-
-        <include layout="@layout/list_item_lesson_time"/>
-
-    </RelativeLayout>
+    <include layout="@layout/list_item_lesson_two_line"/>
 
 </LinearLayout>
