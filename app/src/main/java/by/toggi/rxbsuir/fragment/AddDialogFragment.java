@@ -16,13 +16,19 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.mvp.presenter.AddDialogPresenter;
 import by.toggi.rxbsuir.mvp.view.AddDialogView;
 import rx.android.view.ViewActions;
 import rx.android.widget.WidgetObservable;
 
 public class AddDialogFragment extends DialogFragment implements AddDialogView {
+
+    @Inject AddDialogPresenter mPresenter;
 
     private List<String> mStudentGroupList = new ArrayList<>();
 
@@ -33,6 +39,10 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        initializeComponent();
+
+        mPresenter.attachView(this);
+        mPresenter.onCreate();
 
         TextInputLayout textInputLayout = (TextInputLayout) View.inflate(getActivity(), R.layout.dialog_add_group, null);
         AutoCompleteTextView textView = ButterKnife.findById(textInputLayout, R.id.group_number_text_view);
@@ -52,12 +62,15 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
                 .build();
         // Input validation
         WidgetObservable.text(textView).map(onTextChangeEvent -> onTextChangeEvent.text().toString())
-//                .map(mPresenter::isValidGroupNumber)
-                .map(s -> true)
+                .map(mPresenter::isValidGroupNumber)
                 .startWith(false)
                 .distinctUntilChanged()
                 .subscribe(ViewActions.setEnabled(dialog.getActionButton(DialogAction.POSITIVE)));
         return dialog;
+    }
+
+    private void initializeComponent() {
+        ((RxBsuirApplication) getActivity().getApplication()).getAppComponent().inject(this);
     }
 
     @Override
