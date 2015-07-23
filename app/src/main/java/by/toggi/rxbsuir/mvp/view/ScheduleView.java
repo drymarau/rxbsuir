@@ -1,7 +1,5 @@
 package by.toggi.rxbsuir.mvp.view;
 
-import java.util.List;
-
 import by.toggi.rxbsuir.mvp.View;
 
 public interface ScheduleView extends View {
@@ -11,7 +9,5 @@ public interface ScheduleView extends View {
     void showLoading();
 
     void finishRefresh();
-
-    void updateStudentGroupList(List<String> studentGroupList);
 
 }
