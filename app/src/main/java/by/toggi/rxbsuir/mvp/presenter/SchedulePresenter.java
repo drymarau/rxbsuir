@@ -2,7 +2,6 @@ package by.toggi.rxbsuir.mvp.presenter;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
-import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import by.toggi.rxbsuir.rest.BsuirService;
 import by.toggi.rxbsuir.rest.model.Schedule;
 import by.toggi.rxbsuir.rest.model.ScheduleModel;
-import by.toggi.rxbsuir.rest.model.StudentGroup;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -30,7 +28,6 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     private BsuirService mService;
     private StorIOSQLite mStorIOSQLite;
     private String mGroupNumber;
-    private List<String> mGroupNumberList;
 
     /**
      * Instantiates a new Schedule presenter.
@@ -55,20 +52,6 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     }
 
     /**
-     * Validates group number.
-     *
-     * @param groupNumber the group number
-     * @return true is group number is valid, false otherwise
-     */
-    public boolean isValidGroupNumber(String groupNumber) {
-        if (mGroupNumberList != null) {
-            return mGroupNumberList.contains(groupNumber);
-        } else {
-            return true;
-        }
-    }
-
-    /**
      * Gets student group schedule.
      */
     // TODO Implement schedule storage and retrieval from SQLite
@@ -82,54 +65,6 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     @Override
     public void onCreate() {
-        if (isViewAttached()) {
-            mScheduleView.showLoading();
-        }
-        Observable<List<StudentGroup>> disk = mStorIOSQLite.get()
-                .listOfObjects(StudentGroup.class)
-                .withQuery(Query.builder()
-                        .table(RxBsuirContract.StudentGroupEntry.TABLE_NAME)
-                        .build())
-                .prepare()
-                .createObservable()
-                .observeOn(AndroidSchedulers.mainThread());
-        disk.subscribe(studentGroups -> {
-            if (studentGroups == null || studentGroups.isEmpty()) {
-                getStudentGroupsFromNetwork();
-            } else {
-                updateStudentGroupListInView(studentGroups);
-            }
-        });
-    }
-
-    private void updateStudentGroupListInView(List<StudentGroup> studentGroupList) {
-        Observable.from(studentGroupList)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(StudentGroup::toString)
-                .toList()
-                .subscribe(strings -> {
-                    mGroupNumberList = strings;
-                    if (isViewAttached()) {
-                        mScheduleView.updateStudentGroupList(mGroupNumberList);
-                    }
-                });
-    }
-
-    private void getStudentGroupsFromNetwork() {
-        Observable<List<StudentGroup>> network = mService.getStudentGroups()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .map(studentGroupXmlModels -> studentGroupXmlModels.studentGroupList);
-        network.subscribe(this::saveStudentGroupsToDisk);
-    }
-
-    private void saveStudentGroupsToDisk(List<StudentGroup> studentGroupList) {
-        mStorIOSQLite.put()
-                .objects(studentGroupList)
-                .prepare()
-                .createObservable()
-                .subscribe();
     }
 
     @Override
