@@ -30,7 +30,7 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
 
     @Inject AddDialogPresenter mPresenter;
 
-    private List<String> mStudentGroupList = new ArrayList<>();
+    private ArrayAdapter<String> mAdapter;
 
     public static AddDialogFragment newInstance() {
         return new AddDialogFragment();
@@ -46,8 +46,8 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
 
         TextInputLayout textInputLayout = (TextInputLayout) View.inflate(getActivity(), R.layout.dialog_add_group, null);
         AutoCompleteTextView textView = ButterKnife.findById(textInputLayout, R.id.group_number_text_view);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mStudentGroupList);
-        textView.setAdapter(adapter);
+        mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<>());
+        textView.setAdapter(mAdapter);
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(textInputLayout, true)
                 .title(R.string.title_add_group)
                 .positiveText(R.string.positive_add)
@@ -55,7 +55,6 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-//                        mPresenter.setGroupNumber(textView.getText().toString());
                         Toast.makeText(getActivity(), textView.getText(), Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -75,7 +74,9 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
 
     @Override
     public void updateStudentGroupList(List<String> studentGroupList) {
-        mStudentGroupList.clear();
-        mStudentGroupList.addAll(studentGroupList);
+        mAdapter.clear();
+        for (String group : studentGroupList) {
+            mAdapter.add(group);
+        }
     }
 }
