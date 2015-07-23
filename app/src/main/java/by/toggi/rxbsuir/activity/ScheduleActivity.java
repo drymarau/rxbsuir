@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -31,6 +32,7 @@ import icepick.State;
 
 public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener {
 
+    public static final String KEY_GROUP_NUMBER = "selected_group_number";
     private static final String TAG_ADD_DIALOG = "add_dialog";
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
@@ -41,6 +43,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
+    @Inject SharedPreferences mSharedPreferences;
 
     @State CharSequence mTitle;
 
@@ -113,6 +116,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     public void onPositiveButtonClicked(String groupNumber) {
         mPresenter.setGroupNumber(groupNumber);
         setTitle(groupNumber);
+        mSharedPreferences.edit().putString(KEY_GROUP_NUMBER, groupNumber).apply();
     }
 
     @Override
