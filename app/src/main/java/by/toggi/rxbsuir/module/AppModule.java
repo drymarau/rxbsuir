@@ -34,7 +34,6 @@ public class AppModule {
 
     @Nullable
     @Provides
-    @Singleton
     String provideGroupNumber(SharedPreferences preferences) {
         return preferences.getString(ScheduleActivity.KEY_GROUP_NUMBER, null);
     }
