@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,14 +32,27 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
     @Inject AddDialogPresenter mPresenter;
 
     private ArrayAdapter<String> mAdapter;
+    private OnButtonClickListener mListener;
 
     public static AddDialogFragment newInstance() {
         return new AddDialogFragment();
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            mListener = (OnButtonClickListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnButtonClickListener");
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         initializeComponent();
 
         FragmentManager manager = getFragmentManager();
@@ -55,7 +69,11 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
 
         mPresenter.attachView(this);
         mPresenter.onCreate();
+    }
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         TextInputLayout textInputLayout = (TextInputLayout) View.inflate(getActivity(), R.layout.dialog_add_group, null);
         AutoCompleteTextView textView = ButterKnife.findById(textInputLayout, R.id.group_number_text_view);
         mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<>());
@@ -67,7 +85,7 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        ((OnButtonClickListener) getActivity()).onPositiveButtonClicked(textView.getText().toString());
+                        mListener.onPositiveButtonClicked(textView.getText().toString());
                     }
                 })
                 .build();
