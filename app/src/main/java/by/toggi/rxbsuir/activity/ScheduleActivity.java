@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -114,6 +113,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void onPositiveButtonClicked(String groupNumber) {
-        Toast.makeText(this, String.format("Group number: %s", groupNumber), Toast.LENGTH_SHORT).show();
+        mPresenter.setGroupNumber(groupNumber);
     }
 }
