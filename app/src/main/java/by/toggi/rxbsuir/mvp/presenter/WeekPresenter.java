@@ -21,14 +21,36 @@ public class WeekPresenter implements Presenter<WeekView> {
     private WeekView mWeekView;
     private Observable<List<Lesson>> mListObservable;
     private Subscription mSubscription;
+    private StorIOSQLite mStorIOSQLite;
+    private int mWeekNumber;
 
     @Inject
-    public WeekPresenter(int weekNumber, StorIOSQLite storIOSQLite) {
-        mListObservable = storIOSQLite.get()
+    public WeekPresenter(String groupNumber, int weekNumber, StorIOSQLite storIOSQLite) {
+        mWeekNumber = weekNumber;
+        mStorIOSQLite = storIOSQLite;
+        mListObservable = mStorIOSQLite.get()
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
                         .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.filterByWeekNumber(weekNumber))
+                        .where(LessonEntry.filterByGroupNumberAndWeekNumber(groupNumber, weekNumber))
+                        .build())
+                .prepare()
+                .createObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .cache();
+    }
+
+    public void setGroupNumber(String groupNumber) {
+        mListObservable = getListObservable(groupNumber, mWeekNumber);
+        onCreate();
+    }
+
+    private Observable<List<Lesson>> getListObservable(String groupNumber, int weekNumber) {
+        return mStorIOSQLite.get()
+                .listOfObjects(Lesson.class)
+                .withQuery(Query.builder()
+                        .table(LessonEntry.TABLE_NAME)
+                        .where(LessonEntry.filterByGroupNumberAndWeekNumber(groupNumber, weekNumber))
                         .build())
                 .prepare()
                 .createObservable()

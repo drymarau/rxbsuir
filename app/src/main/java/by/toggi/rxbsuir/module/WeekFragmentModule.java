@@ -37,4 +37,10 @@ public class WeekFragmentModule {
         return mWeekFragment.getWeekNumber();
     }
 
+    @Provides
+    @Fragment
+    String provideGroupNumber() {
+        return mWeekFragment.getGroupNumber();
+    }
+
 }

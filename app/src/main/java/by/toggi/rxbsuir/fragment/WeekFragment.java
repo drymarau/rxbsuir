@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -170,6 +170,16 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
         return mWeekNumber;
     }
 
+    /**
+     * Gets group number from shared preferences.
+     *
+     * @return the group number, {@value null} if no group
+     */
+    public String getGroupNumber() {
+        return PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getString(ScheduleActivity.KEY_GROUP_NUMBER, null);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -184,6 +194,6 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Toast.makeText(getActivity(), sharedPreferences.getString(ScheduleActivity.KEY_GROUP_NUMBER, "000000"), Toast.LENGTH_SHORT).show();
+        mPresenter.setGroupNumber(sharedPreferences.getString(ScheduleActivity.KEY_GROUP_NUMBER, null));
     }
 }
