@@ -1,5 +1,8 @@
 package by.toggi.rxbsuir.module;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.RxBsuirApplication;
@@ -19,6 +22,12 @@ public class AppModule {
     @Singleton
     RxBsuirApplication provideAppContext() {
         return mApplication;
+    }
+
+    @Provides
+    @Singleton
+    SharedPreferences provideSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(mApplication);
     }
 
 }

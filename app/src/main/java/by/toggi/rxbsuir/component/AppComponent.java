@@ -1,5 +1,7 @@
 package by.toggi.rxbsuir.component;
 
+import android.content.SharedPreferences;
+
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import javax.inject.Singleton;
@@ -25,6 +27,8 @@ public interface AppComponent {
     BsuirService service();
 
     StorIOSQLite storIOSQLite();
+
+    SharedPreferences sharedPreferences();
 
     void inject(AddDialogFragment addDialogFragment);
 
