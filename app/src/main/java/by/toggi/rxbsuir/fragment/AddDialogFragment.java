@@ -96,4 +96,10 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
     private String getPresenterTag() {
         return "add_dialog";
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
+    }
 }
