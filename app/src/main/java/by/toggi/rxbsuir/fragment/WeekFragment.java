@@ -95,12 +95,12 @@ public class WeekFragment extends Fragment implements WeekView {
         }
         if (fragment.getPresenter(getPresenterTag()) == null) {
             fragment.setPresenter(getPresenterTag(), mPresenter);
-            mPresenter.attachView(this);
-            mPresenter.onCreate();
         } else {
             mPresenter = fragment.getPresenter(getPresenterTag());
-            mPresenter.attachView(this);
         }
+
+        mPresenter.attachView(this);
+        mPresenter.onCreate();
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
