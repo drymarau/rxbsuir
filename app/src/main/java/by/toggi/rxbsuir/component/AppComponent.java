@@ -1,6 +1,7 @@
 package by.toggi.rxbsuir.component;
 
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
@@ -29,6 +30,8 @@ public interface AppComponent {
     StorIOSQLite storIOSQLite();
 
     SharedPreferences sharedPreferences();
+
+    @Nullable String groupNumber();
 
     void inject(AddDialogFragment addDialogFragment);
 

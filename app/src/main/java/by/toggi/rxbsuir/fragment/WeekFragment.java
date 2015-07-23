@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -168,16 +167,6 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
      */
     public int getWeekNumber() {
         return mWeekNumber;
-    }
-
-    /**
-     * Gets group number from shared preferences.
-     *
-     * @return the group number, {@value null} if no group
-     */
-    public String getGroupNumber() {
-        return PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .getString(ScheduleActivity.KEY_GROUP_NUMBER, null);
     }
 
     @Override
