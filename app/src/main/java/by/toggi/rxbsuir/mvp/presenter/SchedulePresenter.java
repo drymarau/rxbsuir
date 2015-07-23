@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import by.toggi.rxbsuir.db.RxBsuirContract;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
@@ -118,7 +117,10 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     private void onNetworkSuccess(List<Lesson> lessonList) {
         Observable.concat(
                 mStorIOSQLite.delete()
-                        .byQuery(DeleteQuery.builder().table(RxBsuirContract.LessonEntry.TABLE_NAME).build())
+                        .byQuery(DeleteQuery.builder()
+                                .table(LessonEntry.TABLE_NAME)
+                                .where(LessonEntry.filterByGroupNumber(mGroupNumber))
+                                .build())
                         .prepare()
                         .createObservable(),
                 mStorIOSQLite.put()
