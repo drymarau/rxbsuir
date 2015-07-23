@@ -50,10 +50,6 @@ public class AddDialogPresenter implements Presenter<AddDialogView> {
      * @return true is group number is valid, false otherwise
      */
     public boolean isValidGroupNumber(String groupNumber) {
-        if (mGroupNumberList != null) {
-            return mGroupNumberList.contains(groupNumber);
-        } else {
-            return true;
-        }
+        return mGroupNumberList == null || mGroupNumberList.contains(groupNumber);
     }
 }
