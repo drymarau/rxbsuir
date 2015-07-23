@@ -80,6 +80,13 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         if (fragment == null) {
             fragment = new StorageFragment();
             manager.beginTransaction().add(fragment, WeekFragment.TAG_STORAGE_FRAGMENT).commit();
+            fragment.setPresenter(getPresenterTag(), mPresenter);
+        } else {
+            try {
+                mPresenter = (SchedulePresenter) fragment.getPresenter(getPresenterTag());
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Presenter must be of class SchedulePresenter");
+            }
         }
     }
 
@@ -113,6 +120,11 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void finishRefresh() {
+    }
+
+    @Override
+    public String getPresenterTag() {
+        return "schedule_presenter";
     }
 
     @Override

@@ -156,8 +156,9 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
         }
     }
 
-    private String getPresenterTag() {
-        return "week_" + mWeekNumber;
+    @Override
+    public String getPresenterTag() {
+        return "week_presenter_" + mWeekNumber;
     }
 
     /**

@@ -114,8 +114,9 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
         }
     }
 
-    private String getPresenterTag() {
-        return "add_dialog";
+    @Override
+    public String getPresenterTag() {
+        return "add_dialog_presenter";
     }
 
     @Override
