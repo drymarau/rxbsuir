@@ -119,6 +119,7 @@ public class WeekFragment extends Fragment implements WeekView {
         mAdapter.setLessonList(lessonList);
         if (mLayoutManagerState != null) {
             mLayoutManager.onRestoreInstanceState(mLayoutManagerState);
+            mLayoutManagerState = null;
         }
     }
 
