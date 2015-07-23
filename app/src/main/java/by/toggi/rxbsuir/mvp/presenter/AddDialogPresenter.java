@@ -1,6 +1,7 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResults;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class AddDialogPresenter implements Presenter<AddDialogView> {
 
@@ -37,8 +39,7 @@ public class AddDialogPresenter implements Presenter<AddDialogView> {
                         .build())
                 .prepare()
                 .createObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .cache();
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -72,18 +73,18 @@ public class AddDialogPresenter implements Presenter<AddDialogView> {
 
     private void getStudentGroupsFromNetwork() {
         mService.getStudentGroups()
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .map(studentGroupXmlModels -> studentGroupXmlModels.studentGroupList)
-                .subscribe(this::saveStudentGroupsToDisk);
+                .flatMap(this::getStudentGroupPutObservable)
+                .subscribe(studentGroupPutResults -> Timber.d("Insert count: %d", studentGroupPutResults.numberOfInserts()));
     }
 
-    private void saveStudentGroupsToDisk(List<StudentGroup> studentGroupList) {
-        mStorIOSQLite.put()
+    private Observable<PutResults<StudentGroup>> getStudentGroupPutObservable(List<StudentGroup> studentGroupList) {
+        return mStorIOSQLite.put()
                 .objects(studentGroupList)
                 .prepare()
-                .createObservable()
-                .subscribe();
+                .createObservable();
     }
 
     @Override
