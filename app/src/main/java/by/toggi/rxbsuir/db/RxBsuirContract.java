@@ -35,6 +35,14 @@ public class RxBsuirContract {
             return COL_WEEK_NUMBER_LIST + " like '%" + weekNumber + "%'";
         }
 
+        public static String filterByGroupNumber(String groupNumber) {
+            return COL_STUDENT_GROUP_LIST + " like '%" + groupNumber + "%'";
+        }
+
+        public static String filterByGroupNumberAndWeekNumber(String groupNumber, int weekNumber) {
+            return filterByGroupNumber(groupNumber) + " and " + filterByWeekNumber(weekNumber);
+        }
+
     }
 
 }
