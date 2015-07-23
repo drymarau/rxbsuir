@@ -1,7 +1,10 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
+import android.support.annotation.Nullable;
+
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
+import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,18 +19,22 @@ import by.toggi.rxbsuir.rest.BsuirService;
 import by.toggi.rxbsuir.rest.model.Schedule;
 import by.toggi.rxbsuir.rest.model.ScheduleModel;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
+
+import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 /**
  * The type Schedule presenter.
  */
 public class SchedulePresenter implements Presenter<ScheduleView> {
 
+    private Observable<List<Lesson>> mLessonListObservable;
     private ScheduleView mScheduleView;
     private BsuirService mService;
     private StorIOSQLite mStorIOSQLite;
     private String mGroupNumber;
+    private Subscription mSubscription;
 
     /**
      * Instantiates a new Schedule presenter.
@@ -36,9 +43,24 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      * @param storIOSQLite the stor iOSQ lite
      */
     @Inject
-    public SchedulePresenter(BsuirService service, StorIOSQLite storIOSQLite) {
+    public SchedulePresenter(@Nullable String groupNumber, BsuirService service, StorIOSQLite storIOSQLite) {
         mService = service;
         mStorIOSQLite = storIOSQLite;
+        mGroupNumber = groupNumber;
+        mLessonListObservable = getLessonListObservable(groupNumber);
+    }
+
+    private Observable<List<Lesson>> getLessonListObservable(@Nullable String groupNumber) {
+        return mStorIOSQLite.get()
+                .listOfObjects(Lesson.class)
+                .withQuery(Query.builder()
+                        .table(LessonEntry.TABLE_NAME)
+                        .where(LessonEntry.filterByGroupNumber(groupNumber))
+                        .build())
+                .prepare()
+                .createObservable()
+                .observeOn(Schedulers.io())
+                .cache();
     }
 
     /**
@@ -48,15 +70,15 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      */
     public void setGroupNumber(String groupNumber) {
         mGroupNumber = groupNumber;
-        getStudentGroupSchedule();
+        mLessonListObservable = getLessonListObservable(groupNumber);
+        onCreate();
     }
 
     /**
      * Gets student group schedule.
      */
-    // TODO Implement schedule storage and retrieval from SQLite
     public void getStudentGroupSchedule() {
-        mService.getGroupSchedule(mGroupNumber).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+        mService.getGroupSchedule(mGroupNumber).observeOn(Schedulers.io()).subscribeOn(Schedulers.io())
                 .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
                 .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
                 .toList()
@@ -65,10 +87,18 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     @Override
     public void onCreate() {
+        mSubscription = mLessonListObservable.subscribe(lessonList -> {
+            if (lessonList == null || lessonList.isEmpty()) {
+                getStudentGroupSchedule();
+            }
+        });
     }
 
     @Override
     public void onDestroy() {
+        if (!mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
         detachView();
     }
 
