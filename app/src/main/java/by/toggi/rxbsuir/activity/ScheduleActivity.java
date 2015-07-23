@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ProgressBar;
@@ -28,7 +27,7 @@ import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 
 
-public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener {
 
     private static final String TAG_ADD_DIALOG = "add_dialog";
 
@@ -37,7 +36,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Bind(R.id.view_pager) ViewPager mViewPager;
     @Bind(R.id.progress_bar) ProgressBar mProgressBar;
     @Bind(R.id.error_text_view) TextView mErrorTextView;
-    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
@@ -57,9 +55,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(4);
         mTabLayout.setupWithViewPager(mViewPager);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setEnabled(false);
 
         mPresenter.attachView(this);
         mPresenter.onCreate();
@@ -105,10 +100,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void finishRefresh() {
-    }
-
-    @Override
-    public void onRefresh() {
     }
 
     @Override
