@@ -25,6 +25,8 @@ import by.toggi.rxbsuir.module.ActivityModule;
 import by.toggi.rxbsuir.module.ScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
+import icepick.Icepick;
+import icepick.State;
 
 
 public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener {
@@ -39,6 +41,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
+
+    @State CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         mPresenter.attachView(this);
         mPresenter.onCreate();
+
+        Icepick.restoreInstanceState(this, savedInstanceState);
+        setTitle(mTitle);
     }
 
     private void addStorageFragment() {
@@ -105,5 +112,18 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     public void onPositiveButtonClicked(String groupNumber) {
         mPresenter.setGroupNumber(groupNumber);
+        setTitle(groupNumber);
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getDelegate().getSupportActionBar().setTitle(mTitle);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
     }
 }
