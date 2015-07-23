@@ -40,6 +40,12 @@ public class WeekPresenter implements Presenter<WeekView> {
                 .cache();
     }
 
+
+    /**
+     * Sets group number and updates the list.
+     *
+     * @param groupNumber the group number
+     */
     public void setGroupNumber(String groupNumber) {
         mListObservable = getListObservable(groupNumber, mWeekNumber);
         onCreate();
