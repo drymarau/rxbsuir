@@ -1,6 +1,7 @@
 package by.toggi.rxbsuir.fragment;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.component.DaggerWeekFragmentComponent;
 import by.toggi.rxbsuir.db.model.Lesson;
@@ -29,7 +32,7 @@ import by.toggi.rxbsuir.module.WeekFragmentModule;
 import by.toggi.rxbsuir.mvp.presenter.WeekPresenter;
 import by.toggi.rxbsuir.mvp.view.WeekView;
 
-public class WeekFragment extends Fragment implements WeekView {
+public class WeekFragment extends Fragment implements WeekView, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String TAG_STORAGE_FRAGMENT = "storage_fragment";
     public static final String ARGS_WEEK_NUMBER = "week_number";
@@ -40,6 +43,7 @@ public class WeekFragment extends Fragment implements WeekView {
     @Inject LinearLayoutManager mLayoutManager;
     @Inject LessonAdapter mAdapter;
     @Inject WeekPresenter mPresenter;
+    @Inject SharedPreferences mSharedPreferences;
 
     private Parcelable mLayoutManagerState;
     private int mWeekNumber;
@@ -164,5 +168,22 @@ public class WeekFragment extends Fragment implements WeekView {
      */
     public int getWeekNumber() {
         return mWeekNumber;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Toast.makeText(getActivity(), sharedPreferences.getString(ScheduleActivity.KEY_GROUP_NUMBER, "000000"), Toast.LENGTH_SHORT).show();
     }
 }
