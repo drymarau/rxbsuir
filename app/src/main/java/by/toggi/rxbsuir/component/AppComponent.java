@@ -5,6 +5,7 @@ import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.fragment.AddDialogFragment;
 import by.toggi.rxbsuir.module.AppModule;
 import by.toggi.rxbsuir.module.BsuirServiceModule;
 import by.toggi.rxbsuir.module.DbModule;
@@ -24,5 +25,7 @@ public interface AppComponent {
     BsuirService service();
 
     StorIOSQLite storIOSQLite();
+
+    void inject(AddDialogFragment addDialogFragment);
 
 }
