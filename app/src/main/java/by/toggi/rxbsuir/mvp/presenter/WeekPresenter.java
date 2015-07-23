@@ -1,5 +1,7 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
+import android.support.annotation.Nullable;
+
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -25,19 +27,23 @@ public class WeekPresenter implements Presenter<WeekView> {
     private int mWeekNumber;
 
     @Inject
-    public WeekPresenter(String groupNumber, int weekNumber, StorIOSQLite storIOSQLite) {
+    public WeekPresenter(@Nullable String groupNumber, int weekNumber, StorIOSQLite storIOSQLite) {
         mWeekNumber = weekNumber;
         mStorIOSQLite = storIOSQLite;
-        mListObservable = mStorIOSQLite.get()
-                .listOfObjects(Lesson.class)
-                .withQuery(Query.builder()
-                        .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.filterByGroupNumberAndWeekNumber(groupNumber, weekNumber))
-                        .build())
-                .prepare()
-                .createObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .cache();
+        if (groupNumber != null) {
+            mListObservable = mStorIOSQLite.get()
+                    .listOfObjects(Lesson.class)
+                    .withQuery(Query.builder()
+                            .table(LessonEntry.TABLE_NAME)
+                            .where(LessonEntry.filterByGroupNumberAndWeekNumber(groupNumber, weekNumber))
+                            .build())
+                    .prepare()
+                    .createObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .cache();
+        } else {
+            mListObservable = Observable.empty();
+        }
     }
 
 

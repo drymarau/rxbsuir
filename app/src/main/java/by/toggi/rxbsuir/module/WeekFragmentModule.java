@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.module;
 
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class WeekFragmentModule {
         return mWeekFragment.getWeekNumber();
     }
 
+    @Nullable
     @Provides
     @Fragment
     String provideGroupNumber() {
