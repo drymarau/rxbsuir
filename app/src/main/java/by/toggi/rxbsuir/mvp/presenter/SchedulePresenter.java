@@ -34,6 +34,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     private StorIOSQLite mStorIOSQLite;
     private String mGroupNumber;
     private Subscription mSubscription;
+    private boolean mHasSynced = false;
 
     /**
      * Instantiates a new Schedule presenter.
@@ -58,8 +59,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                         .build())
                 .prepare()
                 .createObservable()
-                .observeOn(Schedulers.io())
-                .cache();
+                .observeOn(Schedulers.io());
     }
 
     /**
@@ -68,6 +68,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      * @param groupNumber the group number
      */
     public void setGroupNumber(String groupNumber) {
+        mHasSynced = false;
         mGroupNumber = groupNumber;
         mLessonListObservable = getLessonListObservable(groupNumber);
         onCreate();
@@ -88,7 +89,9 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     public void onCreate() {
         mSubscription = mLessonListObservable.subscribe(lessonList -> {
             if (lessonList == null || lessonList.isEmpty()) {
-                getStudentGroupSchedule();
+                if (!mHasSynced) {
+                    getStudentGroupSchedule();
+                }
             }
         });
     }
@@ -115,6 +118,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     }
 
     private void onNetworkSuccess(List<Lesson> lessonList) {
+        mHasSynced = true;
         Observable.concat(
                 mStorIOSQLite.delete()
                         .byQuery(DeleteQuery.builder()
@@ -131,6 +135,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     }
 
     private void onNetworkError(Throwable throwable) {
+        mHasSynced = true;
     }
 
     private List<Lesson> transformScheduleToLesson(ScheduleModel model) {
