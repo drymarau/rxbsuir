@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -68,7 +67,7 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        Toast.makeText(getActivity(), textView.getText(), Toast.LENGTH_SHORT).show();
+                        ((OnButtonClickListener) getActivity()).onPositiveButtonClicked(textView.getText().toString());
                     }
                 })
                 .build();
@@ -101,5 +100,11 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
+    }
+
+    public interface OnButtonClickListener {
+
+        void onPositiveButtonClicked(String groupNumber);
+
     }
 }

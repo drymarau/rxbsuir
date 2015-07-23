@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -28,7 +29,7 @@ import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 
 
-public class ScheduleActivity extends AppCompatActivity implements ScheduleView, SwipeRefreshLayout.OnRefreshListener {
+public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG_ADD_DIALOG = "add_dialog";
 
@@ -111,4 +112,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     public void onRefresh() {
     }
 
+    @Override
+    public void onPositiveButtonClicked(String groupNumber) {
+        Toast.makeText(this, String.format("Group number: %s", groupNumber), Toast.LENGTH_SHORT).show();
+    }
 }
