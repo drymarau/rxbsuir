@@ -96,7 +96,11 @@ public class WeekFragment extends Fragment implements WeekView {
         if (fragment.getPresenter(getPresenterTag()) == null) {
             fragment.setPresenter(getPresenterTag(), mPresenter);
         } else {
-            mPresenter = (WeekPresenter) fragment.getPresenter(getPresenterTag());
+            try {
+                mPresenter = (WeekPresenter) fragment.getPresenter(getPresenterTag());
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Presenter must be of class WeekPresenter");
+            }
         }
 
         mPresenter.attachView(this);

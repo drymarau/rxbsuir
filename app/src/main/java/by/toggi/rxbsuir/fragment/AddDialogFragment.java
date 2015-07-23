@@ -64,7 +64,11 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
         if (fragment.getPresenter(getPresenterTag()) == null) {
             fragment.setPresenter(getPresenterTag(), mPresenter);
         } else {
-            mPresenter = (AddDialogPresenter) fragment.getPresenter(getPresenterTag());
+            try {
+                mPresenter = (AddDialogPresenter) fragment.getPresenter(getPresenterTag());
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Presenter must be of class AddDialogPresenter");
+            }
         }
 
         mPresenter.attachView(this);
