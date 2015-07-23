@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -40,6 +41,18 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         initializeComponent();
+
+        FragmentManager manager = getFragmentManager();
+        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(WeekFragment.TAG_STORAGE_FRAGMENT);
+
+        if (fragment == null) {
+            throw new IllegalStateException("Storage fragment should already be added");
+        }
+        if (fragment.getPresenter(getPresenterTag()) == null) {
+            fragment.setPresenter(getPresenterTag(), mPresenter);
+        } else {
+            mPresenter = (AddDialogPresenter) fragment.getPresenter(getPresenterTag());
+        }
 
         mPresenter.attachView(this);
         mPresenter.onCreate();
@@ -78,5 +91,9 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
         for (String group : studentGroupList) {
             mAdapter.add(group);
         }
+    }
+
+    private String getPresenterTag() {
+        return "add_dialog";
     }
 }
