@@ -77,7 +77,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                 .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
                 .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
                 .toList()
-                .subscribe(this::onSuccess, this::onError);
+                .subscribe(this::onNetworkSuccess, this::onNetworkError);
     }
 
     @Override
@@ -150,7 +150,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         mScheduleView = null;
     }
 
-    private void onSuccess(List<Lesson> lessonList) {
+    private void onNetworkSuccess(List<Lesson> lessonList) {
         Observable.concat(
                 mStorIOSQLite.delete()
                         .byQuery(DeleteQuery.builder().table(RxBsuirContract.LessonEntry.TABLE_NAME).build())
@@ -163,7 +163,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         ).subscribe();
     }
 
-    private void onError(Throwable throwable) {
+    private void onNetworkError(Throwable throwable) {
     }
 
     private List<Lesson> transformScheduleToLesson(ScheduleModel model) {
