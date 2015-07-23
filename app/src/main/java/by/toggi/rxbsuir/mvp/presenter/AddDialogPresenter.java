@@ -21,7 +21,7 @@ import timber.log.Timber;
 
 public class AddDialogPresenter implements Presenter<AddDialogView> {
 
-    private final Observable<List<StudentGroup>> mGroupListObservable;
+    private Observable<List<StudentGroup>> mGroupListObservable;
     private List<String> mGroupNumberList;
     private AddDialogView mAddDialogView;
     private BsuirService mService;
