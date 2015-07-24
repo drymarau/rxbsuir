@@ -4,7 +4,8 @@
     <string name="schedule_endpoint" translatable="false">http://www.bsuir.by/schedule/rest</string>
 
     <!-- Error message when something went wrong with schedule -->
-    <string name="error_schedule">Something is wrong with schedule. Please try again later</string>
+    <string name="error_schedule">Something went wrong</string>
+    <string name="action_retry">Retry</string>
 
     <!-- ADD GROUP DIALOG -->
     <!-- Group number hint in add group dialog -->
