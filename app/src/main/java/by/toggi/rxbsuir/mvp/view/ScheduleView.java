@@ -8,6 +8,4 @@ public interface ScheduleView extends View {
 
     void showLoading();
 
-    void finishRefresh();
-
 }
