@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -9,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 import javax.inject.Inject;
 
@@ -31,7 +32,7 @@ import icepick.Icepick;
 import icepick.State;
 
 
-public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener {
+public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener, View.OnClickListener {
 
     public static final String KEY_GROUP_NUMBER = "selected_group_number";
     private static final String TAG_ADD_DIALOG = "add_dialog";
@@ -40,7 +41,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
     @Bind(R.id.view_pager) ViewPager mViewPager;
     @Bind(R.id.progress_bar) ProgressBar mProgressBar;
-    @Bind(R.id.error_text_view) TextView mErrorTextView;
+    @Bind(R.id.parent_view) RelativeLayout mParentView;
 
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
@@ -113,17 +114,23 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void showError(Throwable throwable) {
+        mViewPager.setVisibility(View.INVISIBLE);
         mProgressBar.setVisibility(View.GONE);
-        mErrorTextView.setVisibility(View.VISIBLE);
-        mErrorTextView.setText(throwable.getLocalizedMessage());
+        Snackbar.make(mParentView, R.string.error_schedule, Snackbar.LENGTH_LONG)
+                .setAction(R.string.action_retry, this)
+                .show();
     }
 
     @Override
     public void showLoading() {
+        mViewPager.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void finishRefresh() {
+    public void showContent() {
+        mProgressBar.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -148,5 +155,10 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    public void onClick(View v) {
+        mPresenter.retry();
     }
 }

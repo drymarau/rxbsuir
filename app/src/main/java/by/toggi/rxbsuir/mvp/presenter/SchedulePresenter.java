@@ -60,7 +60,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                         .build())
                 .prepare()
                 .createObservable()
-                .observeOn(Schedulers.io());
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -95,10 +95,17 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     @Override
     public void onCreate() {
+        if (isViewAttached()) {
+            mScheduleView.showLoading();
+        }
         mSubscription = mLessonListObservable.subscribe(lessonList -> {
             if (lessonList == null || lessonList.isEmpty()) {
                 if (!mHasSynced) {
                     getStudentGroupSchedule();
+                }
+            } else {
+                if (isViewAttached()) {
+                    mScheduleView.showContent();
                 }
             }
         });
@@ -144,7 +151,9 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     private void onNetworkError(Throwable throwable) {
         mHasSynced = true;
-        mScheduleView.showError(throwable);
+        if (isViewAttached()) {
+            mScheduleView.showError(throwable);
+        }
     }
 
     private List<Lesson> transformScheduleToLesson(ScheduleModel model) {
