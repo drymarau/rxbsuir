@@ -95,7 +95,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     @Override
     public void onCreate() {
-        if (isViewAttached()) {
+        if (isViewAttached() && !mHasSynced) {
             mScheduleView.showLoading();
         }
         mSubscription = mLessonListObservable.subscribe(lessonList -> {
