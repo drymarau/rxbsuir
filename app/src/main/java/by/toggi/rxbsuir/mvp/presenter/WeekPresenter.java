@@ -90,8 +90,11 @@ public class WeekPresenter implements Presenter<WeekView> {
     }
 
     @Override
-    public void attachView(WeekView view) {
-        mWeekView = view;
+    public void attachView(WeekView weekView) {
+        if (weekView == null) {
+            throw new NullPointerException("WeekView should not be null");
+        }
+        mWeekView = weekView;
     }
 
     @Override

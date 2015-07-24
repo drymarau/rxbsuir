@@ -97,6 +97,9 @@ public class AddDialogPresenter implements Presenter<AddDialogView> {
 
     @Override
     public void attachView(AddDialogView addDialogView) {
+        if (addDialogView == null) {
+            throw new NullPointerException("AddDialogView should not be null");
+        }
         mAddDialogView = addDialogView;
     }
 

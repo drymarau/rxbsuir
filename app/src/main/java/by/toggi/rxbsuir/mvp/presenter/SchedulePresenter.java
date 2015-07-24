@@ -107,7 +107,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     @Override
     public void attachView(ScheduleView scheduleView) {
         if (scheduleView == null) {
-            throw new NullPointerException("ScheduleView is null!");
+            throw new NullPointerException("ScheduleView should not be null");
         }
         mScheduleView = scheduleView;
     }
