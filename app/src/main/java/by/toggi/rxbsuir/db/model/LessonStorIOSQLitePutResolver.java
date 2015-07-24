@@ -48,6 +48,7 @@ public class LessonStorIOSQLitePutResolver extends DefaultPutResolver<Lesson> {
         contentValues.put(LessonEntry.COL_SUBJECT, object.getSubject());
         contentValues.put(LessonEntry.COL_STUDENT_GROUP_LIST, gson.toJson(object.getStudentGroupList()));
         contentValues.put(LessonEntry.COL_WEEK_NUMBER_LIST, gson.toJson(object.getWeekNumberList()));
+        contentValues.put(LessonEntry.COL_IS_GROUP_SCHEDULE, object.isGroupSchedule() ? 1 : 0);
 
         return contentValues;
     }

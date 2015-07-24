@@ -40,7 +40,8 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
                 LessonEntry.COL_SUBJECT + " text not null, " +
                 LessonEntry.COL_WEEKDAY + " integer not null, " +
                 LessonEntry.COL_NOTE + " text, " +
-                LessonEntry.COL_WEEK_NUMBER_LIST+ " text not null" + ");";
+                LessonEntry.COL_IS_GROUP_SCHEDULE + " integer not null, " +
+                LessonEntry.COL_WEEK_NUMBER_LIST + " text not null" + ");";
     }
 
     @Override

@@ -21,8 +21,9 @@ public class Lesson {
     private String subject;
     private List<Integer> weekNumberList;
     private String weekday;
+    private boolean isGroupSchedule;
 
-    public Lesson(@Nullable Long _id, List<String> auditoryList, List<Employee> employeeList, String lessonTime, String lessonType, String note, int numSubgroup, List<String> studentGroupList, String subject, List<Integer> weekNumberList, String weekday) {
+    public Lesson(@Nullable Long _id, List<String> auditoryList, List<Employee> employeeList, String lessonTime, String lessonType, String note, int numSubgroup, List<String> studentGroupList, String subject, List<Integer> weekNumberList, String weekday, boolean isGroupSchedule) {
         this._id = _id;
         this.auditoryList = auditoryList;
         this.employeeList = employeeList;
@@ -34,9 +35,10 @@ public class Lesson {
         this.subject = subject;
         this.weekNumberList = weekNumberList;
         this.weekday = weekday;
+        this.isGroupSchedule = isGroupSchedule;
     }
 
-    public Lesson(@Nullable Long _id, Schedule schedule, String weekday) {
+    public Lesson(@Nullable Long _id, Schedule schedule, String weekday, boolean isGroupSchedule) {
         this._id = _id;
         this.auditoryList = schedule.auditory;
         this.employeeList = schedule.employeeList;
@@ -48,6 +50,7 @@ public class Lesson {
         this.subject = schedule.subject;
         this.weekNumberList = schedule.weekNumberList;
         this.weekday = weekday;
+        this.isGroupSchedule = isGroupSchedule;
     }
 
     public Long getId() {
@@ -140,5 +143,9 @@ public class Lesson {
 
     public String getWeekday() {
         return weekday;
+    }
+
+    public boolean isGroupSchedule() {
+        return isGroupSchedule;
     }
 }

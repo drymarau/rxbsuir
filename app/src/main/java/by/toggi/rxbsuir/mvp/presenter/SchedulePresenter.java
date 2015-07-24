@@ -141,7 +141,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     private List<Lesson> transformScheduleToLesson(ScheduleModel model) {
         List<Lesson> lessonList = new ArrayList<>(model.scheduleList.size());
         for (Schedule schedule : model.scheduleList) {
-            lessonList.add(new Lesson(null, schedule, model.weekDay));
+            lessonList.add(new Lesson(null, schedule, model.weekDay, true));
         }
         return lessonList;
     }

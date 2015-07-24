@@ -41,7 +41,8 @@ public class LessonStorIOISQLiteGetResolver extends DefaultGetResolver<Lesson> {
                 new ArrayList<>(Arrays.asList(studentGroupArray)),
                 cursor.getString(cursor.getColumnIndex(LessonEntry.COL_SUBJECT)),
                 new ArrayList<>(Arrays.asList(weekNumberArray)),
-                cursor.getString(cursor.getColumnIndex(LessonEntry.COL_WEEKDAY))
+                cursor.getString(cursor.getColumnIndex(LessonEntry.COL_WEEKDAY)),
+                cursor.getInt(cursor.getColumnIndex(LessonEntry.COL_IS_GROUP_SCHEDULE)) != 0
         );
     }
 }

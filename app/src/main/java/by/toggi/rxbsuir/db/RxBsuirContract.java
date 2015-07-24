@@ -30,6 +30,7 @@ public class RxBsuirContract {
         public static final String COL_LESSON_TYPE = "lesson_type";
         public static final String COL_EMPLOYEE_LIST = "employee_list";
         public static final String COL_AUDITORY_LIST = "auditory_list";
+        public static final String COL_IS_GROUP_SCHEDULE = "is_group_schedule";
 
         public static String filterByWeekNumber(int weekNumber) {
             return COL_WEEK_NUMBER_LIST + " like '%" + weekNumber + "%'";
