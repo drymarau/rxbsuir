@@ -90,6 +90,9 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      * Retry network request with the same group.
      */
     public void retry() {
+        if (isViewAttached()) {
+            mScheduleView.showLoading();
+        }
         mHasSynced = false;
         getStudentGroupSchedule();
     }

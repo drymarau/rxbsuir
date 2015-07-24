@@ -173,7 +173,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                showLoading();
                 mPresenter.retry();
                 return true;
             default:
