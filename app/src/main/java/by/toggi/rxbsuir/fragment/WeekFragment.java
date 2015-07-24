@@ -12,8 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -115,14 +113,6 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
 
     @Override
     public void showLessonList(List<Lesson> lessonList) {
-        ProgressBar progressBar = ButterKnife.findById(getActivity(), R.id.progress_bar);
-        TextView textView = ButterKnife.findById(getActivity(), R.id.error_text_view);
-        if (progressBar != null) {
-            progressBar.setVisibility(View.GONE);
-        }
-        if (textView != null) {
-            textView.setVisibility(View.GONE);
-        }
         mAdapter.setLessonList(lessonList);
         if (mLayoutManagerState != null) {
             mLayoutManager.onRestoreInstanceState(mLayoutManagerState);
