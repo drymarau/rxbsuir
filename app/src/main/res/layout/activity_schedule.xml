@@ -49,6 +49,7 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
         app:borderWidth="0dp"
-        app:elevation="4dp"/>
+        app:elevation="4dp"
+        app:layout_behavior=".FABScrollBehavior"/>
 
 </android.support.design.widget.CoordinatorLayout>
