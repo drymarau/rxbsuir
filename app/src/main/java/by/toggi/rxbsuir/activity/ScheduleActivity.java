@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -114,7 +115,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void showError(Throwable throwable) {
-        mViewPager.setVisibility(View.INVISIBLE);
+        disableScrollFlags();
         mProgressBar.setVisibility(View.GONE);
         Snackbar.make(mCoordinatorLayout, R.string.error_schedule, Snackbar.LENGTH_LONG)
                 .setAction(R.string.action_retry, this)
@@ -123,14 +124,14 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void showLoading() {
-        mViewPager.setVisibility(View.INVISIBLE);
+        disableScrollFlags();
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showContent() {
+        enableScrollFlags();
         mProgressBar.setVisibility(View.GONE);
-        mViewPager.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -160,5 +161,17 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     public void onClick(View v) {
         mPresenter.retry();
+    }
+
+    private void disableScrollFlags() {
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+        params.setScrollFlags(0);
+        mToolbar.setLayoutParams(params);
+    }
+
+    private void enableScrollFlags() {
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+        mToolbar.setLayoutParams(params);
     }
 }
