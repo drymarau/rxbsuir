@@ -7,6 +7,7 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
+@SuppressWarnings("unused")
 public class FABScrollBehavior extends FloatingActionButton.Behavior {
 
     public FABScrollBehavior(Context context, AttributeSet attrs) {
