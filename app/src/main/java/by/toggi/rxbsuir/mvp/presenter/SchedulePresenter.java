@@ -86,6 +86,13 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                 .subscribe(this::onNetworkSuccess, this::onNetworkError);
     }
 
+    /**
+     * Retry network request with the same group.
+     */
+    public void retry() {
+        setGroupNumber(mGroupNumber);
+    }
+
     @Override
     public void onCreate() {
         mSubscription = mLessonListObservable.subscribe(lessonList -> {
