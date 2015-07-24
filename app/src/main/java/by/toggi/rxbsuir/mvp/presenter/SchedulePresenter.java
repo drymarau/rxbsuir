@@ -19,6 +19,7 @@ import by.toggi.rxbsuir.rest.model.Schedule;
 import by.toggi.rxbsuir.rest.model.ScheduleModel;
 import rx.Observable;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
@@ -78,7 +79,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      * Gets student group schedule.
      */
     public void getStudentGroupSchedule() {
-        mService.getGroupSchedule(mGroupNumber).observeOn(Schedulers.io()).subscribeOn(Schedulers.io())
+        mService.getGroupSchedule(mGroupNumber).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
                 .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
                 .toList()
@@ -136,6 +137,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     private void onNetworkError(Throwable throwable) {
         mHasSynced = true;
+        mScheduleView.showError(throwable);
     }
 
     private List<Lesson> transformScheduleToLesson(ScheduleModel model) {
