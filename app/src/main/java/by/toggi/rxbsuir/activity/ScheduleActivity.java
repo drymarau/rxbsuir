@@ -33,7 +33,7 @@ import icepick.Icepick;
 import icepick.State;
 
 
-public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener, View.OnClickListener {
+public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener {
 
     public static final String KEY_GROUP_NUMBER = "selected_group_number";
     private static final String TAG_ADD_DIALOG = "add_dialog";
@@ -118,7 +118,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         disableScrollFlags();
         mProgressBar.setVisibility(View.GONE);
         Snackbar.make(mCoordinatorLayout, R.string.error_schedule, Snackbar.LENGTH_LONG)
-                .setAction(R.string.action_retry, this)
+                .setAction(R.string.action_retry, v -> mPresenter.retry())
                 .show();
     }
 
@@ -156,11 +156,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
-    }
-
-    @Override
-    public void onClick(View v) {
-        mPresenter.retry();
     }
 
     private void disableScrollFlags() {

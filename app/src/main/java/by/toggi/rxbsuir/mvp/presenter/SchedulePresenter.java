@@ -90,7 +90,8 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      * Retry network request with the same group.
      */
     public void retry() {
-        setGroupNumber(mGroupNumber);
+        mHasSynced = false;
+        getStudentGroupSchedule();
     }
 
     @Override
