@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import javax.inject.Inject;
 
@@ -41,7 +41,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
     @Bind(R.id.view_pager) ViewPager mViewPager;
     @Bind(R.id.progress_bar) ProgressBar mProgressBar;
-    @Bind(R.id.parent_view) RelativeLayout mParentView;
+    @Bind(R.id.coordinator_layout) CoordinatorLayout mCoordinatorLayout;
 
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
@@ -116,7 +116,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     public void showError(Throwable throwable) {
         mViewPager.setVisibility(View.INVISIBLE);
         mProgressBar.setVisibility(View.GONE);
-        Snackbar.make(mParentView, R.string.error_schedule, Snackbar.LENGTH_LONG)
+        Snackbar.make(mCoordinatorLayout, R.string.error_schedule, Snackbar.LENGTH_LONG)
                 .setAction(R.string.action_retry, this)
                 .show();
     }
