@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -116,6 +118,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     public void showError(Throwable throwable) {
         disableScrollFlags();
+        mViewPager.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);
         Snackbar.make(mCoordinatorLayout, R.string.error_schedule, Snackbar.LENGTH_LONG)
                 .setAction(R.string.action_retry, v -> mPresenter.retry())
@@ -125,6 +128,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     public void showLoading() {
         disableScrollFlags();
+        mViewPager.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
@@ -132,6 +136,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     public void showContent() {
         enableScrollFlags();
         mProgressBar.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -156,6 +161,24 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_schedule_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                showLoading();
+                mPresenter.retry();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void disableScrollFlags() {
