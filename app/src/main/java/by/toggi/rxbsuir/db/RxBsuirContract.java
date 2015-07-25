@@ -32,16 +32,16 @@ public class RxBsuirContract {
         public static final String COL_AUDITORY_LIST = "auditory_list";
         public static final String COL_IS_GROUP_SCHEDULE = "is_group_schedule";
 
-        public static String filterByWeekNumber(int weekNumber) {
+        public static String filterByWeek(int weekNumber) {
             return COL_WEEK_NUMBER_LIST + " like '%" + weekNumber + "%'";
         }
 
-        public static String filterByGroupNumber(String groupNumber) {
+        public static String filterByGroup(String groupNumber) {
             return COL_STUDENT_GROUP_LIST + " like '%" + groupNumber + "%'";
         }
 
-        public static String filterByGroupNumberAndWeekNumber(String groupNumber, int weekNumber) {
-            return filterByGroupNumber(groupNumber) + " and " + filterByWeekNumber(weekNumber);
+        public static String filterByGroupAndWeek(String groupNumber, int weekNumber) {
+            return filterByGroup(groupNumber) + " and " + filterByWeek(weekNumber);
         }
 
     }

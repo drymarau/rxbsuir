@@ -57,7 +57,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
                         .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.filterByGroupNumber(groupNumber))
+                        .where(LessonEntry.filterByGroup(groupNumber))
                         .build())
                 .prepare()
                 .createObservable()
@@ -143,7 +143,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                 mStorIOSQLite.delete()
                         .byQuery(DeleteQuery.builder()
                                 .table(LessonEntry.TABLE_NAME)
-                                .where(LessonEntry.filterByGroupNumber(mGroupNumber))
+                                .where(LessonEntry.filterByGroup(mGroupNumber))
                                 .build())
                         .prepare()
                         .createObservable(),
