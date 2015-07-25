@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">BSUIR Schedule</string>
     <!-- bsuir.by endpoint for retrofit -->
-    <string name="schedule_endpoint" translatable="false">http://www.bsuir.by/schedule/rest</string>
+    <!--<string name="schedule_endpoint" translatable="false">http://www.bsuir.by/schedule/rest</string>-->
+    <string name="schedule_endpoint" translatable="false">http://web.archive.org/web/20141106111025/http://www.bsuir.by/schedule/rest/</string>
+
 
     <!-- SNACKBAR -->
     <!-- Error message when something went wrong with schedule -->

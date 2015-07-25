@@ -29,8 +29,7 @@ public class RxBsuirApplication extends Application {
         if (mAppComponent == null) {
             mAppComponent = DaggerAppComponent.builder()
                     .appModule(new AppModule(this))
-//                    .bsuirServiceModule(new BsuirServiceModule(getString(R.string.schedule_endpoint)))
-                    .bsuirServiceModule(new BsuirServiceModule("http://web.archive.org/web/20141106111025/http://www.bsuir.by/schedule/rest/"))
+                    .bsuirServiceModule(new BsuirServiceModule(getString(R.string.schedule_endpoint)))
                     .build();
         }
     }
