@@ -2,6 +2,8 @@ package by.toggi.rxbsuir;
 
 import android.app.Application;
 
+import com.jakewharton.threetenabp.AndroidThreeTen;
+
 import by.toggi.rxbsuir.component.AppComponent;
 import by.toggi.rxbsuir.component.DaggerAppComponent;
 import by.toggi.rxbsuir.module.AppModule;
@@ -15,6 +17,8 @@ public class RxBsuirApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        AndroidThreeTen.init(this);
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
