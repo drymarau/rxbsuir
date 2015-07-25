@@ -39,6 +39,8 @@ import icepick.State;
 public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener {
 
     public static final String KEY_GROUP_NUMBER = "selected_group_number";
+    public static final String KEY_SUBGROUP_1 = "subgroup_1";
+    public static final String KEY_SUBGROUP_2 = "subgroup_2";
     private static final String TAG_ADD_DIALOG = "add_dialog";
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
@@ -181,9 +183,26 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
             case R.id.action_today:
                 showCurrentWeek();
                 return true;
+            case R.id.action_subgroup_1:
+                item.setChecked(!item.isChecked());
+                mSharedPreferences.edit().putBoolean(KEY_SUBGROUP_1, item.isChecked()).apply();
+                return true;
+            case R.id.action_subgroup_2:
+                item.setChecked(!item.isChecked());
+                mSharedPreferences.edit().putBoolean(KEY_SUBGROUP_2, item.isChecked()).apply();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_subgroup_1);
+        item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_1, true));
+        item = menu.findItem(R.id.action_subgroup_2);
+        item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_2, true));
+        return super.onPrepareOptionsMenu(menu);
     }
 
     private void disableScrollFlags() {
