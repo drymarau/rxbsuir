@@ -173,7 +173,17 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        mPresenter.setGroupNumber(sharedPreferences.getString(ScheduleActivity.KEY_GROUP_NUMBER, null));
+    public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
+        switch (key) {
+            case ScheduleActivity.KEY_GROUP_NUMBER:
+                mPresenter.setGroupNumber(preferences.getString(key, null));
+                break;
+            case ScheduleActivity.KEY_SUBGROUP_1:
+            case ScheduleActivity.KEY_SUBGROUP_2:
+                boolean subgroup1 = preferences.getBoolean(ScheduleActivity.KEY_SUBGROUP_1, true);
+                boolean subgroup2 = preferences.getBoolean(ScheduleActivity.KEY_SUBGROUP_2, true);
+                mPresenter.setSubgroupNumber(subgroup1, subgroup2);
+                break;
+        }
     }
 }

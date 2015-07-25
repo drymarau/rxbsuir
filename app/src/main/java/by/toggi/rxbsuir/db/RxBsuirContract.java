@@ -40,8 +40,30 @@ public class RxBsuirContract {
             return COL_STUDENT_GROUP_LIST + " like '%" + groupNumber + "%'";
         }
 
+        public static String filterBySubgroup(int subgroupNumber) {
+            String commonQuery = COL_NUM_SUBGROUP + " = 0";
+            String subgroup1Query = COL_NUM_SUBGROUP + " = 1";
+            String subgroup2Query = COL_NUM_SUBGROUP + " = 2";
+            switch (subgroupNumber) {
+                case 0:
+                    return commonQuery + " or " + subgroup1Query + " or " + subgroup2Query;
+                case 1:
+                    return commonQuery + " or " + subgroup1Query;
+                case 2:
+                    return commonQuery + " or " + subgroup2Query;
+                case 3:
+                    return commonQuery;
+                default:
+                    throw new IllegalArgumentException("Unknown subgroup number: " + subgroupNumber);
+            }
+        }
+
         public static String filterByGroupAndWeek(String groupNumber, int weekNumber) {
             return filterByGroup(groupNumber) + " and " + filterByWeek(weekNumber);
+        }
+
+        public static String filterByGroupSubgroupAndWeek(String groupNumber, int subgroupNumber, int weekNumber) {
+            return filterByGroupAndWeek(groupNumber, weekNumber) + " and (" + filterBySubgroup(subgroupNumber) + ")";
         }
 
     }

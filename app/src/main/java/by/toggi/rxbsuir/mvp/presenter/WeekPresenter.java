@@ -25,22 +25,16 @@ public class WeekPresenter implements Presenter<WeekView> {
     private Subscription mSubscription;
     private StorIOSQLite mStorIOSQLite;
     private int mWeekNumber;
+    private int mSubgroupNumber = 0;
+    private String mGroupNumber;
 
     @Inject
     public WeekPresenter(@Nullable String groupNumber, int weekNumber, StorIOSQLite storIOSQLite) {
         mWeekNumber = weekNumber;
         mStorIOSQLite = storIOSQLite;
-        if (groupNumber != null) {
-            mListObservable = mStorIOSQLite.get()
-                    .listOfObjects(Lesson.class)
-                    .withQuery(Query.builder()
-                            .table(LessonEntry.TABLE_NAME)
-                            .where(LessonEntry.filterByGroupAndWeek(groupNumber, weekNumber))
-                            .build())
-                    .prepare()
-                    .createObservable()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .cache();
+        mGroupNumber = groupNumber;
+        if (mGroupNumber != null) {
+            mListObservable = getListObservable(mGroupNumber, mSubgroupNumber, mWeekNumber);
         } else {
             mListObservable = Observable.empty();
         }
@@ -53,16 +47,33 @@ public class WeekPresenter implements Presenter<WeekView> {
      * @param groupNumber the group number
      */
     public void setGroupNumber(String groupNumber) {
-        mListObservable = getListObservable(groupNumber, mWeekNumber);
+        mGroupNumber = groupNumber;
+        mListObservable = getListObservable(mGroupNumber, mSubgroupNumber, mWeekNumber);
         onCreate();
     }
 
-    private Observable<List<Lesson>> getListObservable(String groupNumber, int weekNumber) {
+    public void setSubgroupNumber(boolean subgroup1, boolean subgroup2) {
+        if (subgroup1 && subgroup2) {
+            mSubgroupNumber = 0;
+        } else if (!subgroup1 && !subgroup2) {
+            mSubgroupNumber = 3;
+        } else {
+            if (subgroup1) {
+                mSubgroupNumber = 1;
+            } else {
+                mSubgroupNumber = 2;
+            }
+        }
+        mListObservable = getListObservable(mGroupNumber, mSubgroupNumber, mWeekNumber);
+        onCreate();
+    }
+
+    private Observable<List<Lesson>> getListObservable(String groupNumber, int subgroupNumber, int weekNumber) {
         return mStorIOSQLite.get()
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
                         .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.filterByGroupAndWeek(groupNumber, weekNumber))
+                        .where(LessonEntry.filterByGroupSubgroupAndWeek(groupNumber, subgroupNumber, weekNumber))
                         .build())
                 .prepare()
                 .createObservable()
