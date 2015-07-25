@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
 import by.toggi.rxbsuir.fragment.AddDialogFragment;
@@ -70,6 +71,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         mPresenter.attachView(this);
         mPresenter.onCreate();
+
+        showCurrentWeek();
 
         Icepick.restoreInstanceState(this, savedInstanceState);
         if (mTitle == null) {
@@ -137,7 +140,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         enableScrollFlags();
         mProgressBar.setVisibility(View.GONE);
         mViewPager.setVisibility(View.VISIBLE);
-        mViewPager.setCurrentItem(position, true);
     }
 
     @Override
@@ -177,7 +179,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 mPresenter.retry();
                 return true;
             case R.id.action_today:
-                mPresenter.showCurrentWeek();
+                showCurrentWeek();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -194,5 +196,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         mToolbar.setLayoutParams(params);
+    }
+
+    private void showCurrentWeek() {
+        mViewPager.setCurrentItem(Utils.getCurrentWeekNumber() - 1);
     }
 }
