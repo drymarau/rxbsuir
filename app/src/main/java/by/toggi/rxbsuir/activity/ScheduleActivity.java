@@ -176,6 +176,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
             case R.id.action_refresh:
                 mPresenter.retry();
                 return true;
+            case R.id.action_today:
+                mPresenter.showCurrentWeek();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

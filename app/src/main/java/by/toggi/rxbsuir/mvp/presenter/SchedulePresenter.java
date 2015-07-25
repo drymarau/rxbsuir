@@ -98,6 +98,12 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         getStudentGroupSchedule();
     }
 
+    public void showCurrentWeek() {
+        if (isViewAttached()) {
+            mScheduleView.showContent(Utils.getCurrentWeekNumber() - 1);
+        }
+    }
+
     @Override
     public void onCreate() {
         if (isViewAttached() && !mHasSynced) {
