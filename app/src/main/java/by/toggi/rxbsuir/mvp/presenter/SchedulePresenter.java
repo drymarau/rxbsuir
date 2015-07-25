@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
@@ -109,7 +110,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                 }
             } else {
                 if (isViewAttached()) {
-                    mScheduleView.showContent();
+                    mScheduleView.showContent(Utils.getCurrentWeekNumber() - 1);
                 }
             }
         });

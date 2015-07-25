@@ -133,10 +133,11 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     }
 
     @Override
-    public void showContent() {
+    public void showContent(int position) {
         enableScrollFlags();
         mProgressBar.setVisibility(View.GONE);
         mViewPager.setVisibility(View.VISIBLE);
+        mViewPager.setCurrentItem(position, true);
     }
 
     @Override
