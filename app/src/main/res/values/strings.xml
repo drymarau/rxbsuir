@@ -3,6 +3,7 @@
     <!-- bsuir.by endpoint for retrofit -->
     <string name="schedule_endpoint" translatable="false">http://www.bsuir.by/schedule/rest</string>
 
+    <!-- SNACKBAR -->
     <!-- Error message when something went wrong with schedule -->
     <string name="error_schedule">Something went wrong</string>
     <string name="action_retry">Retry</string>
@@ -13,6 +14,10 @@
     <string name="title_add_group">Add group</string>
     <string name="positive_add">Add</string>
     <string name="error_no_group">No schedule is available for this group</string>
+
+    <!-- MENU -->
+    <string name="action_today">Today</string>
+    <string name="action_refresh">Refresh</string>
 
     <array name="tabs">
         <item>Week 1</item>

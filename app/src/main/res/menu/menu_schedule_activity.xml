@@ -4,10 +4,10 @@
     <item
         android:id="@+id/action_today"
         android:icon="@drawable/ic_action_today"
-        android:title="Today"
+        android:title="@string/action_today"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_refresh"
-        android:title="Refresh"
+        android:title="@string/action_refresh"
         app:showAsAction="never"/>
 </menu>
