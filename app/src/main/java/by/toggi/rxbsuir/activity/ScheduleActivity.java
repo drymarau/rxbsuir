@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import javax.inject.Inject;
@@ -48,6 +50,10 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Bind(R.id.view_pager) ViewPager mViewPager;
     @Bind(R.id.progress_bar) ProgressBar mProgressBar;
     @Bind(R.id.coordinator_layout) CoordinatorLayout mCoordinatorLayout;
+    @Bind(R.id.fab_group) FloatingActionButton mFabGroup;
+    @Bind(R.id.fab_employee) FloatingActionButton mFabEmployee;
+    @Bind(R.id.floating_action_menu) FrameLayout mFloatingActionMenu;
+    @Bind(R.id.floating_action_button) FloatingActionButton mFloatingActionButton;
 
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
@@ -116,6 +122,35 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @OnClick(R.id.floating_action_button)
     public void onFloatingActionButtonClick() {
+        if (mFabGroup.getVisibility() == View.VISIBLE) {
+            hideFloatingActionMenu();
+        } else {
+            showFloatingActionMenu();
+        }
+    }
+
+    private void showFloatingActionMenu() {
+        mFloatingActionMenu.setClickable(true);
+        mFloatingActionMenu.setOnClickListener(v -> hideFloatingActionMenu());
+        mFloatingActionMenu.setBackgroundResource(R.color.floating_action_menu_protection);
+        mFabGroup.show();
+        mFabEmployee.show();
+    }
+
+    private void hideFloatingActionMenu() {
+        mFabGroup.hide();
+        mFabEmployee.hide();
+        mFloatingActionMenu.setClickable(false);
+        mFloatingActionMenu.setBackgroundResource(android.R.color.transparent);
+    }
+
+    @OnClick(R.id.fab_employee)
+    public void onFloatingActionButtonEmployeeClick() {
+
+    }
+
+    @OnClick(R.id.fab_group)
+    public void onFloatingActionButtonGroupClick() {
         AddDialogFragment dialog = AddDialogFragment.newInstance();
         dialog.show(getSupportFragmentManager(), TAG_ADD_DIALOG);
     }
@@ -170,6 +205,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         mPresenter.setGroupNumber(groupNumber);
         setTitle(groupNumber);
         mSharedPreferences.edit().putString(KEY_GROUP_NUMBER, groupNumber).apply();
+        hideFloatingActionMenu();
     }
 
     @Override
