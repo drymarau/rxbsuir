@@ -30,6 +30,10 @@ import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
  */
 public class SchedulePresenter implements Presenter<ScheduleView> {
 
+    public static final String ERROR_NO_GROUP = "error_no_group";
+    public static final String ERROR_NETWORK = "error_netwok";
+    public static final String ERROR_EMPTY_SCHEDULE = "error_empty_schedule";
+
     private Observable<List<Lesson>> mLessonListObservable;
     private ScheduleView mScheduleView;
     private BsuirService mService;
@@ -80,27 +84,35 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      * Gets student group schedule.
      */
     public void getStudentGroupSchedule() {
-        mService.getGroupSchedule(mGroupNumber).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-                .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
-                .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
-                .toList()
-                .subscribe(this::onNetworkSuccess, this::onNetworkError);
+        if (mGroupNumber != null) {
+            mService.getGroupSchedule(mGroupNumber).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                    .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
+                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
+                    .toList()
+                    .subscribe(this::onNetworkSuccess, this::onNetworkError);
+        }
     }
 
     /**
      * Retry network request with the same group.
      */
     public void retry() {
-        if (isViewAttached()) {
-            mScheduleView.showLoading();
+        if (mGroupNumber == null) {
+            if (isViewAttached()) {
+                mScheduleView.showError(new Throwable(ERROR_NO_GROUP));
+            }
+        } else {
+            if (isViewAttached()) {
+                mScheduleView.showLoading();
+            }
+            mHasSynced = false;
+            getStudentGroupSchedule();
         }
-        mHasSynced = false;
-        getStudentGroupSchedule();
     }
 
     @Override
     public void onCreate() {
-        if (isViewAttached() && !mHasSynced) {
+        if (isViewAttached() && !mHasSynced && mGroupNumber != null) {
             mScheduleView.showLoading();
         }
         mSubscription = mLessonListObservable.subscribe(lessonList -> {
@@ -157,7 +169,11 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     private void onNetworkError(Throwable throwable) {
         mHasSynced = true;
         if (isViewAttached()) {
-            mScheduleView.showError(throwable);
+            if (throwable.getMessage().contains("org.simpleframework.xml.core.ValueRequiredException")) {
+                mScheduleView.showError(new Throwable(ERROR_EMPTY_SCHEDULE));
+            } else {
+                mScheduleView.showError(new Throwable(ERROR_NETWORK));
+            }
         }
     }
 

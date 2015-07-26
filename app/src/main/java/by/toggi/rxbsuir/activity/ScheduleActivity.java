@@ -125,9 +125,25 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         disableScrollFlags();
         mViewPager.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);
-        Snackbar.make(mCoordinatorLayout, R.string.error_schedule, Snackbar.LENGTH_LONG)
-                .setAction(R.string.action_retry, v -> mPresenter.retry())
-                .show();
+        switch (throwable.getMessage()) {
+            case SchedulePresenter.ERROR_NO_GROUP:
+                Snackbar.make(mCoordinatorLayout, SchedulePresenter.ERROR_NO_GROUP, Snackbar.LENGTH_LONG)
+                        .show();
+                break;
+            case SchedulePresenter.ERROR_NETWORK:
+                Snackbar.make(mCoordinatorLayout, SchedulePresenter.ERROR_NETWORK, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.action_retry, v -> mPresenter.retry())
+                        .show();
+                break;
+            case SchedulePresenter.ERROR_EMPTY_SCHEDULE:
+                Snackbar.make(mCoordinatorLayout, SchedulePresenter.ERROR_EMPTY_SCHEDULE, Snackbar.LENGTH_LONG)
+                        .show();
+                break;
+            default:
+                Snackbar.make(mCoordinatorLayout, getString(R.string.error_schedule), Snackbar.LENGTH_LONG)
+                        .show();
+                break;
+        }
     }
 
     @Override
