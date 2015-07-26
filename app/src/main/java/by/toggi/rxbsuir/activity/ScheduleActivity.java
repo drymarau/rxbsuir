@@ -127,20 +127,20 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         mProgressBar.setVisibility(View.GONE);
         switch (throwable.getMessage()) {
             case SchedulePresenter.ERROR_NO_GROUP:
-                Snackbar.make(mCoordinatorLayout, SchedulePresenter.ERROR_NO_GROUP, Snackbar.LENGTH_LONG)
+                Snackbar.make(mCoordinatorLayout, getString(R.string.error_no_group), Snackbar.LENGTH_LONG)
                         .show();
                 break;
             case SchedulePresenter.ERROR_NETWORK:
-                Snackbar.make(mCoordinatorLayout, SchedulePresenter.ERROR_NETWORK, Snackbar.LENGTH_LONG)
+                Snackbar.make(mCoordinatorLayout, getString(R.string.error_network), Snackbar.LENGTH_LONG)
                         .setAction(R.string.action_retry, v -> mPresenter.retry())
                         .show();
                 break;
             case SchedulePresenter.ERROR_EMPTY_SCHEDULE:
-                Snackbar.make(mCoordinatorLayout, SchedulePresenter.ERROR_EMPTY_SCHEDULE, Snackbar.LENGTH_LONG)
+                Snackbar.make(mCoordinatorLayout, getString(R.string.error_empty_schedule), Snackbar.LENGTH_LONG)
                         .show();
                 break;
             default:
-                Snackbar.make(mCoordinatorLayout, getString(R.string.error_schedule), Snackbar.LENGTH_LONG)
+                Snackbar.make(mCoordinatorLayout, getString(R.string.error_default), Snackbar.LENGTH_LONG)
                         .show();
                 break;
         }
