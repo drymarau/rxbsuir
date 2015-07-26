@@ -1,5 +1,7 @@
 package by.toggi.rxbsuir.activity;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -70,6 +72,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         initializeComponent();
         ButterKnife.bind(this);
+        mFloatingActionMenu.getBackground().setAlpha(0);
 
         addStorageFragment();
 
@@ -134,7 +137,10 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     private void showFloatingActionMenu() {
         mFloatingActionMenu.setClickable(true);
         mFloatingActionMenu.setOnClickListener(v -> hideFloatingActionMenu());
-        mFloatingActionMenu.setBackgroundResource(R.color.floating_action_menu_protection);
+        ObjectAnimator.ofPropertyValuesHolder(
+                mFloatingActionMenu.getBackground(),
+                PropertyValuesHolder.ofInt("alpha", 255)
+        ).setDuration(200).start();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate_in));
         }
@@ -148,8 +154,11 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate_out));
         }
+        ObjectAnimator.ofPropertyValuesHolder(
+                mFloatingActionMenu.getBackground(),
+                PropertyValuesHolder.ofInt("alpha", 0)
+        ).setDuration(200).start();
         mFloatingActionMenu.setClickable(false);
-        mFloatingActionMenu.setBackgroundResource(android.R.color.transparent);
     }
 
     @OnClick(R.id.fab_employee)

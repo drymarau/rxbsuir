@@ -45,6 +45,7 @@
         android:id="@+id/floating_action_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/floating_action_menu_protection"
         android:elevation="6dp"
         app:layout_behavior=".FAMScrollBehavior">
 
