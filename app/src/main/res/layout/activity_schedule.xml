@@ -41,15 +41,54 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floating_action_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_add"
-        app:borderWidth="0dp"
-        app:elevation="4dp"
-        app:layout_behavior=".FABScrollBehavior"/>
+    <FrameLayout
+        android:id="@+id/floating_action_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="6dp"
+        app:layout_behavior=".FAMScrollBehavior">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_employee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="144dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:src="@drawable/ic_social_person"
+            android:visibility="gone"
+            app:backgroundTint="@android:color/white"
+            app:borderWidth="0dp"
+            app:elevation="4dp"
+            app:fabSize="mini"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="88dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:src="@drawable/ic_social_group"
+            android:visibility="gone"
+            app:backgroundTint="@android:color/white"
+            app:borderWidth="0dp"
+            app:elevation="4dp"
+            app:fabSize="mini"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add"
+            android:tag="fab"
+            app:borderWidth="0dp"
+            app:elevation="4dp"/>
+
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>
