@@ -1,6 +1,7 @@
 package by.toggi.rxbsuir.activity;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
@@ -133,6 +135,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         mFloatingActionMenu.setClickable(true);
         mFloatingActionMenu.setOnClickListener(v -> hideFloatingActionMenu());
         mFloatingActionMenu.setBackgroundResource(R.color.floating_action_menu_protection);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate_in));
+        }
         mFabGroup.show();
         mFabEmployee.show();
     }
@@ -140,6 +145,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     private void hideFloatingActionMenu() {
         mFabGroup.hide();
         mFabEmployee.hide();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate_out));
+        }
         mFloatingActionMenu.setClickable(false);
         mFloatingActionMenu.setBackgroundResource(android.R.color.transparent);
     }
