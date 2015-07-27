@@ -8,9 +8,12 @@
 
     <dimen name="list_subheader_height">48dp</dimen>
 
-    <!-- FAB dimens -->
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="fab_margin_mini">24dp</dimen>
+    <!-- FAB dimens (for elevation of 6dp) -->
+    <dimen name="fab_margin">4dp</dimen>
+    <dimen name="fab_margin_mini">12dp</dimen>
     <dimen name="fam_elevation">6dp</dimen>
+    <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="fab_pressed_translationZ">6dp</dimen>
+    <dimen name="fab_margin_top">-20dp</dimen>
 
 </resources>
