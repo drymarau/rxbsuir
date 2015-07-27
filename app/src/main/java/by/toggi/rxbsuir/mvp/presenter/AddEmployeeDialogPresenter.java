@@ -74,7 +74,18 @@ public class AddEmployeeDialogPresenter implements Presenter<AddEmployeeDialogVi
         mAddEmployeeDialogView = null;
     }
 
+    /**
+     * Validates employeeString.
+     *
+     * @param employeeString the group number
+     * @return true is group number is valid, false otherwise
+     */
+    public boolean isValidGroupNumber(String employeeString) {
+        return mEmployeeList != null && mEmployeeList.toString().contains(employeeString);
+    }
+
     private void updateEmployeeListInView(List<Employee> employeeList) {
+        mEmployeeList = employeeList;
         if (isViewAttached()) {
             mAddEmployeeDialogView.updateEmployeeList(employeeList);
         }
