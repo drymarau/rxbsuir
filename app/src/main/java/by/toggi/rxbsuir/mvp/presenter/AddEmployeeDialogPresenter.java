@@ -80,7 +80,7 @@ public class AddEmployeeDialogPresenter implements Presenter<AddEmployeeDialogVi
      * @param employeeString the group number
      * @return true is group number is valid, false otherwise
      */
-    public boolean isValidGroupNumber(String employeeString) {
+    public boolean isValidEmployee(String employeeString) {
         return mEmployeeList != null && mEmployeeList.toString().contains(employeeString);
     }
 
