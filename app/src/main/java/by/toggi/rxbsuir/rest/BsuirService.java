@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.rest;
 
+import by.toggi.rxbsuir.rest.model.EmployeeXmlModels;
 import by.toggi.rxbsuir.rest.model.ScheduleXmlModels;
 import by.toggi.rxbsuir.rest.model.StudentGroupXmlModels;
 import retrofit.http.GET;
@@ -13,5 +14,8 @@ public interface BsuirService {
 
     @GET("/studentGroup")
     Observable<StudentGroupXmlModels> getStudentGroups();
+
+    @GET("/employee")
+    Observable<EmployeeXmlModels> getEmployees();
 
 }
