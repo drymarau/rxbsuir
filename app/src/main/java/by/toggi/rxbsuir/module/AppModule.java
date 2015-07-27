@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.RxBsuirApplication;
@@ -34,8 +35,16 @@ public class AppModule {
 
     @Nullable
     @Provides
+    @Named(value = ScheduleActivity.KEY_GROUP_NUMBER)
     String provideGroupNumber(SharedPreferences preferences) {
         return preferences.getString(ScheduleActivity.KEY_GROUP_NUMBER, null);
+    }
+
+    @Nullable
+    @Provides
+    @Named(value = ScheduleActivity.KEY_EMPLOYEE_ID)
+    String provideEmployeeId(SharedPreferences preferences) {
+        return preferences.getString(ScheduleActivity.KEY_EMPLOYEE_ID, null);
     }
 
 }

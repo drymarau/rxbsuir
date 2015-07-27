@@ -5,9 +5,11 @@ import android.support.annotation.Nullable;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.module.AppModule;
@@ -32,7 +34,9 @@ public interface AppComponent {
 
     SharedPreferences sharedPreferences();
 
-    @Nullable String groupNumber();
+    @Nullable @Named(ScheduleActivity.KEY_GROUP_NUMBER) String groupNumber();
+
+    @Nullable @Named(ScheduleActivity.KEY_EMPLOYEE_ID) String employeeId();
 
     void inject(AddGroupDialogFragment addGroupDialogFragment);
 

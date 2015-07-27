@@ -8,7 +8,9 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.WeekView;
@@ -29,7 +31,7 @@ public class WeekPresenter implements Presenter<WeekView> {
     private String mGroupNumber;
 
     @Inject
-    public WeekPresenter(@Nullable String groupNumber, int weekNumber, StorIOSQLite storIOSQLite) {
+    public WeekPresenter(@Nullable @Named(ScheduleActivity.KEY_GROUP_NUMBER) String groupNumber, int weekNumber, StorIOSQLite storIOSQLite) {
         mWeekNumber = weekNumber;
         mStorIOSQLite = storIOSQLite;
         mGroupNumber = groupNumber;
