@@ -26,7 +26,7 @@ public class AddEmployeeDialogPresenter implements Presenter<AddEmployeeDialogVi
     private AddEmployeeDialogView mAddEmployeeDialogView;
     private Observable<List<Employee>> mEmployeeListObservable;
     private Subscription mSubscription;
-    private List<Employee> mEmployeeList;
+    private List<String> mEmployeeStringList;
 
     @Inject
     public AddEmployeeDialogPresenter(BsuirService service, StorIOSQLite storIOSQLite) {
@@ -81,11 +81,14 @@ public class AddEmployeeDialogPresenter implements Presenter<AddEmployeeDialogVi
      * @return true is group number is valid, false otherwise
      */
     public boolean isValidEmployee(String employeeString) {
-        return mEmployeeList != null && mEmployeeList.toString().contains(employeeString);
+        return mEmployeeStringList != null && mEmployeeStringList.contains(employeeString);
     }
 
     private void updateEmployeeListInView(List<Employee> employeeList) {
-        mEmployeeList = employeeList;
+        Observable.from(employeeList).subscribeOn(Schedulers.computation()).observeOn(Schedulers.computation())
+                .map(Employee::toString)
+                .toList()
+                .subscribe(strings -> mEmployeeStringList = strings);
         if (isViewAttached()) {
             mAddEmployeeDialogView.updateEmployeeList(employeeList);
         }
