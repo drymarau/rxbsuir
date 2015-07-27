@@ -13,7 +13,7 @@ public class Employee {
     public List<String> academicDepartment;
     @Element(name = "firstName")
     public String firstName;
-    @Element(name = "middleName")
+    @Element(name = "middleName", required = false)
     public String middleName;
     @Element(name = "lastName")
     public String lastName;
@@ -33,6 +33,10 @@ public class Employee {
 
     @Override
     public String toString() {
-        return String.format("%s %s.%s.", lastName, firstName.charAt(0), middleName.charAt(0));
+        if (middleName == null) {
+            return String.format("%s %s.", lastName, firstName.charAt(0));
+        } else {
+            return String.format("%s %s.%s.", lastName, firstName.charAt(0), middleName.charAt(0));
+        }
     }
 }

@@ -23,7 +23,7 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
                 EmployeeEntry.COL_ID + " integer primary key, " +
                 EmployeeEntry.COL_ACADEMIC_DEPARTMENT_LIST + " text not null, " +
                 EmployeeEntry.COL_FIRST_NAME + " text not null, " +
-                EmployeeEntry.COL_MIDDLE_NAME + " text not null, " +
+                EmployeeEntry.COL_MIDDLE_NAME + " text, " +
                 EmployeeEntry.COL_LAST_NAME + " text not null, " +
                 "unique (" + EmployeeEntry.COL_ID + ") on conflict replace" + ");";
     }
