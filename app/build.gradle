@@ -23,7 +23,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 // Manifest version information!
 def versionMajor = 1
 def versionMinor = 0
-def versionPatch = 0
+def versionPatch = 1
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 android {

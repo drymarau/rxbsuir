@@ -29,4 +29,7 @@
         <item>Week 3</item>
         <item>Week 4</item>
     </array>
+
+    <!-- Main FAB tag for FAM -->
+    <string name="tag_fab" translatable="false">fab</string>
 </resources>
