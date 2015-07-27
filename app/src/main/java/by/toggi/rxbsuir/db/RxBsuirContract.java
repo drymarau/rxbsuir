@@ -78,6 +78,10 @@ public class RxBsuirContract {
             return filterByGroupAndWeek(groupNumber, weekNumber) + " and (" + filterBySubgroup(subgroupNumber) + ")";
         }
 
+        public static String filterByEmployeeId(String employeeId) {
+            return COL_EMPLOYEE_LIST + " like '%" + employeeId + "%'";
+        }
+
     }
 
 }
