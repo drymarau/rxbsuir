@@ -53,40 +53,6 @@ public class AddGroupDialogPresenter implements Presenter<AddGroupDialogView> {
         });
     }
 
-    private void updateStudentGroupListInView(List<StudentGroup> studentGroupList) {
-        Observable.from(studentGroupList)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(StudentGroup::toString)
-                .toList()
-                .subscribe(strings -> {
-                    mGroupNumberList = strings;
-                    if (isViewAttached()) {
-                        mAddGroupDialogView.updateStudentGroupList(mGroupNumberList);
-                    }
-                });
-    }
-
-    private boolean isViewAttached() {
-        return mAddGroupDialogView != null;
-    }
-
-    private void getStudentGroupsFromNetwork() {
-        mService.getStudentGroups()
-                .observeOn(Schedulers.io())
-                .subscribeOn(Schedulers.io())
-                .map(studentGroupXmlModels -> studentGroupXmlModels.studentGroupList)
-                .flatMap(this::getStudentGroupPutObservable)
-                .subscribe(studentGroupPutResults -> Timber.d("Insert count: %d", studentGroupPutResults.numberOfInserts()));
-    }
-
-    private Observable<PutResults<StudentGroup>> getStudentGroupPutObservable(List<StudentGroup> studentGroupList) {
-        return mStorIOSQLite.put()
-                .objects(studentGroupList)
-                .prepare()
-                .createObservable();
-    }
-
     @Override
     public void onDestroy() {
         if (!mSubscription.isUnsubscribed()) {
@@ -116,5 +82,39 @@ public class AddGroupDialogPresenter implements Presenter<AddGroupDialogView> {
      */
     public boolean isValidGroupNumber(String groupNumber) {
         return mGroupNumberList == null || mGroupNumberList.contains(groupNumber);
+    }
+
+    private void updateStudentGroupListInView(List<StudentGroup> studentGroupList) {
+        Observable.from(studentGroupList)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(StudentGroup::toString)
+                .toList()
+                .subscribe(strings -> {
+                    mGroupNumberList = strings;
+                    if (isViewAttached()) {
+                        mAddGroupDialogView.updateStudentGroupList(mGroupNumberList);
+                    }
+                });
+    }
+
+    private void getStudentGroupsFromNetwork() {
+        mService.getStudentGroups()
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .map(studentGroupXmlModels -> studentGroupXmlModels.studentGroupList)
+                .flatMap(this::getStudentGroupPutObservable)
+                .subscribe(studentGroupPutResults -> Timber.d("Insert count: %d", studentGroupPutResults.numberOfInserts()));
+    }
+
+    private Observable<PutResults<StudentGroup>> getStudentGroupPutObservable(List<StudentGroup> studentGroupList) {
+        return mStorIOSQLite.put()
+                .objects(studentGroupList)
+                .prepare()
+                .createObservable();
+    }
+
+    private boolean isViewAttached() {
+        return mAddGroupDialogView != null;
     }
 }
