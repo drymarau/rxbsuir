@@ -79,8 +79,8 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        TextInputLayout textInputLayout = (TextInputLayout) View.inflate(getActivity(), R.layout.dialog_add_group, null);
-        AutoCompleteTextView textView = ButterKnife.findById(textInputLayout, R.id.group_number_text_view);
+        TextInputLayout textInputLayout = (TextInputLayout) View.inflate(getActivity(), R.layout.dialog_add_employee, null);
+        AutoCompleteTextView textView = ButterKnife.findById(textInputLayout, R.id.employee_text_view);
         mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<>());
         textView.setAdapter(mAdapter);
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(textInputLayout, true)
@@ -90,14 +90,12 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-//                        mListener.onPositiveButtonClicked(mAdapter.get);
                     }
                 })
                 .build();
         // Input validation
         WidgetObservable.text(textView).map(onTextChangeEvent -> onTextChangeEvent.text().toString())
-//                .map(mPresenter::isValidGroupNumber)
-                .map(s -> true)
+                .map(mPresenter::isValidGroupNumber)
                 .startWith(false)
                 .distinctUntilChanged()
                 .subscribe(ViewActions.setEnabled(dialog.getActionButton(DialogAction.POSITIVE)));
