@@ -8,10 +8,14 @@ import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.db.RxBsuirOpenHelper;
+import by.toggi.rxbsuir.db.model.EmployeeStorIOISQLiteGetResolver;
+import by.toggi.rxbsuir.db.model.EmployeeStorIOSQLiteDeleteResolver;
+import by.toggi.rxbsuir.db.model.EmployeeStorIOSQLitePutResolver;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.db.model.LessonStorIOISQLiteGetResolver;
 import by.toggi.rxbsuir.db.model.LessonStorIOSQLiteDeleteResolver;
 import by.toggi.rxbsuir.db.model.LessonStorIOSQLitePutResolver;
+import by.toggi.rxbsuir.rest.model.Employee;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
 import by.toggi.rxbsuir.rest.model.StudentGroupStorIOSQLiteDeleteResolver;
 import by.toggi.rxbsuir.rest.model.StudentGroupStorIOSQLiteGetResolver;
@@ -42,6 +46,11 @@ public class DbModule {
                         .putResolver(new LessonStorIOSQLitePutResolver())
                         .getResolver(new LessonStorIOISQLiteGetResolver())
                         .deleteResolver(new LessonStorIOSQLiteDeleteResolver())
+                        .build())
+                .addTypeMapping(Employee.class, SQLiteTypeMapping.<Employee>builder()
+                        .putResolver(new EmployeeStorIOSQLitePutResolver())
+                        .getResolver(new EmployeeStorIOISQLiteGetResolver())
+                        .deleteResolver(new EmployeeStorIOSQLiteDeleteResolver())
                         .build())
                 .build();
     }
