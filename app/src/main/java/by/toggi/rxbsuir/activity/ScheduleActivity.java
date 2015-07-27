@@ -94,23 +94,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         setTitle(mTitle);
     }
 
-    private void addStorageFragment() {
-        FragmentManager manager = getSupportFragmentManager();
-        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(WeekFragment.TAG_STORAGE_FRAGMENT);
-
-        if (fragment == null) {
-            fragment = new StorageFragment();
-            manager.beginTransaction().add(fragment, WeekFragment.TAG_STORAGE_FRAGMENT).commit();
-            fragment.setPresenter(getPresenterTag(), mPresenter);
-        } else {
-            try {
-                mPresenter = (SchedulePresenter) fragment.getPresenter(getPresenterTag());
-            } catch (ClassCastException e) {
-                throw new ClassCastException("Presenter must be of class SchedulePresenter");
-            }
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -132,33 +115,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         } else {
             showFloatingActionMenu();
         }
-    }
-
-    private void showFloatingActionMenu() {
-        mFloatingActionMenu.setClickable(true);
-        mFloatingActionMenu.setOnClickListener(v -> hideFloatingActionMenu());
-        ObjectAnimator.ofPropertyValuesHolder(
-                mFloatingActionMenu.getBackground(),
-                PropertyValuesHolder.ofInt("alpha", 255)
-        ).setDuration(200).start();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fab_rotate_in));
-        }
-        mFabGroup.show();
-        mFabEmployee.show();
-    }
-
-    private void hideFloatingActionMenu() {
-        mFabGroup.hide();
-        mFabEmployee.hide();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fab_rotate_out));
-        }
-        ObjectAnimator.ofPropertyValuesHolder(
-                mFloatingActionMenu.getBackground(),
-                PropertyValuesHolder.ofInt("alpha", 0)
-        ).setDuration(200).start();
-        mFloatingActionMenu.setClickable(false);
     }
 
     @OnClick(R.id.fab_employee)
@@ -288,5 +244,49 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     private void showCurrentWeek() {
         mViewPager.setCurrentItem(Utils.getCurrentWeekNumber() - 1);
+    }
+
+    private void addStorageFragment() {
+        FragmentManager manager = getSupportFragmentManager();
+        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(WeekFragment.TAG_STORAGE_FRAGMENT);
+
+        if (fragment == null) {
+            fragment = new StorageFragment();
+            manager.beginTransaction().add(fragment, WeekFragment.TAG_STORAGE_FRAGMENT).commit();
+            fragment.setPresenter(getPresenterTag(), mPresenter);
+        } else {
+            try {
+                mPresenter = (SchedulePresenter) fragment.getPresenter(getPresenterTag());
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Presenter must be of class SchedulePresenter");
+            }
+        }
+    }
+
+    private void showFloatingActionMenu() {
+        mFloatingActionMenu.setClickable(true);
+        mFloatingActionMenu.setOnClickListener(v -> hideFloatingActionMenu());
+        ObjectAnimator.ofPropertyValuesHolder(
+                mFloatingActionMenu.getBackground(),
+                PropertyValuesHolder.ofInt("alpha", 255)
+        ).setDuration(200).start();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fab_rotate_in));
+        }
+        mFabGroup.show();
+        mFabEmployee.show();
+    }
+
+    private void hideFloatingActionMenu() {
+        mFabGroup.hide();
+        mFabEmployee.hide();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fab_rotate_out));
+        }
+        ObjectAnimator.ofPropertyValuesHolder(
+                mFloatingActionMenu.getBackground(),
+                PropertyValuesHolder.ofInt("alpha", 0)
+        ).setDuration(200).start();
+        mFloatingActionMenu.setClickable(false);
     }
 }
