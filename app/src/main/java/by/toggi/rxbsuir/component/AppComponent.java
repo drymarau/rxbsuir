@@ -8,6 +8,7 @@ import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.module.AppModule;
 import by.toggi.rxbsuir.module.BsuirServiceModule;
@@ -34,5 +35,7 @@ public interface AppComponent {
     @Nullable String groupNumber();
 
     void inject(AddGroupDialogFragment addGroupDialogFragment);
+
+    void inject(AddEmployeeDialogFragment addEmployeeDialogFragment);
 
 }

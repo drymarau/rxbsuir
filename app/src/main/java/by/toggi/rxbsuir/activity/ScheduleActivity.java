@@ -31,6 +31,7 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
+import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.StorageFragment;
 import by.toggi.rxbsuir.fragment.WeekFragment;
@@ -38,16 +39,18 @@ import by.toggi.rxbsuir.module.ActivityModule;
 import by.toggi.rxbsuir.module.ScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
+import by.toggi.rxbsuir.rest.model.Employee;
 import icepick.Icepick;
 import icepick.State;
 
 
-public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddGroupDialogFragment.OnButtonClickListener {
+public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddGroupDialogFragment.OnButtonClickListener, AddEmployeeDialogFragment.OnButtonClickListener {
 
     public static final String KEY_GROUP_NUMBER = "selected_group_number";
     public static final String KEY_SUBGROUP_1 = "subgroup_1";
     public static final String KEY_SUBGROUP_2 = "subgroup_2";
-    private static final String TAG_ADD_DIALOG = "add_dialog";
+    private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
+    private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
@@ -119,13 +122,14 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @OnClick(R.id.fab_employee)
     public void onFloatingActionButtonEmployeeClick() {
-
+        AddEmployeeDialogFragment dialog = AddEmployeeDialogFragment.newInstance();
+        dialog.show(getSupportFragmentManager(), TAG_ADD_EMPLOYEE_DIALOG);
     }
 
     @OnClick(R.id.fab_group)
     public void onFloatingActionButtonGroupClick() {
         AddGroupDialogFragment dialog = AddGroupDialogFragment.newInstance();
-        dialog.show(getSupportFragmentManager(), TAG_ADD_DIALOG);
+        dialog.show(getSupportFragmentManager(), TAG_ADD_GROUP_DIALOG);
     }
 
     @Override
@@ -179,6 +183,11 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         setTitle(groupNumber);
         mSharedPreferences.edit().putString(KEY_GROUP_NUMBER, groupNumber).apply();
         hideFloatingActionMenu();
+    }
+
+    @Override
+    public void onPositiveButtonClicked(Employee employee) {
+
     }
 
     @Override
