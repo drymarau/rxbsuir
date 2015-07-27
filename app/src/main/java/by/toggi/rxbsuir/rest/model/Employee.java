@@ -8,7 +8,7 @@ import java.util.List;
 public class Employee {
 
     @Element(name = "id")
-    public int id;
+    public long id;
     @ElementList(entry = "academicDepartment", inline = true, required = false)
     public List<String> academicDepartment;
     @Element(name = "firstName")
