@@ -23,6 +23,9 @@ public class EmployeeStorIOISQLiteGetResolver extends DefaultGetResolver<Employe
                 cursor.getString(cursor.getColumnIndex(EmployeeEntry.COL_ACADEMIC_DEPARTMENT_LIST)),
                 String[].class
         );
+        if (academicDepartmentArray == null) {
+            academicDepartmentArray = new String[]{};
+        }
 
         return Employee.newInstance(
                 cursor.getLong(cursor.getColumnIndex(EmployeeEntry.COL_ID)),
