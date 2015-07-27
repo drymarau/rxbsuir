@@ -142,7 +142,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 PropertyValuesHolder.ofInt("alpha", 255)
         ).setDuration(200).start();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate_in));
+            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fab_rotate_in));
         }
         mFabGroup.show();
         mFabEmployee.show();
@@ -152,7 +152,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         mFabGroup.hide();
         mFabEmployee.hide();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate_out));
+            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fab_rotate_out));
         }
         ObjectAnimator.ofPropertyValuesHolder(
                 mFloatingActionMenu.getBackground(),
