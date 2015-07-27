@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 
@@ -14,6 +15,17 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
 
     public RxBsuirOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    private static String getEmployeesCreateQuery() {
+        return "create table " +
+                EmployeeEntry.TABLE_NAME + " (" +
+                EmployeeEntry.COL_ID + " integer primary key, " +
+                EmployeeEntry.COL_ACADEMIC_DEPARTMENT_LIST + " text not null, " +
+                EmployeeEntry.COL_FIRST_NAME + " text not null, " +
+                EmployeeEntry.COL_MIDDLE_NAME + " text not null, " +
+                EmployeeEntry.COL_LAST_NAME + " text not null, " +
+                "unique (" + EmployeeEntry.COL_ID + ") on conflict replace" + ");";
     }
 
     private static String getStudentGroupsCreateQuery() {
@@ -48,12 +60,14 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(getStudentGroupsCreateQuery());
         db.execSQL(getLessonsCreateQuery());
+        db.execSQL(getEmployeesCreateQuery());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists " + StudentGroupEntry.TABLE_NAME);
         db.execSQL("drop table if exists " + LessonEntry.TABLE_NAME);
+        db.execSQL("drop table if exists " + EmployeeEntry.TABLE_NAME);
         onCreate(db);
     }
 }
