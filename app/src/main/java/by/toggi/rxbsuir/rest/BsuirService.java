@@ -12,6 +12,9 @@ public interface BsuirService {
     @GET("/schedule/{group}")
     Observable<ScheduleXmlModels> getGroupSchedule(@Path("group") String group);
 
+    @GET("/employee/{employeeId}")
+    Observable<ScheduleXmlModels> getEmployeeSchedule(@Path("employeeId") String employeeId);
+
     @GET("/studentGroup")
     Observable<StudentGroupXmlModels> getStudentGroups();
 
