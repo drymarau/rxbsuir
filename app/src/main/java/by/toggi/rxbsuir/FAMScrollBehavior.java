@@ -1,7 +1,6 @@
 package by.toggi.rxbsuir;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,26 +16,22 @@ import java.util.List;
 public class FAMScrollBehavior extends CoordinatorLayout.Behavior<FrameLayout> {
 
     static final Interpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new FastOutSlowInInterpolator();
-    private static final boolean SNACKBAR_BEHAVIOR_ENABLED;
-
-    static {
-        SNACKBAR_BEHAVIOR_ENABLED = Build.VERSION.SDK_INT >= 11;
-    }
 
     private float mTranslationY;
     private FloatingActionButton mButton;
+    private String mTag;
 
-    public FAMScrollBehavior() {
-        super();
+    public FAMScrollBehavior(String tag) {
+        mTag = tag;
     }
 
     public FAMScrollBehavior(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        mTag = context.getString(R.string.tag_fab);
     }
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, FrameLayout child, View dependency) {
-        return SNACKBAR_BEHAVIOR_ENABLED && dependency instanceof Snackbar.SnackbarLayout;
+        return dependency instanceof Snackbar.SnackbarLayout;
     }
 
     @Override
@@ -104,7 +99,7 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<FrameLayout> {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
 
         if (mButton == null) {
-            mButton = (FloatingActionButton) child.findViewWithTag("fab");
+            mButton = (FloatingActionButton) child.findViewWithTag(mTag);
         }
 
         if (dyConsumed > 0 && mButton.getVisibility() == View.VISIBLE) {
