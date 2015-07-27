@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/fam_protection"
-        android:elevation="6dp"
+        android:elevation="@dimen/fam_elevation"
         app:layout_behavior=".FAMScrollBehavior">
 
         <android.support.design.widget.FloatingActionButton

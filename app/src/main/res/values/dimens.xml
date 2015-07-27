@@ -11,5 +11,6 @@
     <!-- FAB dimens -->
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_margin_mini">24dp</dimen>
+    <dimen name="fam_elevation">6dp</dimen>
 
 </resources>
