@@ -8,7 +8,7 @@
         android:id="@+id/employee_text_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="@string/hint_group_number"
+        android:hint="@string/hint_employee"
         android:singleLine="true"/>
 
 </android.support.design.widget.TextInputLayout>
