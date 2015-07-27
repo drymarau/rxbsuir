@@ -49,11 +49,6 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<FrameLayout> {
         }
     }
 
-    @Override
-    public boolean blocksInteractionBelow(CoordinatorLayout parent, FrameLayout child) {
-        return false;
-    }
-
     private void updateFabTranslationForSnackbar(CoordinatorLayout parent, FrameLayout layout, View snackbar) {
         if (layout.getVisibility() == View.VISIBLE) {
             float translationY = this.getFabTranslationYForSnackbar(parent, layout);
