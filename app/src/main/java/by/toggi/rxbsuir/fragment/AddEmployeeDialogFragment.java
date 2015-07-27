@@ -34,6 +34,7 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
 
     private ArrayAdapter<Employee> mAdapter;
     private OnButtonClickListener mListener;
+    private int mPosition = -1;
 
     public static AddEmployeeDialogFragment newInstance() {
         return new AddEmployeeDialogFragment();
@@ -83,19 +84,24 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
         AutoCompleteTextView textView = ButterKnife.findById(textInputLayout, R.id.employee_text_view);
         mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<>());
         textView.setAdapter(mAdapter);
+        textView.setOnItemClickListener((parent, view, position, id) -> mPosition = position);
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(textInputLayout, true)
-                .title(R.string.title_add_group)
+                .title(R.string.title_add_employee)
                 .positiveText(R.string.positive_add)
                 .negativeText(android.R.string.cancel)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
+                        if (mPosition != -1) {
+                            mListener.onPositiveButtonClicked(mAdapter.getItem(mPosition));
+                            mPosition = -1;
+                        }
                     }
                 })
                 .build();
         // Input validation
         WidgetObservable.text(textView).map(onTextChangeEvent -> onTextChangeEvent.text().toString())
-                .map(mPresenter::isValidGroupNumber)
+                .map(mPresenter::isValidEmployee)
                 .startWith(false)
                 .distinctUntilChanged()
                 .subscribe(ViewActions.setEnabled(dialog.getActionButton(DialogAction.POSITIVE)));
