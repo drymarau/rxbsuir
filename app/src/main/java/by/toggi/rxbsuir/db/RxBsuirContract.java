@@ -4,6 +4,18 @@ import android.provider.BaseColumns;
 
 public class RxBsuirContract {
 
+    public static class EmployeeEntry {
+
+        public static final String TABLE_NAME = "employees";
+
+        public static final String COL_ID = "id";
+        public static final String COL_ACADEMIC_DEPARTMENT_LIST = "academic_department_list";
+        public static final String COL_FIRST_NAME = "first_name";
+        public static final String COL_MIDDLE_NAME = "middle_name";
+        public static final String COL_LAST_NAME = "last_name";
+
+    }
+
     public static class StudentGroupEntry {
 
         public static final String TABLE_NAME = "students_groups";
