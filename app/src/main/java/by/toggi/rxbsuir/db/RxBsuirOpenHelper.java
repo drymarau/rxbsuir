@@ -33,7 +33,7 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
                 StudentGroupEntry.TABLE_NAME + " (" +
                 StudentGroupEntry.COL_ID + " integer primary key, " +
                 StudentGroupEntry.COL_FACULTY_ID + " integer not null, " +
-                StudentGroupEntry.COL_NAME + " name not null, " +
+                StudentGroupEntry.COL_NAME + " text not null, " +
                 StudentGroupEntry.COL_COURSE + " integer not null, " +
                 StudentGroupEntry.COL_SPECIALITY_DEPARTMENT_EDUCATION_FORM_ID + " integer not null, " +
                 "unique (" + StudentGroupEntry.COL_ID + ") on conflict replace" + ");";
