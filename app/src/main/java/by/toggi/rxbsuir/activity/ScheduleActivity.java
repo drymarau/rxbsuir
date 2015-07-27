@@ -47,6 +47,7 @@ import icepick.State;
 public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddGroupDialogFragment.OnButtonClickListener, AddEmployeeDialogFragment.OnButtonClickListener {
 
     public static final String KEY_GROUP_NUMBER = "selected_group_number";
+    public static final String KEY_EMPLOYEE_ID = "selected_employee_id";
     public static final String KEY_SUBGROUP_1 = "subgroup_1";
     public static final String KEY_SUBGROUP_2 = "subgroup_2";
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
@@ -187,7 +188,10 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void onPositiveButtonClicked(Employee employee) {
-
+        String id = String.valueOf(employee.id);
+        mSharedPreferences.edit().putString(KEY_EMPLOYEE_ID, id).apply();
+        mPresenter.setEmployeeId(id);
+        hideFloatingActionMenu();
     }
 
     @Override
