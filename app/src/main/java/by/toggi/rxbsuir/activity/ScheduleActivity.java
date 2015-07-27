@@ -18,8 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import javax.inject.Inject;
 
@@ -56,7 +56,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Bind(R.id.coordinator_layout) CoordinatorLayout mCoordinatorLayout;
     @Bind(R.id.fab_group) FloatingActionButton mFabGroup;
     @Bind(R.id.fab_employee) FloatingActionButton mFabEmployee;
-    @Bind(R.id.floating_action_menu) FrameLayout mFloatingActionMenu;
+    @Bind(R.id.floating_action_menu) RelativeLayout mFloatingActionMenu;
     @Bind(R.id.floating_action_button) FloatingActionButton mFloatingActionButton;
 
     @Inject WeekPagerAdapter mPagerAdapter;

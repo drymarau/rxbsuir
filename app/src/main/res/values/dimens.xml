@@ -8,4 +8,8 @@
 
     <dimen name="list_subheader_height">48dp</dimen>
 
+    <!-- FAB dimens -->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_margin_mini">24dp</dimen>
+
 </resources>

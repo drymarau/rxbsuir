@@ -41,7 +41,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/floating_action_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,46 +50,52 @@
         app:layout_behavior=".FAMScrollBehavior">
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_employee"
+            android:id="@+id/floating_action_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginBottom="144dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:src="@drawable/ic_social_person"
-            android:visibility="gone"
-            app:backgroundTint="@android:color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/ic_add"
+            android:tag="@string/tag_fab"
             app:borderWidth="0dp"
-            app:elevation="4dp"
-            app:fabSize="mini"/>
+            app:elevation="@dimen/fab_elevation"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/floating_action_button"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_gravity="end|bottom"
-            android:layout_marginBottom="88dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginLeft="@dimen/fab_margin_mini"
+            android:layout_marginRight="@dimen/fab_margin_mini"
+            android:layout_marginTop="@dimen/fab_margin"
             android:src="@drawable/ic_social_group"
             android:visibility="gone"
             app:backgroundTint="@android:color/white"
             app:borderWidth="0dp"
-            app:elevation="4dp"
+            app:elevation="@dimen/fab_elevation"
             app:fabSize="mini"/>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floating_action_button"
+            android:id="@+id/fab_employee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_add"
-            android:tag="@string/tag_fab"
+            android:layout_above="@id/fab_group"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/fab_margin_mini"
+            android:layout_marginRight="@dimen/fab_margin_mini"
+            android:src="@drawable/ic_social_person"
+            android:visibility="gone"
+            app:backgroundTint="@android:color/white"
             app:borderWidth="0dp"
-            app:elevation="4dp"/>
+            app:elevation="@dimen/fab_elevation"
+            app:fabSize="mini"/>
 
-    </FrameLayout>
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
