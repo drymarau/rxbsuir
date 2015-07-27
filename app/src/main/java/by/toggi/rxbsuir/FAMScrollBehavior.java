@@ -8,12 +8,12 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Interpolator;
-import android.widget.RelativeLayout;
 
 import java.util.List;
 
-public class FAMScrollBehavior extends CoordinatorLayout.Behavior<RelativeLayout> {
+public class FAMScrollBehavior extends CoordinatorLayout.Behavior<ViewGroup> {
 
     static final Interpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new FastOutSlowInInterpolator();
 
@@ -30,12 +30,12 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<RelativeLayout
     }
 
     @Override
-    public boolean layoutDependsOn(CoordinatorLayout parent, RelativeLayout child, View dependency) {
+    public boolean layoutDependsOn(CoordinatorLayout parent, ViewGroup child, View dependency) {
         return dependency instanceof Snackbar.SnackbarLayout;
     }
 
     @Override
-    public boolean onDependentViewChanged(CoordinatorLayout parent, RelativeLayout child, View dependency) {
+    public boolean onDependentViewChanged(CoordinatorLayout parent, ViewGroup child, View dependency) {
         if (dependency instanceof Snackbar.SnackbarLayout) {
             this.updateFabTranslationForSnackbar(parent, child, dependency);
         }
@@ -43,13 +43,13 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<RelativeLayout
     }
 
     @Override
-    public void onDependentViewRemoved(CoordinatorLayout parent, RelativeLayout child, View dependency) {
+    public void onDependentViewRemoved(CoordinatorLayout parent, ViewGroup child, View dependency) {
         if (dependency instanceof Snackbar.SnackbarLayout) {
             ViewCompat.animate(child).translationY(0.0F).setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR).setListener(null);
         }
     }
 
-    private void updateFabTranslationForSnackbar(CoordinatorLayout parent, RelativeLayout child, View snackbar) {
+    private void updateFabTranslationForSnackbar(CoordinatorLayout parent, ViewGroup child, View snackbar) {
         if (child.getVisibility() == View.VISIBLE) {
             float translationY = this.getFabTranslationYForSnackbar(parent, child);
             if (translationY != this.mTranslationY) {
@@ -61,7 +61,7 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<RelativeLayout
         }
     }
 
-    private float getFabTranslationYForSnackbar(CoordinatorLayout parent, RelativeLayout child) {
+    private float getFabTranslationYForSnackbar(CoordinatorLayout parent, ViewGroup child) {
         float minOffset = 0.0F;
         List dependencies = parent.getDependencies(child);
         int i = 0;
@@ -77,20 +77,20 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<RelativeLayout
     }
 
     @Override
-    public boolean onLayoutChild(CoordinatorLayout parent, RelativeLayout child, int layoutDirection) {
+    public boolean onLayoutChild(CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
         parent.onLayoutChild(child, layoutDirection);
         return true;
     }
 
     @Override
-    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, RelativeLayout child, View directTargetChild, View target, int nestedScrollAxes) {
+    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, ViewGroup child, View directTargetChild, View target, int nestedScrollAxes) {
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL ||
                 super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target,
                         nestedScrollAxes);
     }
 
     @Override
-    public void onNestedScroll(CoordinatorLayout coordinatorLayout, RelativeLayout child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
+    public void onNestedScroll(CoordinatorLayout coordinatorLayout, ViewGroup child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
 
         if (mButton == null) {
