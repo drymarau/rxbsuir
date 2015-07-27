@@ -31,7 +31,7 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
-import by.toggi.rxbsuir.fragment.AddDialogFragment;
+import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.StorageFragment;
 import by.toggi.rxbsuir.fragment.WeekFragment;
 import by.toggi.rxbsuir.module.ActivityModule;
@@ -42,7 +42,7 @@ import icepick.Icepick;
 import icepick.State;
 
 
-public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener {
+public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddGroupDialogFragment.OnButtonClickListener {
 
     public static final String KEY_GROUP_NUMBER = "selected_group_number";
     public static final String KEY_SUBGROUP_1 = "subgroup_1";
@@ -124,7 +124,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @OnClick(R.id.fab_group)
     public void onFloatingActionButtonGroupClick() {
-        AddDialogFragment dialog = AddDialogFragment.newInstance();
+        AddGroupDialogFragment dialog = AddGroupDialogFragment.newInstance();
         dialog.show(getSupportFragmentManager(), TAG_ADD_DIALOG);
     }
 

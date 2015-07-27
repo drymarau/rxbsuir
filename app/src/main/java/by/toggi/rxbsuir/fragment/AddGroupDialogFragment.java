@@ -27,15 +27,15 @@ import by.toggi.rxbsuir.mvp.view.AddDialogView;
 import rx.android.view.ViewActions;
 import rx.android.widget.WidgetObservable;
 
-public class AddDialogFragment extends DialogFragment implements AddDialogView {
+public class AddGroupDialogFragment extends DialogFragment implements AddDialogView {
 
     @Inject AddDialogPresenter mPresenter;
 
     private ArrayAdapter<String> mAdapter;
     private OnButtonClickListener mListener;
 
-    public static AddDialogFragment newInstance() {
-        return new AddDialogFragment();
+    public static AddGroupDialogFragment newInstance() {
+        return new AddGroupDialogFragment();
     }
 
     @Override
