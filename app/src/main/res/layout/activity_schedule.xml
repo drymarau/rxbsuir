@@ -42,15 +42,15 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <RelativeLayout
-        android:id="@+id/floating_action_menu"
+        android:id="@+id/fam"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/floating_action_menu_protection"
+        android:background="@color/fam_protection"
         android:elevation="6dp"
         app:layout_behavior=".FAMScrollBehavior">
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floating_action_button"
+            android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -66,7 +66,7 @@
             android:id="@+id/fab_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/floating_action_button"
+            android:layout_above="@id/fab"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="end|bottom"

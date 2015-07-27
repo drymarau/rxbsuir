@@ -56,8 +56,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Bind(R.id.coordinator_layout) CoordinatorLayout mCoordinatorLayout;
     @Bind(R.id.fab_group) FloatingActionButton mFabGroup;
     @Bind(R.id.fab_employee) FloatingActionButton mFabEmployee;
-    @Bind(R.id.floating_action_menu) RelativeLayout mFloatingActionMenu;
-    @Bind(R.id.floating_action_button) FloatingActionButton mFloatingActionButton;
+    @Bind(R.id.fam) RelativeLayout mFloatingActionMenu;
+    @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
 
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
@@ -108,7 +108,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 .build().inject(this);
     }
 
-    @OnClick(R.id.floating_action_button)
+    @OnClick(R.id.fab)
     public void onFloatingActionButtonClick() {
         if (mFabGroup.getVisibility() == View.VISIBLE) {
             hideFloatingActionMenu();
