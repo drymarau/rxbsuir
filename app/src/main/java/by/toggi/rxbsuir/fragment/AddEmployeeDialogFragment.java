@@ -89,13 +89,22 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
                 .title(R.string.title_add_employee)
                 .positiveText(R.string.positive_add)
                 .negativeText(android.R.string.cancel)
+                .autoDismiss(false)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         if (mPosition != -1) {
                             mListener.onPositiveButtonClicked(mAdapter.getItem(mPosition));
                             mPosition = -1;
+                            dismiss();
+                        } else {
+                            textInputLayout.setError(getString(R.string.error_list_employee));
                         }
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        dismiss();
                     }
                 })
                 .build();
