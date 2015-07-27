@@ -21,6 +21,16 @@ public class Employee {
     Employee() {
     }
 
+    public static Employee newInstance(long id, List<String> academicDepartmentList, String firstName, String middleName, String lastName) {
+        Employee employee = new Employee();
+        employee.id = id;
+        employee.academicDepartment = academicDepartmentList;
+        employee.firstName = firstName;
+        employee.middleName = middleName;
+        employee.lastName = lastName;
+        return employee;
+    }
+
     @Override
     public String toString() {
         return String.format("%s %s.%s.", lastName, firstName.charAt(0), middleName.charAt(0));
