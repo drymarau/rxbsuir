@@ -49,26 +49,26 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<FrameLayout> {
         }
     }
 
-    private void updateFabTranslationForSnackbar(CoordinatorLayout parent, FrameLayout layout, View snackbar) {
-        if (layout.getVisibility() == View.VISIBLE) {
-            float translationY = this.getFabTranslationYForSnackbar(parent, layout);
+    private void updateFabTranslationForSnackbar(CoordinatorLayout parent, FrameLayout child, View snackbar) {
+        if (child.getVisibility() == View.VISIBLE) {
+            float translationY = this.getFabTranslationYForSnackbar(parent, child);
             if (translationY != this.mTranslationY) {
-                ViewCompat.animate(layout).cancel();
-                ViewCompat.setTranslationY(layout, translationY);
+                ViewCompat.animate(child).cancel();
+                ViewCompat.setTranslationY(child, translationY);
                 this.mTranslationY = translationY;
             }
 
         }
     }
 
-    private float getFabTranslationYForSnackbar(CoordinatorLayout parent, FrameLayout layout) {
+    private float getFabTranslationYForSnackbar(CoordinatorLayout parent, FrameLayout child) {
         float minOffset = 0.0F;
-        List dependencies = parent.getDependencies(layout);
+        List dependencies = parent.getDependencies(child);
         int i = 0;
 
         for (int z = dependencies.size(); i < z; ++i) {
             View view = (View) dependencies.get(i);
-            if (view instanceof Snackbar.SnackbarLayout && parent.doViewsOverlap(layout, view)) {
+            if (view instanceof Snackbar.SnackbarLayout && parent.doViewsOverlap(child, view)) {
                 minOffset = Math.min(minOffset, ViewCompat.getTranslationY(view) - (float) view.getHeight());
             }
         }
