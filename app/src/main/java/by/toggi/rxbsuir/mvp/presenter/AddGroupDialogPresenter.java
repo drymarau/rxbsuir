@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import by.toggi.rxbsuir.db.RxBsuirContract;
 import by.toggi.rxbsuir.mvp.Presenter;
-import by.toggi.rxbsuir.mvp.view.AddDialogView;
+import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
 import by.toggi.rxbsuir.rest.BsuirService;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
 import rx.Observable;
@@ -19,17 +19,17 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class AddDialogPresenter implements Presenter<AddDialogView> {
+public class AddGroupDialogPresenter implements Presenter<AddGroupDialogView> {
 
     private Observable<List<StudentGroup>> mGroupListObservable;
     private List<String> mGroupNumberList;
-    private AddDialogView mAddDialogView;
+    private AddGroupDialogView mAddGroupDialogView;
     private BsuirService mService;
     private StorIOSQLite mStorIOSQLite;
     private Subscription mSubscription;
 
     @Inject
-    public AddDialogPresenter(BsuirService service, StorIOSQLite storIOSQLite) {
+    public AddGroupDialogPresenter(BsuirService service, StorIOSQLite storIOSQLite) {
         mService = service;
         mStorIOSQLite = storIOSQLite;
         mGroupListObservable = storIOSQLite.get()
@@ -62,13 +62,13 @@ public class AddDialogPresenter implements Presenter<AddDialogView> {
                 .subscribe(strings -> {
                     mGroupNumberList = strings;
                     if (isViewAttached()) {
-                        mAddDialogView.updateStudentGroupList(mGroupNumberList);
+                        mAddGroupDialogView.updateStudentGroupList(mGroupNumberList);
                     }
                 });
     }
 
     private boolean isViewAttached() {
-        return mAddDialogView != null;
+        return mAddGroupDialogView != null;
     }
 
     private void getStudentGroupsFromNetwork() {
@@ -96,16 +96,16 @@ public class AddDialogPresenter implements Presenter<AddDialogView> {
     }
 
     @Override
-    public void attachView(AddDialogView addDialogView) {
-        if (addDialogView == null) {
-            throw new NullPointerException("AddDialogView should not be null");
+    public void attachView(AddGroupDialogView addGroupDialogView) {
+        if (addGroupDialogView == null) {
+            throw new NullPointerException("AddGroupDialogView should not be null");
         }
-        mAddDialogView = addDialogView;
+        mAddGroupDialogView = addGroupDialogView;
     }
 
     @Override
     public void detachView() {
-        mAddDialogView = null;
+        mAddGroupDialogView = null;
     }
 
     /**
