@@ -21,6 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.SubheaderItemDecoration;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.component.DaggerWeekFragmentComponent;
@@ -109,6 +110,10 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addItemDecoration(new SubheaderItemDecoration(
+                LayoutInflater.from(getActivity()).inflate(R.layout.list_item_subheader, mRecyclerView, false),
+                getResources().getDimensionPixelSize(R.dimen.list_subheader_height)
+        ));
     }
 
     @Override
@@ -174,9 +179,9 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
+        boolean isGroupSchedule = preferences.getBoolean(ScheduleActivity.KEY_IS_GROUP_SCHEDULE, true);
         switch (key) {
             case ScheduleActivity.KEY_IS_GROUP_SCHEDULE:
-                boolean isGroupSchedule = preferences.getBoolean(key, true);
                 if (isGroupSchedule) {
                     mPresenter.setGroupNumber(preferences.getString(ScheduleActivity.KEY_GROUP_NUMBER, null));
                 } else {
@@ -193,7 +198,7 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
             case ScheduleActivity.KEY_SUBGROUP_2:
                 boolean subgroup1 = preferences.getBoolean(ScheduleActivity.KEY_SUBGROUP_1, true);
                 boolean subgroup2 = preferences.getBoolean(ScheduleActivity.KEY_SUBGROUP_2, true);
-                mPresenter.setSubgroupNumber(subgroup1, subgroup2);
+                mPresenter.setSubgroupNumber(subgroup1, subgroup2, isGroupSchedule);
                 break;
         }
     }
