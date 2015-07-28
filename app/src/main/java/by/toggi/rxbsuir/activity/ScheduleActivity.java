@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import by.toggi.rxbsuir.R;
@@ -67,6 +68,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Bind(R.id.fam) RelativeLayout mFloatingActionMenu;
     @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
 
+    @BindDimen(R.dimen.view_pager_page_margin) int mPageMargin;
+
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
     @Inject SharedPreferences mSharedPreferences;
@@ -91,6 +94,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setPageMargin(mPageMargin);
         mTabLayout.setupWithViewPager(mViewPager);
 
         mPresenter.attachView(this);

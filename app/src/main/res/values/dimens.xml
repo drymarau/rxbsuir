@@ -16,4 +16,7 @@
     <dimen name="fab_pressed_translationZ">6dp</dimen>
     <dimen name="fab_margin_top">-20dp</dimen>
 
+    <!-- ViewPager margin -->
+    <dimen name="view_pager_page_margin">2dp</dimen>
+
 </resources>
