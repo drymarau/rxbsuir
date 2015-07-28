@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import by.toggi.rxbsuir.Utils;
+import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
@@ -34,13 +36,16 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     public static final String ERROR_NETWORK = "error_netwok";
     public static final String ERROR_EMPTY_SCHEDULE = "error_empty_schedule";
 
-    private Observable<List<Lesson>> mLessonListObservable;
+    private Observable<List<Lesson>> mScheduleObservable;
     private ScheduleView mScheduleView;
     private BsuirService mService;
     private StorIOSQLite mStorIOSQLite;
     private String mGroupNumber;
-    private Subscription mSubscription;
+    private String mEmployeeId;
     private boolean mHasSynced = false;
+    private boolean mIsGroupSchedule;
+    private Subscription mSubscription;
+
 
     /**
      * Instantiates a new Schedule presenter.
@@ -49,14 +54,32 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      * @param storIOSQLite the stor iOSQ lite
      */
     @Inject
-    public SchedulePresenter(@Nullable String groupNumber, BsuirService service, StorIOSQLite storIOSQLite) {
+    public SchedulePresenter(boolean isGroupSchedule, @Nullable @Named(ScheduleActivity.KEY_GROUP_NUMBER) String groupNumber, @Nullable @Named(ScheduleActivity.KEY_EMPLOYEE_ID) String employeeId, BsuirService service, StorIOSQLite storIOSQLite) {
         mService = service;
         mStorIOSQLite = storIOSQLite;
         mGroupNumber = groupNumber;
-        mLessonListObservable = getLessonListObservable(groupNumber);
+        mEmployeeId = employeeId;
+        mIsGroupSchedule = isGroupSchedule;
+        if (mIsGroupSchedule) {
+            mScheduleObservable = getGroupLessonListObservable(groupNumber);
+        } else {
+            mScheduleObservable = getEmployeeLessonListObservable(employeeId);
+        }
     }
 
-    private Observable<List<Lesson>> getLessonListObservable(@Nullable String groupNumber) {
+    private Observable<List<Lesson>> getEmployeeLessonListObservable(String employeeId) {
+        return mStorIOSQLite.get()
+                .listOfObjects(Lesson.class)
+                .withQuery(Query.builder()
+                        .table(LessonEntry.TABLE_NAME)
+                        .where(LessonEntry.filterByEmployee(employeeId))
+                        .build())
+                .prepare()
+                .createObservable()
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private Observable<List<Lesson>> getGroupLessonListObservable(String groupNumber) {
         return mStorIOSQLite.get()
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
@@ -75,50 +98,73 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      */
     public void setGroupNumber(String groupNumber) {
         mHasSynced = false;
+        mIsGroupSchedule = true;
         mGroupNumber = groupNumber;
-        mLessonListObservable = getLessonListObservable(groupNumber);
+        mScheduleObservable = getGroupLessonListObservable(groupNumber);
         onCreate();
     }
 
     /**
-     * Gets student group schedule.
+     * Sets employeeId and updates schedule list.
+     *
+     * @param employeeId the group number
      */
-    public void getStudentGroupSchedule() {
+    public void setEmployeeId(String employeeId) {
+        mHasSynced = false;
+        mIsGroupSchedule = false;
+        mEmployeeId = employeeId;
+        mScheduleObservable = getEmployeeLessonListObservable(employeeId);
+        onCreate();
+    }
+
+    private void getStudentGroupSchedule() {
         if (mGroupNumber != null) {
             mService.getGroupSchedule(mGroupNumber).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                     .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
-                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel)))
+                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, true)))
                     .toList()
-                    .subscribe(this::onNetworkSuccess, this::onNetworkError);
+                    .subscribe(lessonList -> onNetworkSuccess(lessonList, true), this::onNetworkError);
+        }
+    }
+
+    private void getEmployeeSchedule() {
+        if (mEmployeeId != null) {
+            mService.getEmployeeSchedule(mEmployeeId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                    .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
+                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, false)))
+                    .toList()
+                    .subscribe(lessonList -> onNetworkSuccess(lessonList, false), this::onNetworkError);
         }
     }
 
     /**
-     * Retry network request with the same group.
+     * Retry network request with the same group or employee.
      */
     public void retry() {
-        if (mGroupNumber == null) {
-            if (isViewAttached()) {
-                mScheduleView.showError(new Throwable(ERROR_NO_GROUP));
-            }
-        } else {
-            if (isViewAttached()) {
-                mScheduleView.showLoading();
-            }
-            mHasSynced = false;
+        if (isViewAttached()) {
+            mScheduleView.showLoading();
+        }
+        mHasSynced = false;
+        if (mIsGroupSchedule) {
             getStudentGroupSchedule();
+        } else {
+            getEmployeeSchedule();
         }
     }
 
     @Override
     public void onCreate() {
-        if (isViewAttached() && !mHasSynced && mGroupNumber != null) {
+        if (isViewAttached() && !mHasSynced) {
             mScheduleView.showLoading();
         }
-        mSubscription = mLessonListObservable.subscribe(lessonList -> {
+        mSubscription = mIsGroupSchedule ? getGroupSubscription() : getEmployeeSubscription();
+    }
+
+    private Subscription getEmployeeSubscription() {
+        return mScheduleObservable.subscribe(lessonList -> {
             if (lessonList == null || lessonList.isEmpty()) {
                 if (!mHasSynced) {
-                    getStudentGroupSchedule();
+                    getEmployeeSchedule();
                 }
             } else {
                 if (isViewAttached()) {
@@ -126,6 +172,20 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                 }
             }
         });
+    }
+
+    private Subscription getGroupSubscription() {
+        return mScheduleObservable.subscribe(lessonList -> {
+                if (lessonList == null || lessonList.isEmpty()) {
+                    if (!mHasSynced) {
+                        getStudentGroupSchedule();
+                    }
+                } else {
+                    if (isViewAttached()) {
+                        mScheduleView.showContent(Utils.getCurrentWeekNumber() - 1);
+                    }
+                }
+            });
     }
 
     @Override
@@ -149,13 +209,17 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         mScheduleView = null;
     }
 
-    private void onNetworkSuccess(List<Lesson> lessonList) {
+    private void onNetworkSuccess(List<Lesson> lessonList, boolean isGroupSchedule) {
         mHasSynced = true;
+        String whereQuery = LessonEntry.filterByGroup(mGroupNumber);
+        if (!isGroupSchedule) {
+            whereQuery = LessonEntry.filterByEmployee(mEmployeeId);
+        }
         Observable.concat(
                 mStorIOSQLite.delete()
                         .byQuery(DeleteQuery.builder()
                                 .table(LessonEntry.TABLE_NAME)
-                                .where(LessonEntry.filterByGroup(mGroupNumber))
+                                .where(whereQuery)
                                 .build())
                         .prepare()
                         .createObservable(),
@@ -177,10 +241,10 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         }
     }
 
-    private List<Lesson> transformScheduleToLesson(ScheduleModel model) {
+    private List<Lesson> transformScheduleToLesson(ScheduleModel model, boolean isGroupSchedule) {
         List<Lesson> lessonList = new ArrayList<>(model.scheduleList.size());
         for (Schedule schedule : model.scheduleList) {
-            lessonList.add(new Lesson(null, schedule, model.weekDay, true));
+            lessonList.add(new Lesson(null, schedule, model.weekDay, isGroupSchedule));
         }
         return lessonList;
     }

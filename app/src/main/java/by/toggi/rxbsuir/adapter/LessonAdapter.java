@@ -28,6 +28,11 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         mLessonList = lessonList;
     }
 
+    /**
+     * Sets lesson list and updates the {@link RecyclerView}.
+     *
+     * @param lessonList the lesson list
+     */
     public void setLessonList(List<Lesson> lessonList) {
         mLessonList = lessonList;
         notifyDataSetChanged();
@@ -58,29 +63,20 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view;
         switch (viewType) {
+            case VIEW_TYPE_LESSON_ONE_LINE_WITH_WEEKDAY:
             case VIEW_TYPE_LESSON_ONE_LINE:
                 view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.list_item_lesson_one_line, viewGroup, false);
                 break;
-            case VIEW_TYPE_LESSON_ONE_LINE_WITH_WEEKDAY:
-                view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.list_item_lesson_one_line_with_weekday, viewGroup, false);
-                break;
+            case VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY:
             case VIEW_TYPE_LESSON_TWO_LINE:
                 view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.list_item_lesson_two_line, viewGroup, false);
                 break;
-            case VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY:
-                view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.list_item_lesson_two_line_with_weekday, viewGroup, false);
-                break;
+            case VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY:
             case VIEW_TYPE_LESSON_THREE_LINE:
                 view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.list_item_lesson_three_line, viewGroup, false);
-                break;
-            case VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY:
-                view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.list_item_lesson_three_line_with_weekday, viewGroup, false);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown view type: " + viewType);
@@ -91,18 +87,16 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Lesson lesson = mLessonList.get(position);
-        viewHolder.lessonType.setText(lesson.getLessonType());
-        viewHolder.lessonSubjectSubgroup.setText(lesson.getSubjectWithSubgroup());
-        viewHolder.lessonTime.setText(lesson.getPrettyLessonTime());
-        if (viewHolder.lessonClass != null) {
-            viewHolder.lessonClass.setText(lesson.getPrettyAuditoryList());
+        viewHolder.mLessonType.setText(lesson.getLessonType());
+        viewHolder.mLessonSubjectSubgroup.setText(lesson.getSubjectWithSubgroup());
+        viewHolder.mLessonTime.setText(lesson.getPrettyLessonTime());
+        if (viewHolder.mLessonClass != null) {
+            viewHolder.mLessonClass.setText(lesson.getPrettyAuditoryList());
         }
-        if (viewHolder.lessonWeekday != null) {
-            viewHolder.lessonWeekday.setText(lesson.getWeekday());
+        if (viewHolder.mLessonEmployee != null) {
+            viewHolder.mLessonEmployee.setText(lesson.getPrettyEmployeeList());
         }
-        if (viewHolder.lessonEmployee != null) {
-            viewHolder.lessonEmployee.setText(lesson.getPrettyEmployeeList());
-        }
+        viewHolder.setWeekDay(lesson.getWeekday());
     }
 
     @Override
@@ -112,17 +106,26 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.lesson_type) TextView lessonType;
-        @Bind(R.id.lesson_subject_subgroup) TextView lessonSubjectSubgroup;
-        @Bind(R.id.lesson_time) TextView lessonTime;
+        @Bind(R.id.lesson_type) TextView mLessonType;
+        @Bind(R.id.lesson_subject_subgroup) TextView mLessonSubjectSubgroup;
+        @Bind(R.id.lesson_time) TextView mLessonTime;
 
-        @Nullable @Bind(R.id.lesson_weekday) TextView lessonWeekday;
-        @Nullable @Bind(R.id.lesson_employee) TextView lessonEmployee;
-        @Nullable @Bind(R.id.lesson_class) TextView lessonClass;
+        @Nullable @Bind(R.id.lesson_employee) TextView mLessonEmployee;
+        @Nullable @Bind(R.id.lesson_class) TextView mLessonClass;
+
+        private String mWeekDay;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        public void setWeekDay(String weekDay) {
+            mWeekDay = weekDay;
+        }
+
+        public String getWeekDay() {
+            return mWeekDay;
         }
     }
 

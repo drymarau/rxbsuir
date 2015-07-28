@@ -4,6 +4,18 @@ import android.provider.BaseColumns;
 
 public class RxBsuirContract {
 
+    public static class EmployeeEntry {
+
+        public static final String TABLE_NAME = "employees";
+
+        public static final String COL_ID = "id";
+        public static final String COL_ACADEMIC_DEPARTMENT_LIST = "academic_department_list";
+        public static final String COL_FIRST_NAME = "first_name";
+        public static final String COL_MIDDLE_NAME = "middle_name";
+        public static final String COL_LAST_NAME = "last_name";
+
+    }
+
     public static class StudentGroupEntry {
 
         public static final String TABLE_NAME = "students_groups";
@@ -32,15 +44,69 @@ public class RxBsuirContract {
         public static final String COL_AUDITORY_LIST = "auditory_list";
         public static final String COL_IS_GROUP_SCHEDULE = "is_group_schedule";
 
-        public static String filterByWeek(int weekNumber) {
+        /**
+         * Filter by group.
+         *
+         * @param groupNumber the group number
+         * @return where query
+         */
+        public static String filterByGroup(String groupNumber) {
+            return COL_STUDENT_GROUP_LIST + " like '%" + groupNumber + "%'" + " and " + filterByScheduleType(true);
+        }
+
+        /**
+         * Filter by employee.
+         *
+         * @param employeeId the employee id
+         * @return where query
+         */
+        public static String filterByEmployee(String employeeId) {
+            return COL_EMPLOYEE_LIST + " like '%" + employeeId + "%'" + " and " + filterByScheduleType(false);
+        }
+
+        /**
+         * Filter by group, subgroup, and week.
+         *
+         * @param groupNumber    the group number
+         * @param subgroupNumber the subgroup number
+         * @param weekNumber     the week number
+         * @return where query
+         */
+        public static String filterByGroupSubgroupAndWeek(String groupNumber, int subgroupNumber, int weekNumber) {
+            return filterByGroupAndWeek(groupNumber, weekNumber)
+                    + " and (" + filterBySubgroup(subgroupNumber) + ")";
+        }
+
+        /**
+         * Filter by employee, subgroup and week.
+         *
+         * @param employeeId     the employee id
+         * @param subgroupNumber the subgroup number
+         * @param weekNumber     the week number
+         * @return where query
+         */
+        public static String filterByEmployeeSubgroupAndWeek(String employeeId, int subgroupNumber, int weekNumber) {
+            return filterByEmployeeAndWeek(employeeId, weekNumber)
+                    + " and (" + filterBySubgroup(subgroupNumber) + ")";
+        }
+
+        private static String filterByWeek(int weekNumber) {
             return COL_WEEK_NUMBER_LIST + " like '%" + weekNumber + "%'";
         }
 
-        public static String filterByGroup(String groupNumber) {
-            return COL_STUDENT_GROUP_LIST + " like '%" + groupNumber + "%'";
+        private static String filterByScheduleType(boolean isGroupSchedule) {
+            return COL_IS_GROUP_SCHEDULE + " = " + (isGroupSchedule ? 1 : 0);
         }
 
-        public static String filterBySubgroup(int subgroupNumber) {
+        private static String filterByGroupAndWeek(String groupNumber, int weekNumber) {
+            return filterByGroup(groupNumber) + " and " + filterByWeek(weekNumber);
+        }
+
+        private static String filterByEmployeeAndWeek(String employeeId, int weekNumber) {
+            return filterByEmployee(employeeId) + " and " + filterByWeek(weekNumber);
+        }
+
+        private static String filterBySubgroup(int subgroupNumber) {
             String commonQuery = COL_NUM_SUBGROUP + " = 0";
             String subgroup1Query = COL_NUM_SUBGROUP + " = 1";
             String subgroup2Query = COL_NUM_SUBGROUP + " = 2";
@@ -56,14 +122,6 @@ public class RxBsuirContract {
                 default:
                     throw new IllegalArgumentException("Unknown subgroup number: " + subgroupNumber);
             }
-        }
-
-        public static String filterByGroupAndWeek(String groupNumber, int weekNumber) {
-            return filterByGroup(groupNumber) + " and " + filterByWeek(weekNumber);
-        }
-
-        public static String filterByGroupSubgroupAndWeek(String groupNumber, int subgroupNumber, int weekNumber) {
-            return filterByGroupAndWeek(groupNumber, weekNumber) + " and (" + filterBySubgroup(subgroupNumber) + ")";
         }
 
     }

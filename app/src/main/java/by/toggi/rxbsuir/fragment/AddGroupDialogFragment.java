@@ -22,20 +22,20 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.mvp.presenter.AddDialogPresenter;
-import by.toggi.rxbsuir.mvp.view.AddDialogView;
+import by.toggi.rxbsuir.mvp.presenter.AddGroupDialogPresenter;
+import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
 import rx.android.view.ViewActions;
 import rx.android.widget.WidgetObservable;
 
-public class AddDialogFragment extends DialogFragment implements AddDialogView {
+public class AddGroupDialogFragment extends DialogFragment implements AddGroupDialogView {
 
-    @Inject AddDialogPresenter mPresenter;
+    @Inject AddGroupDialogPresenter mPresenter;
 
     private ArrayAdapter<String> mAdapter;
     private OnButtonClickListener mListener;
 
-    public static AddDialogFragment newInstance() {
-        return new AddDialogFragment();
+    public static AddGroupDialogFragment newInstance() {
+        return new AddGroupDialogFragment();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
             fragment.setPresenter(getPresenterTag(), mPresenter);
         } else {
             try {
-                mPresenter = (AddDialogPresenter) fragment.getPresenter(getPresenterTag());
+                mPresenter = (AddGroupDialogPresenter) fragment.getPresenter(getPresenterTag());
             } catch (ClassCastException e) {
                 throw new ClassCastException("Presenter must be of class AddDialogPresenter");
             }
@@ -116,7 +116,7 @@ public class AddDialogFragment extends DialogFragment implements AddDialogView {
 
     @Override
     public String getPresenterTag() {
-        return "add_dialog_presenter";
+        return "add_group_dialog_presenter";
     }
 
     @Override

@@ -8,7 +8,9 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.WeekView;
@@ -21,22 +23,24 @@ import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 public class WeekPresenter implements Presenter<WeekView> {
 
     private WeekView mWeekView;
-    private Observable<List<Lesson>> mListObservable;
-    private Subscription mSubscription;
+    private Observable<List<Lesson>> mScheduleObservable;
     private StorIOSQLite mStorIOSQLite;
     private int mWeekNumber;
     private int mSubgroupNumber = 0;
     private String mGroupNumber;
+    private String mEmployeeId;
+    private Subscription mSubscription;
 
     @Inject
-    public WeekPresenter(@Nullable String groupNumber, int weekNumber, StorIOSQLite storIOSQLite) {
+    public WeekPresenter(boolean isGroupSchedule, @Nullable @Named(ScheduleActivity.KEY_GROUP_NUMBER) String groupNumber, @Nullable @Named(ScheduleActivity.KEY_EMPLOYEE_ID) String employeeId, int weekNumber, StorIOSQLite storIOSQLite) {
         mWeekNumber = weekNumber;
+        mEmployeeId = employeeId;
         mStorIOSQLite = storIOSQLite;
         mGroupNumber = groupNumber;
-        if (mGroupNumber != null) {
-            mListObservable = getListObservable(mGroupNumber, mSubgroupNumber, mWeekNumber);
+        if (isGroupSchedule) {
+            mScheduleObservable = getGroupScheduleObservable(mGroupNumber, mSubgroupNumber, mWeekNumber);
         } else {
-            mListObservable = Observable.empty();
+            mScheduleObservable = getEmployeeListObservable(mEmployeeId, mSubgroupNumber, mWeekNumber);
         }
     }
 
@@ -48,11 +52,28 @@ public class WeekPresenter implements Presenter<WeekView> {
      */
     public void setGroupNumber(String groupNumber) {
         mGroupNumber = groupNumber;
-        mListObservable = getListObservable(mGroupNumber, mSubgroupNumber, mWeekNumber);
+        mScheduleObservable = getGroupScheduleObservable(mGroupNumber, mSubgroupNumber, mWeekNumber);
         onCreate();
     }
 
-    public void setSubgroupNumber(boolean subgroup1, boolean subgroup2) {
+    /**
+     * Sets employee id and updates the list.
+     *
+     * @param employeeId the employee id
+     */
+    public void setEmployeeId(String employeeId) {
+        mEmployeeId = employeeId;
+        mScheduleObservable = getEmployeeListObservable(mEmployeeId, mSubgroupNumber, mWeekNumber);
+        onCreate();
+    }
+
+    /**
+     * Sets subgroup number.
+     *
+     * @param subgroup1 the subgroup 1 state
+     * @param subgroup2 the subgroup 2 state
+     */
+    public void setSubgroupNumber(boolean subgroup1, boolean subgroup2, boolean isGroupSchedule) {
         if (subgroup1 && subgroup2) {
             mSubgroupNumber = 0;
         } else if (!subgroup1 && !subgroup2) {
@@ -64,12 +85,16 @@ public class WeekPresenter implements Presenter<WeekView> {
                 mSubgroupNumber = 2;
             }
         }
-        mListObservable = getListObservable(mGroupNumber, mSubgroupNumber, mWeekNumber);
+        if (isGroupSchedule) {
+            mScheduleObservable = getGroupScheduleObservable(mGroupNumber, mSubgroupNumber, mWeekNumber);
+        } else {
+            mScheduleObservable = getEmployeeListObservable(mEmployeeId, mSubgroupNumber, mWeekNumber);
+        }
         onCreate();
     }
 
-    private Observable<List<Lesson>> getListObservable(String groupNumber, int subgroupNumber, int weekNumber) {
-        return mStorIOSQLite.get()
+    private Observable<List<Lesson>> getGroupScheduleObservable(@Nullable String groupNumber, int subgroupNumber, int weekNumber) {
+        return groupNumber == null ? Observable.empty() : mStorIOSQLite.get()
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
                         .table(LessonEntry.TABLE_NAME)
@@ -81,9 +106,22 @@ public class WeekPresenter implements Presenter<WeekView> {
                 .cache();
     }
 
+    private Observable<List<Lesson>> getEmployeeListObservable(@Nullable String employeeId, int subgroupNumber, int weekNumber) {
+        return employeeId == null ? Observable.empty() : mStorIOSQLite.get()
+                .listOfObjects(Lesson.class)
+                .withQuery(Query.builder()
+                        .table(LessonEntry.TABLE_NAME)
+                        .where(LessonEntry.filterByEmployeeSubgroupAndWeek(employeeId, subgroupNumber, weekNumber))
+                        .build())
+                .prepare()
+                .createObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .cache();
+    }
+
     @Override
     public void onCreate() {
-        mSubscription = mListObservable.subscribe(this::showLessonList);
+        mSubscription = mScheduleObservable.subscribe(this::showLessonList);
     }
 
     private void showLessonList(List<Lesson> lessonList) {

@@ -13,11 +13,14 @@
     <string name="error_default">Something went wrong</string>
     <string name="action_retry">Retry</string>
 
-    <!-- ADD GROUP DIALOG -->
+    <!-- ADD GROUP/EMPLOYEE DIALOG -->
     <!-- Group number hint in add group dialog -->
     <string name="hint_group_number">Group number</string>
+    <string name="hint_employee">Employee last name</string>
     <string name="title_add_group">Add group</string>
+    <string name="title_add_employee">Add employee</string>
     <string name="positive_add">Add</string>
+    <string name="error_list_employee">Please choose employee from the list</string>
 
     <!-- MENU -->
     <string name="action_today">Today</string>

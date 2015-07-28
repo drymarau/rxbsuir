@@ -5,6 +5,7 @@ import android.animation.PropertyValuesHolder;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,23 +33,29 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
-import by.toggi.rxbsuir.fragment.AddDialogFragment;
+import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
+import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.StorageFragment;
 import by.toggi.rxbsuir.fragment.WeekFragment;
 import by.toggi.rxbsuir.module.ActivityModule;
 import by.toggi.rxbsuir.module.ScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
+import by.toggi.rxbsuir.rest.model.Employee;
 import icepick.Icepick;
 import icepick.State;
 
 
-public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddDialogFragment.OnButtonClickListener {
+public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddGroupDialogFragment.OnButtonClickListener, AddEmployeeDialogFragment.OnButtonClickListener {
 
+    public static final String KEY_TITLE = "title";
     public static final String KEY_GROUP_NUMBER = "selected_group_number";
+    public static final String KEY_EMPLOYEE_ID = "selected_employee_id";
+    public static final String KEY_IS_GROUP_SCHEDULE = "is_group_schedule";
     public static final String KEY_SUBGROUP_1 = "subgroup_1";
     public static final String KEY_SUBGROUP_2 = "subgroup_2";
-    private static final String TAG_ADD_DIALOG = "add_dialog";
+    private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
+    private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
@@ -62,6 +70,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
     @Inject SharedPreferences mSharedPreferences;
+    @Inject boolean mIsGroupSchedule;
+    @Nullable @Inject @Named(KEY_GROUP_NUMBER) String mGroupNumber;
+    @Nullable @Inject @Named(KEY_EMPLOYEE_ID) String mEmployeeId;
 
     @State CharSequence mTitle;
 
@@ -89,7 +100,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         Icepick.restoreInstanceState(this, savedInstanceState);
         if (mTitle == null) {
-            mTitle = mSharedPreferences.getString(KEY_GROUP_NUMBER, null);
+            mTitle = mSharedPreferences.getString(KEY_TITLE, null);
         }
         setTitle(mTitle);
     }
@@ -119,13 +130,14 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @OnClick(R.id.fab_employee)
     public void onFloatingActionButtonEmployeeClick() {
-
+        AddEmployeeDialogFragment dialog = AddEmployeeDialogFragment.newInstance();
+        dialog.show(getSupportFragmentManager(), TAG_ADD_EMPLOYEE_DIALOG);
     }
 
     @OnClick(R.id.fab_group)
     public void onFloatingActionButtonGroupClick() {
-        AddDialogFragment dialog = AddDialogFragment.newInstance();
-        dialog.show(getSupportFragmentManager(), TAG_ADD_DIALOG);
+        AddGroupDialogFragment dialog = AddGroupDialogFragment.newInstance();
+        dialog.show(getSupportFragmentManager(), TAG_ADD_GROUP_DIALOG);
     }
 
     @Override
@@ -177,13 +189,35 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     public void onPositiveButtonClicked(String groupNumber) {
         mPresenter.setGroupNumber(groupNumber);
         setTitle(groupNumber);
-        mSharedPreferences.edit().putString(KEY_GROUP_NUMBER, groupNumber).apply();
+        mSharedPreferences.edit()
+                .putString(KEY_GROUP_NUMBER, groupNumber)
+                .putBoolean(KEY_IS_GROUP_SCHEDULE, true)
+                .apply();
+        mGroupNumber = groupNumber;
+        supportInvalidateOptionsMenu();
+        hideFloatingActionMenu();
+    }
+
+    @Override
+    public void onPositiveButtonClicked(Employee employee) {
+        String id = String.valueOf(employee.id);
+        mPresenter.setEmployeeId(id);
+        setTitle(employee.toString());
+        mSharedPreferences.edit()
+                .putString(KEY_EMPLOYEE_ID, id)
+                .putBoolean(KEY_IS_GROUP_SCHEDULE, false)
+                .apply();
+        mEmployeeId = id;
+        supportInvalidateOptionsMenu();
         hideFloatingActionMenu();
     }
 
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
+        if (mTitle != null) {
+            mSharedPreferences.edit().putString(KEY_TITLE, title.toString()).apply();
+        }
         getDelegate().getSupportActionBar().setTitle(mTitle);
     }
 
@@ -224,10 +258,18 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_subgroup_1);
+        item.setEnabled(isMenuItemEnabled());
         item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_1, true));
         item = menu.findItem(R.id.action_subgroup_2);
+        item.setEnabled(isMenuItemEnabled());
         item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_2, true));
+        item = menu.findItem(R.id.action_refresh);
+        item.setEnabled(isMenuItemEnabled());
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    private boolean isMenuItemEnabled() {
+        return mGroupNumber != null || mEmployeeId != null;
     }
 
     private void disableScrollFlags() {
