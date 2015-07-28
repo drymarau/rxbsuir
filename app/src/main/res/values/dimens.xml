@@ -19,4 +19,7 @@
     <!-- ViewPager margin -->
     <dimen name="view_pager_page_margin">2dp</dimen>
 
+    <!-- ProgressBar padding for centering purposes -->
+    <dimen name="progress_bar_padding_top">104dp</dimen>
+
 </resources>

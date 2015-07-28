@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:paddingTop="?actionBarSize"
+        android:paddingTop="@dimen/progress_bar_padding_top"
         android:visibility="gone"/>
 
     <android.support.v4.view.ViewPager
