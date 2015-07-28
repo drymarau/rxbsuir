@@ -5,6 +5,7 @@ import android.animation.PropertyValuesHolder;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,6 +71,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Inject SchedulePresenter mPresenter;
     @Inject SharedPreferences mSharedPreferences;
     @Inject boolean mIsGroupSchedule;
+    @Nullable @Inject @Named(KEY_GROUP_NUMBER) String mGroupNumber;
+    @Nullable @Inject @Named(KEY_EMPLOYEE_ID) String mEmployeeId;
 
     @State CharSequence mTitle;
 
@@ -189,6 +193,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 .putString(KEY_GROUP_NUMBER, groupNumber)
                 .putBoolean(KEY_IS_GROUP_SCHEDULE, true)
                 .apply();
+        mGroupNumber = groupNumber;
+        supportInvalidateOptionsMenu();
         hideFloatingActionMenu();
     }
 
@@ -201,6 +207,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 .putString(KEY_EMPLOYEE_ID, id)
                 .putBoolean(KEY_IS_GROUP_SCHEDULE, false)
                 .apply();
+        mEmployeeId = id;
+        supportInvalidateOptionsMenu();
         hideFloatingActionMenu();
     }
 
@@ -250,10 +258,18 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_subgroup_1);
+        item.setEnabled(isMenuItemEnabled());
         item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_1, true));
         item = menu.findItem(R.id.action_subgroup_2);
+        item.setEnabled(isMenuItemEnabled());
         item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_2, true));
+        item = menu.findItem(R.id.action_refresh);
+        item.setEnabled(isMenuItemEnabled());
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    private boolean isMenuItemEnabled() {
+        return mGroupNumber != null || mEmployeeId != null;
     }
 
     private void disableScrollFlags() {
