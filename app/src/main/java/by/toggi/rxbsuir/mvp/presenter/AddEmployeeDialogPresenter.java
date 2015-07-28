@@ -23,8 +23,8 @@ public class AddEmployeeDialogPresenter implements Presenter<AddEmployeeDialogVi
 
     private final BsuirService mService;
     private final StorIOSQLite mStorIOSQLite;
+    private final Observable<List<Employee>> mEmployeeListObservable;
     private AddEmployeeDialogView mAddEmployeeDialogView;
-    private Observable<List<Employee>> mEmployeeListObservable;
     private Subscription mSubscription;
     private List<String> mEmployeeStringList;
 

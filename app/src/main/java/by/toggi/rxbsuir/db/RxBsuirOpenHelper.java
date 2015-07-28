@@ -10,8 +10,8 @@ import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 
 public class RxBsuirOpenHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "rxbsuir.db";
-    public static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "rxbsuir.db";
+    private static final int DATABASE_VERSION = 1;
 
     public RxBsuirOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

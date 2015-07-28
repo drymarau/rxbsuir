@@ -13,7 +13,7 @@ public class EmployeeStorIOSQLiteDeleteResolver extends DefaultDeleteResolver<Em
 
     @NonNull
     @Override
-    protected DeleteQuery mapToDeleteQuery(Employee object) {
+    protected DeleteQuery mapToDeleteQuery(@NonNull Employee object) {
         return DeleteQuery.builder()
                 .table(EmployeeEntry.TABLE_NAME)
                 .where(EmployeeEntry.COL_ID + " = ?")

@@ -49,7 +49,6 @@ import icepick.State;
 
 public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddGroupDialogFragment.OnButtonClickListener, AddEmployeeDialogFragment.OnButtonClickListener {
 
-    public static final String KEY_TITLE = "title";
     public static final String KEY_GROUP_NUMBER = "selected_group_number";
     public static final String KEY_EMPLOYEE_ID = "selected_employee_id";
     public static final String KEY_IS_GROUP_SCHEDULE = "is_group_schedule";
@@ -57,6 +56,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     public static final String KEY_SUBGROUP_2 = "subgroup_2";
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
+    private static final String KEY_TITLE = "title";
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.tab_layout) TabLayout mTabLayout;

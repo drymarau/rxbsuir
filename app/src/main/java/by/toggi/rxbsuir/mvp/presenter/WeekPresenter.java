@@ -22,10 +22,10 @@ import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 public class WeekPresenter implements Presenter<WeekView> {
 
+    private final StorIOSQLite mStorIOSQLite;
+    private final int mWeekNumber;
     private WeekView mWeekView;
     private Observable<List<Lesson>> mScheduleObservable;
-    private StorIOSQLite mStorIOSQLite;
-    private int mWeekNumber;
     private int mSubgroupNumber = 0;
     private String mGroupNumber;
     private String mEmployeeId;

@@ -13,13 +13,13 @@ import android.view.animation.Interpolator;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class FAMScrollBehavior extends CoordinatorLayout.Behavior<ViewGroup> {
 
-    static final Interpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new FastOutSlowInInterpolator();
-
+    private static final Interpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new FastOutSlowInInterpolator();
+    private final String mTag;
     private float mTranslationY;
     private FloatingActionButton mButton;
-    private String mTag;
 
     public FAMScrollBehavior(String tag) {
         mTag = tag;
@@ -37,7 +37,7 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<ViewGroup> {
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, ViewGroup child, View dependency) {
         if (dependency instanceof Snackbar.SnackbarLayout) {
-            this.updateFabTranslationForSnackbar(parent, child, dependency);
+            this.updateFabTranslationForSnackbar(parent, child);
         }
         return false;
     }
@@ -49,7 +49,7 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<ViewGroup> {
         }
     }
 
-    private void updateFabTranslationForSnackbar(CoordinatorLayout parent, ViewGroup child, View snackbar) {
+    private void updateFabTranslationForSnackbar(CoordinatorLayout parent, ViewGroup child) {
         if (child.getVisibility() == View.VISIBLE) {
             float translationY = this.getFabTranslationYForSnackbar(parent, child);
             if (translationY != this.mTranslationY) {

@@ -21,11 +21,11 @@ import timber.log.Timber;
 
 public class AddGroupDialogPresenter implements Presenter<AddGroupDialogView> {
 
-    private Observable<List<StudentGroup>> mGroupListObservable;
+    private final Observable<List<StudentGroup>> mGroupListObservable;
+    private final BsuirService mService;
+    private final StorIOSQLite mStorIOSQLite;
     private List<String> mGroupNumberList;
     private AddGroupDialogView mAddGroupDialogView;
-    private BsuirService mService;
-    private StorIOSQLite mStorIOSQLite;
     private Subscription mSubscription;
 
     @Inject

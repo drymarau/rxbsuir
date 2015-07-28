@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_two_line_avatar"
     android:background="@android:color/white"
-    android:elevation="2dp">
+    android:elevation="2dp"
+    tools:ignore="UnusedAttribute">
 
     <include layout="@layout/list_item_lesson_type"/>
 
@@ -13,7 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/keyline_second"/>
+        android:layout_marginLeft="@dimen/keyline_second"
+        android:layout_marginStart="@dimen/keyline_second"/>
 
     <include layout="@layout/list_item_lesson_time"/>
 

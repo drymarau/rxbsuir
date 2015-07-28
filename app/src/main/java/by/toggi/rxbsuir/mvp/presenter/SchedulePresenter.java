@@ -35,11 +35,10 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     public static final String ERROR_NO_GROUP = "error_no_group";
     public static final String ERROR_NETWORK = "error_netwok";
     public static final String ERROR_EMPTY_SCHEDULE = "error_empty_schedule";
-
+    private final BsuirService mService;
+    private final StorIOSQLite mStorIOSQLite;
     private Observable<List<Lesson>> mScheduleObservable;
     private ScheduleView mScheduleView;
-    private BsuirService mService;
-    private StorIOSQLite mStorIOSQLite;
     private String mGroupNumber;
     private String mEmployeeId;
     private boolean mHasSynced = false;
@@ -176,16 +175,16 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     private Subscription getGroupSubscription() {
         return mScheduleObservable.subscribe(lessonList -> {
-                if (lessonList == null || lessonList.isEmpty()) {
-                    if (!mHasSynced) {
-                        getStudentGroupSchedule();
-                    }
-                } else {
-                    if (isViewAttached()) {
-                        mScheduleView.showContent(Utils.getCurrentWeekNumber() - 1);
-                    }
+            if (lessonList == null || lessonList.isEmpty()) {
+                if (!mHasSynced) {
+                    getStudentGroupSchedule();
                 }
-            });
+            } else {
+                if (isViewAttached()) {
+                    mScheduleView.showContent(Utils.getCurrentWeekNumber() - 1);
+                }
+            }
+        });
     }
 
     @Override

@@ -11,10 +11,10 @@ public class LessonStorIOSQLiteDeleteResolver extends DefaultDeleteResolver<Less
 
     @NonNull
     @Override
-    protected DeleteQuery mapToDeleteQuery(Lesson object) {
+    protected DeleteQuery mapToDeleteQuery(@NonNull Lesson object) {
         return DeleteQuery.builder()
                 .table(LessonEntry.TABLE_NAME)
-                .where("_id = ?")
+                .where(LessonEntry._ID + " = ?")
                 .whereArgs(object.getId())
                 .build();
     }

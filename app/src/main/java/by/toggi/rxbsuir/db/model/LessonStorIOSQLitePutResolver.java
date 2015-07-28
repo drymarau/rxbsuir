@@ -25,7 +25,7 @@ public class LessonStorIOSQLitePutResolver extends DefaultPutResolver<Lesson> {
     protected UpdateQuery mapToUpdateQuery(@NonNull Lesson object) {
         return UpdateQuery.builder()
                 .table(LessonEntry.TABLE_NAME)
-                .where("_id = ?")
+                .where(LessonEntry._ID + " = ?")
                 .whereArgs(object.getId())
                 .build();
     }
