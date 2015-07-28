@@ -73,7 +73,7 @@ public class WeekPresenter implements Presenter<WeekView> {
      * @param subgroup1 the subgroup 1 state
      * @param subgroup2 the subgroup 2 state
      */
-    public void setSubgroupNumber(boolean subgroup1, boolean subgroup2) {
+    public void setSubgroupNumber(boolean subgroup1, boolean subgroup2, boolean isGroupSchedule) {
         if (subgroup1 && subgroup2) {
             mSubgroupNumber = 0;
         } else if (!subgroup1 && !subgroup2) {
@@ -84,6 +84,11 @@ public class WeekPresenter implements Presenter<WeekView> {
             } else {
                 mSubgroupNumber = 2;
             }
+        }
+        if (isGroupSchedule) {
+            mScheduleObservable = getGroupScheduleObservable(mGroupNumber, mSubgroupNumber, mWeekNumber);
+        } else {
+            mScheduleObservable = getEmployeeListObservable(mEmployeeId, mSubgroupNumber, mWeekNumber);
         }
         onCreate();
     }
