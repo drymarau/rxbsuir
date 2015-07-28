@@ -24,6 +24,7 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
@@ -43,9 +44,8 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     private StorIOSQLite mStorIOSQLite;
     private String mGroupNumber;
     private String mEmployeeId;
-    private Subscription mGroupSubscription;
-    private Subscription mEmployeeSubscription;
     private boolean mHasSynced = false;
+    private CompositeSubscription mCompositeSubscription;
 
 
     /**
@@ -69,7 +69,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
                         .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.filterByEmployeeId(employeeId))
+                        .where(LessonEntry.filterByEmployee(employeeId))
                         .build())
                 .prepare()
                 .createObservable()
@@ -154,18 +154,13 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         if (isViewAttached() && !mHasSynced && (mGroupNumber != null || mEmployeeId != null)) {
             mScheduleView.showLoading();
         }
-        mGroupSubscription = mGroupLessonListObservable.subscribe(lessonList -> {
-            if (lessonList == null || lessonList.isEmpty()) {
-                if (!mHasSynced) {
-                    getStudentGroupSchedule();
-                }
-            } else {
-                if (isViewAttached()) {
-                    mScheduleView.showContent(Utils.getCurrentWeekNumber() - 1);
-                }
-            }
-        });
-        mEmployeeSubscription = mEmployeeLessonListObservable.subscribe(lessonList -> {
+        Subscription groupSubscription = getGroupSubscription();
+        Subscription employeeSubscription = getEmployeeSubscription();
+        mCompositeSubscription = new CompositeSubscription(groupSubscription, employeeSubscription);
+    }
+
+    private Subscription getEmployeeSubscription() {
+        return mEmployeeLessonListObservable.subscribe(lessonList -> {
             if (lessonList == null || lessonList.isEmpty()) {
                 if (!mHasSynced) {
                     getEmployeeSchedule();
@@ -178,13 +173,24 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         });
     }
 
+    private Subscription getGroupSubscription() {
+        return mGroupLessonListObservable.subscribe(lessonList -> {
+                if (lessonList == null || lessonList.isEmpty()) {
+                    if (!mHasSynced) {
+                        getStudentGroupSchedule();
+                    }
+                } else {
+                    if (isViewAttached()) {
+                        mScheduleView.showContent(Utils.getCurrentWeekNumber() - 1);
+                    }
+                }
+            });
+    }
+
     @Override
     public void onDestroy() {
-        if (!mGroupSubscription.isUnsubscribed()) {
-            mGroupSubscription.unsubscribe();
-        }
-        if (!mEmployeeSubscription.isUnsubscribed()) {
-            mEmployeeSubscription.unsubscribe();
+        if (mCompositeSubscription.hasSubscriptions() && !mCompositeSubscription.isUnsubscribed()) {
+            mCompositeSubscription.unsubscribe();
         }
         detachView();
     }
@@ -206,7 +212,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         mHasSynced = true;
         String whereQuery = LessonEntry.filterByGroup(mGroupNumber);
         if (!isGroupSchedule) {
-            whereQuery = LessonEntry.filterByEmployeeId(mEmployeeId);
+            whereQuery = LessonEntry.filterByEmployee(mEmployeeId);
         }
         Observable.concat(
                 mStorIOSQLite.delete()
