@@ -98,6 +98,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      */
     public void setGroupNumber(String groupNumber) {
         mHasSynced = false;
+        mIsGroupSchedule = true;
         mGroupNumber = groupNumber;
         mScheduleObservable = getGroupLessonListObservable(groupNumber);
         onCreate();
@@ -110,6 +111,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      */
     public void setEmployeeId(String employeeId) {
         mHasSynced = false;
+        mIsGroupSchedule = false;
         mEmployeeId = employeeId;
         mScheduleObservable = getEmployeeLessonListObservable(employeeId);
         onCreate();
