@@ -24,7 +24,6 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
@@ -37,15 +36,15 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     public static final String ERROR_NETWORK = "error_netwok";
     public static final String ERROR_EMPTY_SCHEDULE = "error_empty_schedule";
 
-    private Observable<List<Lesson>> mGroupLessonListObservable;
-    private Observable<List<Lesson>> mEmployeeLessonListObservable;
+    private Observable<List<Lesson>> mScheduleObservable;
     private ScheduleView mScheduleView;
     private BsuirService mService;
     private StorIOSQLite mStorIOSQLite;
     private String mGroupNumber;
     private String mEmployeeId;
     private boolean mHasSynced = false;
-    private CompositeSubscription mCompositeSubscription;
+    private boolean mIsGroupSchedule;
+    private Subscription mSubscription;
 
 
     /**
@@ -55,13 +54,17 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
      * @param storIOSQLite the stor iOSQ lite
      */
     @Inject
-    public SchedulePresenter(@Nullable @Named(ScheduleActivity.KEY_GROUP_NUMBER) String groupNumber, @Nullable @Named(ScheduleActivity.KEY_EMPLOYEE_ID) String employeeId, BsuirService service, StorIOSQLite storIOSQLite) {
+    public SchedulePresenter(boolean isGroupSchedule, @Nullable @Named(ScheduleActivity.KEY_GROUP_NUMBER) String groupNumber, @Nullable @Named(ScheduleActivity.KEY_EMPLOYEE_ID) String employeeId, BsuirService service, StorIOSQLite storIOSQLite) {
         mService = service;
         mStorIOSQLite = storIOSQLite;
         mGroupNumber = groupNumber;
         mEmployeeId = employeeId;
-        mGroupLessonListObservable = getGroupLessonListObservable(groupNumber);
-        mEmployeeLessonListObservable = getEmployeeLessonListObservable(employeeId);
+        mIsGroupSchedule = isGroupSchedule;
+        if (mIsGroupSchedule) {
+            mScheduleObservable = getGroupLessonListObservable(groupNumber);
+        } else {
+            mScheduleObservable = getEmployeeLessonListObservable(employeeId);
+        }
     }
 
     private Observable<List<Lesson>> getEmployeeLessonListObservable(String employeeId) {
@@ -96,7 +99,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     public void setGroupNumber(String groupNumber) {
         mHasSynced = false;
         mGroupNumber = groupNumber;
-        mGroupLessonListObservable = getGroupLessonListObservable(groupNumber);
+        mScheduleObservable = getGroupLessonListObservable(groupNumber);
         onCreate();
     }
 
@@ -108,7 +111,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     public void setEmployeeId(String employeeId) {
         mHasSynced = false;
         mEmployeeId = employeeId;
-        mEmployeeLessonListObservable = getEmployeeLessonListObservable(employeeId);
+        mScheduleObservable = getEmployeeLessonListObservable(employeeId);
         onCreate();
     }
 
@@ -151,16 +154,11 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     @Override
     public void onCreate() {
-        if (isViewAttached() && !mHasSynced && (mGroupNumber != null || mEmployeeId != null)) {
-            mScheduleView.showLoading();
-        }
-        Subscription groupSubscription = getGroupSubscription();
-        Subscription employeeSubscription = getEmployeeSubscription();
-        mCompositeSubscription = new CompositeSubscription(groupSubscription, employeeSubscription);
+        mSubscription = mIsGroupSchedule ? getGroupSubscription() : getEmployeeSubscription();
     }
 
     private Subscription getEmployeeSubscription() {
-        return mEmployeeLessonListObservable.subscribe(lessonList -> {
+        return mScheduleObservable.subscribe(lessonList -> {
             if (lessonList == null || lessonList.isEmpty()) {
                 if (!mHasSynced) {
                     getEmployeeSchedule();
@@ -174,7 +172,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     }
 
     private Subscription getGroupSubscription() {
-        return mGroupLessonListObservable.subscribe(lessonList -> {
+        return mScheduleObservable.subscribe(lessonList -> {
                 if (lessonList == null || lessonList.isEmpty()) {
                     if (!mHasSynced) {
                         getStudentGroupSchedule();
@@ -189,8 +187,8 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     @Override
     public void onDestroy() {
-        if (mCompositeSubscription.hasSubscriptions() && !mCompositeSubscription.isUnsubscribed()) {
-            mCompositeSubscription.unsubscribe();
+        if (!mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
         }
         detachView();
     }
