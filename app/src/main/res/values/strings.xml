@@ -16,7 +16,7 @@
     <!-- ADD GROUP/EMPLOYEE DIALOG -->
     <!-- Group number hint in add group dialog -->
     <string name="hint_group_number">Group number</string>
-    <string name="hint_employee">Employee last name</string>
+    <string name="hint_employee">Employee name</string>
     <string name="title_add_group">Add group</string>
     <string name="title_add_employee">Add employee</string>
     <string name="positive_add">Add</string>
