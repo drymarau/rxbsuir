@@ -154,7 +154,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     @Override
     public void onCreate() {
-        if (isViewAttached() && !mHasSynced) {
+        if (isViewAttached() && !mHasSynced && (mEmployeeId != null || mGroupNumber != null)) {
             mScheduleView.showLoading();
         }
         mSubscription = mIsGroupSchedule ? getGroupSubscription() : getEmployeeSubscription();
