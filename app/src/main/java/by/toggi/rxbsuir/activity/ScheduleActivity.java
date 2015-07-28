@@ -104,7 +104,10 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         Icepick.restoreInstanceState(this, savedInstanceState);
         if (mTitle == null) {
-            mTitle = mSharedPreferences.getString(KEY_TITLE, null);
+            CharSequence title = getDelegate().getSupportActionBar().getTitle();
+            if (title != null) {
+                mTitle = mSharedPreferences.getString(KEY_TITLE, title.toString());
+            }
         }
         setTitle(mTitle);
     }
