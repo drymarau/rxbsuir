@@ -81,7 +81,7 @@ public class AddGroupDialogPresenter implements Presenter<AddGroupDialogView> {
      * @return true is group number is valid, false otherwise
      */
     public boolean isValidGroupNumber(String groupNumber) {
-        return mGroupNumberList == null || mGroupNumberList.contains(groupNumber);
+        return mGroupNumberList != null && mGroupNumberList.contains(groupNumber);
     }
 
     private void updateStudentGroupListInView(List<StudentGroup> studentGroupList) {
