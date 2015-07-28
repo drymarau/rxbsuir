@@ -8,7 +8,6 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -77,8 +76,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                         .build())
                 .prepare()
                 .createObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .delay(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     private Observable<List<Lesson>> getGroupLessonListObservable(String groupNumber) {
@@ -90,8 +88,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                         .build())
                 .prepare()
                 .createObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .delay(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -157,7 +154,7 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     @Override
     public void onCreate() {
-        if (isViewAttached()) {
+        if (isViewAttached() && !mHasSynced) {
             mScheduleView.showLoading();
         }
         mSubscription = mIsGroupSchedule ? getGroupSubscription() : getEmployeeSubscription();
