@@ -175,8 +175,19 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
     @Override
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         switch (key) {
+            case ScheduleActivity.KEY_IS_GROUP_SCHEDULE:
+                boolean isGroupSchedule = preferences.getBoolean(key, true);
+                if (isGroupSchedule) {
+                    mPresenter.setGroupNumber(preferences.getString(ScheduleActivity.KEY_GROUP_NUMBER, null));
+                } else {
+                    mPresenter.setEmployeeId(preferences.getString(ScheduleActivity.KEY_EMPLOYEE_ID, null));
+                }
+                break;
             case ScheduleActivity.KEY_GROUP_NUMBER:
                 mPresenter.setGroupNumber(preferences.getString(key, null));
+                break;
+            case ScheduleActivity.KEY_EMPLOYEE_ID:
+                mPresenter.setEmployeeId(preferences.getString(key, null));
                 break;
             case ScheduleActivity.KEY_SUBGROUP_1:
             case ScheduleActivity.KEY_SUBGROUP_2:

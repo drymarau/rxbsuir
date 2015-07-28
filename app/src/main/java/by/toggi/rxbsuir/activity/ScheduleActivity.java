@@ -48,6 +48,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     public static final String KEY_GROUP_NUMBER = "selected_group_number";
     public static final String KEY_EMPLOYEE_ID = "selected_employee_id";
+    public static final String KEY_IS_GROUP_SCHEDULE = "is_group_schedule";
     public static final String KEY_SUBGROUP_1 = "subgroup_1";
     public static final String KEY_SUBGROUP_2 = "subgroup_2";
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
@@ -66,6 +67,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mPresenter;
     @Inject SharedPreferences mSharedPreferences;
+    @Inject boolean mIsGroupSchedule;
 
     @State CharSequence mTitle;
 
@@ -93,7 +95,11 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         Icepick.restoreInstanceState(this, savedInstanceState);
         if (mTitle == null) {
-            mTitle = mSharedPreferences.getString(KEY_GROUP_NUMBER, null);
+            if (mIsGroupSchedule) {
+                mTitle = mSharedPreferences.getString(KEY_GROUP_NUMBER, null);
+            } else {
+                mTitle = mSharedPreferences.getString(KEY_EMPLOYEE_ID, null);
+            }
         }
         setTitle(mTitle);
     }
@@ -182,15 +188,22 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     public void onPositiveButtonClicked(String groupNumber) {
         mPresenter.setGroupNumber(groupNumber);
         setTitle(groupNumber);
-        mSharedPreferences.edit().putString(KEY_GROUP_NUMBER, groupNumber).apply();
+        mSharedPreferences.edit()
+                .putString(KEY_GROUP_NUMBER, groupNumber)
+                .putBoolean(KEY_IS_GROUP_SCHEDULE, true)
+                .apply();
         hideFloatingActionMenu();
     }
 
     @Override
     public void onPositiveButtonClicked(Employee employee) {
         String id = String.valueOf(employee.id);
-        mSharedPreferences.edit().putString(KEY_EMPLOYEE_ID, id).apply();
         mPresenter.setEmployeeId(id);
+        setTitle(employee.toString());
+        mSharedPreferences.edit()
+                .putString(KEY_EMPLOYEE_ID, id)
+                .putBoolean(KEY_IS_GROUP_SCHEDULE, false)
+                .apply();
         hideFloatingActionMenu();
     }
 

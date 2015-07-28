@@ -38,6 +38,8 @@ public interface AppComponent {
 
     @Nullable @Named(ScheduleActivity.KEY_EMPLOYEE_ID) String employeeId();
 
+    boolean isGroupSchedule();
+
     void inject(AddGroupDialogFragment addGroupDialogFragment);
 
     void inject(AddEmployeeDialogFragment addEmployeeDialogFragment);

@@ -47,4 +47,9 @@ public class AppModule {
         return preferences.getString(ScheduleActivity.KEY_EMPLOYEE_ID, null);
     }
 
+    @Provides
+    boolean provideIsGroupSchedule(SharedPreferences preferences) {
+        return preferences.getBoolean(ScheduleActivity.KEY_IS_GROUP_SCHEDULE, true);
+    }
+
 }
