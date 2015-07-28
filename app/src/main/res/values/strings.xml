@@ -35,4 +35,6 @@
 
     <!-- Main FAB tag for FAM -->
     <string name="tag_fab" translatable="false">fab</string>
+    <string name="action_subgroup_1">Subgroup 1</string>
+    <string name="action_subgroup_2">Subgroup 2</string>
 </resources>
