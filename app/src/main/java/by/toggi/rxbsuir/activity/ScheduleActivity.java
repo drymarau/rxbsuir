@@ -46,6 +46,7 @@ import icepick.State;
 
 public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddGroupDialogFragment.OnButtonClickListener, AddEmployeeDialogFragment.OnButtonClickListener {
 
+    public static final String KEY_TITLE = "title";
     public static final String KEY_GROUP_NUMBER = "selected_group_number";
     public static final String KEY_EMPLOYEE_ID = "selected_employee_id";
     public static final String KEY_IS_GROUP_SCHEDULE = "is_group_schedule";
@@ -95,11 +96,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         Icepick.restoreInstanceState(this, savedInstanceState);
         if (mTitle == null) {
-            if (mIsGroupSchedule) {
-                mTitle = mSharedPreferences.getString(KEY_GROUP_NUMBER, null);
-            } else {
-                mTitle = mSharedPreferences.getString(KEY_EMPLOYEE_ID, null);
-            }
+            mTitle = mSharedPreferences.getString(KEY_TITLE, null);
         }
         setTitle(mTitle);
     }
@@ -210,6 +207,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
+        if (mTitle != null) {
+            mSharedPreferences.edit().putString(KEY_TITLE, title.toString()).apply();
+        }
         getDelegate().getSupportActionBar().setTitle(mTitle);
     }
 
