@@ -12,7 +12,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -67,6 +69,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Bind(R.id.fab_employee) FloatingActionButton mFabEmployee;
     @Bind(R.id.fam) RelativeLayout mFloatingActionMenu;
     @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
+    @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
 
     @BindDimen(R.dimen.view_pager_page_margin) int mPageMargin;
 
@@ -90,12 +93,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         addStorageFragment();
 
-        getDelegate().setSupportActionBar(mToolbar);
+        setupNavigationView();
 
-        mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.setOffscreenPageLimit(4);
-        mViewPager.setPageMargin(mPageMargin);
-        mTabLayout.setupWithViewPager(mViewPager);
+        setupTabs();
 
         mPresenter.attachView(this);
         mPresenter.onCreate();
@@ -103,13 +103,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         showCurrentWeek();
 
         Icepick.restoreInstanceState(this, savedInstanceState);
-        if (mTitle == null) {
-            CharSequence title = getDelegate().getSupportActionBar().getTitle();
-            if (title != null) {
-                mTitle = mSharedPreferences.getString(KEY_TITLE, title.toString());
-            }
-        }
-        setTitle(mTitle);
+        setupTitle();
     }
 
     @Override
@@ -273,6 +267,30 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         item = menu.findItem(R.id.action_refresh);
         item.setEnabled(isMenuItemEnabled());
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void setupTitle() {
+        if (mTitle == null) {
+            CharSequence title = getDelegate().getSupportActionBar().getTitle();
+            if (title != null) {
+                mTitle = mSharedPreferences.getString(KEY_TITLE, title.toString());
+            }
+        }
+        setTitle(mTitle);
+    }
+
+    private void setupNavigationView() {
+        getDelegate().setSupportActionBar(mToolbar);
+        getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationIcon(R.drawable.ic_action_navigation_menu);
+        mToolbar.setNavigationOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
+    }
+
+    private void setupTabs() {
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setPageMargin(mPageMargin);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     private boolean isMenuItemEnabled() {
