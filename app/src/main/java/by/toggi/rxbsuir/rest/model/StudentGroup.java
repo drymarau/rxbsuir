@@ -25,6 +25,8 @@ public class StudentGroup {
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_SPECIALITY_DEPARTMENT_EDUCATION_FORM_ID)
     @Element(name = "specialityDepartmentEducationFormId")
     public long specialityDepartmentEducationFormId;
+    @StorIOSQLiteColumn(name = StudentGroupEntry.COL_IS_CACHED)
+    public boolean isCached;
 
     StudentGroup() {}
 

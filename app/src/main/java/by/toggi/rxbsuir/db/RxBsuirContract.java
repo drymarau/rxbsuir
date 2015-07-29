@@ -4,7 +4,7 @@ import android.provider.BaseColumns;
 
 public class RxBsuirContract {
 
-    public static class EmployeeEntry {
+    public static class EmployeeEntry implements HelperColumns {
 
         public static final String TABLE_NAME = "employees";
 
@@ -16,7 +16,7 @@ public class RxBsuirContract {
 
     }
 
-    public static class StudentGroupEntry {
+    public static class StudentGroupEntry implements HelperColumns {
 
         public static final String TABLE_NAME = "students_groups";
 

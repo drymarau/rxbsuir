@@ -44,6 +44,7 @@ public class EmployeeStorIOSQLitePutResolver extends DefaultPutResolver<Employee
         contentValues.put(EmployeeEntry.COL_FIRST_NAME, object.firstName);
         contentValues.put(EmployeeEntry.COL_MIDDLE_NAME, object.middleName);
         contentValues.put(EmployeeEntry.COL_LAST_NAME, object.lastName);
+        contentValues.put(EmployeeEntry.COL_IS_CACHED, object.isCached);
 
         return contentValues;
     }
