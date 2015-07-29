@@ -18,6 +18,11 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
     public SubheaderItemDecoration(View headerView, int subheaderHeight) {
         mHeaderView = (TextView) headerView;
         mSubheaderHeight = subheaderHeight;
+        mHeaderView.measure(
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        );
+        mHeaderView.layout(0, 0, mHeaderView.getMeasuredWidth(), mHeaderView.getMeasuredHeight());
     }
 
     @Override
