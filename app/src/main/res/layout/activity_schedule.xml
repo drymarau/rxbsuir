@@ -5,14 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context="by.toggi.rxbsuir.activity.ScheduleActivity">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
-
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="by.toggi.rxbsuir.activity.ScheduleActivity">
+        android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar_layout"
@@ -54,9 +53,12 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/menu_schedule_activity"/>
+        android:background="@android:color/white"
+        app:headerLayout="@layout/navigation_drawer_header"
+        app:menu="@menu/menu_navigation_view"/>
 
 </android.support.v4.widget.DrawerLayout>
