@@ -74,6 +74,11 @@ public class AddEmployeeDialogPresenter implements Presenter<AddEmployeeDialogVi
         mAddEmployeeDialogView = null;
     }
 
+    @Override
+    public String getTag() {
+        return this.getClass().getSimpleName();
+    }
+
     /**
      * Validates employeeString.
      *

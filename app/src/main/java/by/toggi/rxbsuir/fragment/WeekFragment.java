@@ -95,11 +95,11 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
         if (fragment == null) {
             throw new IllegalStateException("Storage fragment should already be added");
         }
-        if (fragment.getPresenter(getPresenterTag()) == null) {
-            fragment.setPresenter(getPresenterTag(), mPresenter);
+        if (fragment.getPresenter(mPresenter.getTag()) == null) {
+            fragment.setPresenter(mPresenter.getTag(), mPresenter);
         } else {
             try {
-                mPresenter = (WeekPresenter) fragment.getPresenter(getPresenterTag());
+                mPresenter = (WeekPresenter) fragment.getPresenter(mPresenter.getTag());
             } catch (ClassCastException e) {
                 throw new ClassCastException("Presenter must be of class WeekPresenter");
             }
@@ -149,11 +149,6 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
         if (savedInstanceState != null) {
             mLayoutManagerState = savedInstanceState.getParcelable(KEY_LAYOUT_MANAGER_STATE);
         }
-    }
-
-    @Override
-    public String getPresenterTag() {
-        return "week_presenter_" + mWeekNumber;
     }
 
     /**

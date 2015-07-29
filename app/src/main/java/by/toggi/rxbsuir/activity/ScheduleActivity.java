@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -70,6 +71,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Bind(R.id.fam) RelativeLayout mFloatingActionMenu;
     @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
     @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
+    @Bind(R.id.navigation_view) NavigationView mNavigationView;
 
     @BindDimen(R.dimen.view_pager_page_margin) int mPageMargin;
 
@@ -179,11 +181,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         enableScrollFlags();
         mProgressBar.setVisibility(View.GONE);
         mViewPager.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public String getPresenterTag() {
-        return "schedule_presenter";
     }
 
     @Override
@@ -320,10 +317,10 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         if (fragment == null) {
             fragment = new StorageFragment();
             manager.beginTransaction().add(fragment, WeekFragment.TAG_STORAGE_FRAGMENT).commit();
-            fragment.setPresenter(getPresenterTag(), mPresenter);
+            fragment.setPresenter(mPresenter.getTag(), mPresenter);
         } else {
             try {
-                mPresenter = (SchedulePresenter) fragment.getPresenter(getPresenterTag());
+                mPresenter = (SchedulePresenter) fragment.getPresenter(mPresenter.getTag());
             } catch (ClassCastException e) {
                 throw new ClassCastException("Presenter must be of class SchedulePresenter");
             }

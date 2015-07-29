@@ -151,6 +151,11 @@ public class WeekPresenter implements Presenter<WeekView> {
         mWeekView = null;
     }
 
+    @Override
+    public String getTag() {
+        return this.getClass().getSimpleName() + "_" + mWeekNumber;
+    }
+
     private boolean isViewAttached() {
         return mWeekView != null;
     }

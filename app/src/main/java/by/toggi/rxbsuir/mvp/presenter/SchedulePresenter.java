@@ -208,6 +208,11 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         mScheduleView = null;
     }
 
+    @Override
+    public String getTag() {
+        return this.getClass().getSimpleName();
+    }
+
     private void onNetworkSuccess(List<Lesson> lessonList, boolean isGroupSchedule) {
         mHasSynced = true;
         String whereQuery = LessonEntry.filterByGroup(mGroupNumber);
