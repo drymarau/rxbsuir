@@ -132,7 +132,7 @@ public class WeekPresenter implements Presenter<WeekView> {
 
     @Override
     public void onDestroy() {
-        if (!mSubscription.isUnsubscribed()) {
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
         detachView();
