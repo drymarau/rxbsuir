@@ -43,6 +43,7 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
         return "create table " +
                 LessonEntry.TABLE_NAME + " (" +
                 LessonEntry._ID + " integer primary key, " +
+                LessonEntry.COL_SYNC_ID + " text not null, " +
                 LessonEntry.COL_EMPLOYEE_LIST + " text, " +
                 LessonEntry.COL_AUDITORY_LIST+ " text, " +
                 LessonEntry.COL_LESSON_TIME + " text not null, " +

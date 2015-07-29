@@ -242,8 +242,9 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
 
     private List<Lesson> transformScheduleToLesson(ScheduleModel model, boolean isGroupSchedule) {
         List<Lesson> lessonList = new ArrayList<>(model.scheduleList.size());
+        String syncId = isGroupSchedule ? mGroupNumber : mEmployeeId;
         for (Schedule schedule : model.scheduleList) {
-            lessonList.add(new Lesson(null, schedule, model.weekDay, isGroupSchedule));
+            lessonList.add(new Lesson(null, syncId, schedule, model.weekDay, isGroupSchedule));
         }
         return lessonList;
     }

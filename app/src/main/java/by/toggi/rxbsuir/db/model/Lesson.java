@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.db.model;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
@@ -11,6 +12,7 @@ import by.toggi.rxbsuir.rest.model.Schedule;
 public class Lesson {
 
     private Long _id;
+    private String syncId;
     private List<String> auditoryList;
     private List<Employee> employeeList;
     private String lessonTime;
@@ -23,8 +25,9 @@ public class Lesson {
     private String weekday;
     private boolean isGroupSchedule;
 
-    public Lesson(@Nullable Long _id, List<String> auditoryList, List<Employee> employeeList, String lessonTime, String lessonType, String note, int numSubgroup, List<String> studentGroupList, String subject, List<Integer> weekNumberList, String weekday, boolean isGroupSchedule) {
+    public Lesson(@Nullable Long _id, @NonNull String syncId, List<String> auditoryList, List<Employee> employeeList, String lessonTime, String lessonType, String note, int numSubgroup, List<String> studentGroupList, String subject, List<Integer> weekNumberList, String weekday, boolean isGroupSchedule) {
         this._id = _id;
+        this.syncId = syncId;
         this.auditoryList = auditoryList;
         this.employeeList = employeeList;
         this.lessonTime = lessonTime;
@@ -38,8 +41,9 @@ public class Lesson {
         this.isGroupSchedule = isGroupSchedule;
     }
 
-    public Lesson(@Nullable Long _id, Schedule schedule, String weekday, boolean isGroupSchedule) {
+    public Lesson(@Nullable Long _id, @NonNull String syncId, Schedule schedule, String weekday, boolean isGroupSchedule) {
         this._id = _id;
+        this.syncId = syncId;
         this.auditoryList = schedule.auditory;
         this.employeeList = schedule.employeeList;
         this.lessonTime = schedule.lessonTime;
@@ -55,6 +59,10 @@ public class Lesson {
 
     public Long getId() {
         return _id;
+    }
+
+    public String getSyncId() {
+        return syncId;
     }
 
     public List<String> getAuditoryList() {

@@ -32,6 +32,7 @@ public class RxBsuirContract {
 
         public static final String TABLE_NAME = "lessons";
 
+        public static final String COL_SYNC_ID = "sync_id";
         public static final String COL_WEEKDAY = "weekday";
         public static final String COL_WEEK_NUMBER_LIST = "week_number_list";
         public static final String COL_SUBJECT = "subject";
@@ -51,7 +52,7 @@ public class RxBsuirContract {
          * @return where query
          */
         public static String filterByGroup(String groupNumber) {
-            return COL_STUDENT_GROUP_LIST + " like '%" + groupNumber + "%'" + " and " + filterByScheduleType(true);
+            return COL_SYNC_ID + " = " + groupNumber + " and " + filterByScheduleType(true);
         }
 
         /**
@@ -61,7 +62,7 @@ public class RxBsuirContract {
          * @return where query
          */
         public static String filterByEmployee(String employeeId) {
-            return COL_EMPLOYEE_LIST + " like '%" + employeeId + "%'" + " and " + filterByScheduleType(false);
+            return COL_SYNC_ID + " = " + employeeId + " and " + filterByScheduleType(false);
         }
 
         /**

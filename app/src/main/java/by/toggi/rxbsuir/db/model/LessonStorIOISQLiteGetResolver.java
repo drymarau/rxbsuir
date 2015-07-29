@@ -32,6 +32,7 @@ public class LessonStorIOISQLiteGetResolver extends DefaultGetResolver<Lesson> {
 
         return new Lesson(
                 cursor.getLong(cursor.getColumnIndex(LessonEntry._ID)),
+                cursor.getString(cursor.getColumnIndex(LessonEntry.COL_SYNC_ID)),
                 new ArrayList<>(Arrays.asList(auditoryArray)),
                 new ArrayList<>(Arrays.asList(employeeArray)),
                 cursor.getString(cursor.getColumnIndex(LessonEntry.COL_LESSON_TIME)),
