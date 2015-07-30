@@ -266,7 +266,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         if (groupMap.size() > 0) {
             Menu menu = mNavigationView.getMenu();
             menu.removeItem(R.id.navigation_view_groups_header);
-            SubMenu subMenu = menu.addSubMenu(R.id.synced, R.id.navigation_view_groups_header, 100, "Groups");
+            SubMenu subMenu = menu.addSubMenu(R.id.synced, R.id.navigation_view_groups_header, 100, R.string.navigation_view_groups);
             for (int id : groupMap.keySet()) {
                 subMenu.add(R.id.navigation_view_groups, id, Menu.NONE, groupMap.get(id));
             }
@@ -281,7 +281,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         if (employeeMap.size() > 0) {
             Menu menu = mNavigationView.getMenu();
             menu.removeItem(R.id.navigation_view_employees_header);
-            SubMenu subMenu = menu.addSubMenu(R.id.synced, R.id.navigation_view_employees_header, 200, "Employees");
+            SubMenu subMenu = menu.addSubMenu(R.id.synced, R.id.navigation_view_employees_header, 200, R.string.navigation_view_employees);
             for (int id : employeeMap.keySet()) {
                 subMenu.add(R.id.navigation_view_employees, id, Menu.NONE, employeeMap.get(id));
             }
