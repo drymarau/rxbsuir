@@ -12,6 +12,10 @@ import timber.log.Timber;
 
 public class RxBsuirApplication extends Application {
 
+    static {
+        System.setProperty("rx.scheduler.jdk6.purge-force", "true");
+    }
+
     private AppComponent mAppComponent;
 
     @Override
