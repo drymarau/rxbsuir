@@ -1,7 +1,7 @@
 package by.toggi.rxbsuir.db;
 
-public interface HelperColumns {
+interface HelperColumns {
 
-    static final String COL_IS_CACHED = "is_cached";
+    String COL_IS_CACHED = "is_cached";
 
 }
