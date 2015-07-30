@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="navigation_view_groups_header" type="id"/>
+    <item name="navigation_view_employees_header" type="id"/>
+    <item name="navigation_view_groups" type="id"/>
+    <item name="navigation_view_employees" type="id"/>
+</resources>
