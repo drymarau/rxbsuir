@@ -20,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
@@ -89,6 +88,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Nullable @Inject @Named(KEY_EMPLOYEE_ID) String mEmployeeId;
 
     @State CharSequence mTitle;
+    @State int mItemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,43 +263,50 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void updateGroupList(Map<Integer, String> groupMap) {
+        Menu menu = mNavigationView.getMenu();
+        MenuItem groupHeader = menu.findItem(R.id.navigation_view_groups_header);
         if (groupMap.size() > 0) {
-            Menu menu = mNavigationView.getMenu();
-            menu.removeItem(R.id.navigation_view_groups_header);
-            SubMenu subMenu = menu.addSubMenu(R.id.synced, R.id.navigation_view_groups_header, 100, R.string.navigation_view_groups);
+            groupHeader.setVisible(true);
+            groupHeader.getSubMenu().clear();
             for (int id : groupMap.keySet()) {
-                subMenu.add(R.id.navigation_view_groups, id, Menu.NONE, groupMap.get(id));
+                groupHeader.getSubMenu().add(R.id.navigation_view_groups, id, Menu.NONE, groupMap.get(id));
             }
-            subMenu.setGroupCheckable(R.id.navigation_view_groups, true, true);
             MenuItem item = menu.getItem(0);
             item.setTitle(item.getTitle());
+        } else {
+            groupHeader.setVisible(false);
         }
     }
 
     @Override
     public void updateEmployeeList(Map<Integer, String> employeeMap) {
+        Menu menu = mNavigationView.getMenu();
+        MenuItem employeeHeader = menu.findItem(R.id.navigation_view_employees_header);
         if (employeeMap.size() > 0) {
-            Menu menu = mNavigationView.getMenu();
-            menu.removeItem(R.id.navigation_view_employees_header);
-            SubMenu subMenu = menu.addSubMenu(R.id.synced, R.id.navigation_view_employees_header, 200, R.string.navigation_view_employees);
+            employeeHeader.setVisible(true);
+            employeeHeader.getSubMenu().clear();
             for (int id : employeeMap.keySet()) {
-                subMenu.add(R.id.navigation_view_employees, id, Menu.NONE, employeeMap.get(id));
+                employeeHeader.getSubMenu().add(R.id.navigation_view_employees, id, Menu.NONE, employeeMap.get(id));
             }
-            subMenu.setGroupCheckable(R.id.navigation_view_employees, true, true);
             MenuItem item = menu.getItem(0);
             item.setTitle(item.getTitle());
+        } else {
+            employeeHeader.setVisible(false);
         }
     }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
-        switch (menuItem.getGroupId()) {
-            case R.id.navigation_view_groups:
-                selectGroup(String.valueOf(menuItem.getItemId()));
-                break;
-            case R.id.navigation_view_employees:
-                selectEmployee(menuItem.getItemId(), menuItem.getTitle().toString());
-                break;
+        if (mItemId != menuItem.getItemId()) {
+            mItemId = menuItem.getItemId();
+            switch (menuItem.getGroupId()) {
+                case R.id.navigation_view_groups:
+                    selectGroup(String.valueOf(menuItem.getItemId()));
+                    break;
+                case R.id.navigation_view_employees:
+                    selectEmployee(menuItem.getItemId(), menuItem.getTitle().toString());
+                    break;
+            }
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
