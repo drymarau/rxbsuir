@@ -20,10 +20,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,14 +46,16 @@ import by.toggi.rxbsuir.fragment.StorageFragment;
 import by.toggi.rxbsuir.fragment.WeekFragment;
 import by.toggi.rxbsuir.module.ActivityModule;
 import by.toggi.rxbsuir.module.ScheduleActivityModule;
+import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
+import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import by.toggi.rxbsuir.rest.model.Employee;
 import icepick.Icepick;
 import icepick.State;
 
 
-public class ScheduleActivity extends AppCompatActivity implements ScheduleView, AddGroupDialogFragment.OnButtonClickListener, AddEmployeeDialogFragment.OnButtonClickListener {
+public class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, AddGroupDialogFragment.OnButtonClickListener, AddEmployeeDialogFragment.OnButtonClickListener {
 
     public static final String KEY_GROUP_NUMBER = "selected_group_number";
     public static final String KEY_EMPLOYEE_ID = "selected_employee_id";
@@ -76,7 +81,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @BindDimen(R.dimen.view_pager_page_margin) int mPageMargin;
 
     @Inject WeekPagerAdapter mPagerAdapter;
-    @Inject SchedulePresenter mPresenter;
+    @Inject SchedulePresenter mSchedulePresenter;
+    @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
     @Inject boolean mIsGroupSchedule;
     @Nullable @Inject @Named(KEY_GROUP_NUMBER) String mGroupNumber;
@@ -99,8 +105,11 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         setupTabs();
 
-        mPresenter.attachView(this);
-        mPresenter.onCreate();
+        mSchedulePresenter.attachView(this);
+        mSchedulePresenter.onCreate();
+
+        mDrawerPresenter.attachView(this);
+        mDrawerPresenter.onCreate();
 
         showCurrentWeek();
 
@@ -111,7 +120,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.onDestroy();
+        mSchedulePresenter.onDestroy();
+        mDrawerPresenter.onDestroy();
     }
 
     private void initializeComponent() {
@@ -155,7 +165,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 break;
             case SchedulePresenter.ERROR_NETWORK:
                 Snackbar.make(mCoordinatorLayout, getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                        .setAction(R.string.action_retry, v -> mPresenter.retry())
+                        .setAction(R.string.action_retry, v -> mSchedulePresenter.retry())
                         .show();
                 break;
             case SchedulePresenter.ERROR_EMPTY_SCHEDULE:
@@ -185,28 +195,13 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void onPositiveButtonClicked(String groupNumber) {
-        mPresenter.setGroupNumber(groupNumber);
-        setTitle(groupNumber);
-        mSharedPreferences.edit()
-                .putString(KEY_GROUP_NUMBER, groupNumber)
-                .putBoolean(KEY_IS_GROUP_SCHEDULE, true)
-                .apply();
-        mGroupNumber = groupNumber;
-        supportInvalidateOptionsMenu();
+        selectGroup(groupNumber);
         hideFloatingActionMenu();
     }
 
     @Override
     public void onPositiveButtonClicked(Employee employee) {
-        String id = String.valueOf(employee.id);
-        mPresenter.setEmployeeId(id);
-        setTitle(employee.toString());
-        mSharedPreferences.edit()
-                .putString(KEY_EMPLOYEE_ID, id)
-                .putBoolean(KEY_IS_GROUP_SCHEDULE, false)
-                .apply();
-        mEmployeeId = id;
-        supportInvalidateOptionsMenu();
+        selectEmployee(Long.valueOf(employee.id).intValue(), employee.toString());
         hideFloatingActionMenu();
     }
 
@@ -235,7 +230,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                mPresenter.retry();
+                mSchedulePresenter.retry();
                 return true;
             case R.id.action_today:
                 showCurrentWeek();
@@ -266,6 +261,73 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         return super.onPrepareOptionsMenu(menu);
     }
 
+    @Override
+    public void updateGroupList(Map<Integer, String> groupMap) {
+        if (groupMap.size() > 0) {
+            Menu menu = mNavigationView.getMenu();
+            menu.removeItem(R.id.navigation_view_groups_header);
+            SubMenu subMenu = menu.addSubMenu(R.id.synced, R.id.navigation_view_groups_header, 100, "Groups");
+            for (int id : groupMap.keySet()) {
+                subMenu.add(R.id.navigation_view_groups, id, Menu.NONE, groupMap.get(id));
+            }
+            subMenu.setGroupCheckable(R.id.navigation_view_groups, true, true);
+            MenuItem item = menu.getItem(0);
+            item.setTitle(item.getTitle());
+        }
+    }
+
+    @Override
+    public void updateEmployeeList(Map<Integer, String> employeeMap) {
+        if (employeeMap.size() > 0) {
+            Menu menu = mNavigationView.getMenu();
+            menu.removeItem(R.id.navigation_view_employees_header);
+            SubMenu subMenu = menu.addSubMenu(R.id.synced, R.id.navigation_view_employees_header, 200, "Employees");
+            for (int id : employeeMap.keySet()) {
+                subMenu.add(R.id.navigation_view_employees, id, Menu.NONE, employeeMap.get(id));
+            }
+            subMenu.setGroupCheckable(R.id.navigation_view_employees, true, true);
+            MenuItem item = menu.getItem(0);
+            item.setTitle(item.getTitle());
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        switch (menuItem.getGroupId()) {
+            case R.id.navigation_view_groups:
+                selectGroup(String.valueOf(menuItem.getItemId()));
+                break;
+            case R.id.navigation_view_employees:
+                selectEmployee(menuItem.getItemId(), menuItem.getTitle().toString());
+                break;
+        }
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void selectGroup(String groupNumber) {
+        mSchedulePresenter.setGroupNumber(groupNumber);
+        setTitle(groupNumber);
+        mSharedPreferences.edit()
+                .putString(KEY_GROUP_NUMBER, groupNumber)
+                .putBoolean(KEY_IS_GROUP_SCHEDULE, true)
+                .apply();
+        mGroupNumber = groupNumber;
+        supportInvalidateOptionsMenu();
+    }
+
+    private void selectEmployee(int id, String employeeName) {
+        String employeeId = String.valueOf(id);
+        mSchedulePresenter.setEmployeeId(employeeId);
+        setTitle(employeeName);
+        mSharedPreferences.edit()
+                .putString(KEY_EMPLOYEE_ID, employeeId)
+                .putBoolean(KEY_IS_GROUP_SCHEDULE, false)
+                .apply();
+        mEmployeeId = employeeId;
+        supportInvalidateOptionsMenu();
+    }
+
     private void setupTitle() {
         if (mTitle == null) {
             CharSequence title = getDelegate().getSupportActionBar().getTitle();
@@ -281,6 +343,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setNavigationIcon(R.drawable.ic_action_navigation_menu);
         mToolbar.setNavigationOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
+        mNavigationView.setNavigationItemSelectedListener(this);
     }
 
     private void setupTabs() {
@@ -317,10 +380,10 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         if (fragment == null) {
             fragment = new StorageFragment();
             manager.beginTransaction().add(fragment, WeekFragment.TAG_STORAGE_FRAGMENT).commit();
-            fragment.setPresenter(mPresenter.getTag(), mPresenter);
+            fragment.setPresenter(mSchedulePresenter.getTag(), mSchedulePresenter);
         } else {
             try {
-                mPresenter = (SchedulePresenter) fragment.getPresenter(mPresenter.getTag());
+                mSchedulePresenter = (SchedulePresenter) fragment.getPresenter(mSchedulePresenter.getTag());
             } catch (ClassCastException e) {
                 throw new ClassCastException("Presenter must be of class SchedulePresenter");
             }
