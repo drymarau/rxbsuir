@@ -37,9 +37,10 @@ import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
  */
 public class SchedulePresenter extends Presenter<ScheduleView> {
 
-    public static final String ERROR_NO_GROUP = "error_no_group";
-    public static final String ERROR_NETWORK = "error_netwok";
-    public static final String ERROR_EMPTY_SCHEDULE = "error_empty_schedule";
+    public enum Error {
+        NETWORK, EMPTY_SCHEDULE
+    }
+
     private final BsuirService mService;
     private final StorIOSQLite mStorIOSQLite;
     private Observable<List<Lesson>> mScheduleObservable;
@@ -191,9 +192,9 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         mHasSynced = true;
         if (isViewAttached()) {
             if (throwable.getMessage().contains("org.simpleframework.xml.core.ValueRequiredException")) {
-                getView().showError(new Throwable(ERROR_EMPTY_SCHEDULE));
+                getView().showError(Error.EMPTY_SCHEDULE);
             } else {
-                getView().showError(new Throwable(ERROR_NETWORK));
+                getView().showError(Error.NETWORK);
             }
         }
     }

@@ -9,7 +9,6 @@
     <!-- Error message when something went wrong with schedule -->
     <string name="error_empty_schedule">Schedule is empty</string>
     <string name="error_network">No network connection</string>
-    <string name="error_no_group">No schedule is available for this group</string>
     <string name="error_default">Something went wrong</string>
     <string name="action_retry">Retry</string>
 

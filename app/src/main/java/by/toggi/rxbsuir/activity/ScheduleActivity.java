@@ -53,6 +53,8 @@ import by.toggi.rxbsuir.rest.model.Employee;
 import icepick.Icepick;
 import icepick.State;
 
+import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
+
 
 public class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, AddGroupDialogFragment.OnButtonClickListener, AddEmployeeDialogFragment.OnButtonClickListener {
 
@@ -154,21 +156,17 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     }
 
     @Override
-    public void showError(Throwable throwable) {
+    public void showError(Error error) {
         disableScrollFlags();
         mViewPager.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);
-        switch (throwable.getMessage()) {
-            case SchedulePresenter.ERROR_NO_GROUP:
-                Snackbar.make(mCoordinatorLayout, getString(R.string.error_no_group), Snackbar.LENGTH_LONG)
-                        .show();
-                break;
-            case SchedulePresenter.ERROR_NETWORK:
+        switch (error) {
+            case NETWORK:
                 Snackbar.make(mCoordinatorLayout, getString(R.string.error_network), Snackbar.LENGTH_LONG)
                         .setAction(R.string.action_retry, v -> mSchedulePresenter.retry())
                         .show();
                 break;
-            case SchedulePresenter.ERROR_EMPTY_SCHEDULE:
+            case EMPTY_SCHEDULE:
                 Snackbar.make(mCoordinatorLayout, getString(R.string.error_empty_schedule), Snackbar.LENGTH_LONG)
                         .show();
                 break;
