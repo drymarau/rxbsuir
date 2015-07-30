@@ -17,17 +17,19 @@ public class Employee {
     public String middleName;
     @Element(name = "lastName")
     public String lastName;
+    public boolean isCached;
 
     Employee() {
     }
 
-    public static Employee newInstance(long id, List<String> academicDepartmentList, String firstName, String middleName, String lastName) {
+    public static Employee newInstance(long id, List<String> academicDepartmentList, String firstName, String middleName, String lastName, boolean isCached) {
         Employee employee = new Employee();
         employee.id = id;
         employee.academicDepartment = academicDepartmentList;
         employee.firstName = firstName;
         employee.middleName = middleName;
         employee.lastName = lastName;
+        employee.isCached = isCached;
         return employee;
     }
 

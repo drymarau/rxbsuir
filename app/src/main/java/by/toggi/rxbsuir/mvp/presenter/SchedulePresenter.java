@@ -18,14 +18,19 @@ import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import by.toggi.rxbsuir.rest.BsuirService;
+import by.toggi.rxbsuir.rest.model.Employee;
 import by.toggi.rxbsuir.rest.model.Schedule;
 import by.toggi.rxbsuir.rest.model.ScheduleModel;
+import by.toggi.rxbsuir.rest.model.StudentGroup;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
+import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 
 /**
  * The type Schedule presenter.
@@ -208,6 +213,11 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         mScheduleView = null;
     }
 
+    @Override
+    public String getTag() {
+        return this.getClass().getSimpleName();
+    }
+
     private void onNetworkSuccess(List<Lesson> lessonList, boolean isGroupSchedule) {
         mHasSynced = true;
         String whereQuery = LessonEntry.filterByGroup(mGroupNumber);
@@ -225,8 +235,48 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
                 mStorIOSQLite.put()
                         .objects(lessonList)
                         .prepare()
-                        .createObservable()
+                        .createObservable(),
+                isGroupSchedule ? getCacheGroupObservable() : getCacheEmployeeObservable()
         ).subscribe();
+    }
+
+    private Observable<Employee> getCacheEmployeeObservable() {
+        return mStorIOSQLite.get()
+                .listOfObjects(Employee.class)
+                .withQuery(Query.builder()
+                        .table(EmployeeEntry.TABLE_NAME)
+                        .where(EmployeeEntry.COL_ID + " = ?")
+                        .whereArgs(mEmployeeId)
+                        .build())
+                .prepare()
+                .createObservable()
+                .take(1)
+                .map(employeeList -> employeeList.get(0))
+                .doOnNext(employee -> {
+                    Timber.d(employee.toString());
+                    employee.isCached = true;
+                    mStorIOSQLite.put().object(employee).prepare().createObservable().subscribe();
+                });
+    }
+
+    private Observable<StudentGroup> getCacheGroupObservable() {
+        return mStorIOSQLite.get()
+                .listOfObjects(StudentGroup.class)
+                .withQuery(Query.builder()
+                        .table(StudentGroupEntry.TABLE_NAME)
+                        .where(StudentGroupEntry.COL_NAME + " = ?")
+                        .whereArgs(mGroupNumber)
+                        .build())
+                .prepare()
+                .createObservable()
+                .take(1)
+                .observeOn(Schedulers.io())
+                .map(studentGroupList -> studentGroupList.get(0))
+                .doOnNext(studentGroup -> {
+                    Timber.d(studentGroup.toString());
+                    studentGroup.isCached = true;
+                    mStorIOSQLite.put().object(studentGroup).prepare().createObservable().subscribe();
+                });
     }
 
     private void onNetworkError(Throwable throwable) {

@@ -61,11 +61,11 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
         if (fragment == null) {
             throw new IllegalStateException("Storage fragment should already be added");
         }
-        if (fragment.getPresenter(getPresenterTag()) == null) {
-            fragment.setPresenter(getPresenterTag(), mPresenter);
+        if (fragment.getPresenter(mPresenter.getTag()) == null) {
+            fragment.setPresenter(mPresenter.getTag(), mPresenter);
         } else {
             try {
-                mPresenter = (AddGroupDialogPresenter) fragment.getPresenter(getPresenterTag());
+                mPresenter = (AddGroupDialogPresenter) fragment.getPresenter(mPresenter.getTag());
             } catch (ClassCastException e) {
                 throw new ClassCastException("Presenter must be of class AddDialogPresenter");
             }
@@ -112,11 +112,6 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
         for (String group : studentGroupList) {
             mAdapter.add(group);
         }
-    }
-
-    @Override
-    public String getPresenterTag() {
-        return "add_group_dialog_presenter";
     }
 
     @Override

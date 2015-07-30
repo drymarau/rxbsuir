@@ -25,6 +25,7 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
                 EmployeeEntry.COL_FIRST_NAME + " text not null, " +
                 EmployeeEntry.COL_MIDDLE_NAME + " text, " +
                 EmployeeEntry.COL_LAST_NAME + " text not null, " +
+                EmployeeEntry.COL_IS_CACHED + " integer not null, " +
                 "unique (" + EmployeeEntry.COL_ID + ") on conflict replace" + ");";
     }
 
@@ -36,6 +37,7 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
                 StudentGroupEntry.COL_NAME + " text not null, " +
                 StudentGroupEntry.COL_COURSE + " integer not null, " +
                 StudentGroupEntry.COL_SPECIALITY_DEPARTMENT_EDUCATION_FORM_ID + " integer not null, " +
+                StudentGroupEntry.COL_IS_CACHED + " integer not null, " +
                 "unique (" + StudentGroupEntry.COL_ID + ") on conflict replace" + ");";
     }
 

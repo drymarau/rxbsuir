@@ -10,4 +10,6 @@ public interface Presenter<V extends View> {
 
     void detachView();
 
+    String getTag();
+
 }

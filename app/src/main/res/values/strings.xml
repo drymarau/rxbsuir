@@ -28,6 +28,10 @@
     <string name="action_subgroup_1">Subgroup 1</string>
     <string name="action_subgroup_2">Subgroup 2</string>
 
+    <!-- NAVIGATION VIEW -->
+    <string name="navigation_view_groups">Groups</string>
+    <string name="navigation_view_employees">Employees</string>
+
     <array name="tabs">
         <item>Week 1</item>
         <item>Week 2</item>

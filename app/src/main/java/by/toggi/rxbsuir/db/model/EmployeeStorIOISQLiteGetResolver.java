@@ -32,7 +32,8 @@ public class EmployeeStorIOISQLiteGetResolver extends DefaultGetResolver<Employe
                 new ArrayList<>(Arrays.asList(academicDepartmentArray)),
                 cursor.getString(cursor.getColumnIndex(EmployeeEntry.COL_FIRST_NAME)),
                 cursor.getString(cursor.getColumnIndex(EmployeeEntry.COL_MIDDLE_NAME)),
-                cursor.getString(cursor.getColumnIndex(EmployeeEntry.COL_LAST_NAME))
+                cursor.getString(cursor.getColumnIndex(EmployeeEntry.COL_LAST_NAME)),
+                cursor.getInt(cursor.getColumnIndex(EmployeeEntry.COL_IS_CACHED)) != 0
         );
     }
 }

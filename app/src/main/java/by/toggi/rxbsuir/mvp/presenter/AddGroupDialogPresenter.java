@@ -74,6 +74,11 @@ public class AddGroupDialogPresenter implements Presenter<AddGroupDialogView> {
         mAddGroupDialogView = null;
     }
 
+    @Override
+    public String getTag() {
+        return this.getClass().getSimpleName();
+    }
+
     /**
      * Validates group number.
      *

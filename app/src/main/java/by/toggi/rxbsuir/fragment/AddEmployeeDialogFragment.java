@@ -63,11 +63,11 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
         if (fragment == null) {
             throw new IllegalStateException("Storage fragment should already be added");
         }
-        if (fragment.getPresenter(getPresenterTag()) == null) {
-            fragment.setPresenter(getPresenterTag(), mPresenter);
+        if (fragment.getPresenter(mPresenter.getTag()) == null) {
+            fragment.setPresenter(mPresenter.getTag(), mPresenter);
         } else {
             try {
-                mPresenter = (AddEmployeeDialogPresenter) fragment.getPresenter(getPresenterTag());
+                mPresenter = (AddEmployeeDialogPresenter) fragment.getPresenter(mPresenter.getTag());
             } catch (ClassCastException e) {
                 throw new ClassCastException("Presenter must be of class AddEmployeeDialogPresenter");
             }
@@ -119,11 +119,6 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
 
     private void initializeComponent() {
         ((RxBsuirApplication) getActivity().getApplication()).getAppComponent().inject(this);
-    }
-
-    @Override
-    public String getPresenterTag() {
-        return "add_employee_dialog_presenter";
     }
 
     @Override
