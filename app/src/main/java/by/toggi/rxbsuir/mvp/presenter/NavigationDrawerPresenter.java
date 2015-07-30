@@ -19,12 +19,11 @@ import rx.subscriptions.CompositeSubscription;
 import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 
-public class NavigationDrawerPresenter implements Presenter<NavigationDrawerView> {
+public class NavigationDrawerPresenter extends Presenter<NavigationDrawerView> {
 
     private final StorIOSQLite mStorIOSQLite;
     private final Observable<List<StudentGroup>> mStudentGroupObservable;
     private final Observable<List<Employee>> mEmployeeListObservable;
-    private NavigationDrawerView mNavigationDrawerView;
     private CompositeSubscription mCompositeSubscription;
 
     @Inject
@@ -36,13 +35,18 @@ public class NavigationDrawerPresenter implements Presenter<NavigationDrawerView
 
     @Override
     public void onCreate() {
-        // get all groups with is_cached = true as set
-        // get all employees with is_cached = true as set
-        // send them to View!
         mCompositeSubscription = new CompositeSubscription(
                 mEmployeeListObservable.subscribe(this::onEmployeeSuccess),
                 mStudentGroupObservable.subscribe(this::onGroupSuccess)
         );
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions() && !mCompositeSubscription.isUnsubscribed()) {
+            mCompositeSubscription.unsubscribe();
+        }
+        detachView();
     }
 
     private void onEmployeeSuccess(List<Employee> employeeList) {
@@ -52,7 +56,7 @@ public class NavigationDrawerPresenter implements Presenter<NavigationDrawerView
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(map -> {
                     if (isViewAttached()) {
-                        mNavigationDrawerView.updateEmployeeList(map);
+                        getView().updateEmployeeList(map);
                     }
                 });
     }
@@ -64,35 +68,9 @@ public class NavigationDrawerPresenter implements Presenter<NavigationDrawerView
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(map -> {
                     if (isViewAttached()) {
-                        mNavigationDrawerView.updateGroupList(map);
+                        getView().updateGroupList(map);
                     }
                 });
-    }
-
-    @Override
-    public void onDestroy() {
-        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions() && !mCompositeSubscription.isUnsubscribed()) {
-            mCompositeSubscription.unsubscribe();
-        }
-        detachView();
-    }
-
-    @Override
-    public void attachView(NavigationDrawerView navigationDrawerView) {
-        if (navigationDrawerView == null) {
-            throw new NullPointerException("ScheduleView should not be null");
-        }
-        mNavigationDrawerView = navigationDrawerView;
-    }
-
-    @Override
-    public void detachView() {
-        mNavigationDrawerView = null;
-    }
-
-    @Override
-    public String getTag() {
-        return this.getClass().getSimpleName();
     }
 
     private Observable<List<StudentGroup>> getGroupObservable() {
@@ -117,9 +95,5 @@ public class NavigationDrawerPresenter implements Presenter<NavigationDrawerView
                         .build())
                 .prepare()
                 .createObservable();
-    }
-
-    private boolean isViewAttached() {
-        return mNavigationDrawerView != null;
     }
 }

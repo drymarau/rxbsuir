@@ -35,7 +35,7 @@ import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 /**
  * The type Schedule presenter.
  */
-public class SchedulePresenter implements Presenter<ScheduleView> {
+public class SchedulePresenter extends Presenter<ScheduleView> {
 
     public static final String ERROR_NO_GROUP = "error_no_group";
     public static final String ERROR_NETWORK = "error_netwok";
@@ -43,13 +43,11 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     private final BsuirService mService;
     private final StorIOSQLite mStorIOSQLite;
     private Observable<List<Lesson>> mScheduleObservable;
-    private ScheduleView mScheduleView;
     private String mGroupNumber;
     private String mEmployeeId;
     private boolean mHasSynced = false;
     private boolean mIsGroupSchedule;
     private Subscription mSubscription;
-
 
     /**
      * Instantiates a new Schedule presenter.
@@ -69,30 +67,6 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         } else {
             mScheduleObservable = getEmployeeLessonListObservable(employeeId);
         }
-    }
-
-    private Observable<List<Lesson>> getEmployeeLessonListObservable(String employeeId) {
-        return mStorIOSQLite.get()
-                .listOfObjects(Lesson.class)
-                .withQuery(Query.builder()
-                        .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.filterByEmployee(employeeId))
-                        .build())
-                .prepare()
-                .createObservable()
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    private Observable<List<Lesson>> getGroupLessonListObservable(String groupNumber) {
-        return mStorIOSQLite.get()
-                .listOfObjects(Lesson.class)
-                .withQuery(Query.builder()
-                        .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.filterByGroup(groupNumber))
-                        .build())
-                .prepare()
-                .createObservable()
-                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -121,32 +95,12 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         onCreate();
     }
 
-    private void getStudentGroupSchedule() {
-        if (mGroupNumber != null) {
-            mService.getGroupSchedule(mGroupNumber).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-                    .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
-                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, true)))
-                    .toList()
-                    .subscribe(lessonList -> onNetworkSuccess(lessonList, true), this::onNetworkError);
-        }
-    }
-
-    private void getEmployeeSchedule() {
-        if (mEmployeeId != null) {
-            mService.getEmployeeSchedule(mEmployeeId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-                    .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
-                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, false)))
-                    .toList()
-                    .subscribe(lessonList -> onNetworkSuccess(lessonList, false), this::onNetworkError);
-        }
-    }
-
     /**
      * Retry network request with the same group or employee.
      */
     public void retry() {
         if (isViewAttached()) {
-            mScheduleView.showLoading();
+            getView().showLoading();
         }
         mHasSynced = false;
         if (mIsGroupSchedule) {
@@ -159,37 +113,9 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
     @Override
     public void onCreate() {
         if (isViewAttached() && !mHasSynced && (mEmployeeId != null || mGroupNumber != null)) {
-            mScheduleView.showLoading();
+            getView().showLoading();
         }
         mSubscription = mIsGroupSchedule ? getGroupSubscription() : getEmployeeSubscription();
-    }
-
-    private Subscription getEmployeeSubscription() {
-        return mScheduleObservable.subscribe(lessonList -> {
-            if (lessonList == null || lessonList.isEmpty()) {
-                if (!mHasSynced) {
-                    getEmployeeSchedule();
-                }
-            } else {
-                if (isViewAttached()) {
-                    mScheduleView.showContent(Utils.getCurrentWeekNumber() - 1);
-                }
-            }
-        });
-    }
-
-    private Subscription getGroupSubscription() {
-        return mScheduleObservable.subscribe(lessonList -> {
-            if (lessonList == null || lessonList.isEmpty()) {
-                if (!mHasSynced) {
-                    getStudentGroupSchedule();
-                }
-            } else {
-                if (isViewAttached()) {
-                    mScheduleView.showContent(Utils.getCurrentWeekNumber() - 1);
-                }
-            }
-        });
     }
 
     @Override
@@ -198,24 +124,6 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
             mSubscription.unsubscribe();
         }
         detachView();
-    }
-
-    @Override
-    public void attachView(ScheduleView scheduleView) {
-        if (scheduleView == null) {
-            throw new NullPointerException("ScheduleView should not be null");
-        }
-        mScheduleView = scheduleView;
-    }
-
-    @Override
-    public void detachView() {
-        mScheduleView = null;
-    }
-
-    @Override
-    public String getTag() {
-        return this.getClass().getSimpleName();
     }
 
     private void onNetworkSuccess(List<Lesson> lessonList, boolean isGroupSchedule) {
@@ -283,9 +191,9 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         mHasSynced = true;
         if (isViewAttached()) {
             if (throwable.getMessage().contains("org.simpleframework.xml.core.ValueRequiredException")) {
-                mScheduleView.showError(new Throwable(ERROR_EMPTY_SCHEDULE));
+                getView().showError(new Throwable(ERROR_EMPTY_SCHEDULE));
             } else {
-                mScheduleView.showError(new Throwable(ERROR_NETWORK));
+                getView().showError(new Throwable(ERROR_NETWORK));
             }
         }
     }
@@ -299,7 +207,75 @@ public class SchedulePresenter implements Presenter<ScheduleView> {
         return lessonList;
     }
 
-    private boolean isViewAttached() {
-        return mScheduleView != null;
+    private Observable<List<Lesson>> getEmployeeLessonListObservable(String employeeId) {
+        return mStorIOSQLite.get()
+                .listOfObjects(Lesson.class)
+                .withQuery(Query.builder()
+                        .table(LessonEntry.TABLE_NAME)
+                        .where(LessonEntry.filterByEmployee(employeeId))
+                        .build())
+                .prepare()
+                .createObservable()
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private Observable<List<Lesson>> getGroupLessonListObservable(String groupNumber) {
+        return mStorIOSQLite.get()
+                .listOfObjects(Lesson.class)
+                .withQuery(Query.builder()
+                        .table(LessonEntry.TABLE_NAME)
+                        .where(LessonEntry.filterByGroup(groupNumber))
+                        .build())
+                .prepare()
+                .createObservable()
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private void getStudentGroupSchedule() {
+        if (mGroupNumber != null) {
+            mService.getGroupSchedule(mGroupNumber).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                    .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
+                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, true)))
+                    .toList()
+                    .subscribe(lessonList -> onNetworkSuccess(lessonList, true), this::onNetworkError);
+        }
+    }
+
+    private void getEmployeeSchedule() {
+        if (mEmployeeId != null) {
+            mService.getEmployeeSchedule(mEmployeeId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                    .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
+                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, false)))
+                    .toList()
+                    .subscribe(lessonList -> onNetworkSuccess(lessonList, false), this::onNetworkError);
+        }
+    }
+
+    private Subscription getEmployeeSubscription() {
+        return mScheduleObservable.subscribe(lessonList -> {
+            if (lessonList == null || lessonList.isEmpty()) {
+                if (!mHasSynced) {
+                    getEmployeeSchedule();
+                }
+            } else {
+                if (isViewAttached()) {
+                    getView().showContent(Utils.getCurrentWeekNumber() - 1);
+                }
+            }
+        });
+    }
+
+    private Subscription getGroupSubscription() {
+        return mScheduleObservable.subscribe(lessonList -> {
+            if (lessonList == null || lessonList.isEmpty()) {
+                if (!mHasSynced) {
+                    getStudentGroupSchedule();
+                }
+            } else {
+                if (isViewAttached()) {
+                    getView().showContent(Utils.getCurrentWeekNumber() - 1);
+                }
+            }
+        });
     }
 }

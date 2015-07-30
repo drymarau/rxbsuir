@@ -19,12 +19,11 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class AddEmployeeDialogPresenter implements Presenter<AddEmployeeDialogView> {
+public class AddEmployeeDialogPresenter extends Presenter<AddEmployeeDialogView> {
 
     private final BsuirService mService;
     private final StorIOSQLite mStorIOSQLite;
     private final Observable<List<Employee>> mEmployeeListObservable;
-    private AddEmployeeDialogView mAddEmployeeDialogView;
     private Subscription mSubscription;
     private List<String> mEmployeeStringList;
 
@@ -61,24 +60,6 @@ public class AddEmployeeDialogPresenter implements Presenter<AddEmployeeDialogVi
         detachView();
     }
 
-    @Override
-    public void attachView(AddEmployeeDialogView addEmployeeDialogView) {
-        if (addEmployeeDialogView == null) {
-            throw new NullPointerException("AddGroupDialogView should not be null");
-        }
-        mAddEmployeeDialogView = addEmployeeDialogView;
-    }
-
-    @Override
-    public void detachView() {
-        mAddEmployeeDialogView = null;
-    }
-
-    @Override
-    public String getTag() {
-        return this.getClass().getSimpleName();
-    }
-
     /**
      * Validates employeeString.
      *
@@ -95,7 +76,7 @@ public class AddEmployeeDialogPresenter implements Presenter<AddEmployeeDialogVi
                 .toList()
                 .subscribe(strings -> mEmployeeStringList = strings);
         if (isViewAttached()) {
-            mAddEmployeeDialogView.updateEmployeeList(employeeList);
+            getView().updateEmployeeList(employeeList);
         }
     }
 
@@ -113,9 +94,5 @@ public class AddEmployeeDialogPresenter implements Presenter<AddEmployeeDialogVi
                 .objects(employeeList)
                 .prepare()
                 .createObservable();
-    }
-
-    private boolean isViewAttached() {
-        return mAddEmployeeDialogView != null;
     }
 }

@@ -20,11 +20,10 @@ import rx.android.schedulers.AndroidSchedulers;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
-public class WeekPresenter implements Presenter<WeekView> {
+public class WeekPresenter extends Presenter<WeekView> {
 
     private final StorIOSQLite mStorIOSQLite;
     private final int mWeekNumber;
-    private WeekView mWeekView;
     private Observable<List<Lesson>> mScheduleObservable;
     private int mSubgroupNumber = 0;
     private String mGroupNumber;
@@ -43,7 +42,6 @@ public class WeekPresenter implements Presenter<WeekView> {
             mScheduleObservable = getEmployeeListObservable(mEmployeeId, mSubgroupNumber, mWeekNumber);
         }
     }
-
 
     /**
      * Sets group number and updates the list.
@@ -93,6 +91,24 @@ public class WeekPresenter implements Presenter<WeekView> {
         onCreate();
     }
 
+    @Override
+    public void onCreate() {
+        mSubscription = mScheduleObservable.subscribe(this::showLessonList);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
+        detachView();
+    }
+
+    @Override
+    public String getTag() {
+        return this.getClass().getSimpleName() + "_" + mWeekNumber;
+    }
+
     private Observable<List<Lesson>> getGroupScheduleObservable(@Nullable String groupNumber, int subgroupNumber, int weekNumber) {
         return groupNumber == null ? Observable.empty() : mStorIOSQLite.get()
                 .listOfObjects(Lesson.class)
@@ -119,45 +135,9 @@ public class WeekPresenter implements Presenter<WeekView> {
                 .cache();
     }
 
-    @Override
-    public void onCreate() {
-        mSubscription = mScheduleObservable.subscribe(this::showLessonList);
-    }
-
     private void showLessonList(List<Lesson> lessonList) {
         if (isViewAttached()) {
-            mWeekView.showLessonList(lessonList);
+            getView().showLessonList(lessonList);
         }
     }
-
-    @Override
-    public void onDestroy() {
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
-        detachView();
-    }
-
-    @Override
-    public void attachView(WeekView weekView) {
-        if (weekView == null) {
-            throw new NullPointerException("WeekView should not be null");
-        }
-        mWeekView = weekView;
-    }
-
-    @Override
-    public void detachView() {
-        mWeekView = null;
-    }
-
-    @Override
-    public String getTag() {
-        return this.getClass().getSimpleName() + "_" + mWeekNumber;
-    }
-
-    private boolean isViewAttached() {
-        return mWeekView != null;
-    }
-
 }

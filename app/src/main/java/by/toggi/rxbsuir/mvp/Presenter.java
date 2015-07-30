@@ -1,15 +1,44 @@
 package by.toggi.rxbsuir.mvp;
 
-public interface Presenter<V extends View> {
+public abstract class Presenter<V extends View> {
 
-    void onCreate();
+    private V mView;
 
-    void onDestroy();
+    public abstract void onCreate();
 
-    void attachView(V v);
+    public abstract void onDestroy();
 
-    void detachView();
+    /**
+     * Attach view.
+     *
+     * @param view the view
+     */
+    public final void attachView(V view) {
+        if (view == null) {
+            throw new NullPointerException("View must not be null");
+        }
+        mView = view;
+    }
 
-    String getTag();
+    protected final void detachView() {
+        mView = null;
+    }
+
+    protected final V getView() {
+        return mView;
+    }
+
+    protected final boolean isViewAttached() {
+        return mView != null;
+    }
+
+    /**
+     * Gets presenter tag.
+     *
+     * @return the tag
+     */
+    public String getTag() {
+        return this.getClass().getSimpleName();
+    }
 
 }

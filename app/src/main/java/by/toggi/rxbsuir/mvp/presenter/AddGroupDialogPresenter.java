@@ -19,13 +19,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class AddGroupDialogPresenter implements Presenter<AddGroupDialogView> {
+public class AddGroupDialogPresenter extends Presenter<AddGroupDialogView> {
 
     private final Observable<List<StudentGroup>> mGroupListObservable;
     private final BsuirService mService;
     private final StorIOSQLite mStorIOSQLite;
     private List<String> mGroupNumberList;
-    private AddGroupDialogView mAddGroupDialogView;
     private Subscription mSubscription;
 
     @Inject
@@ -61,24 +60,6 @@ public class AddGroupDialogPresenter implements Presenter<AddGroupDialogView> {
         detachView();
     }
 
-    @Override
-    public void attachView(AddGroupDialogView addGroupDialogView) {
-        if (addGroupDialogView == null) {
-            throw new NullPointerException("AddGroupDialogView should not be null");
-        }
-        mAddGroupDialogView = addGroupDialogView;
-    }
-
-    @Override
-    public void detachView() {
-        mAddGroupDialogView = null;
-    }
-
-    @Override
-    public String getTag() {
-        return this.getClass().getSimpleName();
-    }
-
     /**
      * Validates group number.
      *
@@ -98,7 +79,7 @@ public class AddGroupDialogPresenter implements Presenter<AddGroupDialogView> {
                 .subscribe(strings -> {
                     mGroupNumberList = strings;
                     if (isViewAttached()) {
-                        mAddGroupDialogView.updateStudentGroupList(mGroupNumberList);
+                        getView().updateStudentGroupList(mGroupNumberList);
                     }
                 });
     }
@@ -117,9 +98,5 @@ public class AddGroupDialogPresenter implements Presenter<AddGroupDialogView> {
                 .objects(studentGroupList)
                 .prepare()
                 .createObservable();
-    }
-
-    private boolean isViewAttached() {
-        return mAddGroupDialogView != null;
     }
 }
