@@ -138,7 +138,7 @@ public class Lesson {
      * @return the subject with subgroup
      */
     public String getSubjectWithSubgroup() {
-        if (lessonType.equals("ЛР")) {
+        if (lessonType.equals("ЛР") || (lessonType.equals("ПЗ") && numSubgroup != 0)) {
             return String.format("%s (%d)", subject, numSubgroup);
         } else {
             return subject;
