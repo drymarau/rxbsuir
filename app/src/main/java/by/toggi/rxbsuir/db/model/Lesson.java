@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import by.toggi.rxbsuir.rest.model.Employee;
@@ -93,10 +94,13 @@ public class Lesson {
      */
     public String getPrettyEmployeeList() {
         if (employeeList != null) {
-            return TextUtils.join(", ", employeeList);
-        } else {
-            return "";
+            List<String> employeeStringList = new ArrayList<>(employeeList.size());
+            for (Employee employee : employeeList) {
+                employeeStringList.add(employee.getShortFullName());
+            }
+            return TextUtils.join(", ", employeeStringList);
         }
+        return "";
     }
 
     public String getLessonTime() {
@@ -126,6 +130,15 @@ public class Lesson {
 
     public List<String> getStudentGroupList() {
         return studentGroupList;
+    }
+
+    /**
+     * Gets pretty student group list ("111801, 011801").
+     *
+     * @return the pretty student group list
+     */
+    public String getPrettyStudentGroupList() {
+        return TextUtils.join(", ", studentGroupList);
     }
 
     public String getSubject() {

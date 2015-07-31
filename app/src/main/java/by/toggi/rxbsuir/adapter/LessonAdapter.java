@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.adapter;
 
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,7 +96,11 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
             viewHolder.mLessonClass.setText(lesson.getPrettyAuditoryList());
         }
         if (viewHolder.mLessonEmployee != null) {
-            viewHolder.mLessonEmployee.setText(lesson.getPrettyEmployeeList());
+            if (lesson.isGroupSchedule()) {
+                viewHolder.mLessonEmployee.setText(lesson.getPrettyEmployeeList());
+            } else {
+                viewHolder.mLessonEmployee.setText(lesson.getPrettyStudentGroupList());
+            }
         }
         viewHolder.setWeekDay(lesson.getWeekday());
     }

@@ -36,9 +36,18 @@ public class Employee {
     @Override
     public String toString() {
         if (middleName == null) {
+            return String.format("%s %s", lastName, firstName);
+        } else {
+            return String.format("%s %s %s", lastName, firstName, middleName);
+        }
+    }
+
+    public String getShortFullName() {
+        if (middleName == null) {
             return String.format("%s %s.", lastName, firstName.charAt(0));
         } else {
             return String.format("%s %s.%s.", lastName, firstName.charAt(0), middleName.charAt(0));
         }
     }
+
 }
