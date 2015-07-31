@@ -157,7 +157,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void showError(Error error) {
-        disableScrollFlags();
+//        disableScrollFlags();
         mViewPager.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);
         switch (error) {
@@ -179,14 +179,14 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void showLoading() {
-        disableScrollFlags();
+//        disableScrollFlags();
         mViewPager.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showContent(int position) {
-        enableScrollFlags();
+//        enableScrollFlags();
         mProgressBar.setVisibility(View.GONE);
         mViewPager.setVisibility(View.VISIBLE);
     }

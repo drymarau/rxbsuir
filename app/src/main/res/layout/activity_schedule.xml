@@ -23,8 +23,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:contentInsetStart="@dimen/keyline_second"
-                app:layout_scrollFlags="scroll|enterAlways"/>
+                app:contentInsetStart="@dimen/keyline_second"/>
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"
