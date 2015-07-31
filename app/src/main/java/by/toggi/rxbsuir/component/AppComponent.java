@@ -10,8 +10,10 @@ import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
+import by.toggi.rxbsuir.activity.SettingsActivity;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
+import by.toggi.rxbsuir.fragment.SettingsFragment;
 import by.toggi.rxbsuir.module.AppModule;
 import by.toggi.rxbsuir.module.BsuirServiceModule;
 import by.toggi.rxbsuir.module.DbModule;
@@ -38,10 +40,16 @@ public interface AppComponent {
 
     @Nullable @Named(ScheduleActivity.KEY_EMPLOYEE_ID) String employeeId();
 
-    boolean isGroupSchedule();
+    @Named(ScheduleActivity.KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule();
+
+    @Named(ScheduleActivity.KEY_IS_DARK_THEME) boolean isDarkTheme();
 
     void inject(AddGroupDialogFragment addGroupDialogFragment);
 
     void inject(AddEmployeeDialogFragment addEmployeeDialogFragment);
+
+    void inject(SettingsFragment settingsFragment);
+
+    void inject(SettingsActivity settingsActivity);
 
 }

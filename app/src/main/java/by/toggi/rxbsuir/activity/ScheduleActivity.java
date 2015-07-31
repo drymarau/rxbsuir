@@ -53,6 +53,7 @@ import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import by.toggi.rxbsuir.rest.model.Employee;
 import icepick.Icepick;
 import icepick.State;
+import timber.log.Timber;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
@@ -64,6 +65,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     public static final String KEY_IS_GROUP_SCHEDULE = "is_group_schedule";
     public static final String KEY_SUBGROUP_1 = "subgroup_1";
     public static final String KEY_SUBGROUP_2 = "subgroup_2";
+    public static final String KEY_IS_DARK_THEME = "is_dark_theme";
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
     private static final String KEY_TITLE = "title";
@@ -86,7 +88,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
-    @Inject boolean mIsGroupSchedule;
+    @Inject @Named(KEY_IS_GROUP_SCHEDULE) boolean mIsGroupSchedule;
+    @Inject @Named(KEY_IS_DARK_THEME) boolean mIsDarkTheme;
     @Nullable @Inject @Named(KEY_GROUP_NUMBER) String mGroupNumber;
     @Nullable @Inject @Named(KEY_EMPLOYEE_ID) String mEmployeeId;
 
@@ -97,11 +100,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     protected void onCreate(Bundle savedInstanceState) {
         initializeComponent();
 
-        if (mSharedPreferences.getBoolean(getString(R.string.key_pref_dark_theme), false)) {
-            setTheme(R.style.AppTheme_Drawer_Dark);
-        } else {
-            setTheme(R.style.AppTheme_Drawer_Light);
-        }
+        setTheme(mIsDarkTheme ? R.style.AppTheme_Drawer_Dark : R.style.AppTheme_Drawer_Light);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);

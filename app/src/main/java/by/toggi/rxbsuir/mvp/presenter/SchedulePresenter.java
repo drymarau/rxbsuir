@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import by.toggi.rxbsuir.Utils;
-import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
@@ -26,20 +25,15 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
+import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_EMPLOYEE_ID;
+import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_GROUP_NUMBER;
+import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_IS_GROUP_SCHEDULE;
 import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 
-/**
- * The type Schedule presenter.
- */
 public class SchedulePresenter extends Presenter<ScheduleView> {
-
-    public enum Error {
-        NETWORK, EMPTY_SCHEDULE
-    }
 
     private final BsuirService mService;
     private final StorIOSQLite mStorIOSQLite;
@@ -57,7 +51,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
      * @param storIOSQLite the stor iOSQ lite
      */
     @Inject
-    public SchedulePresenter(boolean isGroupSchedule, @Nullable @Named(ScheduleActivity.KEY_GROUP_NUMBER) String groupNumber, @Nullable @Named(ScheduleActivity.KEY_EMPLOYEE_ID) String employeeId, BsuirService service, StorIOSQLite storIOSQLite) {
+    public SchedulePresenter(@Named(KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule, @Nullable @Named(KEY_GROUP_NUMBER) String groupNumber, @Nullable @Named(KEY_EMPLOYEE_ID) String employeeId, BsuirService service, StorIOSQLite storIOSQLite) {
         mService = service;
         mStorIOSQLite = storIOSQLite;
         mGroupNumber = groupNumber;
@@ -276,5 +270,9 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 }
             }
         });
+    }
+
+    public enum Error {
+        NETWORK, EMPTY_SCHEDULE
     }
 }
