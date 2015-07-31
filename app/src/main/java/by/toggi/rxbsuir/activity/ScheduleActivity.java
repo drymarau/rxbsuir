@@ -95,10 +95,17 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        initializeComponent();
+
+        if (mSharedPreferences.getBoolean(getString(R.string.key_pref_dark_theme), false)) {
+            setTheme(R.style.AppTheme_Drawer_Dark);
+        } else {
+            setTheme(R.style.AppTheme_Drawer_Light);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
 
-        initializeComponent();
         ButterKnife.bind(this);
         mFloatingActionMenu.getBackground().setAlpha(0);
 

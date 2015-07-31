@@ -42,4 +42,10 @@
     <string name="tag_fab" translatable="false">fab</string>
     <string name="label_settings">Settings</string>
 
+    <!-- PREFERENCES -->
+    <string name="key_pref_dark_theme">pref_dark_theme</string>
+    <string name="title_pref_dark_theme">Use dark theme</string>
+    <string name="summary_pref_dark_theme_enabled">App uses dark theme</string>
+    <string name="summary_pref_dark_theme_disabled">App uses light theme</string>
+
 </resources>
