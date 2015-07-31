@@ -53,7 +53,6 @@ import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import by.toggi.rxbsuir.rest.model.Employee;
 import icepick.Icepick;
 import icepick.State;
-import timber.log.Timber;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
@@ -124,6 +123,16 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         Icepick.restoreInstanceState(this, savedInstanceState);
         setupTitle();
+
+        if (mIsGroupSchedule) {
+            if (mGroupNumber != null) {
+                mItemId = Integer.valueOf(mGroupNumber);
+            }
+        } else {
+            if (mEmployeeId != null) {
+                mItemId = Integer.valueOf(mEmployeeId);
+            }
+        }
     }
 
     @Override
