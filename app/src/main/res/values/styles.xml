@@ -9,6 +9,7 @@
         <item name="android:windowBackground">@color/window_background</item>
         <item name="cardBackground">@android:color/white</item>
         <item name="drawerBackground">@android:color/white</item>
+        <item name="famProtection">@color/fam_protection</item>
     </style>
 
     <style name="AppThemeBaseDark" parent="@style/Theme.AppCompat.NoActionBar">
@@ -19,6 +20,7 @@
         <item name="android:windowBackground">@color/window_background_dark</item>
         <item name="cardBackground">@color/card_background_dark</item>
         <item name="drawerBackground">@color/window_background_dark</item>
+        <item name="famProtection">@color/fam_protection_dark</item>
     </style>
 
     <style name="AppTheme.Light" parent="AppThemeBase"/>
