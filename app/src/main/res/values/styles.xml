@@ -27,6 +27,10 @@
 
     <style name="AppTheme.Dark" parent="AppThemeBaseDark"/>
 
+    <style name="AppTheme.Drawer.Light" parent="AppThemeBase"/>
+
+    <style name="AppTheme.Drawer.Dark" parent="AppThemeBaseDark"/>
+
     <style name="Toolbar" parent="ToolbarBase"/>
 
     <style name="ToolbarDark" parent="ToolbarBase">
