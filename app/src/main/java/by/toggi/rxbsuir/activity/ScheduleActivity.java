@@ -397,6 +397,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     }
 
     private void showFloatingActionMenu() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
         mFloatingActionMenu.setClickable(true);
         mFloatingActionMenu.setOnClickListener(v -> hideFloatingActionMenu());
         ObjectAnimator.ofPropertyValuesHolder(
@@ -411,6 +412,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     }
 
     private void hideFloatingActionMenu() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
         mFabGroup.hide();
         mFabEmployee.hide();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
