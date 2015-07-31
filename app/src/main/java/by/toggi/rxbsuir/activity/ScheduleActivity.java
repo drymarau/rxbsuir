@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.activity;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import by.toggi.rxbsuir.rest.model.Employee;
 import icepick.Icepick;
 import icepick.State;
+import timber.log.Timber;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
@@ -63,6 +65,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     public static final String KEY_IS_GROUP_SCHEDULE = "is_group_schedule";
     public static final String KEY_SUBGROUP_1 = "subgroup_1";
     public static final String KEY_SUBGROUP_2 = "subgroup_2";
+    public static final String KEY_IS_DARK_THEME = "is_dark_theme";
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
     private static final String KEY_TITLE = "title";
@@ -85,7 +88,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
-    @Inject boolean mIsGroupSchedule;
+    @Inject @Named(KEY_IS_GROUP_SCHEDULE) boolean mIsGroupSchedule;
+    @Inject @Named(KEY_IS_DARK_THEME) boolean mIsDarkTheme;
     @Nullable @Inject @Named(KEY_GROUP_NUMBER) String mGroupNumber;
     @Nullable @Inject @Named(KEY_EMPLOYEE_ID) String mEmployeeId;
 
@@ -94,10 +98,13 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        initializeComponent();
+
+        setTheme(mIsDarkTheme ? R.style.AppTheme_Drawer_Dark : R.style.AppTheme_Drawer_Light);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
 
-        initializeComponent();
         ButterKnife.bind(this);
         mFloatingActionMenu.getBackground().setAlpha(0);
 
@@ -303,6 +310,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 case R.id.navigation_view_employees:
                     selectEmployee(menuItem.getItemId(), menuItem.getTitle().toString());
                     break;
+            }
+            if (menuItem.getItemId() == R.id.navigation_view_settings) {
+                startActivity(new Intent(this, SettingsActivity.class));
             }
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);

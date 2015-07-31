@@ -48,8 +48,15 @@ public class AppModule {
     }
 
     @Provides
+    @Named(value = ScheduleActivity.KEY_IS_GROUP_SCHEDULE)
     boolean provideIsGroupSchedule(SharedPreferences preferences) {
         return preferences.getBoolean(ScheduleActivity.KEY_IS_GROUP_SCHEDULE, true);
+    }
+
+    @Provides
+    @Named(value = ScheduleActivity.KEY_IS_DARK_THEME)
+    boolean provideIsDarkTheme(SharedPreferences preferences) {
+        return preferences.getBoolean(ScheduleActivity.KEY_IS_DARK_THEME, false);
     }
 
 }

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/navigation_view_settings"
+        android:icon="@drawable/ic_action_settings"
+        android:orderInCategory="300"
+        android:title="@string/label_settings"/>
+    <item
         android:id="@id/navigation_view_groups_header"
         android:checkable="true"
         android:orderInCategory="100"

@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_subheader_height"
     android:gravity="center_vertical"
-    android:paddingTop="16dp"
-    android:text="Понедельник"
     android:paddingLeft="@dimen/keyline_first"
     android:paddingRight="@dimen/keyline_first"
+    android:paddingTop="16dp"
+    android:text="Понедельник"
     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-    android:textColor="@color/black_54"
+    android:textColor="?android:attr/textColorSecondary"
     tools:text="Понедельник"/>

@@ -10,7 +10,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.WeekView;
@@ -18,6 +17,9 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
+import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_EMPLOYEE_ID;
+import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_GROUP_NUMBER;
+import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_IS_GROUP_SCHEDULE;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 public class WeekPresenter extends Presenter<WeekView> {
@@ -31,7 +33,7 @@ public class WeekPresenter extends Presenter<WeekView> {
     private Subscription mSubscription;
 
     @Inject
-    public WeekPresenter(boolean isGroupSchedule, @Nullable @Named(ScheduleActivity.KEY_GROUP_NUMBER) String groupNumber, @Nullable @Named(ScheduleActivity.KEY_EMPLOYEE_ID) String employeeId, int weekNumber, StorIOSQLite storIOSQLite) {
+    public WeekPresenter(@Named(KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule, @Nullable @Named(KEY_GROUP_NUMBER) String groupNumber, @Nullable @Named(KEY_EMPLOYEE_ID) String employeeId, int weekNumber, StorIOSQLite storIOSQLite) {
         mWeekNumber = weekNumber;
         mEmployeeId = employeeId;
         mStorIOSQLite = storIOSQLite;
