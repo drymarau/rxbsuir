@@ -17,7 +17,6 @@ import by.toggi.rxbsuir.mvp.view.WeekView;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
@@ -97,7 +96,11 @@ public class WeekPresenter extends Presenter<WeekView> {
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
-        mSubscription = mScheduleObservable.subscribe(this::showLessonList);
+        mSubscription = mScheduleObservable.subscribe(lessons -> {
+            if (lessons.size() > 0) {
+                showLessonList(lessons);
+            }
+        });
     }
 
     @Override
@@ -139,11 +142,7 @@ public class WeekPresenter extends Presenter<WeekView> {
 
     private void showLessonList(List<Lesson> lessonList) {
         if (isViewAttached()) {
-            if (lessonList.size() > 0) {
-                getView().showLessonList(lessonList);
-            } else {
-                Timber.d("lessonList is empty!");
-            }
+            getView().showLessonList(lessonList);
         }
     }
 }

@@ -16,12 +16,12 @@ import by.toggi.rxbsuir.db.model.Lesson;
 
 public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> {
 
-    private static final int VIEW_TYPE_LESSON_ONE_LINE = 0;
     public static final int VIEW_TYPE_LESSON_ONE_LINE_WITH_WEEKDAY = 1;
-    private static final int VIEW_TYPE_LESSON_TWO_LINE = 2;
     public static final int VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY = 3;
-    private static final int VIEW_TYPE_LESSON_THREE_LINE = 4;
     public static final int VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY = 5;
+    private static final int VIEW_TYPE_LESSON_ONE_LINE = 0;
+    private static final int VIEW_TYPE_LESSON_TWO_LINE = 2;
+    private static final int VIEW_TYPE_LESSON_THREE_LINE = 4;
     private List<Lesson> mLessonList;
 
     public LessonAdapter(List<Lesson> lessonList) {
@@ -34,7 +34,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
      * @param lessonList the lesson list
      */
     public void setLessonList(List<Lesson> lessonList) {
-        mLessonList = lessonList;
+        mLessonList.clear();
+        mLessonList.addAll(lessonList);
         notifyDataSetChanged();
     }
 
@@ -120,12 +121,12 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
             ButterKnife.bind(this, itemView);
         }
 
-        public void setWeekDay(String weekDay) {
-            mWeekDay = weekDay;
-        }
-
         public String getWeekDay() {
             return mWeekDay;
+        }
+
+        public void setWeekDay(String weekDay) {
+            mWeekDay = weekDay;
         }
     }
 
