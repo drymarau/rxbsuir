@@ -296,7 +296,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         if (mItemId != menuItem.getItemId()) {
-            mItemId = menuItem.getItemId();
             switch (menuItem.getGroupId()) {
                 case R.id.navigation_view_groups:
                     selectGroup(String.valueOf(menuItem.getItemId()));
@@ -311,6 +310,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     }
 
     private void selectGroup(String groupNumber) {
+        mItemId = Integer.valueOf(groupNumber);
         mSchedulePresenter.setGroupNumber(groupNumber);
         setTitle(groupNumber);
         mSharedPreferences.edit()
@@ -322,6 +322,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     }
 
     private void selectEmployee(int id, String employeeName) {
+        mItemId = id;
         String employeeId = String.valueOf(id);
         mSchedulePresenter.setEmployeeId(employeeId);
         setTitle(employeeName);
