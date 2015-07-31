@@ -40,5 +40,6 @@
 
     <!-- Main FAB tag for FAM -->
     <string name="tag_fab" translatable="false">fab</string>
+    <string name="label_settings">Settings</string>
 
 </resources>

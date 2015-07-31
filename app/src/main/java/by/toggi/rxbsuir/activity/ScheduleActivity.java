@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.activity;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -303,6 +304,9 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 case R.id.navigation_view_employees:
                     selectEmployee(menuItem.getItemId(), menuItem.getTitle().toString());
                     break;
+            }
+            if (menuItem.getItemId() == R.id.navigation_view_settings) {
+                startActivity(new Intent(this, SettingsActivity.class));
             }
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
