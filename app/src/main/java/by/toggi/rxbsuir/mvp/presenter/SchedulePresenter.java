@@ -162,7 +162,6 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 .take(1)
                 .map(employeeList -> employeeList.get(0))
                 .doOnNext(employee -> {
-                    Timber.d(employee.toString());
                     employee.isCached = true;
                     mStorIOSQLite.put().object(employee).prepare().createObservable().subscribe();
                 });
@@ -182,7 +181,6 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 .observeOn(Schedulers.io())
                 .map(studentGroupList -> studentGroupList.get(0))
                 .doOnNext(studentGroup -> {
-                    Timber.d(studentGroup.toString());
                     studentGroup.isCached = true;
                     mStorIOSQLite.put().object(studentGroup).prepare().createObservable().subscribe();
                 });
