@@ -17,6 +17,7 @@ import by.toggi.rxbsuir.mvp.view.WeekView;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
@@ -93,6 +94,9 @@ public class WeekPresenter extends Presenter<WeekView> {
 
     @Override
     public void onCreate() {
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
         mSubscription = mScheduleObservable.subscribe(this::showLessonList);
     }
 
@@ -118,8 +122,7 @@ public class WeekPresenter extends Presenter<WeekView> {
                         .build())
                 .prepare()
                 .createObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .cache();
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     private Observable<List<Lesson>> getEmployeeListObservable(@Nullable String employeeId, int subgroupNumber, int weekNumber) {
@@ -131,13 +134,16 @@ public class WeekPresenter extends Presenter<WeekView> {
                         .build())
                 .prepare()
                 .createObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .cache();
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     private void showLessonList(List<Lesson> lessonList) {
         if (isViewAttached()) {
-            getView().showLessonList(lessonList);
+            if (lessonList.size() > 0) {
+                getView().showLessonList(lessonList);
+            } else {
+                Timber.d("lessonList is empty!");
+            }
         }
     }
 }
