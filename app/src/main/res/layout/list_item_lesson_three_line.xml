@@ -10,6 +10,7 @@
     tools:ignore="UnusedAttribute">
 
     <include
+        android:id="@+id/lesson_type"
         layout="@layout/list_item_lesson_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,32 +18,42 @@
         android:layout_marginLeft="@dimen/keyline_first"
         android:layout_marginRight="@dimen/keyline_first"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/keyline_second"
-        android:layout_marginStart="@dimen/keyline_second"
-        android:orientation="vertical">
-
-        <include layout="@layout/list_item_lesson_subject_subgroup"/>
-
-        <include
-            android:id="@+id/lesson_employee"
-            layout="@layout/list_item_lesson_class_employee"/>
-
-        <include
-            android:id="@+id/lesson_class"
-            layout="@layout/list_item_lesson_class_employee"/>
-
-    </LinearLayout>
-
     <include
+        android:id="@+id/lesson_time"
         layout="@layout/list_item_lesson_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="false"/>
+
+    <include
+        layout="@layout/list_item_lesson_subject_subgroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/keyline_second"
+        android:layout_marginStart="@dimen/keyline_second"/>
+
+    <include
+        android:id="@+id/lesson_employee"
+        layout="@layout/list_item_lesson_class_employee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lesson_subject_subgroup"
+        android:layout_toEndOf="@id/lesson_type"
+        android:layout_toLeftOf="@id/lesson_time"
+        android:layout_toRightOf="@id/lesson_type"
+        android:layout_toStartOf="@id/lesson_time"/>
+
+    <include
+        android:id="@+id/lesson_class"
+        layout="@layout/list_item_lesson_class_employee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lesson_employee"
+        android:layout_toEndOf="@id/lesson_type"
+        android:layout_toLeftOf="@id/lesson_time"
+        android:layout_toRightOf="@id/lesson_type"
+        android:layout_toStartOf="@id/lesson_time"/>
 
 </RelativeLayout>
