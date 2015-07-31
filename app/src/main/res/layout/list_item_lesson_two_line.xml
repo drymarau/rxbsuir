@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_two_line_avatar"
-    android:background="@android:color/white"
+    android:background="?attr/cardBackground"
     android:elevation="2dp"
     tools:ignore="UnusedAttribute">
 

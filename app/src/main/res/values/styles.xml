@@ -7,16 +7,40 @@
         <item name="colorAccent">@color/accent</item>
         <item name="toolbarStyle">@style/Toolbar</item>
         <item name="android:windowBackground">@color/window_background</item>
+        <item name="cardBackground">@android:color/white</item>
+        <item name="drawerBackground">@android:color/white</item>
     </style>
 
-    <style name="AppTheme" parent="AppThemeBase"/>
+    <style name="AppThemeBaseDark" parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="toolbarStyle">@style/ToolbarDark</item>
+        <item name="android:windowBackground">@color/window_background_dark</item>
+        <item name="cardBackground">@color/card_background_dark</item>
+        <item name="drawerBackground">@color/window_background_dark</item>
+    </style>
 
-    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
+    <style name="AppTheme.Light" parent="AppThemeBase"/>
+
+    <style name="AppTheme.Dark" parent="AppThemeBaseDark"/>
+
+    <style name="Toolbar" parent="ToolbarBase"/>
+
+    <style name="ToolbarDark" parent="ToolbarBase">
+        <item name="popupTheme">@style/Toolbar.PopUp.Dark</item>
+    </style>
+
+    <style name="ToolbarBase" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">@color/primary</item>
-        <item name="popupTheme">@style/Toolbar.PopUp</item>
+        <item name="popupTheme">@style/Toolbar.PopUp.Light</item>
     </style>
 
-    <style name="Toolbar.PopUp" parent="Theme.AppCompat.Light">
+    <style name="Toolbar.PopUp.Light" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+    <style name="Toolbar.PopUp.Dark" parent="Theme.AppCompat">
         <item name="colorAccent">@color/accent</item>
     </style>
 
