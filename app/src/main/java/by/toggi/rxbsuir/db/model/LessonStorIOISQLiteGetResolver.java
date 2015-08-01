@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.pushtorefresh.storio.sqlite.operations.get.DefaultGetResolver;
 
 import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +38,8 @@ public class LessonStorIOISQLiteGetResolver extends DefaultGetResolver<Lesson> {
                 cursor.getString(cursor.getColumnIndex(LessonEntry.COL_SYNC_ID)),
                 new ArrayList<>(Arrays.asList(auditoryArray)),
                 new ArrayList<>(Arrays.asList(employeeArray)),
-                cursor.getString(cursor.getColumnIndex(LessonEntry.COL_LESSON_TIME)),
+                LocalTime.parse(cursor.getString(cursor.getColumnIndex(LessonEntry.COL_LESSON_TIME_START))),
+                LocalTime.parse(cursor.getString(cursor.getColumnIndex(LessonEntry.COL_LESSON_TIME_END))),
                 cursor.getString(cursor.getColumnIndex(LessonEntry.COL_LESSON_TYPE)),
                 cursor.getString(cursor.getColumnIndex(LessonEntry.COL_NOTE)),
                 cursor.getInt(cursor.getColumnIndex(LessonEntry.COL_NUM_SUBGROUP)),

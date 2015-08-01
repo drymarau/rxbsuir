@@ -33,14 +33,15 @@ public class LessonStorIOSQLitePutResolver extends DefaultPutResolver<Lesson> {
     @NonNull
     @Override
     protected ContentValues mapToContentValues(@NonNull Lesson object) {
-        ContentValues contentValues = new ContentValues(12);
+        ContentValues contentValues = new ContentValues(13);
 
         Gson gson = new Gson();
 
         contentValues.put(LessonEntry._ID, object.getId());
         contentValues.put(LessonEntry.COL_SYNC_ID, object.getSyncId());
         contentValues.put(LessonEntry.COL_WEEKDAY, object.getWeekday().toString());
-        contentValues.put(LessonEntry.COL_LESSON_TIME, object.getLessonTime());
+        contentValues.put(LessonEntry.COL_LESSON_TIME_START, object.getLessonTimeStart().toString());
+        contentValues.put(LessonEntry.COL_LESSON_TIME_END, object.getLessonTimeEnd().toString());
         contentValues.put(LessonEntry.COL_LESSON_TYPE, object.getLessonType());
         contentValues.put(LessonEntry.COL_NOTE, object.getNote());
         contentValues.put(LessonEntry.COL_EMPLOYEE_LIST, gson.toJson(object.getEmployeeList()));

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.TextStyle;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Locale;
 
 import by.toggi.rxbsuir.rest.model.Employee;
 import by.toggi.rxbsuir.rest.model.Schedule;
+import timber.log.Timber;
 
 public class Lesson {
 
@@ -20,7 +22,8 @@ public class Lesson {
     private String syncId;
     private List<String> auditoryList;
     private List<Employee> employeeList;
-    private String lessonTime;
+    private LocalTime lessonTimeStart;
+    private LocalTime lessonTimeEnd;
     private String lessonType;
     private String note;
     private int numSubgroup;
@@ -30,12 +33,13 @@ public class Lesson {
     private DayOfWeek weekday;
     private boolean isGroupSchedule;
 
-    public Lesson(@Nullable Long _id, @NonNull String syncId, List<String> auditoryList, List<Employee> employeeList, String lessonTime, String lessonType, String note, int numSubgroup, List<String> studentGroupList, String subject, List<Integer> weekNumberList, DayOfWeek weekday, boolean isGroupSchedule) {
+    public Lesson(@Nullable Long _id, @NonNull String syncId, List<String> auditoryList, List<Employee> employeeList, LocalTime lessonTimeStart, LocalTime lessonTimeEnd, String lessonType, String note, int numSubgroup, List<String> studentGroupList, String subject, List<Integer> weekNumberList, DayOfWeek weekday, boolean isGroupSchedule) {
         this._id = _id;
         this.syncId = syncId;
         this.auditoryList = auditoryList;
         this.employeeList = employeeList;
-        this.lessonTime = lessonTime;
+        this.lessonTimeStart = lessonTimeStart;
+        this.lessonTimeEnd = lessonTimeEnd;
         this.lessonType = lessonType;
         this.note = note;
         this.numSubgroup = numSubgroup;
@@ -51,7 +55,13 @@ public class Lesson {
         this.syncId = syncId;
         this.auditoryList = schedule.auditory;
         this.employeeList = schedule.employeeList;
-        this.lessonTime = schedule.lessonTime;
+        String[] lessonTime = TextUtils.split(schedule.lessonTime, "-");
+        try {
+            this.lessonTimeStart = LocalTime.parse(lessonTime[0]);
+            this.lessonTimeEnd = LocalTime.parse(lessonTime[1]);
+        } catch (IndexOutOfBoundsException e) {
+            Timber.e("Something went wrong: " + e.getMessage());
+        }
         this.lessonType = schedule.lessonType;
         this.note = schedule.note;
         this.numSubgroup = schedule.numSubgroup;
@@ -107,8 +117,12 @@ public class Lesson {
         return "";
     }
 
-    public String getLessonTime() {
-        return lessonTime;
+    public LocalTime getLessonTimeStart() {
+        return lessonTimeStart;
+    }
+
+    public LocalTime getLessonTimeEnd() {
+        return lessonTimeEnd;
     }
 
     /**
@@ -117,7 +131,7 @@ public class Lesson {
      * @return the pretty lesson time
      */
     public String getPrettyLessonTime() {
-        return lessonTime.replace("-", "\n");
+        return lessonTimeStart.toString() + "\n" + lessonTimeEnd.toString();
     }
 
     public String getLessonType() {
