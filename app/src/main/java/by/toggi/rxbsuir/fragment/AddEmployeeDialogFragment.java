@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.mvp.presenter.AddEmployeeDialogPresenter;
+import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddEmployeeDialogView;
 import by.toggi.rxbsuir.rest.model.Employee;
 import rx.android.view.ViewActions;
@@ -35,6 +36,7 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
     private ArrayAdapter<Employee> mAdapter;
     private OnButtonClickListener mListener;
     private int mPosition = -1;
+    private TextInputLayout mTextInputLayout;
 
     public static AddEmployeeDialogFragment newInstance() {
         return new AddEmployeeDialogFragment();
@@ -80,12 +82,12 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        TextInputLayout textInputLayout = (TextInputLayout) View.inflate(getActivity(), R.layout.dialog_add_employee, null);
-        AutoCompleteTextView textView = ButterKnife.findById(textInputLayout, R.id.employee_text_view);
+        mTextInputLayout = (TextInputLayout) View.inflate(getActivity(), R.layout.dialog_add_employee, null);
+        AutoCompleteTextView textView = ButterKnife.findById(mTextInputLayout, R.id.employee_text_view);
         mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<>());
         textView.setAdapter(mAdapter);
         textView.setOnItemClickListener((parent, view, position, id) -> mPosition = position);
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(textInputLayout, true)
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(mTextInputLayout, true)
                 .title(R.string.title_add_employee)
                 .positiveText(R.string.positive_add)
                 .negativeText(android.R.string.cancel)
@@ -98,7 +100,7 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
                             mPosition = -1;
                             dismiss();
                         } else {
-                            textInputLayout.setError(getString(R.string.error_list_employee));
+                            mTextInputLayout.setError(getString(R.string.error_list_employee));
                         }
                     }
 
@@ -129,9 +131,22 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
 
     @Override
     public void updateEmployeeList(List<Employee> employeeList) {
+        mTextInputLayout.setErrorEnabled(false);
         mAdapter.clear();
         for (Employee employee : employeeList) {
             mAdapter.add(employee);
+        }
+    }
+
+    @Override
+    public void showError(SchedulePresenter.Error error) {
+        if (mTextInputLayout != null) {
+            mTextInputLayout.setErrorEnabled(true);
+            switch (error) {
+                case NETWORK:
+                    mTextInputLayout.setError(getString(R.string.error_network));
+                    break;
+            }
         }
     }
 

@@ -71,22 +71,24 @@ public class AddEmployeeDialogPresenter extends Presenter<AddEmployeeDialogView>
     }
 
     private void updateEmployeeListInView(List<Employee> employeeList) {
-        Observable.from(employeeList).subscribeOn(Schedulers.computation()).observeOn(Schedulers.computation())
+        Observable.from(employeeList).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
                 .map(Employee::toString)
                 .toList()
-                .subscribe(strings -> mEmployeeStringList = strings);
-        if (isViewAttached()) {
-            getView().updateEmployeeList(employeeList);
-        }
+                .subscribe(strings -> {
+                    mEmployeeStringList = strings;
+                    if (isViewAttached()) {
+                        getView().updateEmployeeList(employeeList);
+                    }
+                });
     }
 
     private void getEmployeeListFromNetwork() {
         mService.getEmployees()
-                .observeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(employeeXmlModels -> employeeXmlModels.employeeList)
                 .flatMap(this::getEmployeePutObservable)
-                .subscribe(employeePutResults -> Timber.d("Insert count: %d", employeePutResults.numberOfInserts()));
+                .subscribe(employeePutResults -> Timber.d("Insert count: %d", employeePutResults.numberOfInserts()), this::onError);
     }
 
     private Observable<PutResults<Employee>> getEmployeePutObservable(List<Employee> employeeList) {
@@ -94,5 +96,13 @@ public class AddEmployeeDialogPresenter extends Presenter<AddEmployeeDialogView>
                 .objects(employeeList)
                 .prepare()
                 .createObservable();
+    }
+
+    private void onError(Throwable throwable) {
+        if (throwable.getCause().toString().contains("java.net.UnknownHostException")) {
+            if (isViewAttached()) {
+                getView().showError(SchedulePresenter.Error.NETWORK);
+            }
+        }
     }
 }
