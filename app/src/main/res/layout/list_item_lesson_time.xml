@@ -3,7 +3,7 @@
        xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
-        android:id="@+id/lesson_time_start"
+        android:id="@id/lesson_time_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -15,7 +15,7 @@
         tools:text="11:40"/>
 
     <TextView
-        android:id="@+id/lesson_time_end"
+        android:id="@id/lesson_time_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

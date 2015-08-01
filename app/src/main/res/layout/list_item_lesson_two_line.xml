@@ -8,7 +8,9 @@
     android:elevation="2dp"
     tools:ignore="UnusedAttribute">
 
-    <include layout="@layout/list_item_lesson_type"/>
+    <include
+        android:id="@+id/lesson_type"
+        layout="@layout/list_item_lesson_type"/>
 
     <include
         layout="@layout/list_item_lesson_subject_subgroup"
@@ -16,7 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/lesson_type"
         android:layout_toEndOf="@id/lesson_type"
-        android:layout_toRightOf="@id/lesson_type"/>
+        android:layout_toLeftOf="@id/lesson_time_start"
+        android:layout_toRightOf="@id/lesson_type"
+        android:layout_toStartOf="@id/lesson_time_start"/>
 
     <include
         android:id="@+id/lesson_class"
@@ -25,7 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/lesson_subject_subgroup"
         android:layout_toEndOf="@id/lesson_type"
-        android:layout_toRightOf="@id/lesson_type"/>
+        android:layout_toLeftOf="@id/lesson_time_start"
+        android:layout_toRightOf="@id/lesson_type"
+        android:layout_toStartOf="@id/lesson_time_start"/>
 
     <include layout="@layout/list_item_lesson_time"/>
 
