@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.mvp.presenter.AddGroupDialogPresenter;
+import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
 import rx.android.view.ViewActions;
 import rx.android.widget.WidgetObservable;
@@ -33,6 +34,7 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
 
     private ArrayAdapter<String> mAdapter;
     private OnButtonClickListener mListener;
+    private TextInputLayout mTextInputLayout;
 
     public static AddGroupDialogFragment newInstance() {
         return new AddGroupDialogFragment();
@@ -78,11 +80,11 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        TextInputLayout textInputLayout = (TextInputLayout) View.inflate(getActivity(), R.layout.dialog_add_group, null);
-        AutoCompleteTextView textView = ButterKnife.findById(textInputLayout, R.id.group_number_text_view);
+        mTextInputLayout = (TextInputLayout) View.inflate(getActivity(), R.layout.dialog_add_group, null);
+        AutoCompleteTextView textView = ButterKnife.findById(mTextInputLayout, R.id.group_number_text_view);
         mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<>());
         textView.setAdapter(mAdapter);
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(textInputLayout, true)
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(mTextInputLayout, true)
                 .title(R.string.title_add_group)
                 .positiveText(R.string.positive_add)
                 .negativeText(android.R.string.cancel)
@@ -111,6 +113,18 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
         mAdapter.clear();
         for (String group : studentGroupList) {
             mAdapter.add(group);
+        }
+    }
+
+    @Override
+    public void showError(SchedulePresenter.Error error) {
+        if (mTextInputLayout != null) {
+            mTextInputLayout.setErrorEnabled(true);
+            switch (error) {
+                case NETWORK:
+                    mTextInputLayout.setError(getString(R.string.error_network));
+                    break;
+            }
         }
     }
 

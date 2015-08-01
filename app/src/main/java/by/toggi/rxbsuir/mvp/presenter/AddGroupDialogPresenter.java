@@ -86,11 +86,11 @@ public class AddGroupDialogPresenter extends Presenter<AddGroupDialogView> {
 
     private void getStudentGroupsFromNetwork() {
         mService.getStudentGroups()
-                .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(studentGroupXmlModels -> studentGroupXmlModels.studentGroupList)
                 .flatMap(this::getStudentGroupPutObservable)
-                .subscribe(studentGroupPutResults -> Timber.d("Insert count: %d", studentGroupPutResults.numberOfInserts()));
+                .subscribe(studentGroupPutResults -> Timber.d("Insert count: %d", studentGroupPutResults.numberOfInserts()), this::onError);
     }
 
     private Observable<PutResults<StudentGroup>> getStudentGroupPutObservable(List<StudentGroup> studentGroupList) {
@@ -98,5 +98,13 @@ public class AddGroupDialogPresenter extends Presenter<AddGroupDialogView> {
                 .objects(studentGroupList)
                 .prepare()
                 .createObservable();
+    }
+
+    private void onError(Throwable throwable) {
+        if (throwable.getCause().toString().contains("java.net.UnknownHostException")) {
+            if (isViewAttached()) {
+                getView().showError(SchedulePresenter.Error.NETWORK);
+            }
+        }
     }
 }
