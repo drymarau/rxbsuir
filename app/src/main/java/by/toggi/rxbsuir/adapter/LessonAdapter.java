@@ -90,7 +90,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         Lesson lesson = mLessonList.get(position);
         viewHolder.mLessonType.setText(lesson.getLessonType());
         viewHolder.mLessonSubjectSubgroup.setText(lesson.getSubjectWithSubgroup());
-        viewHolder.mLessonTime.setText(lesson.getPrettyLessonTime());
+        viewHolder.mLessonTimeStart.setText(lesson.getPrettyLessonTimeStart());
+        viewHolder.mLessonTimeEnd.setText(lesson.getPrettyLessonTimeEnd());
         if (viewHolder.mLessonClass != null) {
             viewHolder.mLessonClass.setText(lesson.getPrettyAuditoryList());
         }
@@ -113,7 +114,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
 
         @Bind(R.id.lesson_type) TextView mLessonType;
         @Bind(R.id.lesson_subject_subgroup) TextView mLessonSubjectSubgroup;
-        @Bind(R.id.lesson_time) TextView mLessonTime;
+        @Bind(R.id.lesson_time_start) TextView mLessonTimeStart;
+        @Bind(R.id.lesson_time_end) TextView mLessonTimeEnd;
 
         @Nullable @Bind(R.id.lesson_employee) TextView mLessonEmployee;
         @Nullable @Bind(R.id.lesson_class) TextView mLessonClass;

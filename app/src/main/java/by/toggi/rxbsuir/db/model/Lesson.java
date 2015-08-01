@@ -121,17 +121,26 @@ public class Lesson {
         return lessonTimeStart;
     }
 
+    /**
+     * Gets pretty lesson time start ("8:00").
+     *
+     * @return the pretty lesson time start
+     */
+    public String getPrettyLessonTimeStart() {
+        return lessonTimeStart.toString();
+    }
+
     public LocalTime getLessonTimeEnd() {
         return lessonTimeEnd;
     }
 
     /**
-     * Gets pretty lesson time (two-line time).
+     * Gets pretty lesson time end ("9:45").
      *
-     * @return the pretty lesson time
+     * @return the pretty lesson time end
      */
-    public String getPrettyLessonTime() {
-        return lessonTimeStart.toString() + "\n" + lessonTimeEnd.toString();
+    public String getPrettyLessonTimeEnd() {
+        return lessonTimeEnd.toString();
     }
 
     public String getLessonType() {
