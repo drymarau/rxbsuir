@@ -195,7 +195,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         List<Lesson> lessonList = new ArrayList<>(model.scheduleList.size());
         String syncId = isGroupSchedule ? mGroupNumber : mEmployeeId;
         for (Schedule schedule : model.scheduleList) {
-            lessonList.add(new Lesson(null, syncId, schedule, model.weekDay, isGroupSchedule));
+            lessonList.add(new Lesson(null, syncId, schedule, Utils.convertWeekdayToDayOfWeek(model.weekDay), isGroupSchedule));
         }
         return lessonList;
     }

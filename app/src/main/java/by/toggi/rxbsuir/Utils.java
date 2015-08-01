@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir;
 
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Month;
 import org.threeten.bp.temporal.ChronoUnit;
@@ -20,6 +21,27 @@ public class Utils {
     public static int getCurrentWeekNumber() {
         Long weeks = ChronoUnit.WEEKS.between(getStartYear(), LocalDate.now());
         return weeks.intValue() % 4 + 1;
+    }
+
+    public static DayOfWeek convertWeekdayToDayOfWeek(String weekday) {
+        switch (weekday.toLowerCase()) {
+            case "понедельник":
+                return DayOfWeek.MONDAY;
+            case "вторник":
+                return DayOfWeek.TUESDAY;
+            case "среда":
+                return DayOfWeek.WEDNESDAY;
+            case "четверг":
+                return DayOfWeek.THURSDAY;
+            case "пятница":
+                return DayOfWeek.FRIDAY;
+            case "суббота":
+                return DayOfWeek.SATURDAY;
+            case "воскресенье":
+                return DayOfWeek.SUNDAY;
+            default:
+                throw new IllegalArgumentException("Unknown weekday: " + weekday);
+        }
     }
 
     private static LocalDate getStartYear() {
