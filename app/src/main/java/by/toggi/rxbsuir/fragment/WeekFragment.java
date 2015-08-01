@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,7 +29,6 @@ import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.module.WeekFragmentModule;
 import by.toggi.rxbsuir.mvp.presenter.WeekPresenter;
 import by.toggi.rxbsuir.mvp.view.WeekView;
-import timber.log.Timber;
 
 public class WeekFragment extends Fragment implements WeekView, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -179,9 +177,9 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
     @Override
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         boolean isGroupSchedule = preferences.getBoolean(ScheduleActivity.KEY_IS_GROUP_SCHEDULE, true);
-        mRecyclerView.setVisibility(View.GONE);
         switch (key) {
             case ScheduleActivity.KEY_IS_GROUP_SCHEDULE:
+                mRecyclerView.setVisibility(View.GONE);
                 if (isGroupSchedule) {
                     mPresenter.setGroupNumber(preferences.getString(ScheduleActivity.KEY_GROUP_NUMBER, null));
                 } else {
@@ -189,9 +187,11 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
                 }
                 break;
             case ScheduleActivity.KEY_GROUP_NUMBER:
+                mRecyclerView.setVisibility(View.GONE);
                 mPresenter.setGroupNumber(preferences.getString(key, null));
                 break;
             case ScheduleActivity.KEY_EMPLOYEE_ID:
+                mRecyclerView.setVisibility(View.GONE);
                 mPresenter.setEmployeeId(preferences.getString(key, null));
                 break;
             case ScheduleActivity.KEY_SUBGROUP_1:
