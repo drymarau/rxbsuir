@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Расписание БГУИР</string>
+
+    <!-- SNACKBAR -->
+    <!-- Error message when something went wrong with schedule -->
+    <string name="error_empty_schedule">Пустое расписание</string>
+    <string name="error_network">Нет соединения с интернетом</string>
+    <string name="error_default">Что-то пошло не так</string>
+    <string name="action_retry">Повторить</string>
+
+    <!-- ADD GROUP/EMPLOYEE DIALOG -->
+    <!-- Group number hint in add group dialog -->
+    <string name="hint_group_number">Номер группы</string>
+    <string name="hint_employee">ФИО преподавателя</string>
+    <string name="title_add_group">Добавить группу</string>
+    <string name="title_add_employee">Добавить преподавателя</string>
+    <string name="positive_add">Добавить</string>
+    <string name="error_list_employee">Пожалуйста, выберите преподавателя из списка</string>
+
+    <!-- MENU -->
+    <string name="action_today">Сегодня</string>
+    <string name="action_refresh">Обновить</string>
+    <string name="action_subgroup_1">Подгруппа 1</string>
+    <string name="action_subgroup_2">Подгруппа 2</string>
+
+    <!-- NAVIGATION VIEW -->
+    <string name="navigation_view_groups">Группы</string>
+    <string name="navigation_view_employees">Преподаватели</string>
+
+    <array name="tabs">
+        <item>Неделя 1</item>
+        <item>Неделя 2</item>
+        <item>Неделя 3</item>
+        <item>Неделя 4</item>
+    </array>
+
+    <string name="label_settings">Настройки</string>
+
+    <!-- PREFERENCES -->
+    <string name="title_pref_dark_theme">Использовать темную тему</string>
+    <string name="summary_pref_dark_theme_enabled">Приложение использует темную тему</string>
+    <string name="summary_pref_dark_theme_disabled">Приложение использует светлую тему</string>
+    <string name="category_appearance">Оформление</string>
+    <string name="category_about">О приложении</string>
+    <string name="title_build_version">Версия</string>
+
+</resources>
