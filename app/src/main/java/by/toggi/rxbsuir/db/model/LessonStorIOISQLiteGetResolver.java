@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.pushtorefresh.storio.sqlite.operations.get.DefaultGetResolver;
 
+import org.threeten.bp.DayOfWeek;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -42,7 +44,7 @@ public class LessonStorIOISQLiteGetResolver extends DefaultGetResolver<Lesson> {
                 new ArrayList<>(Arrays.asList(studentGroupArray)),
                 cursor.getString(cursor.getColumnIndex(LessonEntry.COL_SUBJECT)),
                 new ArrayList<>(Arrays.asList(weekNumberArray)),
-                cursor.getString(cursor.getColumnIndex(LessonEntry.COL_WEEKDAY)),
+                DayOfWeek.valueOf(cursor.getString(cursor.getColumnIndex(LessonEntry.COL_WEEKDAY))),
                 cursor.getInt(cursor.getColumnIndex(LessonEntry.COL_IS_GROUP_SCHEDULE)) != 0
         );
     }

@@ -39,7 +39,7 @@ public class LessonStorIOSQLitePutResolver extends DefaultPutResolver<Lesson> {
 
         contentValues.put(LessonEntry._ID, object.getId());
         contentValues.put(LessonEntry.COL_SYNC_ID, object.getSyncId());
-        contentValues.put(LessonEntry.COL_WEEKDAY, object.getWeekday());
+        contentValues.put(LessonEntry.COL_WEEKDAY, object.getWeekday().toString());
         contentValues.put(LessonEntry.COL_LESSON_TIME, object.getLessonTime());
         contentValues.put(LessonEntry.COL_LESSON_TYPE, object.getLessonType());
         contentValues.put(LessonEntry.COL_NOTE, object.getNote());
