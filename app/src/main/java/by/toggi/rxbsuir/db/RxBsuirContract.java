@@ -39,7 +39,8 @@ public class RxBsuirContract {
         public static final String COL_STUDENT_GROUP_LIST = "student_group_list";
         public static final String COL_NUM_SUBGROUP = "num_subgroup";
         public static final String COL_NOTE = "note";
-        public static final String COL_LESSON_TIME = "lesson_time";
+        public static final String COL_LESSON_TIME_START = "lesson_time_start";
+        public static final String COL_LESSON_TIME_END = "lesson_time_end";
         public static final String COL_LESSON_TYPE = "lesson_type";
         public static final String COL_EMPLOYEE_LIST = "employee_list";
         public static final String COL_AUDITORY_LIST = "auditory_list";

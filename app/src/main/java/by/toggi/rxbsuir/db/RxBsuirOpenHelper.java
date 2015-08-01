@@ -48,7 +48,8 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
                 LessonEntry.COL_SYNC_ID + " text not null, " +
                 LessonEntry.COL_EMPLOYEE_LIST + " text, " +
                 LessonEntry.COL_AUDITORY_LIST+ " text, " +
-                LessonEntry.COL_LESSON_TIME + " text not null, " +
+                LessonEntry.COL_LESSON_TIME_START + " text not null, " +
+                LessonEntry.COL_LESSON_TIME_END + " text not null, " +
                 LessonEntry.COL_LESSON_TYPE + " text not null, " +
                 LessonEntry.COL_NUM_SUBGROUP + " integer not null, " +
                 LessonEntry.COL_STUDENT_GROUP_LIST + " text not null, " +

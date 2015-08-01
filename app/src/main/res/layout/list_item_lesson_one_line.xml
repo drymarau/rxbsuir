@@ -8,16 +8,20 @@
     android:elevation="2dp"
     tools:ignore="UnusedAttribute">
 
-    <include layout="@layout/list_item_lesson_type"/>
+    <include
+        android:id="@+id/lesson_type"
+        layout="@layout/list_item_lesson_type"/>
+
+    <include layout="@layout/list_item_lesson_time"/>
 
     <include
         layout="@layout/list_item_lesson_subject_subgroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/keyline_second"
-        android:layout_marginStart="@dimen/keyline_second"/>
-
-    <include layout="@layout/list_item_lesson_time"/>
+        android:layout_toEndOf="@id/lesson_type"
+        android:layout_toLeftOf="@id/lesson_time_start"
+        android:layout_toRightOf="@id/lesson_type"
+        android:layout_toStartOf="@id/lesson_time_start"/>
 
 </RelativeLayout>

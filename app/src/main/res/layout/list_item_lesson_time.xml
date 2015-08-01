@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    android:id="@+id/lesson_time"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
-    android:layout_centerVertical="true"
-    android:paddingLeft="@dimen/keyline_first"
-    android:paddingRight="@dimen/keyline_first"
-    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-    tools:text="11:40\n13:15"/>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@id/lesson_time_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/lesson_type"
+        android:layout_marginEnd="@dimen/keyline_first"
+        android:layout_marginRight="@dimen/keyline_first"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        tools:text="11:40"/>
+
+    <TextView
+        android:id="@id/lesson_time_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/lesson_time_start"
+        android:layout_marginEnd="@dimen/keyline_first"
+        android:layout_marginRight="@dimen/keyline_first"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        tools:text="13:15"/>
+
+</merge>
