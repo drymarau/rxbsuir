@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/category_appearance">
-        <CheckBoxPreference
+    <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_appearance">
+        <com.jenzz.materialpreference.CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/key_pref_dark_theme"
             android:summary="@string/summary_pref_dark_theme_disabled"
             android:title="@string/title_pref_dark_theme"/>
-    </PreferenceCategory>
+    </com.jenzz.materialpreference.PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/category_about">
-        <Preference
+    <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_about">
+        <com.jenzz.materialpreference.Preference
             android:key="@string/key_pref_build_version"
             android:selectable="false"
             android:title="@string/title_build_version"/>
-    </PreferenceCategory>
+    </com.jenzz.materialpreference.PreferenceCategory>
 
 </PreferenceScreen>
