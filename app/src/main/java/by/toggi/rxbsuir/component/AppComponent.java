@@ -13,7 +13,6 @@ import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
-import by.toggi.rxbsuir.fragment.SettingsFragment;
 import by.toggi.rxbsuir.module.AppModule;
 import by.toggi.rxbsuir.module.BsuirServiceModule;
 import by.toggi.rxbsuir.module.DbModule;
@@ -47,8 +46,6 @@ public interface AppComponent {
     void inject(AddGroupDialogFragment addGroupDialogFragment);
 
     void inject(AddEmployeeDialogFragment addEmployeeDialogFragment);
-
-    void inject(SettingsFragment settingsFragment);
 
     void inject(SettingsActivity settingsActivity);
 
