@@ -26,12 +26,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         addPreferencesFromResource(R.xml.preferences);
 
-        Preference preference = findPreference(ScheduleActivity.KEY_IS_DARK_THEME);
-        preference.setOnPreferenceChangeListener(this);
-        preference.setSummary(mIsDarkTheme
-                        ? R.string.summary_pref_dark_theme_enabled
-                        : R.string.summary_pref_dark_theme_disabled
-        );
+        findPreference(ScheduleActivity.KEY_IS_DARK_THEME).setOnPreferenceChangeListener(this);
         findPreference("build_version").setSummary(BuildConfig.VERSION_NAME);
     }
 

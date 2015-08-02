@@ -6,7 +6,8 @@
         <com.jenzz.materialpreference.CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/key_pref_dark_theme"
-            android:summary="@string/summary_pref_dark_theme_disabled"
+            android:summaryOff="@string/summary_pref_dark_theme_disabled"
+            android:summaryOn="@string/summary_pref_dark_theme_enabled"
             android:title="@string/title_pref_dark_theme"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
