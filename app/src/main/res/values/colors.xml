@@ -4,11 +4,14 @@
     <color name="primary_dark">#303F9F</color>
     <color name="accent">#FF9100</color>
 
-    <color name="window_background">#E3E3E3</color>
+    <!-- LIGHT THEME -->
+    <color name="window_background_light">#FAFAFA</color>
+    <color name="card_background_light">@android:color/white</color>
+    <color name="fam_protection_light">#E6E3E3E3</color>
+
+    <!-- DARK THEME -->
     <color name="window_background_dark">#303030</color>
-
     <color name="card_background_dark">#424242</color>
-
-    <color name="fam_protection">#E6E3E3E3</color>
     <color name="fam_protection_dark">#E6303030</color>
+
 </resources>
