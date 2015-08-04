@@ -17,6 +17,7 @@ local.properties
 
 # Crashlytics properties
 crashlytics.properties
+fabric.properties
 
 # Manifest release report
 manifest-merger-release-report.txt
