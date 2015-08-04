@@ -2,12 +2,14 @@ package by.toggi.rxbsuir;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import by.toggi.rxbsuir.component.AppComponent;
 import by.toggi.rxbsuir.component.DaggerAppComponent;
 import by.toggi.rxbsuir.module.AppModule;
 import by.toggi.rxbsuir.module.BsuirServiceModule;
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 public class RxBsuirApplication extends Application {
@@ -21,6 +23,7 @@ public class RxBsuirApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         AndroidThreeTen.init(this);
 
