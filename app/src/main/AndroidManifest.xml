@@ -27,6 +27,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ScheduleActivity"/>
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="aedd177c4bd42ca01848f855c0e22dc3001068cc" />
     </application>
 
 </manifest>
