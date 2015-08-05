@@ -33,20 +33,6 @@ public class AppModule {
         return PreferenceManager.getDefaultSharedPreferences(mApplication);
     }
 
-    @Nullable
-    @Provides
-    @Named(value = ScheduleActivity.KEY_GROUP_NUMBER)
-    String provideGroupNumber(SharedPreferences preferences) {
-        return preferences.getString(ScheduleActivity.KEY_GROUP_NUMBER, null);
-    }
-
-    @Nullable
-    @Provides
-    @Named(value = ScheduleActivity.KEY_EMPLOYEE_ID)
-    String provideEmployeeId(SharedPreferences preferences) {
-        return preferences.getString(ScheduleActivity.KEY_EMPLOYEE_ID, null);
-    }
-
     @Provides
     @Named(value = ScheduleActivity.KEY_IS_GROUP_SCHEDULE)
     boolean provideIsGroupSchedule(SharedPreferences preferences) {
@@ -57,6 +43,13 @@ public class AppModule {
     @Named(value = ScheduleActivity.KEY_IS_DARK_THEME)
     boolean provideIsDarkTheme(SharedPreferences preferences) {
         return preferences.getBoolean(ScheduleActivity.KEY_IS_DARK_THEME, false);
+    }
+
+    @Nullable
+    @Provides
+    @Named(value = ScheduleActivity.KEY_SYNC_ID)
+    String provideSyncId(SharedPreferences preferences) {
+        return preferences.getString(ScheduleActivity.KEY_SYNC_ID, null);
     }
 
 }

@@ -25,6 +25,7 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.mvp.presenter.AddGroupDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
+import by.toggi.rxbsuir.rest.model.StudentGroup;
 import rx.android.view.ViewActions;
 import rx.android.widget.WidgetObservable;
 
@@ -32,8 +33,9 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
 
     @Inject AddGroupDialogPresenter mPresenter;
 
-    private ArrayAdapter<String> mAdapter;
+    private ArrayAdapter<StudentGroup> mAdapter;
     private OnButtonClickListener mListener;
+    private int mPosition = -1;
     private TextInputLayout mTextInputLayout;
 
     public static AddGroupDialogFragment newInstance() {
@@ -84,14 +86,28 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
         AutoCompleteTextView textView = ButterKnife.findById(mTextInputLayout, R.id.group_number_text_view);
         mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<>());
         textView.setAdapter(mAdapter);
+        textView.setOnItemClickListener((parent, view, position, id) -> mPosition = position);
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(mTextInputLayout, true)
                 .title(R.string.title_add_group)
                 .positiveText(R.string.positive_add)
                 .negativeText(android.R.string.cancel)
+                .autoDismiss(false)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        mListener.onPositiveButtonClicked(textView.getText().toString());
+                        if (mPosition != -1) {
+                            StudentGroup studentGroup = mAdapter.getItem(mPosition);
+                            mListener.onPositiveButtonClicked(studentGroup.id, studentGroup.name);
+                            mPosition = -1;
+                            dismiss();
+                        } else {
+                            mTextInputLayout.setError(getString(R.string.error_list_group));
+                        }
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        dismiss();
                     }
                 })
                 .build();
@@ -109,9 +125,10 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
     }
 
     @Override
-    public void updateStudentGroupList(List<String> studentGroupList) {
+    public void updateStudentGroupList(List<StudentGroup> studentGroupList) {
+        mTextInputLayout.setErrorEnabled(false);
         mAdapter.clear();
-        for (String group : studentGroupList) {
+        for (StudentGroup group : studentGroupList) {
             mAdapter.add(group);
         }
     }
@@ -136,7 +153,7 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
 
     public interface OnButtonClickListener {
 
-        void onPositiveButtonClicked(String groupNumber);
+        void onPositiveButtonClicked(int groupId, String groupName);
 
     }
 }
