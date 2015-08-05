@@ -12,7 +12,7 @@ public class StudentGroup {
 
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_ID, key = true)
     @Element(name = "id")
-    public long id;
+    public int id;
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_NAME)
     @Element(name = "name")
     public String name;
