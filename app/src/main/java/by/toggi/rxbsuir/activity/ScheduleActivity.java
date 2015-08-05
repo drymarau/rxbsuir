@@ -59,8 +59,6 @@ import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
 public class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, AddGroupDialogFragment.OnButtonClickListener, AddEmployeeDialogFragment.OnButtonClickListener {
 
-    public static final String KEY_GROUP_NUMBER = "selected_group_number";
-    public static final String KEY_EMPLOYEE_ID = "selected_employee_id";
     public static final String KEY_IS_GROUP_SCHEDULE = "is_group_schedule";
     public static final String KEY_SUBGROUP_1 = "subgroup_1";
     public static final String KEY_SUBGROUP_2 = "subgroup_2";
@@ -90,8 +88,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(KEY_IS_GROUP_SCHEDULE) boolean mIsGroupSchedule;
     @Inject @Named(KEY_IS_DARK_THEME) boolean mIsDarkTheme;
-    @Nullable @Inject @Named(KEY_GROUP_NUMBER) String mGroupNumber;
-    @Nullable @Inject @Named(KEY_EMPLOYEE_ID) String mEmployeeId;
+    @Nullable @Inject @Named(KEY_SYNC_ID) String mSyncId;
 
     @State CharSequence mTitle;
     @State int mItemId;
@@ -125,15 +122,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         Icepick.restoreInstanceState(this, savedInstanceState);
         setupTitle();
 
-        if (mIsGroupSchedule) {
-            if (mGroupNumber != null) {
-                mItemId = Integer.valueOf(mGroupNumber);
-            }
-        } else {
-            if (mEmployeeId != null) {
-                mItemId = Integer.valueOf(mEmployeeId);
-            }
-        }
     }
 
     @Override
@@ -331,26 +319,26 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     private void selectGroup(int id, String groupNumber) {
         mItemId = id;
-        mSchedulePresenter.setGroupNumber(groupNumber);
+        mSchedulePresenter.setSyncId(groupNumber, true);
         setTitle(groupNumber);
         mSharedPreferences.edit()
-                .putString(KEY_GROUP_NUMBER, groupNumber)
+                .putString(KEY_SYNC_ID, groupNumber)
                 .putBoolean(KEY_IS_GROUP_SCHEDULE, true)
                 .apply();
-        mGroupNumber = groupNumber;
+        mSyncId = groupNumber;
         supportInvalidateOptionsMenu();
     }
 
     private void selectEmployee(int id, String employeeName) {
         mItemId = id;
         String employeeId = String.valueOf(id);
-        mSchedulePresenter.setEmployeeId(employeeId);
+        mSchedulePresenter.setSyncId(employeeId, false);
         setTitle(employeeName);
         mSharedPreferences.edit()
-                .putString(KEY_EMPLOYEE_ID, employeeId)
+                .putString(KEY_SYNC_ID, employeeId)
                 .putBoolean(KEY_IS_GROUP_SCHEDULE, false)
                 .apply();
-        mEmployeeId = employeeId;
+        mSyncId = employeeId;
         supportInvalidateOptionsMenu();
     }
 
@@ -380,7 +368,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     }
 
     private boolean isMenuItemEnabled() {
-        return mGroupNumber != null || mEmployeeId != null;
+        return mSyncId != null;
     }
 
     private void disableScrollFlags() {
