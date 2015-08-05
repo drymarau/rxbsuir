@@ -43,6 +43,8 @@ public interface AppComponent {
 
     @Named(ScheduleActivity.KEY_IS_DARK_THEME) boolean isDarkTheme();
 
+    @Nullable @Named(ScheduleActivity.KEY_SYNC_ID) String syncId();
+
     void inject(AddGroupDialogFragment addGroupDialogFragment);
 
     void inject(AddEmployeeDialogFragment addEmployeeDialogFragment);

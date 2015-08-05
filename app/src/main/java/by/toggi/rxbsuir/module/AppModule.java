@@ -59,4 +59,11 @@ public class AppModule {
         return preferences.getBoolean(ScheduleActivity.KEY_IS_DARK_THEME, false);
     }
 
+    @Nullable
+    @Provides
+    @Named(value = ScheduleActivity.KEY_SYNC_ID)
+    String provideSyncId(SharedPreferences preferences) {
+        return preferences.getString(ScheduleActivity.KEY_SYNC_ID, null);
+    }
+
 }
