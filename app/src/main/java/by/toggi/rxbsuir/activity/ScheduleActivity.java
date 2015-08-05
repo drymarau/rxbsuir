@@ -208,8 +208,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     }
 
     @Override
-    public void onPositiveButtonClicked(String groupNumber) {
-        selectGroup(groupNumber);
+    public void onPositiveButtonClicked(int groupId, String groupName) {
+        selectGroup(groupId, groupName);
         hideFloatingActionMenu();
     }
 
@@ -314,7 +314,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         if (mItemId != menuItem.getItemId()) {
             switch (menuItem.getGroupId()) {
                 case R.id.navigation_view_groups:
-                    selectGroup(String.valueOf(menuItem.getItemId()));
+                    selectGroup(menuItem.getItemId(), menuItem.getTitle().toString());
                     break;
                 case R.id.navigation_view_employees:
                     selectEmployee(menuItem.getItemId(), menuItem.getTitle().toString());
@@ -328,8 +328,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         return true;
     }
 
-    private void selectGroup(String groupNumber) {
-        mItemId = Integer.valueOf(groupNumber);
+    private void selectGroup(int id, String groupNumber) {
+        mItemId = id;
         mSchedulePresenter.setGroupNumber(groupNumber);
         setTitle(groupNumber);
         mSharedPreferences.edit()
