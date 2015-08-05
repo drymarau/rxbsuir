@@ -213,7 +213,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
 
     private void getStudentGroupSchedule() {
         if (mSyncId != null) {
-            mService.getGroupSchedule(mSyncId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+            mService.getGroupSchedule(mSyncId.replace("М", "M")).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                     .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
                     .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, true)))
                     .toList()
