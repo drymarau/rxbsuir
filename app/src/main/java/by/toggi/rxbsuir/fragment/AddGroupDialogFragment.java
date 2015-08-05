@@ -101,8 +101,13 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
                             mPosition = -1;
                             dismiss();
                         } else {
-                            mTextInputLayout.setError(getString(R.string.error_list_employee));
+                            mTextInputLayout.setError(getString(R.string.error_list_group));
                         }
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        dismiss();
                     }
                 })
                 .build();

@@ -16,6 +16,7 @@
     <string name="title_add_employee">Добавить преподавателя</string>
     <string name="positive_add">Добавить</string>
     <string name="error_list_employee">Пожалуйста, выберите преподавателя из списка</string>
+    <string name="error_list_group">Пожалуйста, выберите группу из списка</string>
 
     <!-- MENU -->
     <string name="action_today">Сегодня</string>
