@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.mvp.presenter.AddEmployeeDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddEmployeeDialogView;
@@ -129,9 +130,7 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+        Utils.unsubscribe(mSubscription);
     }
 
     @Override

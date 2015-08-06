@@ -5,6 +5,8 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.Month;
 import org.threeten.bp.temporal.ChronoUnit;
 
+import rx.Subscription;
+
 /**
  * Utils class with all RxBsuir goodies.
  */
@@ -47,6 +49,17 @@ public class Utils {
                 return DayOfWeek.SUNDAY;
             default:
                 throw new IllegalArgumentException("Unknown weekday: " + weekday);
+        }
+    }
+
+    /**
+     * RxJava unsubscribe helper.
+     *
+     * @param subscription the subscription
+     */
+    public static void unsubscribe(Subscription subscription) {
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
         }
     }
 

@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.mvp.presenter.AddGroupDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
@@ -150,8 +151,6 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+        Utils.unsubscribe(mSubscription);
     }
 }

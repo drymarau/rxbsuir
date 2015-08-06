@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.RxBsuirContract;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
@@ -54,9 +55,7 @@ public class AddGroupDialogPresenter extends Presenter<AddGroupDialogView> {
 
     @Override
     public void onDestroy() {
-        if (!mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+        Utils.unsubscribe(mSubscription);
         detachView();
     }
 

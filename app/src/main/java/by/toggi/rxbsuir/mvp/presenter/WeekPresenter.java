@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.WeekView;
@@ -85,9 +86,7 @@ public class WeekPresenter extends Presenter<WeekView> {
 
     @Override
     public void onCreate() {
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+        Utils.unsubscribe(mSubscription);
         mSubscription = mScheduleObservable.subscribe(lessons -> {
             if (lessons.size() > 0) {
                 showLessonList(lessons);
@@ -97,9 +96,7 @@ public class WeekPresenter extends Presenter<WeekView> {
 
     @Override
     public void onDestroy() {
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+        Utils.unsubscribe(mSubscription);
         detachView();
     }
 

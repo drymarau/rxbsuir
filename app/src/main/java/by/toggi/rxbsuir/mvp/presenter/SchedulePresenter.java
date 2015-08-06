@@ -103,9 +103,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
 
     @Override
     public void onDestroy() {
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+        Utils.unsubscribe(mSubscription);
         detachView();
     }
 
