@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +27,6 @@ import by.toggi.rxbsuir.mvp.presenter.AddEmployeeDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddEmployeeDialogView;
 import by.toggi.rxbsuir.rest.model.Employee;
-import rx.android.view.ViewActions;
-import rx.android.widget.WidgetObservable;
 
 public class AddEmployeeDialogFragment extends DialogFragment implements AddEmployeeDialogView {
 
@@ -112,11 +111,11 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
                 })
                 .build();
         // Input validation
-        WidgetObservable.text(textView).map(onTextChangeEvent -> onTextChangeEvent.text().toString())
-                .map(mPresenter::isValidEmployee)
+        RxTextView.textChanges(textView)
+                .map(charSequence -> mPresenter.isValidEmployee(charSequence.toString()))
                 .startWith(false)
                 .distinctUntilChanged()
-                .subscribe(ViewActions.setEnabled(dialog.getActionButton(DialogAction.POSITIVE)));
+                .subscribe(aBoolean -> dialog.getActionButton(DialogAction.POSITIVE).setEnabled(aBoolean));
         return dialog;
     }
 
