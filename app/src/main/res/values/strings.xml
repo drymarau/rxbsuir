@@ -19,6 +19,7 @@
     <string name="title_add_employee">Add employee</string>
     <string name="positive_add">Add</string>
     <string name="error_list_employee">Please choose employee from the list</string>
+    <string name="error_list_group">Please choose group from the list</string>
 
     <!-- MENU -->
     <string name="action_today">Today</string>

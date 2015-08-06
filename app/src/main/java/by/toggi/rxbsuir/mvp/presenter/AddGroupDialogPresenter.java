@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.RxBsuirContract;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
@@ -24,7 +25,7 @@ public class AddGroupDialogPresenter extends Presenter<AddGroupDialogView> {
     private final Observable<List<StudentGroup>> mGroupListObservable;
     private final BsuirService mService;
     private final StorIOSQLite mStorIOSQLite;
-    private List<String> mGroupNumberList;
+    private List<String> mStudentGroupStringList;
     private Subscription mSubscription;
 
     @Inject
@@ -43,20 +44,18 @@ public class AddGroupDialogPresenter extends Presenter<AddGroupDialogView> {
 
     @Override
     public void onCreate() {
-        mSubscription = mGroupListObservable.subscribe(studentGroups -> {
-            if (studentGroups == null || studentGroups.isEmpty()) {
+        mSubscription = mGroupListObservable.subscribe(studentGroupList -> {
+            if (studentGroupList == null || studentGroupList.isEmpty()) {
                 getStudentGroupsFromNetwork();
             } else {
-                updateStudentGroupListInView(studentGroups);
+                updateStudentGroupListInView(studentGroupList);
             }
         });
     }
 
     @Override
     public void onDestroy() {
-        if (!mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+        Utils.unsubscribe(mSubscription);
         detachView();
     }
 
@@ -67,7 +66,7 @@ public class AddGroupDialogPresenter extends Presenter<AddGroupDialogView> {
      * @return true is group number is valid, false otherwise
      */
     public boolean isValidGroupNumber(String groupNumber) {
-        return mGroupNumberList != null && mGroupNumberList.contains(groupNumber);
+        return mStudentGroupStringList != null && mStudentGroupStringList.contains(groupNumber);
     }
 
     private void updateStudentGroupListInView(List<StudentGroup> studentGroupList) {
@@ -77,9 +76,9 @@ public class AddGroupDialogPresenter extends Presenter<AddGroupDialogView> {
                 .map(StudentGroup::toString)
                 .toList()
                 .subscribe(strings -> {
-                    mGroupNumberList = strings;
+                    mStudentGroupStringList = strings;
                     if (isViewAttached()) {
-                        getView().updateStudentGroupList(mGroupNumberList);
+                        getView().updateStudentGroupList(studentGroupList);
                     }
                 });
     }

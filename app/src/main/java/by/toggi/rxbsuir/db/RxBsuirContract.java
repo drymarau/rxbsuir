@@ -53,7 +53,7 @@ public class RxBsuirContract {
          * @return where query
          */
         public static String filterByGroup(String groupNumber) {
-            return COL_SYNC_ID + " = " + groupNumber + " and " + filterByScheduleType(true);
+            return COL_SYNC_ID + " = '" + groupNumber + "' and " + filterByScheduleType(true);
         }
 
         /**
@@ -63,7 +63,7 @@ public class RxBsuirContract {
          * @return where query
          */
         public static String filterByEmployee(String employeeId) {
-            return COL_SYNC_ID + " = " + employeeId + " and " + filterByScheduleType(false);
+            return COL_SYNC_ID + " = '" + employeeId + "' and " + filterByScheduleType(false);
         }
 
         /**

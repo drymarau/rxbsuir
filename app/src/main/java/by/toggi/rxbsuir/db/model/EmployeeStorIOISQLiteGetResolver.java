@@ -28,7 +28,7 @@ public class EmployeeStorIOISQLiteGetResolver extends DefaultGetResolver<Employe
         }
 
         return Employee.newInstance(
-                cursor.getLong(cursor.getColumnIndex(EmployeeEntry.COL_ID)),
+                cursor.getInt(cursor.getColumnIndex(EmployeeEntry.COL_ID)),
                 new ArrayList<>(Arrays.asList(academicDepartmentArray)),
                 cursor.getString(cursor.getColumnIndex(EmployeeEntry.COL_FIRST_NAME)),
                 cursor.getString(cursor.getColumnIndex(EmployeeEntry.COL_MIDDLE_NAME)),

@@ -8,7 +8,7 @@ import java.util.List;
 public class Employee {
 
     @Element(name = "id")
-    public long id;
+    public int id;
     @ElementList(entry = "academicDepartment", inline = true, required = false)
     public List<String> academicDepartment;
     @Element(name = "firstName")
@@ -22,7 +22,7 @@ public class Employee {
     Employee() {
     }
 
-    public static Employee newInstance(long id, List<String> academicDepartmentList, String firstName, String middleName, String lastName, boolean isCached) {
+    public static Employee newInstance(int id, List<String> academicDepartmentList, String firstName, String middleName, String lastName, boolean isCached) {
         Employee employee = new Employee();
         employee.id = id;
         employee.academicDepartment = academicDepartmentList;

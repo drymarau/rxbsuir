@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,19 +23,22 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.mvp.presenter.AddGroupDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
-import rx.android.view.ViewActions;
-import rx.android.widget.WidgetObservable;
+import by.toggi.rxbsuir.rest.model.StudentGroup;
+import rx.Subscription;
 
 public class AddGroupDialogFragment extends DialogFragment implements AddGroupDialogView {
 
     @Inject AddGroupDialogPresenter mPresenter;
 
-    private ArrayAdapter<String> mAdapter;
+    private ArrayAdapter<StudentGroup> mAdapter;
     private OnButtonClickListener mListener;
+    private int mPosition = -1;
     private TextInputLayout mTextInputLayout;
+    private Subscription mSubscription;
 
     public static AddGroupDialogFragment newInstance() {
         return new AddGroupDialogFragment();
@@ -84,23 +88,37 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
         AutoCompleteTextView textView = ButterKnife.findById(mTextInputLayout, R.id.group_number_text_view);
         mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<>());
         textView.setAdapter(mAdapter);
+        textView.setOnItemClickListener((parent, view, position, id) -> mPosition = position);
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(mTextInputLayout, true)
                 .title(R.string.title_add_group)
                 .positiveText(R.string.positive_add)
                 .negativeText(android.R.string.cancel)
+                .autoDismiss(false)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        mListener.onPositiveButtonClicked(textView.getText().toString());
+                        if (mPosition != -1) {
+                            StudentGroup studentGroup = mAdapter.getItem(mPosition);
+                            mListener.onPositiveButtonClicked(studentGroup.id, studentGroup.name, true);
+                            mPosition = -1;
+                            dismiss();
+                        } else {
+                            mTextInputLayout.setError(getString(R.string.error_list_group));
+                        }
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        dismiss();
                     }
                 })
                 .build();
         // Input validation
-        WidgetObservable.text(textView).map(onTextChangeEvent -> onTextChangeEvent.text().toString())
-                .map(mPresenter::isValidGroupNumber)
+        mSubscription = RxTextView.textChanges(textView)
+                .map(charSequence -> mPresenter.isValidGroupNumber(charSequence.toString()))
                 .startWith(false)
                 .distinctUntilChanged()
-                .subscribe(ViewActions.setEnabled(dialog.getActionButton(DialogAction.POSITIVE)));
+                .subscribe(aBoolean -> dialog.getActionButton(DialogAction.POSITIVE).setEnabled(aBoolean));
         return dialog;
     }
 
@@ -109,9 +127,10 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
     }
 
     @Override
-    public void updateStudentGroupList(List<String> studentGroupList) {
+    public void updateStudentGroupList(List<StudentGroup> studentGroupList) {
+        mTextInputLayout.setErrorEnabled(false);
         mAdapter.clear();
-        for (String group : studentGroupList) {
+        for (StudentGroup group : studentGroupList) {
             mAdapter.add(group);
         }
     }
@@ -132,11 +151,6 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
-    }
-
-    public interface OnButtonClickListener {
-
-        void onPositiveButtonClicked(String groupNumber);
-
+        Utils.unsubscribe(mSubscription);
     }
 }

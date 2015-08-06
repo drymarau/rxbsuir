@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +23,12 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.mvp.presenter.AddEmployeeDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddEmployeeDialogView;
 import by.toggi.rxbsuir.rest.model.Employee;
-import rx.android.view.ViewActions;
-import rx.android.widget.WidgetObservable;
+import rx.Subscription;
 
 public class AddEmployeeDialogFragment extends DialogFragment implements AddEmployeeDialogView {
 
@@ -37,6 +38,7 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
     private OnButtonClickListener mListener;
     private int mPosition = -1;
     private TextInputLayout mTextInputLayout;
+    private Subscription mSubscription;
 
     public static AddEmployeeDialogFragment newInstance() {
         return new AddEmployeeDialogFragment();
@@ -96,7 +98,8 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         if (mPosition != -1) {
-                            mListener.onPositiveButtonClicked(mAdapter.getItem(mPosition));
+                            Employee employee = mAdapter.getItem(mPosition);
+                            mListener.onPositiveButtonClicked(employee.id, employee.toString(), false);
                             mPosition = -1;
                             dismiss();
                         } else {
@@ -111,11 +114,11 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
                 })
                 .build();
         // Input validation
-        WidgetObservable.text(textView).map(onTextChangeEvent -> onTextChangeEvent.text().toString())
-                .map(mPresenter::isValidEmployee)
+        mSubscription = RxTextView.textChanges(textView)
+                .map(charSequence -> mPresenter.isValidEmployee(charSequence.toString()))
                 .startWith(false)
                 .distinctUntilChanged()
-                .subscribe(ViewActions.setEnabled(dialog.getActionButton(DialogAction.POSITIVE)));
+                .subscribe(aBoolean -> dialog.getActionButton(DialogAction.POSITIVE).setEnabled(aBoolean));
         return dialog;
     }
 
@@ -127,6 +130,7 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
+        Utils.unsubscribe(mSubscription);
     }
 
     @Override
@@ -148,11 +152,5 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
                     break;
             }
         }
-    }
-
-    public interface OnButtonClickListener {
-
-        void onPositiveButtonClicked(Employee employee);
-
     }
 }

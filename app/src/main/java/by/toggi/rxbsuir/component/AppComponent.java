@@ -35,13 +35,11 @@ public interface AppComponent {
 
     SharedPreferences sharedPreferences();
 
-    @Nullable @Named(ScheduleActivity.KEY_GROUP_NUMBER) String groupNumber();
-
-    @Nullable @Named(ScheduleActivity.KEY_EMPLOYEE_ID) String employeeId();
-
     @Named(ScheduleActivity.KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule();
 
     @Named(ScheduleActivity.KEY_IS_DARK_THEME) boolean isDarkTheme();
+
+    @Nullable @Named(ScheduleActivity.KEY_SYNC_ID) String syncId();
 
     void inject(AddGroupDialogFragment addGroupDialogFragment);
 
