@@ -178,10 +178,6 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         boolean isGroupSchedule = preferences.getBoolean(ScheduleActivity.KEY_IS_GROUP_SCHEDULE, true);
         switch (key) {
-//            case ScheduleActivity.KEY_IS_GROUP_SCHEDULE:
-//                mRecyclerView.setVisibility(View.GONE);
-//                mPresenter.setSyncId(preferences.getString(ScheduleActivity.KEY_SYNC_ID, null), isGroupSchedule);
-//                break;
             case ScheduleActivity.KEY_SYNC_ID:
                 mRecyclerView.setVisibility(View.GONE);
                 mPresenter.setSyncId(preferences.getString(key, null), isGroupSchedule);
