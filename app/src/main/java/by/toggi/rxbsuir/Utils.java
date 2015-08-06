@@ -23,6 +23,12 @@ public class Utils {
         return weeks.intValue() % 4 + 1;
     }
 
+    /**
+     * Convert weekday to {@link DayOfWeek}.
+     *
+     * @param weekday the weekday
+     * @return the day of week
+     */
     public static DayOfWeek convertWeekdayToDayOfWeek(String weekday) {
         switch (weekday.toLowerCase()) {
             case "понедельник":
