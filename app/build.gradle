@@ -28,7 +28,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 def versionMajor = 1
 def versionMinor = 0
 def versionPatch = 0
-def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+def versionBuild = 1 // bump for dogfood builds, public betas, etc.
 
 android {
     compileSdkVersion 22
@@ -86,9 +86,9 @@ dependencies {
     compile 'frankiesardo:icepick:3.1.0'
     apt 'frankiesardo:icepick-processor:3.1.0'
 
-    compile 'com.pushtorefresh.storio:sqlite:1.1.0'
-    compile 'com.pushtorefresh.storio:sqlite-annotations:1.1.0'
-    apt 'com.pushtorefresh.storio:sqlite-annotations-processor:1.1.0'
+    compile 'com.pushtorefresh.storio:sqlite:1.1.2'
+    compile 'com.pushtorefresh.storio:sqlite-annotations:1.1.2'
+    apt 'com.pushtorefresh.storio:sqlite-annotations-processor:1.1.2'
 
     compile 'com.google.dagger:dagger:2.0.1'
     apt 'com.google.dagger:dagger-compiler:2.0.1'
