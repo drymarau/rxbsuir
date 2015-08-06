@@ -1,5 +1,7 @@
 package by.toggi.rxbsuir;
 
+import android.support.annotation.NonNull;
+
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Month;
@@ -31,7 +33,7 @@ public class Utils {
      * @param weekday the weekday
      * @return the day of week
      */
-    public static DayOfWeek convertWeekdayToDayOfWeek(String weekday) {
+    public static DayOfWeek convertWeekdayToDayOfWeek(@NonNull String weekday) {
         switch (weekday.toLowerCase()) {
             case "понедельник":
                 return DayOfWeek.MONDAY;
