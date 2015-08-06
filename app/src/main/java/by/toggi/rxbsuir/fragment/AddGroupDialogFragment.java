@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +27,7 @@ import by.toggi.rxbsuir.mvp.presenter.AddGroupDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
-import rx.android.view.ViewActions;
-import rx.android.widget.WidgetObservable;
+import rx.Subscription;
 
 public class AddGroupDialogFragment extends DialogFragment implements AddGroupDialogView {
 
@@ -37,6 +37,7 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
     private OnButtonClickListener mListener;
     private int mPosition = -1;
     private TextInputLayout mTextInputLayout;
+    private Subscription mSubscription;
 
     public static AddGroupDialogFragment newInstance() {
         return new AddGroupDialogFragment();
@@ -112,11 +113,11 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
                 })
                 .build();
         // Input validation
-        WidgetObservable.text(textView).map(onTextChangeEvent -> onTextChangeEvent.text().toString())
-                .map(mPresenter::isValidGroupNumber)
+        mSubscription = RxTextView.textChanges(textView)
+                .map(charSequence -> mPresenter.isValidGroupNumber(charSequence.toString()))
                 .startWith(false)
                 .distinctUntilChanged()
-                .subscribe(ViewActions.setEnabled(dialog.getActionButton(DialogAction.POSITIVE)));
+                .subscribe(aBoolean -> dialog.getActionButton(DialogAction.POSITIVE).setEnabled(aBoolean));
         return dialog;
     }
 
@@ -149,5 +150,8 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
     }
 }
