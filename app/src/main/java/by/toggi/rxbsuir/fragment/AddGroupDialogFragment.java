@@ -97,7 +97,7 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
                     public void onPositive(MaterialDialog dialog) {
                         if (mPosition != -1) {
                             StudentGroup studentGroup = mAdapter.getItem(mPosition);
-                            mListener.onPositiveButtonClicked(studentGroup.id, studentGroup.name);
+                            mListener.onPositiveButtonClicked(studentGroup.id, studentGroup.name, true);
                             mPosition = -1;
                             dismiss();
                         } else {
@@ -149,11 +149,5 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
-    }
-
-    public interface OnButtonClickListener {
-
-        void onPositiveButtonClicked(int groupId, String groupName);
-
     }
 }

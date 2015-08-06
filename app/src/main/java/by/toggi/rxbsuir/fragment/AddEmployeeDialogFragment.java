@@ -96,7 +96,8 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         if (mPosition != -1) {
-                            mListener.onPositiveButtonClicked(mAdapter.getItem(mPosition));
+                            Employee employee = mAdapter.getItem(mPosition);
+                            mListener.onPositiveButtonClicked(employee.id, employee.toString(), false);
                             mPosition = -1;
                             dismiss();
                         } else {
@@ -148,11 +149,5 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
                     break;
             }
         }
-    }
-
-    public interface OnButtonClickListener {
-
-        void onPositiveButtonClicked(Employee employee);
-
     }
 }

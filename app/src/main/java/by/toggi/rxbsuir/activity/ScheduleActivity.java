@@ -42,6 +42,7 @@ import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
 import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
+import by.toggi.rxbsuir.fragment.OnButtonClickListener;
 import by.toggi.rxbsuir.fragment.StorageFragment;
 import by.toggi.rxbsuir.fragment.WeekFragment;
 import by.toggi.rxbsuir.module.ActivityModule;
@@ -50,14 +51,13 @@ import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
-import by.toggi.rxbsuir.rest.model.Employee;
 import icepick.Icepick;
 import icepick.State;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
 
-public class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, AddGroupDialogFragment.OnButtonClickListener, AddEmployeeDialogFragment.OnButtonClickListener {
+public class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 
     public static final String KEY_IS_GROUP_SCHEDULE = "is_group_schedule";
     public static final String KEY_SUBGROUP_1 = "subgroup_1";
@@ -197,15 +197,13 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
     }
 
     @Override
-    public void onPositiveButtonClicked(int groupId, String groupName) {
-        selectGroup(groupId, groupName);
+    public void onPositiveButtonClicked(int id, String name, boolean isGroupSchedule) {
         hideFloatingActionMenu();
-    }
-
-    @Override
-    public void onPositiveButtonClicked(Employee employee) {
-        selectEmployee(Long.valueOf(employee.id).intValue(), employee.toString());
-        hideFloatingActionMenu();
+        if (isGroupSchedule) {
+            selectGroup(id, name);
+        } else {
+            selectEmployee(id, name);
+        }
     }
 
     @Override
