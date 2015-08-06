@@ -27,6 +27,7 @@ import by.toggi.rxbsuir.mvp.presenter.AddGroupDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
+import rx.Subscription;
 
 public class AddGroupDialogFragment extends DialogFragment implements AddGroupDialogView {
 
@@ -36,6 +37,7 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
     private OnButtonClickListener mListener;
     private int mPosition = -1;
     private TextInputLayout mTextInputLayout;
+    private Subscription mSubscription;
 
     public static AddGroupDialogFragment newInstance() {
         return new AddGroupDialogFragment();
@@ -111,7 +113,7 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
                 })
                 .build();
         // Input validation
-        RxTextView.textChanges(textView)
+        mSubscription = RxTextView.textChanges(textView)
                 .map(charSequence -> mPresenter.isValidGroupNumber(charSequence.toString()))
                 .startWith(false)
                 .distinctUntilChanged()
@@ -148,5 +150,8 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
     }
 }

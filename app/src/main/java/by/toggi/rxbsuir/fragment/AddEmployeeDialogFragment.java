@@ -27,6 +27,7 @@ import by.toggi.rxbsuir.mvp.presenter.AddEmployeeDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddEmployeeDialogView;
 import by.toggi.rxbsuir.rest.model.Employee;
+import rx.Subscription;
 
 public class AddEmployeeDialogFragment extends DialogFragment implements AddEmployeeDialogView {
 
@@ -36,6 +37,7 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
     private OnButtonClickListener mListener;
     private int mPosition = -1;
     private TextInputLayout mTextInputLayout;
+    private Subscription mSubscription;
 
     public static AddEmployeeDialogFragment newInstance() {
         return new AddEmployeeDialogFragment();
@@ -111,7 +113,7 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
                 })
                 .build();
         // Input validation
-        RxTextView.textChanges(textView)
+        mSubscription = RxTextView.textChanges(textView)
                 .map(charSequence -> mPresenter.isValidEmployee(charSequence.toString()))
                 .startWith(false)
                 .distinctUntilChanged()
@@ -127,6 +129,9 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
     }
 
     @Override
