@@ -41,24 +41,26 @@ public class BsuirServiceTest {
                 .create(BsuirService.class);
     }
 
-//    @Test
-//    public void employeeScheduleParseTest() {
-//        mServer.enqueue(new MockResponse().setBody(RESPONSE_EMPLOYEE_LIST));
-//        List<ScheduleModel> scheduleModelList = mService.getEmployeeSchedule("")
-//                .toBlocking()
-//                .first()
-//                .scheduleModelList;
-//        assertThat(scheduleModelList).isNotNull();
-//        assertThat(scheduleModelList).hasSize(2);
-//        ScheduleModel scheduleModel = scheduleModelList.get(0);
-//        assertThat(scheduleModel.weekDay).isEqualTo("Понедельник");
-//        List<Schedule> scheduleList = scheduleModel.scheduleList;
-//        assertThat(scheduleList).hasSize(2);
-//        assertThat(scheduleList).extracting("note", "subject").contains(
-//                tuple(null, "ПИСЭД"),
-//                tuple(null, "ОДиРСМЭ")
-//        );
-//    }
+    @Test
+    public void employeeScheduleParseTest() {
+        mServer.enqueue(new MockResponse().setBody(RESPONSE_EMPLOYEE_SCHEDULE_LIST));
+        List<ScheduleModel> scheduleModelList = mService.getEmployeeSchedule("")
+                .toBlocking()
+                .first()
+                .scheduleModelList;
+        assertThat(scheduleModelList).isNotNull();
+        assertThat(scheduleModelList).hasSize(1);
+        ScheduleModel scheduleModel = scheduleModelList.get(0);
+        assertThat(scheduleModel.weekDay).isEqualTo("Вторник");
+        List<Schedule> scheduleList = scheduleModel.scheduleList;
+        assertThat(scheduleList).hasSize(4);
+        assertThat(scheduleList).extracting("note", "subject", "lessonType", "numSubgroup").contains(
+                tuple(null, "БтСУ", "ЛР", 1),
+                tuple(null, "БтСУ", "ЛР", 2),
+                tuple(null, "БтСУ", "ПЗ", 0),
+                tuple(null, "БтСУ", "ЛР", 0)
+        );
+    }
 
     @Test
     public void studentScheduleParseTest() {
