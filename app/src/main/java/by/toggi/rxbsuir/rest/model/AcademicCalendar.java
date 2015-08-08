@@ -41,4 +41,13 @@ public class AcademicCalendar {
     public String getEndDate() {
         return endDate;
     }
+
+    @Override
+    public String toString() {
+        return "AcademicCalendar{" +
+                "course=" + course +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                '}';
+    }
 }
