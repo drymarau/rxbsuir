@@ -45,7 +45,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
     /**
      * Instantiates a new Schedule presenter.
      *
-     * @param service      the service
+     * @param service      the bsuirService
      * @param storIOSQLite the stor iOSQ lite
      */
     @Inject
