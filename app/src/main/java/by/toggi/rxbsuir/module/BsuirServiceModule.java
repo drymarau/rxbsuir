@@ -30,7 +30,6 @@ public class BsuirServiceModule {
         return new RestAdapter.Builder()
                 .setConverter(converter)
                 .setEndpoint(mEndpoint)
-                .setLogLevel(RestAdapter.LogLevel.BASIC)
                 .build();
     }
 
