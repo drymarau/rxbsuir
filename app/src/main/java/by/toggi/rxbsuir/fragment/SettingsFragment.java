@@ -10,6 +10,7 @@ import android.support.v4.content.IntentCompat;
 import by.toggi.rxbsuir.BuildConfig;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
+import by.toggi.rxbsuir.activity.StartupActivity;
 
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
@@ -27,7 +28,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference.getKey().equals(ScheduleActivity.KEY_IS_DARK_THEME)) {
             getActivity().finish();
-            ComponentName componentName = new ComponentName(getActivity(), ScheduleActivity.class);
+            ComponentName componentName = new ComponentName(getActivity(), StartupActivity.class);
             final Intent intent = IntentCompat.makeMainActivity(componentName);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

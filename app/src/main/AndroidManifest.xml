@@ -23,6 +23,9 @@
             android:name=".activity.WeekScheduleActivity"
             android:theme="@style/AppTheme.Drawer.Dark"/>
         <activity
+            android:name=".activity.TermScheduleActivity"
+            android:theme="@style/AppTheme.Drawer.Dark"/>
+        <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/label_settings">
             <meta-data
