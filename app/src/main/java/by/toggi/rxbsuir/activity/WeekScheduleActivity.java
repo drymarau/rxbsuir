@@ -24,7 +24,7 @@ public class WeekScheduleActivity extends ScheduleActivity {
 
     @Override
     protected int getLayoutRes() {
-        return R.layout.activity_schedule;
+        return R.layout.activity_week_schedule;
     }
 
     @Override
