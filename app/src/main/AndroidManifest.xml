@@ -20,14 +20,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ScheduleActivity"
+            android:name=".activity.WeekScheduleActivity"
             android:theme="@style/AppTheme.Drawer.Dark"/>
         <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/label_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ScheduleActivity"/>
+                android:value=".activity.WeekScheduleActivity"/>
         </activity>
 
         <meta-data
