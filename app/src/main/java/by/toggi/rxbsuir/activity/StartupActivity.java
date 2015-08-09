@@ -9,7 +9,7 @@ public class StartupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startActivity(new Intent(this, WeekScheduleActivity.class));
+        startActivity(new Intent(this, TermScheduleActivity.class));
         finish();
     }
 }
