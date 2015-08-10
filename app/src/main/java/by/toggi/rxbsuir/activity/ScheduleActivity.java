@@ -35,16 +35,12 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
-import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
 import by.toggi.rxbsuir.fragment.StorageFragment;
 import by.toggi.rxbsuir.fragment.WeekFragment;
-import by.toggi.rxbsuir.module.ActivityModule;
-import by.toggi.rxbsuir.module.ScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
@@ -126,13 +122,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         mDrawerPresenter.onDestroy();
     }
 
-    private void initializeComponent() {
-        DaggerScheduleActivityComponent.builder()
-                .activityModule(new ActivityModule(this))
-                .scheduleActivityModule(new ScheduleActivityModule())
-                .appComponent(((RxBsuirApplication) getApplication()).getAppComponent())
-                .build().inject(this);
-    }
+    protected abstract void initializeComponent();
 
     @OnClick(R.id.fab)
     public void onFloatingActionButtonClick() {

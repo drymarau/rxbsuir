@@ -7,7 +7,11 @@ import android.view.View;
 
 import butterknife.Bind;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
+import by.toggi.rxbsuir.component.DaggerWeekScheduleActivityComponent;
+import by.toggi.rxbsuir.module.ActivityModule;
+import by.toggi.rxbsuir.module.WeekScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 
 public class WeekScheduleActivity extends ScheduleActivity {
@@ -25,6 +29,15 @@ public class WeekScheduleActivity extends ScheduleActivity {
     @Override
     protected int getLayoutRes() {
         return R.layout.activity_week_schedule;
+    }
+
+    @Override
+    protected void initializeComponent() {
+        DaggerWeekScheduleActivityComponent.builder()
+                .activityModule(new ActivityModule(this))
+                .weekScheduleActivityModule(new WeekScheduleActivityModule())
+                .appComponent(((RxBsuirApplication) getApplication()).getAppComponent())
+                .build().inject(this);
     }
 
     @Override
