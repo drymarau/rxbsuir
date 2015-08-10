@@ -35,7 +35,6 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
@@ -74,7 +73,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     @BindDimen(R.dimen.view_pager_page_margin) int mPageMargin;
 
-    @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
