@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -13,9 +15,11 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.component.DaggerTermScheduleActivityComponent;
+import by.toggi.rxbsuir.db.model.LessonWithDate;
 import by.toggi.rxbsuir.module.TermScheduleActivityModule;
+import by.toggi.rxbsuir.mvp.view.TermView;
 
-public class TermScheduleActivity extends ScheduleActivity {
+public class TermScheduleActivity extends ScheduleActivity implements TermView {
 
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
 
@@ -57,4 +61,8 @@ public class TermScheduleActivity extends ScheduleActivity {
         ));
     }
 
+    @Override
+    public void showLessonList(List<LessonWithDate> lessonWithDateList) {
+
+    }
 }
