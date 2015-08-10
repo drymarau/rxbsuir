@@ -67,6 +67,28 @@ public class RxBsuirContract {
         }
 
         /**
+         * Filter by group and subgroup.
+         *
+         * @param groupNumber the group number
+         * @param subgroupNumber the subgroup number
+         * @return the string
+         */
+        public static String filterByGroupAndSubgroup(String groupNumber, int subgroupNumber) {
+            return filterByGroup(groupNumber) + " and (" + filterBySubgroup(subgroupNumber) + ")";
+        }
+
+        /**
+         * Filter by employee and subgroup.
+         *
+         * @param employeeId the employee id
+         * @param subgroupNumber the subgroup number
+         * @return the string
+         */
+        public static String filterByEmployeeAndSubgroup(String employeeId, int subgroupNumber) {
+            return filterByEmployee(employeeId) + " and (" + filterBySubgroup(subgroupNumber) + ")";
+        }
+
+        /**
          * Filter by group, subgroup, and week.
          *
          * @param groupNumber    the group number
