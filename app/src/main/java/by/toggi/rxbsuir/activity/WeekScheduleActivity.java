@@ -5,12 +5,14 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
+import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
 import by.toggi.rxbsuir.component.DaggerWeekScheduleActivityComponent;
-import by.toggi.rxbsuir.module.ActivityModule;
 import by.toggi.rxbsuir.module.WeekScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 
@@ -18,6 +20,8 @@ public class WeekScheduleActivity extends ScheduleActivity {
 
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
     @Bind(R.id.view_pager) ViewPager mViewPager;
+
+    @Inject WeekPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +38,7 @@ public class WeekScheduleActivity extends ScheduleActivity {
     @Override
     protected void initializeComponent() {
         DaggerWeekScheduleActivityComponent.builder()
-                .activityModule(new ActivityModule(this))
-                .weekScheduleActivityModule(new WeekScheduleActivityModule())
+                .weekScheduleActivityModule(new WeekScheduleActivityModule(this))
                 .appComponent(((RxBsuirApplication) getApplication()).getAppComponent())
                 .build().inject(this);
     }
