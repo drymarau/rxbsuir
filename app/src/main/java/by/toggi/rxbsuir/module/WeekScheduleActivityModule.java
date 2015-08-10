@@ -1,27 +1,38 @@
 package by.toggi.rxbsuir.module;
 
-import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 
 import by.toggi.rxbsuir.Activity;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 public class WeekScheduleActivityModule {
 
-    @Provides
-    @Activity
-    String[] provideTabs(Context context) {
-        return context.getResources().getStringArray(R.array.tabs);
+    private final WeekScheduleActivity mActivity;
+
+    public WeekScheduleActivityModule(WeekScheduleActivity activity) {
+        mActivity = activity;
     }
 
     @Provides
     @Activity
-    FragmentManager provideSupportFragmentManager(AppCompatActivity activity) {
-        return activity.getSupportFragmentManager();
+    WeekScheduleActivity provideActivity() {
+        return mActivity;
+    }
+
+    @Provides
+    @Activity
+    String[] provideTabs() {
+        return mActivity.getResources().getStringArray(R.array.tabs);
+    }
+
+    @Provides
+    @Activity
+    FragmentManager provideSupportFragmentManager() {
+        return mActivity.getSupportFragmentManager();
     }
 
 }
