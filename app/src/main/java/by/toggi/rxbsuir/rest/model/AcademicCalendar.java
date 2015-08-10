@@ -1,13 +1,22 @@
 package by.toggi.rxbsuir.rest.model;
 
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
+
+import static by.toggi.rxbsuir.db.RxBsuirContract.AcademicCalendarEntry;
+
 /**
  * The type Academic calendar.
  */
+@StorIOSQLiteType(table = AcademicCalendarEntry.TABLE_NAME)
 public class AcademicCalendar {
 
-    private int course;
-    private String startDate;
-    private String endDate;
+    @StorIOSQLiteColumn(name = AcademicCalendarEntry.COL_COURSE, key = true)
+    public int course;
+    @StorIOSQLiteColumn(name = AcademicCalendarEntry.COL_START_DATE)
+    public String startDate;
+    @StorIOSQLiteColumn(name = AcademicCalendarEntry.COL_END_DATE)
+    public String endDate;
 
     /**
      * Instantiates a new Academic calendar.
