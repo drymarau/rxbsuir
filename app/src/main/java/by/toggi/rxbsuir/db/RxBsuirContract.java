@@ -4,6 +4,16 @@ import android.provider.BaseColumns;
 
 public class RxBsuirContract {
 
+    public static class AcademicCalendarEntry {
+
+        public static final String TABLE_NAME = "academic_calendars";
+
+        public static final String COL_COURSE = "course";
+        public static final String COL_START_DATE = "start_date";
+        public static final String COL_END_DATE = "end_date";
+
+    }
+
     public static class EmployeeEntry implements HelperColumns {
 
         public static final String TABLE_NAME = "employees";
@@ -64,6 +74,28 @@ public class RxBsuirContract {
          */
         public static String filterByEmployee(String employeeId) {
             return COL_SYNC_ID + " = '" + employeeId + "' and " + filterByScheduleType(false);
+        }
+
+        /**
+         * Filter by group and subgroup.
+         *
+         * @param groupNumber the group number
+         * @param subgroupNumber the subgroup number
+         * @return the string
+         */
+        public static String filterByGroupAndSubgroup(String groupNumber, int subgroupNumber) {
+            return filterByGroup(groupNumber) + " and (" + filterBySubgroup(subgroupNumber) + ")";
+        }
+
+        /**
+         * Filter by employee and subgroup.
+         *
+         * @param employeeId the employee id
+         * @param subgroupNumber the subgroup number
+         * @return the string
+         */
+        public static String filterByEmployeeAndSubgroup(String employeeId, int subgroupNumber) {
+            return filterByEmployee(employeeId) + " and (" + filterBySubgroup(subgroupNumber) + ")";
         }
 
         /**

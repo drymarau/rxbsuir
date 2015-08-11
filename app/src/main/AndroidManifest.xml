@@ -12,8 +12,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme.Dark">
         <activity
-            android:theme="@style/AppTheme.Drawer.Dark"
-            android:name=".activity.ScheduleActivity">
+            android:name=".activity.StartupActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -21,15 +20,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.WeekScheduleActivity"
+            android:theme="@style/AppTheme.Drawer.Dark"/>
+        <activity
+            android:name=".activity.TermScheduleActivity"
+            android:theme="@style/AppTheme.Drawer.Dark"/>
+        <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/label_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ScheduleActivity"/>
+                android:value=".activity.WeekScheduleActivity"/>
         </activity>
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="aedd177c4bd42ca01848f855c0e22dc3001068cc" />
+            android:value="aedd177c4bd42ca01848f855c0e22dc3001068cc"/>
     </application>
 
 </manifest>

@@ -7,37 +7,61 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.db.model.LessonWithDate;
 
-public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> implements LessonViewType {
+public class LessonWithDateAdapter extends RecyclerView.Adapter<LessonWithDateAdapter.ViewHolder> implements LessonViewType {
 
-    private List<Lesson> mLessonList;
 
-    public LessonAdapter(List<Lesson> lessonList) {
-        mLessonList = lessonList;
+    private List<LessonWithDate> mLessonWithDateList;
+
+    public LessonWithDateAdapter(List<LessonWithDate> lessonWithDateList) {
+        mLessonWithDateList = lessonWithDateList;
     }
 
     /**
      * Sets lesson list and updates the {@link RecyclerView}.
      *
-     * @param lessonList the lesson list
+     * @param lessonWithDateList the lesson list
      */
-    public void setLessonList(List<Lesson> lessonList) {
-        mLessonList.clear();
-        mLessonList.addAll(lessonList);
+    public void setLessonWithDateList(List<LessonWithDate> lessonWithDateList) {
+        mLessonWithDateList.clear();
+        mLessonWithDateList.addAll(lessonWithDateList);
         notifyDataSetChanged();
+    }
+
+    /**
+     * Gets today position.
+     *
+     * @return the today position
+     */
+    public int getTodayPosition() {
+        LocalDate localDate = LocalDate.now();
+        if (localDate.isBefore(mLessonWithDateList.get(0).getLocalDate())) {
+            return 0;
+        }
+        for (LessonWithDate lessonWithDate : mLessonWithDateList) {
+            LocalDate lessonDate = lessonWithDate.getLocalDate();
+            if (lessonDate.isEqual(lessonDate) || lessonDate.isAfter(lessonDate)) {
+                return mLessonWithDateList.indexOf(lessonWithDate);
+            }
+        }
+        return mLessonWithDateList.size() - 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        Lesson lesson = mLessonList.get(position);
+        LessonWithDate lessonWithDate = mLessonWithDateList.get(position);
+        Lesson lesson = lessonWithDate.getLesson();
 
-        if (position != 0 && lesson.getWeekday().equals(mLessonList.get(position - 1).getWeekday())) {
+        if (position != 0 && lessonWithDate.getPrettyDate().equals(mLessonWithDateList.get(position - 1).getPrettyDate())) {
             if (lesson.getPrettyAuditoryList().isEmpty()) {
                 return VIEW_TYPE_LESSON_ONE_LINE;
             }
@@ -81,7 +105,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Lesson lesson = mLessonList.get(position);
+        LessonWithDate lessonWithDate = mLessonWithDateList.get(position);
+        Lesson lesson = lessonWithDate.getLesson();
         viewHolder.mLessonType.setText(lesson.getLessonType());
         viewHolder.mLessonSubjectSubgroup.setText(lesson.getSubjectWithSubgroup());
         viewHolder.mLessonTimeStart.setText(lesson.getPrettyLessonTimeStart());
@@ -96,12 +121,12 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
                 viewHolder.mLessonEmployee.setText(lesson.getPrettyStudentGroupList());
             }
         }
-        viewHolder.setWeekDay(lesson.getPrettyWeekday());
+        viewHolder.setWeekDay(lessonWithDate.getPrettyDate());
     }
 
     @Override
     public int getItemCount() {
-        return mLessonList.size();
+        return mLessonWithDateList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

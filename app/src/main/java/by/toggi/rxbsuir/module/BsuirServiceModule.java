@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.module;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.rest.BsuirService;
@@ -26,17 +27,17 @@ public class BsuirServiceModule {
 
     @Provides
     @Singleton
+    @Named("simple")
     RestAdapter provideRestAdapter(Converter converter) {
         return new RestAdapter.Builder()
                 .setConverter(converter)
                 .setEndpoint(mEndpoint)
-                .setLogLevel(RestAdapter.LogLevel.BASIC)
                 .build();
     }
 
     @Provides
     @Singleton
-    BsuirService provideBsuirService(RestAdapter restAdapter) {
+    BsuirService provideBsuirService(@Named("simple") RestAdapter restAdapter) {
         return restAdapter.create(BsuirService.class);
     }
 

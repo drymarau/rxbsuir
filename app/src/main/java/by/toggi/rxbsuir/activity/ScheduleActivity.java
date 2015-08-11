@@ -6,16 +6,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -36,17 +35,12 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
-import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
-import by.toggi.rxbsuir.component.DaggerScheduleActivityComponent;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
 import by.toggi.rxbsuir.fragment.StorageFragment;
 import by.toggi.rxbsuir.fragment.WeekFragment;
-import by.toggi.rxbsuir.module.ActivityModule;
-import by.toggi.rxbsuir.module.ScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
@@ -57,20 +51,19 @@ import icepick.State;
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
 
-public class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
+public abstract class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 
     public static final String KEY_IS_GROUP_SCHEDULE = "is_group_schedule";
     public static final String KEY_SUBGROUP_1 = "subgroup_1";
     public static final String KEY_SUBGROUP_2 = "subgroup_2";
     public static final String KEY_IS_DARK_THEME = "is_dark_theme";
     public static final String KEY_SYNC_ID = "sync_id";
+    public static final String KEY_IS_WEEK_VIEW = "is_week_view";
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
     private static final String KEY_TITLE = "title";
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.tab_layout) TabLayout mTabLayout;
-    @Bind(R.id.view_pager) ViewPager mViewPager;
     @Bind(R.id.progress_bar) ProgressBar mProgressBar;
     @Bind(R.id.coordinator_layout) CoordinatorLayout mCoordinatorLayout;
     @Bind(R.id.fab_group) FloatingActionButton mFabGroup;
@@ -82,12 +75,12 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @BindDimen(R.dimen.view_pager_page_margin) int mPageMargin;
 
-    @Inject WeekPagerAdapter mPagerAdapter;
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(KEY_IS_GROUP_SCHEDULE) boolean mIsGroupSchedule;
     @Inject @Named(KEY_IS_DARK_THEME) boolean mIsDarkTheme;
+    @Inject @Named(KEY_IS_WEEK_VIEW) boolean mIsWeekView;
     @Nullable @Inject @Named(KEY_SYNC_ID) String mSyncId;
 
     @State CharSequence mTitle;
@@ -100,7 +93,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         setTheme(mIsDarkTheme ? R.style.AppTheme_Drawer_Dark : R.style.AppTheme_Drawer_Light);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedule);
+        setContentView(getLayoutRes());
 
         ButterKnife.bind(this);
         mFloatingActionMenu.getBackground().setAlpha(0);
@@ -109,20 +102,19 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
         setupNavigationView();
 
-        setupTabs();
-
         mSchedulePresenter.attachView(this);
         mSchedulePresenter.onCreate();
 
         mDrawerPresenter.attachView(this);
         mDrawerPresenter.onCreate();
 
-        showCurrentWeek();
-
         Icepick.restoreInstanceState(this, savedInstanceState);
         setupTitle();
 
     }
+
+    @LayoutRes
+    protected abstract int getLayoutRes();
 
     @Override
     protected void onDestroy() {
@@ -131,13 +123,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         mDrawerPresenter.onDestroy();
     }
 
-    private void initializeComponent() {
-        DaggerScheduleActivityComponent.builder()
-                .activityModule(new ActivityModule(this))
-                .scheduleActivityModule(new ScheduleActivityModule())
-                .appComponent(((RxBsuirApplication) getApplication()).getAppComponent())
-                .build().inject(this);
-    }
+    protected abstract void initializeComponent();
 
     @OnClick(R.id.fab)
     public void onFloatingActionButtonClick() {
@@ -162,8 +148,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void showError(Error error) {
-//        disableScrollFlags();
-        mViewPager.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);
         switch (error) {
             case NETWORK:
@@ -184,16 +168,12 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public void showLoading() {
-//        disableScrollFlags();
-        mViewPager.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showContent(int position) {
-//        enableScrollFlags();
         mProgressBar.setVisibility(View.GONE);
-        mViewPager.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -234,7 +214,7 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 mSchedulePresenter.retry();
                 return true;
             case R.id.action_today:
-                showCurrentWeek();
+                showToday();
                 return true;
             case R.id.action_subgroup_1:
                 item.setChecked(!item.isChecked());
@@ -248,6 +228,8 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    protected abstract void showToday();
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -298,17 +280,30 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
+        int itemId = menuItem.getItemId();
         if (mItemId != menuItem.getItemId()) {
             switch (menuItem.getGroupId()) {
                 case R.id.navigation_view_groups:
-                    selectGroup(menuItem.getItemId(), menuItem.getTitle().toString());
+                    selectGroup(itemId, menuItem.getTitle().toString());
                     break;
                 case R.id.navigation_view_employees:
-                    selectEmployee(menuItem.getItemId(), menuItem.getTitle().toString());
+                    selectEmployee(itemId, menuItem.getTitle().toString());
                     break;
             }
-            if (menuItem.getItemId() == R.id.navigation_view_settings) {
+            if (itemId == R.id.navigation_view_settings) {
                 startActivity(new Intent(this, SettingsActivity.class));
+            }
+            if (itemId == R.id.navigation_view_week_view) {
+                if (!mIsWeekView) {
+                    mSharedPreferences.edit().putBoolean(KEY_IS_WEEK_VIEW, true).apply();
+                    Utils.restartApp(this);
+                }
+            }
+            if (itemId == R.id.navigation_view_term_view) {
+                if (mIsWeekView) {
+                    mSharedPreferences.edit().putBoolean(KEY_IS_WEEK_VIEW, false).apply();
+                    Utils.restartApp(this);
+                }
             }
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -358,13 +353,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void setupTabs() {
-        mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.setOffscreenPageLimit(4);
-        mViewPager.setPageMargin(mPageMargin);
-        mTabLayout.setupWithViewPager(mViewPager);
-    }
-
     private boolean isMenuItemEnabled() {
         return mSyncId != null;
     }
@@ -379,10 +367,6 @@ public class ScheduleActivity extends AppCompatActivity implements ScheduleView,
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         mToolbar.setLayoutParams(params);
-    }
-
-    private void showCurrentWeek() {
-        mViewPager.setCurrentItem(Utils.getCurrentWeekNumber() - 1);
     }
 
     private void addStorageFragment() {

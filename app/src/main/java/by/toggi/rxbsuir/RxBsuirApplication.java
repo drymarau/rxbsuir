@@ -7,6 +7,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import by.toggi.rxbsuir.component.AppComponent;
 import by.toggi.rxbsuir.component.DaggerAppComponent;
+import by.toggi.rxbsuir.module.AcademicCalendarServiceModule;
 import by.toggi.rxbsuir.module.AppModule;
 import by.toggi.rxbsuir.module.BsuirServiceModule;
 import io.fabric.sdk.android.Fabric;
@@ -36,6 +37,7 @@ public class RxBsuirApplication extends Application {
         if (mAppComponent == null) {
             mAppComponent = DaggerAppComponent.builder()
                     .appModule(new AppModule(this))
+                    .academicCalendarServiceModule(new AcademicCalendarServiceModule("https://rxbsuir-backend.appspot.com/_ah/api/schedule/v1"))
                     .bsuirServiceModule(new BsuirServiceModule(getString(R.string.schedule_endpoint)))
                     .build();
         }

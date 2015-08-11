@@ -25,11 +25,6 @@
                 android:layout_height="?actionBarSize"
                 app:contentInsetStart="@dimen/keyline_second"/>
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
         </android.support.design.widget.AppBarLayout>
 
         <ProgressBar
@@ -41,24 +36,19 @@
             android:paddingTop="@dimen/progress_bar_padding_top"
             android:visibility="gone"/>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
+            android:clipToPadding="false"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         <include layout="@layout/floating_action_menu"/>
 
     </android.support.design.widget.CoordinatorLayout>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navigation_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="?attr/drawerBackground"
-        app:headerLayout="@layout/navigation_drawer_header"
-        app:menu="@menu/menu_navigation_view"/>
+    <include layout="@layout/widget_navigation_view" />
 
 </android.support.v4.widget.DrawerLayout>

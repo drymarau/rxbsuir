@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_view_week_view"
+            android:icon="@drawable/ic_navigation_view_week_view"
+            android:orderInCategory="1"
+            android:title="@string/navigation_view_week_view"/>
+        <item
+            android:id="@+id/navigation_view_term_view"
+            android:icon="@drawable/ic_navigation_view_term_view"
+            android:orderInCategory="2"
+            android:title="@string/navigation_view_term_view"/>
+    </group>
     <item
         android:id="@+id/navigation_view_settings"
         android:icon="@drawable/ic_action_settings"

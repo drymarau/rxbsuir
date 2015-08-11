@@ -1,12 +1,20 @@
 package by.toggi.rxbsuir;
 
+import android.content.ComponentName;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.IntentCompat;
+import android.support.v7.app.AppCompatActivity;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Month;
 import org.threeten.bp.temporal.ChronoUnit;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import by.toggi.rxbsuir.activity.StartupActivity;
 import rx.Subscription;
 
 /**
@@ -17,13 +25,45 @@ public class Utils {
     private Utils() {
     }
 
+    public static void restartApp(AppCompatActivity activity) {
+        activity.finish();
+        ComponentName componentName = new ComponentName(activity, StartupActivity.class);
+        final Intent intent = IntentCompat.makeMainActivity(componentName);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * Gets date list.
+     *
+     * @param startDate the start date
+     * @param endDate   the end date
+     * @return the date list
+     */
+    public static List<LocalDate> getDateList(@NonNull String startDate, @NonNull String endDate) {
+        List<LocalDate> dateList = new ArrayList<>();
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+        while (!start.isAfter(end)) {
+            if (start.getDayOfWeek() != DayOfWeek.SUNDAY) {
+                dateList.add(start);
+            }
+            start = start.plusDays(1);
+        }
+        return dateList;
+    }
+
     /**
      * Gets current week number.
      *
      * @return the current week number
      */
     public static int getCurrentWeekNumber() {
-        Long weeks = ChronoUnit.WEEKS.between(getStartYear(), LocalDate.now());
+        return getWeekNumber(LocalDate.now());
+    }
+
+    public static int getWeekNumber(LocalDate localDate) {
+        Long weeks = ChronoUnit.WEEKS.between(getStartYear(), localDate);
         return weeks.intValue() % 4 + 1;
     }
 
