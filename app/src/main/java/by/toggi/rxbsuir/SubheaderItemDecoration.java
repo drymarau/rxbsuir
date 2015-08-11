@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import by.toggi.rxbsuir.adapter.LessonAdapter;
+import by.toggi.rxbsuir.adapter.LessonWithDateAdapter;
 
 import static android.view.View.MeasureSpec;
 
@@ -36,8 +37,12 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
                 case LessonAdapter.VIEW_TYPE_LESSON_ONE_LINE_WITH_WEEKDAY:
                 case LessonAdapter.VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY:
                 case LessonAdapter.VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY:
-                    LessonAdapter.ViewHolder viewHolder = (LessonAdapter.ViewHolder) parent.getChildViewHolder(child);
-                    drawText(c, viewHolder.getWeekDay(), child.getTop() - mSubheaderHeight - params.topMargin);
+                    RecyclerView.ViewHolder holder = parent.getChildViewHolder(child);
+                    if (holder instanceof LessonAdapter.ViewHolder) {
+                        drawText(c, ((LessonAdapter.ViewHolder) holder).getWeekDay(), child.getTop() - mSubheaderHeight - params.topMargin);
+                    } else if (holder instanceof LessonWithDateAdapter.ViewHolder) {
+                        drawText(c, ((LessonWithDateAdapter.ViewHolder) holder).getWeekDay(), child.getTop() - mSubheaderHeight - params.topMargin);
+                    }
                     break;
             }
         }
