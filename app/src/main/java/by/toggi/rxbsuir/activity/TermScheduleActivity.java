@@ -58,7 +58,7 @@ public class TermScheduleActivity extends ScheduleActivity implements TermView, 
 
     @Override
     protected void showToday() {
-        mRecyclerView.scrollToPosition(mAdapter.getTodayPosition());
+        mRecyclerView.smoothScrollToPosition(mAdapter.getTodayPosition());
     }
 
     private void setupRecyclerView() {
