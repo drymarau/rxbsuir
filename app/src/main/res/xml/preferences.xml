@@ -13,6 +13,11 @@
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_about">
         <com.jenzz.materialpreference.Preference
+            android:key="rate_app"
+            android:selectable="true"
+            android:title="@string/title_pref_rate_app"/>
+
+        <com.jenzz.materialpreference.Preference
             android:key="@string/key_pref_build_version"
             android:selectable="false"
             android:title="@string/title_build_version"/>

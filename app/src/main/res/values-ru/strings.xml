@@ -49,5 +49,7 @@
     <string name="category_appearance">Оформление</string>
     <string name="category_about">О приложении</string>
     <string name="title_build_version">Версия</string>
+    <string name="title_pref_rate_app">Оцените приложение!</string>
+    <string name="play_store_not_found">Похоже, что Play Маркет не установлен</string>
 
 </resources>
