@@ -29,6 +29,7 @@
     <string name="navigation_view_employees">Преподаватели</string>
     <string name="navigation_view_week_view">Неделя</string>
     <string name="navigation_view_term_view">Семестр (beta)</string>
+    <string name="navigation_view_send_feedback">Отправить отзыв</string>
 
     <array name="tabs">
         <item>Неделя 1</item>

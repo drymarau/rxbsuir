@@ -18,6 +18,11 @@
         android:orderInCategory="300"
         android:title="@string/label_settings"/>
     <item
+        android:id="@+id/navigation_view_feedback"
+        android:icon="@drawable/ic_action_send_feedback"
+        android:orderInCategory="400"
+        android:title="@string/navigation_view_send_feedback"/>
+    <item
         android:id="@id/navigation_view_groups_header"
         android:checkable="true"
         android:orderInCategory="100"
