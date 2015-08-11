@@ -44,6 +44,8 @@ public interface AppComponent {
 
     @Named(ScheduleActivity.KEY_IS_DARK_THEME) boolean isDarkTheme();
 
+    @Named(ScheduleActivity.KEY_IS_WEEK_VIEW) boolean isWeekView();
+
     @Nullable @Named(ScheduleActivity.KEY_SYNC_ID) String syncId();
 
     void inject(AddGroupDialogFragment addGroupDialogFragment);
