@@ -34,6 +34,8 @@ public class TermScheduleActivity extends ScheduleActivity implements TermView, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mNavigationView.getMenu().findItem(R.id.navigation_view_term_view).setChecked(true);
+
         setupRecyclerView();
 
         mPresenter.attachView(this);
