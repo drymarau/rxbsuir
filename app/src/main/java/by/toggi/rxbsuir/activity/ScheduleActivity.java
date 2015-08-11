@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -32,6 +33,7 @@ import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.BindDimen;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import by.toggi.rxbsuir.R;
@@ -74,6 +76,10 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Bind(R.id.navigation_view) NavigationView mNavigationView;
 
     @BindDimen(R.dimen.view_pager_page_margin) int mPageMargin;
+
+    @BindString(R.string.intent_feedback) String mSendFeedbackTitle;
+    @BindString(R.string.email_feedback) String mFeedbackEmail;
+    @BindString(R.string.subject_feedback) String mFeedbackSubject;
 
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
@@ -304,6 +310,12 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                     mSharedPreferences.edit().putBoolean(KEY_IS_WEEK_VIEW, false).apply();
                     Utils.restartApp(this);
                 }
+            }
+            if (itemId == R.id.navigation_view_feedback) {
+                Intent feedbackIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", mFeedbackEmail, null));
+                feedbackIntent.putExtra(Intent.EXTRA_SUBJECT, mFeedbackSubject);
+                startActivity(Intent.createChooser(feedbackIntent, mSendFeedbackTitle));
+                return true;
             }
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);

@@ -32,6 +32,13 @@
     <string name="navigation_view_employees">Employees</string>
     <string name="navigation_view_week_view">Week view</string>
     <string name="navigation_view_term_view">Term view (beta)</string>
+    <string name="navigation_view_send_feedback">Send feedback</string>
+    <!-- Send feedback intent -->
+    <string name="intent_feedback">Send feedback via…</string>
+    <!-- Author email for feedback -->
+    <string name="email_feedback" translatable="false">dmitry.rymarev@gmail.com</string>
+    <!-- Feedback email subject -->
+    <string name="subject_feedback" translatable="false">[Feedback] RxBSUIR</string>
 
     <array name="tabs">
         <item>Week 1</item>
