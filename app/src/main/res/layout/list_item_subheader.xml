@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/keyline_first"
     android:paddingRight="@dimen/keyline_first"
     android:paddingTop="16dp"
-    android:text="Понедельник"
+    android:text="thisisareallylongtitlethatshouldhelpwithpropersubheaderinitialization"
     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
     android:textColor="?android:attr/textColorSecondary"
     tools:text="Понедельник"/>
