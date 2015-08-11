@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.db.model;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.FormatStyle;
 
 public class LessonWithDate {
 
@@ -31,7 +32,16 @@ public class LessonWithDate {
      * @return the pretty date
      */
     public String getPrettyDate() {
-        return localDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return localDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+    }
+
+    /**
+     * Gets local date.
+     *
+     * @return the local date
+     */
+    public LocalDate getLocalDate() {
+        return localDate;
     }
 
     /**
