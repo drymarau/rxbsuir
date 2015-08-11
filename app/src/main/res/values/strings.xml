@@ -30,6 +30,8 @@
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Groups</string>
     <string name="navigation_view_employees">Employees</string>
+    <string name="navigation_view_week_view">Week view</string>
+    <string name="navigation_view_term_view">Term view</string>
 
     <array name="tabs">
         <item>Week 1</item>
@@ -43,7 +45,7 @@
     <string name="label_settings">Settings</string>
 
     <!-- PREFERENCES -->
-    <string name="key_pref_dark_theme"  translatable="false">is_dark_theme</string>
+    <string name="key_pref_dark_theme" translatable="false">is_dark_theme</string>
     <string name="title_pref_dark_theme">Use dark theme</string>
     <string name="summary_pref_dark_theme_enabled">App uses dark theme</string>
     <string name="summary_pref_dark_theme_disabled">App uses light theme</string>
