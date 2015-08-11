@@ -19,6 +19,7 @@ import by.toggi.rxbsuir.adapter.LessonWithDateAdapter;
 import by.toggi.rxbsuir.component.DaggerTermScheduleActivityComponent;
 import by.toggi.rxbsuir.db.model.LessonWithDate;
 import by.toggi.rxbsuir.module.TermScheduleActivityModule;
+import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.presenter.TermPresenter;
 import by.toggi.rxbsuir.mvp.view.TermView;
 
@@ -104,5 +105,23 @@ public class TermScheduleActivity extends ScheduleActivity implements TermView, 
                 mPresenter.setSubgroupNumber(subgroup1, subgroup2, isGroupSchedule);
                 break;
         }
+    }
+
+    @Override
+    public void showError(SchedulePresenter.Error error) {
+        super.showError(error);
+        mRecyclerView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showLoading() {
+        super.showLoading();
+        mRecyclerView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showContent(int position) {
+        super.showContent(position);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 }
