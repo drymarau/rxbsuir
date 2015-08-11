@@ -1,8 +1,5 @@
 package by.toggi.rxbsuir.adapter;
 
-/**
- * Created by knotzy on 11-Aug-15.
- */
 public interface LessonViewType {
 
     int VIEW_TYPE_LESSON_ONE_LINE_WITH_WEEKDAY = 1;
