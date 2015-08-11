@@ -27,7 +27,6 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_IS_GROUP_SCHEDULE;
 import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_SYNC_ID;
@@ -174,7 +173,6 @@ public class TermPresenter extends Presenter<TermView> {
             for (Lesson lesson : lessonList) {
                 if (filter(date.getDayOfWeek(), Utils.getWeekNumber(date), lesson)) {
                     LessonWithDate lessonWithDate = LessonWithDate.newInstance(lesson, date);
-                    Timber.d(lessonWithDate.toString());
                     lessonWithDateList.add(lessonWithDate);
                 }
             }
