@@ -1,6 +1,10 @@
 package by.toggi.rxbsuir;
 
+import android.content.ComponentName;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.IntentCompat;
+import android.support.v7.app.AppCompatActivity;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
@@ -10,6 +14,7 @@ import org.threeten.bp.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.toggi.rxbsuir.activity.StartupActivity;
 import rx.Subscription;
 
 /**
@@ -18,6 +23,14 @@ import rx.Subscription;
 public class Utils {
 
     private Utils() {
+    }
+
+    public static void restartApp(AppCompatActivity activity) {
+        activity.finish();
+        ComponentName componentName = new ComponentName(activity, StartupActivity.class);
+        final Intent intent = IntentCompat.makeMainActivity(componentName);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+        activity.startActivity(intent);
     }
 
     /**
