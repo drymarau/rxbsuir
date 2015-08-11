@@ -48,7 +48,8 @@ public class LessonWithDateAdapter extends RecyclerView.Adapter<LessonWithDateAd
             return 0;
         }
         for (LessonWithDate lessonWithDate : mLessonWithDateList) {
-            if (lessonWithDate.getLocalDate().isEqual(localDate)) {
+            LocalDate lessonDate = lessonWithDate.getLocalDate();
+            if (lessonDate.isEqual(lessonDate) || lessonDate.isAfter(lessonDate)) {
                 return mLessonWithDateList.indexOf(lessonWithDate);
             }
         }
