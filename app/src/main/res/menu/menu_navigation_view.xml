@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/navigation_view_view_switcher"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_view_week_view"
             android:icon="@drawable/ic_navigation_view_week_view"
@@ -12,16 +14,18 @@
             android:orderInCategory="2"
             android:title="@string/navigation_view_term_view"/>
     </group>
-    <item
-        android:id="@+id/navigation_view_settings"
-        android:icon="@drawable/ic_action_settings"
-        android:orderInCategory="300"
-        android:title="@string/label_settings"/>
-    <item
-        android:id="@+id/navigation_view_feedback"
-        android:icon="@drawable/ic_action_send_feedback"
-        android:orderInCategory="400"
-        android:title="@string/navigation_view_send_feedback"/>
+    <group android:id="@+id/navigation_view_misc">
+        <item
+            android:id="@+id/navigation_view_settings"
+            android:icon="@drawable/ic_action_settings"
+            android:orderInCategory="300"
+            android:title="@string/label_settings"/>
+        <item
+            android:id="@+id/navigation_view_feedback"
+            android:icon="@drawable/ic_action_send_feedback"
+            android:orderInCategory="400"
+            android:title="@string/navigation_view_send_feedback"/>
+    </group>
     <item
         android:id="@id/navigation_view_groups_header"
         android:checkable="true"
