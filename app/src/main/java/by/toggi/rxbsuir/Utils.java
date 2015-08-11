@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscription;
-import timber.log.Timber;
 
 /**
  * Utils class with all RxBsuir goodies.
@@ -25,7 +24,7 @@ public class Utils {
      * Gets date list.
      *
      * @param startDate the start date
-     * @param endDate the end date
+     * @param endDate   the end date
      * @return the date list
      */
     public static List<LocalDate> getDateList(@NonNull String startDate, @NonNull String endDate) {
@@ -38,7 +37,6 @@ public class Utils {
             }
             start = start.plusDays(1);
         }
-        Timber.d(dateList.toString());
         return dateList;
     }
 
@@ -48,7 +46,11 @@ public class Utils {
      * @return the current week number
      */
     public static int getCurrentWeekNumber() {
-        Long weeks = ChronoUnit.WEEKS.between(getStartYear(), LocalDate.now());
+        return getWeekNumber(LocalDate.now());
+    }
+
+    public static int getWeekNumber(LocalDate localDate) {
+        Long weeks = ChronoUnit.WEEKS.between(getStartYear(), localDate);
         return weeks.intValue() % 4 + 1;
     }
 
