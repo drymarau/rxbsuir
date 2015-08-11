@@ -74,6 +74,7 @@ public class TermScheduleActivity extends ScheduleActivity implements TermView, 
     public void showLessonList(List<LessonWithDate> lessonWithDateList) {
         mAdapter.setLessonWithDateList(lessonWithDateList);
         mRecyclerView.setVisibility(View.VISIBLE);
+        showToday();
     }
 
     @Override
