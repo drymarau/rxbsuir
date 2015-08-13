@@ -239,14 +239,13 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.setGroupVisible(R.id.group_items, isMenuItemEnabled());
         MenuItem item = menu.findItem(R.id.action_subgroup_1);
-        item.setEnabled(isMenuItemEnabled());
+        item.setVisible(isMenuItemEnabled());
         item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_1, true));
         item = menu.findItem(R.id.action_subgroup_2);
-        item.setEnabled(isMenuItemEnabled());
+        item.setVisible(isMenuItemEnabled());
         item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_2, true));
-        item = menu.findItem(R.id.action_refresh);
-        item.setEnabled(isMenuItemEnabled());
         return super.onPrepareOptionsMenu(menu);
     }
 
