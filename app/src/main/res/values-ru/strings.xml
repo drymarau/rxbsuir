@@ -23,6 +23,7 @@
     <string name="action_refresh">Обновить</string>
     <string name="action_subgroup_1">Подгруппа 1</string>
     <string name="action_subgroup_2">Подгруппа 2</string>
+    <string name="action_delete">Удалить</string>
 
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Группы</string>

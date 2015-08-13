@@ -26,6 +26,7 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_subgroup_1">Subgroup 1</string>
     <string name="action_subgroup_2">Subgroup 2</string>
+    <string name="action_delete">Delete</string>
 
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Groups</string>
