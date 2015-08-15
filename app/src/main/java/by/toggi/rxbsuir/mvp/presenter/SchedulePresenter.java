@@ -36,7 +36,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
 
     private final BsuirService mService;
     private final StorIOSQLite mStorIOSQLite;
-    private Observable<List<Lesson>> mScheduleObservable;
+    private Observable<List<Lesson>> mLessonListObservable;
     private String mSyncId;
     private boolean mHasSynced = false;
     private boolean mIsGroupSchedule;
@@ -54,7 +54,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         mStorIOSQLite = storIOSQLite;
         mSyncId = syncId;
         mIsGroupSchedule = isGroupSchedule;
-        mScheduleObservable = getLessonListObservable(syncId, isGroupSchedule);
+        mLessonListObservable = getLessonListObservable(syncId, isGroupSchedule);
     }
 
     /**
@@ -66,7 +66,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         mHasSynced = false;
         mIsGroupSchedule = isGroupSchedule;
         mSyncId = syncId;
-        mScheduleObservable = getLessonListObservable(syncId, isGroupSchedule);
+        mLessonListObservable = getLessonListObservable(syncId, isGroupSchedule);
         onCreate();
     }
 
@@ -213,7 +213,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
     }
 
     private Subscription getEmployeeSubscription() {
-        return mScheduleObservable.subscribe(lessonList -> {
+        return mLessonListObservable.subscribe(lessonList -> {
             if (lessonList == null || lessonList.isEmpty()) {
                 if (!mHasSynced) {
                     getEmployeeSchedule();
@@ -227,7 +227,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
     }
 
     private Subscription getGroupSubscription() {
-        return mScheduleObservable.subscribe(lessonList -> {
+        return mLessonListObservable.subscribe(lessonList -> {
             if (lessonList == null || lessonList.isEmpty()) {
                 if (!mHasSynced) {
                     getStudentGroupSchedule();
