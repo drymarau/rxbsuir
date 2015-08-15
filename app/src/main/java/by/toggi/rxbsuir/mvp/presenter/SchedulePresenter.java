@@ -54,11 +54,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         mStorIOSQLite = storIOSQLite;
         mSyncId = syncId;
         mIsGroupSchedule = isGroupSchedule;
-        if (mIsGroupSchedule) {
-            mScheduleObservable = getGroupLessonListObservable(syncId);
-        } else {
-            mScheduleObservable = getEmployeeLessonListObservable(syncId);
-        }
+        mScheduleObservable = getLessonListObservable(syncId, isGroupSchedule);
     }
 
     /**
@@ -70,11 +66,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         mHasSynced = false;
         mIsGroupSchedule = isGroupSchedule;
         mSyncId = syncId;
-        if (isGroupSchedule) {
-            mScheduleObservable = getGroupLessonListObservable(syncId);
-        } else {
-            mScheduleObservable = getEmployeeLessonListObservable(syncId);
-        }
+        mScheduleObservable = getLessonListObservable(syncId, isGroupSchedule);
         onCreate();
     }
 
@@ -185,24 +177,15 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         return lessonList;
     }
 
-    private Observable<List<Lesson>> getEmployeeLessonListObservable(String employeeId) {
+    private Observable<List<Lesson>> getLessonListObservable(String syncId, boolean isGroupSchedule) {
+        String whereQuery = isGroupSchedule
+                ? LessonEntry.filterByGroup(syncId)
+                : LessonEntry.filterByEmployee(syncId);
         return mStorIOSQLite.get()
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
                         .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.filterByEmployee(employeeId))
-                        .build())
-                .prepare()
-                .createObservable()
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    private Observable<List<Lesson>> getGroupLessonListObservable(String groupNumber) {
-        return mStorIOSQLite.get()
-                .listOfObjects(Lesson.class)
-                .withQuery(Query.builder()
-                        .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.filterByGroup(groupNumber))
+                        .where(whereQuery)
                         .build())
                 .prepare()
                 .createObservable()
