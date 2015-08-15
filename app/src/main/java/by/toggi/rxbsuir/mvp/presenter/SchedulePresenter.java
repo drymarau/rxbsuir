@@ -20,6 +20,7 @@ import by.toggi.rxbsuir.rest.BsuirService;
 import by.toggi.rxbsuir.rest.model.Employee;
 import by.toggi.rxbsuir.rest.model.Schedule;
 import by.toggi.rxbsuir.rest.model.ScheduleModel;
+import by.toggi.rxbsuir.rest.model.ScheduleXmlModels;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
 import rx.Observable;
 import rx.Subscription;
@@ -78,11 +79,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
             getView().showLoading();
         }
         mHasSynced = false;
-        if (mIsGroupSchedule) {
-            getStudentGroupSchedule();
-        } else {
-            getEmployeeSchedule();
-        }
+        getLessonListFromNetwork(mSyncId, mIsGroupSchedule);
     }
 
     @Override
@@ -90,7 +87,17 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         if (isViewAttached() && !mHasSynced && mSyncId != null) {
             getView().showLoading();
         }
-        mSubscription = mIsGroupSchedule ? getGroupSubscription() : getEmployeeSubscription();
+        mSubscription = mLessonListObservable.subscribe(lessonList -> {
+            if (lessonList == null || lessonList.isEmpty()) {
+                if (!mHasSynced) {
+                    getLessonListFromNetwork(mSyncId, mIsGroupSchedule);
+                }
+            } else {
+                if (isViewAttached()) {
+                    getView().showContent(Utils.getCurrentWeekNumber() - 1);
+                }
+            }
+        });
     }
 
     @Override
@@ -192,52 +199,17 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    private void getStudentGroupSchedule() {
-        if (mSyncId != null) {
-            mService.getGroupSchedule(mSyncId.replace("М", "M")).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+    private void getLessonListFromNetwork(String syncId, boolean isGroupSchedule) {
+        if (syncId != null) {
+            Observable<ScheduleXmlModels> scheduleXmlModelsObservable = isGroupSchedule
+                    ? mService.getGroupSchedule(syncId.replace("М", "M"))
+                    : mService.getEmployeeSchedule(syncId);
+            scheduleXmlModelsObservable.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                     .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
-                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, true)))
+                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, isGroupSchedule)))
                     .toList()
-                    .subscribe(lessonList -> onNetworkSuccess(lessonList, true), this::onNetworkError);
+                    .subscribe(lessonList -> onNetworkSuccess(lessonList, isGroupSchedule), this::onNetworkError);
         }
-    }
-
-    private void getEmployeeSchedule() {
-        if (mSyncId != null) {
-            mService.getEmployeeSchedule(mSyncId).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-                    .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
-                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, false)))
-                    .toList()
-                    .subscribe(lessonList -> onNetworkSuccess(lessonList, false), this::onNetworkError);
-        }
-    }
-
-    private Subscription getEmployeeSubscription() {
-        return mLessonListObservable.subscribe(lessonList -> {
-            if (lessonList == null || lessonList.isEmpty()) {
-                if (!mHasSynced) {
-                    getEmployeeSchedule();
-                }
-            } else {
-                if (isViewAttached()) {
-                    getView().showContent(Utils.getCurrentWeekNumber() - 1);
-                }
-            }
-        });
-    }
-
-    private Subscription getGroupSubscription() {
-        return mLessonListObservable.subscribe(lessonList -> {
-            if (lessonList == null || lessonList.isEmpty()) {
-                if (!mHasSynced) {
-                    getStudentGroupSchedule();
-                }
-            } else {
-                if (isViewAttached()) {
-                    getView().showContent(Utils.getCurrentWeekNumber() - 1);
-                }
-            }
-        });
     }
 
     public enum Error {
