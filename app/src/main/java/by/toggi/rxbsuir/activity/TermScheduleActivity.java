@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import by.toggi.rxbsuir.SubheaderItemDecoration;
 import by.toggi.rxbsuir.adapter.LessonWithDateAdapter;
 import by.toggi.rxbsuir.component.DaggerTermScheduleActivityComponent;
 import by.toggi.rxbsuir.db.model.LessonWithDate;
+import by.toggi.rxbsuir.fragment.WeekFragment;
 import by.toggi.rxbsuir.module.TermScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.presenter.TermPresenter;
@@ -31,6 +33,8 @@ public class TermScheduleActivity extends ScheduleActivity implements TermView, 
     @Inject LessonWithDateAdapter mAdapter;
     @Inject TermPresenter mPresenter;
 
+    private Parcelable mLayoutManagerState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +46,16 @@ public class TermScheduleActivity extends ScheduleActivity implements TermView, 
         mPresenter.attachView(this);
         mPresenter.onCreate();
 
+        if (savedInstanceState != null) {
+            mLayoutManagerState = savedInstanceState.getParcelable(WeekFragment.KEY_LAYOUT_MANAGER_STATE);
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
     }
 
     @Override
@@ -75,7 +89,16 @@ public class TermScheduleActivity extends ScheduleActivity implements TermView, 
     public void showLessonList(List<LessonWithDate> lessonWithDateList) {
         mAdapter.setLessonWithDateList(lessonWithDateList);
         mRecyclerView.setVisibility(View.VISIBLE);
-        showToday();
+        if (mLayoutManagerState != null) {
+            mLayoutManager.onRestoreInstanceState(mLayoutManagerState);
+            mLayoutManagerState = null;
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(WeekFragment.KEY_LAYOUT_MANAGER_STATE, mLayoutManager.onSaveInstanceState());
     }
 
     @Override

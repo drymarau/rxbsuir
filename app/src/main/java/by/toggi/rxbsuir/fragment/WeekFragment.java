@@ -33,9 +33,8 @@ import by.toggi.rxbsuir.mvp.view.WeekView;
 public class WeekFragment extends Fragment implements WeekView, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String TAG_STORAGE_FRAGMENT = "storage_fragment";
+    public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
     private static final String ARGS_WEEK_NUMBER = "week_number";
-    private static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
-
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
 
     @Inject LinearLayoutManager mLayoutManager;
