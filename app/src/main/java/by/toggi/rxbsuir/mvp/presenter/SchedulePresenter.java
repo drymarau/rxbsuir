@@ -3,6 +3,7 @@ package by.toggi.rxbsuir.mvp.presenter;
 import android.support.annotation.Nullable;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -33,6 +34,9 @@ import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 
+/**
+ * The type Schedule presenter.
+ */
 public class SchedulePresenter extends Presenter<ScheduleView> {
 
     private final BsuirService mService;
@@ -82,6 +86,32 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         getLessonListFromNetwork(mSyncId, mIsGroupSchedule);
     }
 
+
+    /**
+     * Remove current syncId from db.
+     */
+    public void remove() {
+        mHasSynced = true;
+        String whereQuery = mIsGroupSchedule
+                ? LessonEntry.filterByGroup(mSyncId)
+                : LessonEntry.filterByEmployee(mSyncId);
+        Observable.concat(
+                getDeleteSyncIdObservable(whereQuery),
+                mIsGroupSchedule ? getCacheGroupObservable(false) : getCacheEmployeeObservable(false)
+        ).subscribe();
+        mSyncId = null;
+    }
+
+    private Observable<DeleteResult> getDeleteSyncIdObservable(String whereQuery) {
+        return mStorIOSQLite.delete()
+                .byQuery(DeleteQuery.builder()
+                        .table(LessonEntry.TABLE_NAME)
+                        .where(whereQuery)
+                        .build())
+                .prepare()
+                .createObservable();
+    }
+
     @Override
     public void onCreate() {
         if (isViewAttached() && !mHasSynced && mSyncId != null) {
@@ -113,22 +143,16 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
             whereQuery = LessonEntry.filterByEmployee(mSyncId);
         }
         Observable.concat(
-                mStorIOSQLite.delete()
-                        .byQuery(DeleteQuery.builder()
-                                .table(LessonEntry.TABLE_NAME)
-                                .where(whereQuery)
-                                .build())
-                        .prepare()
-                        .createObservable(),
+                getDeleteSyncIdObservable(whereQuery),
                 mStorIOSQLite.put()
                         .objects(lessonList)
                         .prepare()
                         .createObservable(),
-                isGroupSchedule ? getCacheGroupObservable() : getCacheEmployeeObservable()
+                isGroupSchedule ? getCacheGroupObservable(true) : getCacheEmployeeObservable(true)
         ).subscribe();
     }
 
-    private Observable<Employee> getCacheEmployeeObservable() {
+    private Observable<Employee> getCacheEmployeeObservable(boolean isCached) {
         return mStorIOSQLite.get()
                 .listOfObjects(Employee.class)
                 .withQuery(Query.builder()
@@ -142,12 +166,12 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 .observeOn(Schedulers.io())
                 .map(employeeList -> employeeList.get(0))
                 .doOnNext(employee -> {
-                    employee.isCached = true;
+                    employee.isCached = isCached;
                     mStorIOSQLite.put().object(employee).prepare().executeAsBlocking();
                 });
     }
 
-    private Observable<StudentGroup> getCacheGroupObservable() {
+    private Observable<StudentGroup> getCacheGroupObservable(boolean isCached) {
         return mStorIOSQLite.get()
                 .listOfObjects(StudentGroup.class)
                 .withQuery(Query.builder()
@@ -161,7 +185,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 .observeOn(Schedulers.io())
                 .map(studentGroupList -> studentGroupList.get(0))
                 .doOnNext(studentGroup -> {
-                    studentGroup.isCached = true;
+                    studentGroup.isCached = isCached;
                     mStorIOSQLite.put().object(studentGroup).prepare().executeAsBlocking();
                 });
     }
@@ -209,9 +233,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                     .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
                     .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, isGroupSchedule)))
                     .toList()
-                    .doOnNext(lessonList -> onNetworkSuccess(lessonList, isGroupSchedule))
-                    .doOnError(this::onNetworkError)
-                    .subscribe();
+                    .subscribe(lessonList -> onNetworkSuccess(lessonList, isGroupSchedule), this::onNetworkError);
         }
     }
 
