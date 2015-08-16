@@ -139,10 +139,11 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 .prepare()
                 .createObservable()
                 .take(1)
+                .observeOn(Schedulers.io())
                 .map(employeeList -> employeeList.get(0))
                 .doOnNext(employee -> {
                     employee.isCached = true;
-                    mStorIOSQLite.put().object(employee).prepare().createObservable().subscribe();
+                    mStorIOSQLite.put().object(employee).prepare().executeAsBlocking();
                 });
     }
 
@@ -161,7 +162,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 .map(studentGroupList -> studentGroupList.get(0))
                 .doOnNext(studentGroup -> {
                     studentGroup.isCached = true;
-                    mStorIOSQLite.put().object(studentGroup).prepare().createObservable().subscribe();
+                    mStorIOSQLite.put().object(studentGroup).prepare().executeAsBlocking();
                 });
     }
 
@@ -208,7 +209,9 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                     .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
                     .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, isGroupSchedule)))
                     .toList()
-                    .subscribe(lessonList -> onNetworkSuccess(lessonList, isGroupSchedule), this::onNetworkError);
+                    .doOnNext(lessonList -> onNetworkSuccess(lessonList, isGroupSchedule))
+                    .doOnError(this::onNetworkError)
+                    .subscribe();
         }
     }
 
