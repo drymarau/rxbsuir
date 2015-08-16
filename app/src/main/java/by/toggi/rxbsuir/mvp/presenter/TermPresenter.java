@@ -105,11 +105,8 @@ public class TermPresenter extends Presenter<TermView> {
     @Override
     public void onCreate() {
         Utils.unsubscribe(mSubscription);
-        mSubscription = mScheduleObservable.subscribe(lessons -> {
-            if (lessons.size() > 0) {
-                showLessonList(getLessonWithDateList(lessons));
-            }
-        });
+        mSubscription = mScheduleObservable
+                .subscribe(lessons -> showLessonList(getLessonWithDateList(lessons)));
     }
 
     @Override
