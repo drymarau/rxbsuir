@@ -155,6 +155,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public void showError(Error error) {
         mProgressBar.setVisibility(View.GONE);
+        resetSyncId();
         switch (error) {
             case NETWORK:
                 Snackbar.make(mCoordinatorLayout, getString(R.string.error_network), Snackbar.LENGTH_LONG)
@@ -230,9 +231,20 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 item.setChecked(!item.isChecked());
                 mSharedPreferences.edit().putBoolean(KEY_SUBGROUP_2, item.isChecked()).apply();
                 return true;
+            case R.id.action_delete:
+                resetSyncId();
+                mSchedulePresenter.remove();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void resetSyncId() {
+        mSharedPreferences.edit().putString(KEY_SYNC_ID, null).apply();
+        mSyncId = null;
+        setTitle(R.string.app_name);
+        supportInvalidateOptionsMenu();
     }
 
     protected abstract void showToday();
