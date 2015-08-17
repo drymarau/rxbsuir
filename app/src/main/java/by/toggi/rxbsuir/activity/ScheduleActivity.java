@@ -155,6 +155,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public void showError(Error error) {
         mProgressBar.setVisibility(View.GONE);
+        resetSyncId();
         switch (error) {
             case NETWORK:
                 Snackbar.make(mCoordinatorLayout, getString(R.string.error_network), Snackbar.LENGTH_LONG)
@@ -185,11 +186,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public void onPositiveButtonClicked(int id, String name, boolean isGroupSchedule) {
         hideFloatingActionMenu();
-        if (isGroupSchedule) {
-            selectGroup(id, name);
-        } else {
-            selectEmployee(id, name);
-        }
+        selectGroupOrEmployee(id, name, isGroupSchedule);
     }
 
     @Override
@@ -230,23 +227,33 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 item.setChecked(!item.isChecked());
                 mSharedPreferences.edit().putBoolean(KEY_SUBGROUP_2, item.isChecked()).apply();
                 return true;
+            case R.id.action_delete:
+                mSchedulePresenter.remove(mSyncId, mIsGroupSchedule);
+                resetSyncId();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void resetSyncId() {
+        mSharedPreferences.edit().putString(KEY_SYNC_ID, null).apply();
+        mSyncId = null;
+        setTitle(R.string.app_name);
+        supportInvalidateOptionsMenu();
     }
 
     protected abstract void showToday();
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.setGroupVisible(R.id.group_items, isMenuItemEnabled());
         MenuItem item = menu.findItem(R.id.action_subgroup_1);
-        item.setEnabled(isMenuItemEnabled());
+        item.setVisible(isMenuItemEnabled());
         item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_1, true));
         item = menu.findItem(R.id.action_subgroup_2);
-        item.setEnabled(isMenuItemEnabled());
+        item.setVisible(isMenuItemEnabled());
         item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_2, true));
-        item = menu.findItem(R.id.action_refresh);
-        item.setEnabled(isMenuItemEnabled());
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -290,10 +297,10 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         if (mItemId != menuItem.getItemId()) {
             switch (menuItem.getGroupId()) {
                 case R.id.navigation_view_groups:
-                    selectGroup(itemId, menuItem.getTitle().toString());
+                    selectGroupOrEmployee(itemId, menuItem.getTitle().toString(), true);
                     break;
                 case R.id.navigation_view_employees:
-                    selectEmployee(itemId, menuItem.getTitle().toString());
+                    selectGroupOrEmployee(itemId, menuItem.getTitle().toString(), false);
                     break;
             }
             if (itemId == R.id.navigation_view_settings) {
@@ -322,28 +329,16 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         return true;
     }
 
-    private void selectGroup(int id, String groupNumber) {
+    private void selectGroupOrEmployee(int id, String s, boolean isGroupSchedule) {
         mItemId = id;
-        mSchedulePresenter.setSyncId(groupNumber, true);
-        setTitle(groupNumber);
+        mSyncId = isGroupSchedule ? s : String.valueOf(id);
+        mIsGroupSchedule = isGroupSchedule;
         mSharedPreferences.edit()
-                .putString(KEY_SYNC_ID, groupNumber)
-                .putBoolean(KEY_IS_GROUP_SCHEDULE, true)
+                .putString(KEY_SYNC_ID, mSyncId)
+                .putBoolean(KEY_IS_GROUP_SCHEDULE, isGroupSchedule)
                 .apply();
-        mSyncId = groupNumber;
-        supportInvalidateOptionsMenu();
-    }
-
-    private void selectEmployee(int id, String employeeName) {
-        mItemId = id;
-        String employeeId = String.valueOf(id);
-        mSchedulePresenter.setSyncId(employeeId, false);
-        setTitle(employeeName);
-        mSharedPreferences.edit()
-                .putString(KEY_SYNC_ID, employeeId)
-                .putBoolean(KEY_IS_GROUP_SCHEDULE, false)
-                .apply();
-        mSyncId = employeeId;
+        mSchedulePresenter.setSyncId(mSyncId, mIsGroupSchedule);
+        setTitle(s);
         supportInvalidateOptionsMenu();
     }
 

@@ -51,7 +51,7 @@ public class NavigationDrawerPresenter extends Presenter<NavigationDrawerView> {
 
     private void onEmployeeSuccess(List<Employee> employeeList) {
         Observable.from(employeeList)
-                .toMap(employee -> Long.valueOf(employee.id).intValue(), Employee::toString)
+                .toMap(employee -> employee.id, Employee::toString)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(map -> {
@@ -63,7 +63,7 @@ public class NavigationDrawerPresenter extends Presenter<NavigationDrawerView> {
 
     private void onGroupSuccess(List<StudentGroup> studentGroupList) {
         Observable.from(studentGroupList)
-                .toMap(studentGroup -> Integer.valueOf(studentGroup.name), studentGroup -> studentGroup.name)
+                .toMap(studentGroup -> studentGroup.id, studentGroup -> studentGroup.name)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(map -> {
