@@ -232,8 +232,8 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 mSharedPreferences.edit().putBoolean(KEY_SUBGROUP_2, item.isChecked()).apply();
                 return true;
             case R.id.action_delete:
+                mSchedulePresenter.remove(mSyncId, mIsGroupSchedule);
                 resetSyncId();
-                mSchedulePresenter.remove();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
