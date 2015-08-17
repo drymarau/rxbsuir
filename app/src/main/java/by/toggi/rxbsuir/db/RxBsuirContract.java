@@ -57,6 +57,15 @@ public class RxBsuirContract {
         public static final String COL_IS_GROUP_SCHEDULE = "is_group_schedule";
 
         /**
+         * Get sql query with syncId and schedule type.
+         *
+         * @return where query
+         */
+        public static String getSyncIdAndTypeQuery() {
+            return COL_SYNC_ID + " = ?" + " and " + COL_IS_GROUP_SCHEDULE + " = ?;";
+        }
+
+        /**
          * Filter by group.
          *
          * @param groupNumber the group number
@@ -79,7 +88,7 @@ public class RxBsuirContract {
         /**
          * Filter by group and subgroup.
          *
-         * @param groupNumber the group number
+         * @param groupNumber    the group number
          * @param subgroupNumber the subgroup number
          * @return the string
          */
@@ -90,7 +99,7 @@ public class RxBsuirContract {
         /**
          * Filter by employee and subgroup.
          *
-         * @param employeeId the employee id
+         * @param employeeId     the employee id
          * @param subgroupNumber the subgroup number
          * @return the string
          */
