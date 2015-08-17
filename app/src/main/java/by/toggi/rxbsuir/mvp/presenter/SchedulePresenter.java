@@ -173,6 +173,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 .createObservable()
                 .take(1)
                 .observeOn(Schedulers.io())
+                .filter(employeeList -> !employeeList.isEmpty())
                 .map(employeeList -> employeeList.get(0))
                 .doOnNext(employee -> {
                     employee.isCached = isCached;
@@ -192,6 +193,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 .createObservable()
                 .take(1)
                 .observeOn(Schedulers.io())
+                .filter(studentGroupList -> !studentGroupList.isEmpty())
                 .map(studentGroupList -> studentGroupList.get(0))
                 .doOnNext(studentGroup -> {
                     studentGroup.isCached = isCached;
@@ -201,7 +203,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
 
     private void onError(Throwable throwable) {
         if (isViewAttached()) {
-            if (throwable.getMessage().contains("org.simpleframework.xml.core.ValueRequiredException")) {
+            if (throwable.getMessage() != null && throwable.getMessage().contains("org.simpleframework.xml.core.ValueRequiredException")) {
                 getView().showError(Error.EMPTY_SCHEDULE);
             } else {
                 getView().showError(Error.NETWORK);
