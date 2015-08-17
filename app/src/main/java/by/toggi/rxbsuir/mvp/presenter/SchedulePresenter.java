@@ -24,9 +24,9 @@ import by.toggi.rxbsuir.rest.model.ScheduleModel;
 import by.toggi.rxbsuir.rest.model.ScheduleXmlModels;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_IS_GROUP_SCHEDULE;
 import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_SYNC_ID;
@@ -41,17 +41,14 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
 
     private final BsuirService mService;
     private final StorIOSQLite mStorIOSQLite;
-    private Observable<List<Lesson>> mLessonListObservable;
     private String mSyncId;
-    private boolean mHasSynced = false;
     private boolean mIsGroupSchedule;
-    private Subscription mSubscription;
 
     /**
      * Instantiates a new Schedule presenter.
      *
      * @param service      the bsuirService
-     * @param storIOSQLite the stor iOSQ lite
+     * @param storIOSQLite the storIOSQlite
      */
     @Inject
     public SchedulePresenter(@Named(KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule, @Nullable @Named(KEY_SYNC_ID) String syncId, BsuirService service, StorIOSQLite storIOSQLite) {
@@ -59,7 +56,6 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         mStorIOSQLite = storIOSQLite;
         mSyncId = syncId;
         mIsGroupSchedule = isGroupSchedule;
-        mLessonListObservable = getLessonListObservable(syncId, isGroupSchedule);
     }
 
     /**
@@ -68,82 +64,95 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
      * @param syncId the group number
      */
     public void setSyncId(String syncId, boolean isGroupSchedule) {
-        mHasSynced = false;
-        mIsGroupSchedule = isGroupSchedule;
+        // Set syncId and isGroupSchedule
         mSyncId = syncId;
-        mLessonListObservable = getLessonListObservable(syncId, isGroupSchedule);
-        onCreate();
+        mIsGroupSchedule = isGroupSchedule;
+        // View.showLoading()
+        if (isViewAttached()) {
+            getView().showLoading();
+        }
+        Observable.concat(
+                // If database contains syncId, View.showContent()
+                mStorIOSQLite.get()
+                        .listOfObjects(Lesson.class)
+                        .withQuery(Query.builder()
+                                .table(LessonEntry.TABLE_NAME)
+                                .where(LessonEntry.getSyncIdAndTypeQuery())
+                                .whereArgs(syncId, isGroupSchedule ? 1 : 0)
+                                .build())
+                        .prepare()
+                        .createObservable()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .take(1)
+                        .doOnNext(lessonList1 -> Timber.d("size: %s", lessonList1.size())),
+                // If database doesn't contain syncId, make a network request and store result in database
+                getLessonListFromNetworkObservable(syncId, isGroupSchedule))
+                .first(lessonList -> !lessonList.isEmpty())
+                .subscribe(lessonList -> {
+                    // View.showContent()
+                    if (isViewAttached()) {
+                        getView().showContent(0);
+                    }
+                }, this::onError);
     }
 
     /**
      * Retry network request with the same group or employee.
      */
     public void retry() {
+        // View.showLoading()
         if (isViewAttached()) {
             getView().showLoading();
         }
-        mHasSynced = false;
-        getLessonListFromNetwork(mSyncId, mIsGroupSchedule);
+        // Make a network request with current syncId and isGroupSchedule
+        getLessonListFromNetworkObservable(mSyncId, mIsGroupSchedule).subscribe(lessonList -> {
+            if (isViewAttached()) {
+                getView().showContent(0);
+            }
+        }, this::onError);
+        // View.showContent()
+
     }
 
 
     /**
      * Remove current syncId from db.
      */
-    public void remove() {
-        mHasSynced = true;
-        String whereQuery = mIsGroupSchedule
-                ? LessonEntry.filterByGroup(mSyncId)
-                : LessonEntry.filterByEmployee(mSyncId);
+    public void remove(String syncId, boolean isGroupSchedule) {
+        // Remove all records from db with supplied syncId;
         Observable.concat(
-                getDeleteSyncIdObservable(whereQuery),
-                mIsGroupSchedule ? getCacheGroupObservable(false) : getCacheEmployeeObservable(false)
-        ).subscribe();
-        mSyncId = null;
+                getDeleteSyncIdObservable(syncId, isGroupSchedule),
+                isGroupSchedule ? getCacheGroupObservable(false) : getCacheEmployeeObservable(false)
+        ).doOnError(this::onError).subscribe();
     }
 
-    private Observable<DeleteResult> getDeleteSyncIdObservable(String whereQuery) {
+    private Observable<DeleteResult> getDeleteSyncIdObservable(String syncId, boolean isGroupSchedule) {
         return mStorIOSQLite.delete()
                 .byQuery(DeleteQuery.builder()
                         .table(LessonEntry.TABLE_NAME)
-                        .where(whereQuery)
+                        .where(LessonEntry.getSyncIdAndTypeQuery())
+                        .whereArgs(syncId, isGroupSchedule ? 1 : 0)
                         .build())
                 .prepare()
-                .createObservable();
+                .createObservable()
+                .doOnNext(deleteResult -> Timber.d(deleteResult.toString()));
     }
 
     @Override
     public void onCreate() {
-        if (isViewAttached() && !mHasSynced && mSyncId != null) {
-            getView().showLoading();
+        if (mSyncId != null) {
+            setSyncId(mSyncId, mIsGroupSchedule);
         }
-        mSubscription = mLessonListObservable.subscribe(lessonList -> {
-            if (lessonList == null || lessonList.isEmpty()) {
-                if (!mHasSynced) {
-                    getLessonListFromNetwork(mSyncId, mIsGroupSchedule);
-                }
-            } else {
-                if (isViewAttached()) {
-                    getView().showContent(Utils.getCurrentWeekNumber() - 1);
-                }
-            }
-        });
     }
 
     @Override
     public void onDestroy() {
-        Utils.unsubscribe(mSubscription);
         detachView();
     }
 
     private void onNetworkSuccess(List<Lesson> lessonList, boolean isGroupSchedule) {
-        mHasSynced = true;
-        String whereQuery = LessonEntry.filterByGroup(mSyncId);
-        if (!isGroupSchedule) {
-            whereQuery = LessonEntry.filterByEmployee(mSyncId);
-        }
         Observable.concat(
-                getDeleteSyncIdObservable(whereQuery),
+                getDeleteSyncIdObservable(mSyncId, isGroupSchedule),
                 mStorIOSQLite.put()
                         .objects(lessonList)
                         .prepare()
@@ -190,8 +199,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 });
     }
 
-    private void onNetworkError(Throwable throwable) {
-        mHasSynced = true;
+    private void onError(Throwable throwable) {
         if (isViewAttached()) {
             if (throwable.getMessage().contains("org.simpleframework.xml.core.ValueRequiredException")) {
                 getView().showError(Error.EMPTY_SCHEDULE);
@@ -209,32 +217,15 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         return lessonList;
     }
 
-    private Observable<List<Lesson>> getLessonListObservable(String syncId, boolean isGroupSchedule) {
-        String whereQuery = isGroupSchedule
-                ? LessonEntry.filterByGroup(syncId)
-                : LessonEntry.filterByEmployee(syncId);
-        return mStorIOSQLite.get()
-                .listOfObjects(Lesson.class)
-                .withQuery(Query.builder()
-                        .table(LessonEntry.TABLE_NAME)
-                        .where(whereQuery)
-                        .build())
-                .prepare()
-                .createObservable()
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    private void getLessonListFromNetwork(String syncId, boolean isGroupSchedule) {
-        if (syncId != null) {
-            Observable<ScheduleXmlModels> scheduleXmlModelsObservable = isGroupSchedule
-                    ? mService.getGroupSchedule(syncId.replace("М", "M"))
-                    : mService.getEmployeeSchedule(syncId);
-            scheduleXmlModelsObservable.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-                    .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
-                    .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, isGroupSchedule)))
-                    .toList()
-                    .subscribe(lessonList -> onNetworkSuccess(lessonList, isGroupSchedule), this::onNetworkError);
-        }
+    private Observable<List<Lesson>> getLessonListFromNetworkObservable(String syncId, boolean isGroupSchedule) {
+        Observable<ScheduleXmlModels> scheduleXmlModelsObservable = isGroupSchedule
+                ? mService.getGroupSchedule(syncId.replace("М", "M"))
+                : mService.getEmployeeSchedule(syncId);
+        return scheduleXmlModelsObservable.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
+                .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, isGroupSchedule)))
+                .toList()
+                .doOnNext(lessonList -> onNetworkSuccess(lessonList, isGroupSchedule));
     }
 
     public enum Error {
