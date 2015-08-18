@@ -143,8 +143,8 @@ public class TermScheduleActivity extends ScheduleActivity implements TermView, 
     }
 
     @Override
-    public void showContent(int position) {
-        super.showContent(position);
+    public void showContent() {
+        super.showContent();
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 }
