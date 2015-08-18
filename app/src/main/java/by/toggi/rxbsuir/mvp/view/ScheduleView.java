@@ -10,6 +10,6 @@ public interface ScheduleView extends View {
 
     void showLoading();
 
-    void showContent(int position);
+    void showContent();
 
 }

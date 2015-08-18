@@ -91,7 +91,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 .subscribe(lessonList -> {
                     // View.showContent()
                     if (isViewAttached()) {
-                        getView().showContent(0);
+                        getView().showContent();
                     }
                 }, this::onError);
     }
@@ -107,7 +107,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         // Make a network request with current syncId and isGroupSchedule
         getLessonListFromNetworkObservable(mSyncId, mIsGroupSchedule).subscribe(lessonList -> {
             if (isViewAttached()) {
-                getView().showContent(0);
+                getView().showContent();
             }
         }, this::onError);
         // View.showContent()
