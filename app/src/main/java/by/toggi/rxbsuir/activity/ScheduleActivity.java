@@ -179,7 +179,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     @Override
-    public void showContent(int position) {
+    public void showContent() {
         mProgressBar.setVisibility(View.GONE);
     }
 

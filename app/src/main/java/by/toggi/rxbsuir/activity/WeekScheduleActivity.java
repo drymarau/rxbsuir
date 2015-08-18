@@ -27,7 +27,7 @@ public class WeekScheduleActivity extends ScheduleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mNavigationView.getMenu().findItem(R.id.navigation_view_week_view).setChecked(true);
+//        mNavigationView.getMenu().findItem(R.id.navigation_view_week_view).setChecked(true);
 
         setupTabs();
         showToday();
@@ -71,8 +71,9 @@ public class WeekScheduleActivity extends ScheduleActivity {
     }
 
     @Override
-    public void showContent(int position) {
-        super.showContent(position);
+    public void showContent() {
+        super.showContent();
         mViewPager.setVisibility(View.VISIBLE);
+        showToday();
     }
 }
