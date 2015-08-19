@@ -25,6 +25,11 @@ public class Utils {
     private Utils() {
     }
 
+    /**
+     * Restarts app.
+     *
+     * @param activity the activity
+     */
     public static void restartApp(Activity activity) {
         activity.finish();
         ComponentName componentName = new ComponentName(activity, WeekScheduleActivity.class);
@@ -62,6 +67,12 @@ public class Utils {
         return getWeekNumber(LocalDate.now());
     }
 
+    /**
+     * Gets week number.
+     *
+     * @param localDate the local date
+     * @return the week number
+     */
     public static int getWeekNumber(LocalDate localDate) {
         Long weeks = ChronoUnit.WEEKS.between(getStartYear(), localDate);
         return weeks.intValue() % 4 + 1;
