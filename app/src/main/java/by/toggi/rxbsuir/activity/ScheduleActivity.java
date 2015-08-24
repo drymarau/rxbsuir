@@ -84,7 +84,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
-    @Inject Preference<Boolean> mIsGroupSchedulePreference;
+    @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
     @Inject Preference<Integer> mItemIdPreference;
 
     private CompositeSubscription mCompositeSubscription;
@@ -106,7 +106,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         setupNavigationView();
 
         mSchedulePresenter.attachView(this);
-        mSchedulePresenter.onCreate();
+        mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
         mDrawerPresenter.attachView(this);
         mDrawerPresenter.onCreate();

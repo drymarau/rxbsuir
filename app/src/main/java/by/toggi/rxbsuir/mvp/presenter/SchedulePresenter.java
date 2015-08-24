@@ -1,7 +1,5 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
-import android.support.annotation.Nullable;
-
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
@@ -11,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
@@ -28,8 +25,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-import static by.toggi.rxbsuir.PreferenceHelper.IS_GROUP_SCHEDULE;
-import static by.toggi.rxbsuir.PreferenceHelper.SYNC_ID;
 import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
@@ -51,11 +46,9 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
      * @param storIOSQLite the storIOSQlite
      */
     @Inject
-    public SchedulePresenter(@Named(IS_GROUP_SCHEDULE) boolean isGroupSchedule, @Nullable @Named(SYNC_ID) String syncId, BsuirService service, StorIOSQLite storIOSQLite) {
+    public SchedulePresenter(BsuirService service, StorIOSQLite storIOSQLite) {
         mService = service;
         mStorIOSQLite = storIOSQLite;
-        mSyncId = syncId;
-        mIsGroupSchedule = isGroupSchedule;
     }
 
     /**
@@ -63,7 +56,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
      *
      * @param syncId the group number
      */
-    public void setSyncId(String syncId, boolean isGroupSchedule) {
+    public void setSyncId(String syncId, Boolean isGroupSchedule) {
         // Set syncId and isGroupSchedule
         mSyncId = syncId;
         mIsGroupSchedule = isGroupSchedule;
@@ -118,7 +111,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
     /**
      * Remove current syncId from db.
      */
-    public void remove(String syncId, boolean isGroupSchedule) {
+    public void remove(String syncId, Boolean isGroupSchedule) {
         // Remove all records from db with supplied syncId;
         Observable.concat(
                 getDeleteSyncIdObservable(syncId, isGroupSchedule),
@@ -140,9 +133,6 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
 
     @Override
     public void onCreate() {
-        if (mSyncId != null) {
-            setSyncId(mSyncId, mIsGroupSchedule);
-        }
     }
 
     @Override
