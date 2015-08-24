@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -25,6 +24,8 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import com.f2prateek.rx.preferences.Preference;
 
 import java.util.Map;
 
@@ -82,9 +83,9 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
-    @Inject @Named(KEY_IS_GROUP_SCHEDULE) boolean mIsGroupSchedule;
     @Inject @Named(KEY_IS_DARK_THEME) boolean mIsDarkTheme;
-    @Nullable @Inject @Named(KEY_SYNC_ID) String mSyncId;
+    @Inject Preference<String> mSyncId;
+    @Inject Preference<Boolean> mIsGroupSchedule;
 
     @State CharSequence mTitle;
     @State int mItemId;
@@ -225,7 +226,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 mSharedPreferences.edit().putBoolean(KEY_SUBGROUP_2, item.isChecked()).apply();
                 return true;
             case R.id.action_delete:
-                mSchedulePresenter.remove(mSyncId, mIsGroupSchedule);
+                mSchedulePresenter.remove(mSyncId.get(), mIsGroupSchedule.get());
                 resetSyncId();
                 return true;
             default:
@@ -234,8 +235,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private void resetSyncId() {
-        mSharedPreferences.edit().putString(KEY_SYNC_ID, null).apply();
-        mSyncId = null;
+        mSyncId.set(null);
         setTitle(R.string.app_name);
         supportInvalidateOptionsMenu();
     }
@@ -316,13 +316,9 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     private void selectGroupOrEmployee(int id, String s, boolean isGroupSchedule) {
         mItemId = id;
-        mSyncId = isGroupSchedule ? s : String.valueOf(id);
-        mIsGroupSchedule = isGroupSchedule;
-        mSharedPreferences.edit()
-                .putString(KEY_SYNC_ID, mSyncId)
-                .putBoolean(KEY_IS_GROUP_SCHEDULE, isGroupSchedule)
-                .apply();
-        mSchedulePresenter.setSyncId(mSyncId, mIsGroupSchedule);
+        mSyncId.set(isGroupSchedule ? s : String.valueOf(id));
+        mIsGroupSchedule.set(isGroupSchedule);
+        mSchedulePresenter.setSyncId(mSyncId.get(), mIsGroupSchedule.get());
         setTitle(s);
         supportInvalidateOptionsMenu();
     }
