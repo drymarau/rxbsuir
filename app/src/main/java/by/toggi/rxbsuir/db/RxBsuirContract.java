@@ -52,91 +52,17 @@ public class RxBsuirContract {
          * @return where query
          */
         public static String getSyncIdAndTypeQuery() {
-            return COL_SYNC_ID + " = ?" + " and " + COL_IS_GROUP_SCHEDULE + " = ?;";
+            return COL_SYNC_ID + " = ?" + " and " + COL_IS_GROUP_SCHEDULE + " = ?";
         }
 
         /**
-         * Filter by group.
+         * Gets sync id type subgroup and week number query.
          *
-         * @param groupNumber the group number
+         * @param subgroupNumber the subgroup number
          * @return where query
          */
-        public static String filterByGroup(String groupNumber) {
-            return COL_SYNC_ID + " = '" + groupNumber + "' and " + filterByScheduleType(true);
-        }
-
-        /**
-         * Filter by employee.
-         *
-         * @param employeeId the employee id
-         * @return where query
-         */
-        public static String filterByEmployee(String employeeId) {
-            return COL_SYNC_ID + " = '" + employeeId + "' and " + filterByScheduleType(false);
-        }
-
-        /**
-         * Filter by group and subgroup.
-         *
-         * @param groupNumber    the group number
-         * @param subgroupNumber the subgroup number
-         * @return the string
-         */
-        public static String filterByGroupAndSubgroup(String groupNumber, int subgroupNumber) {
-            return filterByGroup(groupNumber) + " and (" + filterBySubgroup(subgroupNumber) + ")";
-        }
-
-        /**
-         * Filter by employee and subgroup.
-         *
-         * @param employeeId     the employee id
-         * @param subgroupNumber the subgroup number
-         * @return the string
-         */
-        public static String filterByEmployeeAndSubgroup(String employeeId, int subgroupNumber) {
-            return filterByEmployee(employeeId) + " and (" + filterBySubgroup(subgroupNumber) + ")";
-        }
-
-        /**
-         * Filter by group, subgroup, and week.
-         *
-         * @param groupNumber    the group number
-         * @param subgroupNumber the subgroup number
-         * @param weekNumber     the week number
-         * @return where query
-         */
-        public static String filterByGroupSubgroupAndWeek(String groupNumber, int subgroupNumber, int weekNumber) {
-            return filterByGroupAndWeek(groupNumber, weekNumber)
-                    + " and (" + filterBySubgroup(subgroupNumber) + ")";
-        }
-
-        /**
-         * Filter by employee, subgroup and week.
-         *
-         * @param employeeId     the employee id
-         * @param subgroupNumber the subgroup number
-         * @param weekNumber     the week number
-         * @return where query
-         */
-        public static String filterByEmployeeSubgroupAndWeek(String employeeId, int subgroupNumber, int weekNumber) {
-            return filterByEmployeeAndWeek(employeeId, weekNumber)
-                    + " and (" + filterBySubgroup(subgroupNumber) + ")";
-        }
-
-        private static String filterByWeek(int weekNumber) {
-            return COL_WEEK_NUMBER_LIST + " like '%" + weekNumber + "%'";
-        }
-
-        private static String filterByScheduleType(boolean isGroupSchedule) {
-            return COL_IS_GROUP_SCHEDULE + " = " + (isGroupSchedule ? 1 : 0);
-        }
-
-        private static String filterByGroupAndWeek(String groupNumber, int weekNumber) {
-            return filterByGroup(groupNumber) + " and " + filterByWeek(weekNumber);
-        }
-
-        private static String filterByEmployeeAndWeek(String employeeId, int weekNumber) {
-            return filterByEmployee(employeeId) + " and " + filterByWeek(weekNumber);
+        public static String getSyncIdTypeSubgroupAndWeekNumberQuery(int subgroupNumber) {
+            return getSyncIdAndTypeQuery() + " and " + COL_WEEK_NUMBER_LIST + " like ?" + " and (" + filterBySubgroup(subgroupNumber) + ")";
         }
 
         private static String filterBySubgroup(int subgroupNumber) {
