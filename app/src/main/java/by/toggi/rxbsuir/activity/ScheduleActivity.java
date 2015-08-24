@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -331,18 +330,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     private boolean isMenuItemEnabled() {
         return mSyncIdPreference.get() != null;
-    }
-
-    private void disableScrollFlags() {
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
-        params.setScrollFlags(0);
-        mToolbar.setLayoutParams(params);
-    }
-
-    private void enableScrollFlags() {
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
-        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-        mToolbar.setLayoutParams(params);
     }
 
     private void addStorageFragment() {
