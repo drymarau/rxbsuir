@@ -18,6 +18,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,6 +77,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @BindString(R.string.intent_feedback) String mSendFeedbackTitle;
     @BindString(R.string.email_feedback) String mFeedbackEmail;
     @BindString(R.string.subject_feedback) String mFeedbackSubject;
+    @BindString(R.string.title_format) String mTitleFormat;
 
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
@@ -399,6 +401,14 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     private Subscription getTitlePreferenceSubscription() {
         return mTitlePreference.asObservable()
                 .observeOn(AndroidSchedulers.mainThread())
+                .map(s -> TextUtils.split(s, " "))
+                .map(strings -> {
+                    if (strings.length == 3) {
+                        return String.format(mTitleFormat, strings[0], strings[1], strings[2]);
+                    } else {
+                        return TextUtils.join(" ", strings);
+                    }
+                })
                 .subscribe(this::setTitle);
     }
 }
