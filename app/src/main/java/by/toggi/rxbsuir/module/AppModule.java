@@ -68,6 +68,7 @@ public class AppModule {
     }
 
     @Provides
+    @Singleton
     Preference<Boolean> provideRxIsGroupSchedule(RxSharedPreferences preferences) {
         return preferences.getBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, true);
     }
