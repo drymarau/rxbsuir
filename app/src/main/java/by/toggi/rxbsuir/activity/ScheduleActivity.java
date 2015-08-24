@@ -49,7 +49,6 @@ import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
-import icepick.Icepick;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -199,12 +198,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     public void onPositiveButtonClicked(int id, String name, boolean isGroupSchedule) {
         hideFloatingActionMenu();
         selectGroupOrEmployee(id, name, isGroupSchedule);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
     }
 
     @Override
