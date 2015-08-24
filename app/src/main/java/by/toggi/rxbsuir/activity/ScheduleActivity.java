@@ -37,6 +37,7 @@ import butterknife.BindDimen;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
@@ -55,14 +56,8 @@ import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
 public abstract class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 
-    public static final String KEY_IS_GROUP_SCHEDULE = "is_group_schedule";
-    public static final String KEY_SUBGROUP_1 = "subgroup_1";
-    public static final String KEY_SUBGROUP_2 = "subgroup_2";
-    public static final String KEY_IS_DARK_THEME = "is_dark_theme";
-    public static final String KEY_SYNC_ID = "sync_id";
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
-    private static final String KEY_TITLE = "title";
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.progress_bar) ProgressBar mProgressBar;
@@ -83,7 +78,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
-    @Inject @Named(KEY_IS_DARK_THEME) boolean mIsDarkTheme;
+    @Inject @Named(PreferenceHelper.KEY_IS_DARK_THEME) boolean mIsDarkTheme;
     @Inject Preference<String> mSyncId;
     @Inject Preference<Boolean> mIsGroupSchedule;
 
@@ -191,7 +186,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     public void setTitle(CharSequence title) {
         mTitle = title;
         if (mTitle != null) {
-            mSharedPreferences.edit().putString(KEY_TITLE, title.toString()).apply();
+            mSharedPreferences.edit().putString(PreferenceHelper.KEY_TITLE, title.toString()).apply();
         }
         getDelegate().getSupportActionBar().setTitle(mTitle);
     }
@@ -219,11 +214,11 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 return true;
             case R.id.action_subgroup_1:
                 item.setChecked(!item.isChecked());
-                mSharedPreferences.edit().putBoolean(KEY_SUBGROUP_1, item.isChecked()).apply();
+                mSharedPreferences.edit().putBoolean(PreferenceHelper.KEY_SUBGROUP_1, item.isChecked()).apply();
                 return true;
             case R.id.action_subgroup_2:
                 item.setChecked(!item.isChecked());
-                mSharedPreferences.edit().putBoolean(KEY_SUBGROUP_2, item.isChecked()).apply();
+                mSharedPreferences.edit().putBoolean(PreferenceHelper.KEY_SUBGROUP_2, item.isChecked()).apply();
                 return true;
             case R.id.action_delete:
                 mSchedulePresenter.remove(mSyncId.get(), mIsGroupSchedule.get());
@@ -247,10 +242,10 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         menu.setGroupVisible(R.id.group_items, isMenuItemEnabled());
         MenuItem item = menu.findItem(R.id.action_subgroup_1);
         item.setVisible(isMenuItemEnabled());
-        item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_1, true));
+        item.setChecked(mSharedPreferences.getBoolean(PreferenceHelper.KEY_SUBGROUP_1, true));
         item = menu.findItem(R.id.action_subgroup_2);
         item.setVisible(isMenuItemEnabled());
-        item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_2, true));
+        item.setChecked(mSharedPreferences.getBoolean(PreferenceHelper.KEY_SUBGROUP_2, true));
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -327,7 +322,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         if (mTitle == null) {
             CharSequence title = getDelegate().getSupportActionBar().getTitle();
             if (title != null) {
-                mTitle = mSharedPreferences.getString(KEY_TITLE, title.toString());
+                mTitle = mSharedPreferences.getString(PreferenceHelper.KEY_TITLE, title.toString());
             }
         }
         setTitle(mTitle);

@@ -10,8 +10,8 @@ import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
@@ -43,11 +43,11 @@ public interface AppComponent {
 
     Preference<Boolean> rxIsGroupSchedule();
 
-    @Named(ScheduleActivity.KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule();
+    @Named(PreferenceHelper.KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule();
 
-    @Named(ScheduleActivity.KEY_IS_DARK_THEME) boolean isDarkTheme();
+    @Named(PreferenceHelper.KEY_IS_DARK_THEME) boolean isDarkTheme();
 
-    @Nullable @Named(ScheduleActivity.KEY_SYNC_ID) String syncId();
+    @Nullable @Named(PreferenceHelper.KEY_SYNC_ID) String syncId();
 
     void inject(AddGroupDialogFragment addGroupDialogFragment);
 

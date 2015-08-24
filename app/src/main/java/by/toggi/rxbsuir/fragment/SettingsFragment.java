@@ -9,9 +9,9 @@ import android.preference.PreferenceFragment;
 import android.widget.Toast;
 
 import by.toggi.rxbsuir.BuildConfig;
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
-import by.toggi.rxbsuir.activity.ScheduleActivity;
 
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
@@ -21,14 +21,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         addPreferencesFromResource(R.xml.preferences);
 
-        findPreference(ScheduleActivity.KEY_IS_DARK_THEME).setOnPreferenceChangeListener(this);
+        findPreference(PreferenceHelper.KEY_IS_DARK_THEME).setOnPreferenceChangeListener(this);
         findPreference("build_version").setSummary(BuildConfig.VERSION_NAME);
         findPreference("rate_app").setOnPreferenceClickListener(this);
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference.getKey().equals(ScheduleActivity.KEY_IS_DARK_THEME)) {
+        if (preference.getKey().equals(PreferenceHelper.KEY_IS_DARK_THEME)) {
             Utils.restartApp(getActivity());
         }
         return true;

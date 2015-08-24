@@ -10,8 +10,8 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.activity.ScheduleActivity;
 import dagger.Module;
 import dagger.Provides;
 
@@ -37,22 +37,22 @@ public class AppModule {
     }
 
     @Provides
-    @Named(value = ScheduleActivity.KEY_IS_GROUP_SCHEDULE)
+    @Named(PreferenceHelper.KEY_IS_GROUP_SCHEDULE)
     boolean provideIsGroupSchedule(SharedPreferences preferences) {
-        return preferences.getBoolean(ScheduleActivity.KEY_IS_GROUP_SCHEDULE, true);
+        return preferences.getBoolean(PreferenceHelper.KEY_IS_GROUP_SCHEDULE, true);
     }
 
     @Provides
-    @Named(value = ScheduleActivity.KEY_IS_DARK_THEME)
+    @Named(PreferenceHelper.KEY_IS_DARK_THEME)
     boolean provideIsDarkTheme(SharedPreferences preferences) {
-        return preferences.getBoolean(ScheduleActivity.KEY_IS_DARK_THEME, false);
+        return preferences.getBoolean(PreferenceHelper.KEY_IS_DARK_THEME, false);
     }
 
     @Nullable
     @Provides
-    @Named(value = ScheduleActivity.KEY_SYNC_ID)
+    @Named(PreferenceHelper.KEY_SYNC_ID)
     String provideSyncId(SharedPreferences preferences) {
-        return preferences.getString(ScheduleActivity.KEY_SYNC_ID, null);
+        return preferences.getString(PreferenceHelper.KEY_SYNC_ID, null);
     }
 
     @Provides
@@ -64,12 +64,12 @@ public class AppModule {
     @Provides
     @Singleton
     Preference<String> provideRxSyncId(RxSharedPreferences preferences) {
-        return preferences.getString(ScheduleActivity.KEY_SYNC_ID, null);
+        return preferences.getString(PreferenceHelper.KEY_SYNC_ID, null);
     }
 
     @Provides
     Preference<Boolean> provideRxIsGroupSchedule(RxSharedPreferences preferences) {
-        return preferences.getBoolean(ScheduleActivity.KEY_IS_GROUP_SCHEDULE, true);
+        return preferences.getBoolean(PreferenceHelper.KEY_IS_GROUP_SCHEDULE, true);
     }
 
 }

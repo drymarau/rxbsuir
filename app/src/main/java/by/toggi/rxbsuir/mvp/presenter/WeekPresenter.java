@@ -18,8 +18,8 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
-import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_IS_GROUP_SCHEDULE;
-import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_SYNC_ID;
+import static by.toggi.rxbsuir.PreferenceHelper.KEY_IS_GROUP_SCHEDULE;
+import static by.toggi.rxbsuir.PreferenceHelper.KEY_SYNC_ID;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 public class WeekPresenter extends Presenter<WeekView> {

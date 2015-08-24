@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.fragment.SettingsFragment;
@@ -17,7 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
 
-    @Inject @Named(ScheduleActivity.KEY_IS_DARK_THEME) boolean mIsDarkTheme;
+    @Inject @Named(PreferenceHelper.KEY_IS_DARK_THEME) boolean mIsDarkTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
