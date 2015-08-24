@@ -82,7 +82,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject Preference<String> mSyncId;
     @Inject Preference<Boolean> mIsGroupSchedule;
 
-    @State CharSequence mTitle;
     @State int mItemId;
 
     @Override
@@ -108,7 +107,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         mDrawerPresenter.onCreate();
 
         Icepick.restoreInstanceState(this, savedInstanceState);
-        setupTitle();
 
     }
 
@@ -180,15 +178,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     public void onPositiveButtonClicked(int id, String name, boolean isGroupSchedule) {
         hideFloatingActionMenu();
         selectGroupOrEmployee(id, name, isGroupSchedule);
-    }
-
-    @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        if (mTitle != null) {
-            mSharedPreferences.edit().putString(PreferenceHelper.TITLE, title.toString()).apply();
-        }
-        getDelegate().getSupportActionBar().setTitle(mTitle);
     }
 
     @Override
@@ -316,16 +305,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         mSchedulePresenter.setSyncId(mSyncId.get(), mIsGroupSchedule.get());
         setTitle(s);
         supportInvalidateOptionsMenu();
-    }
-
-    private void setupTitle() {
-        if (mTitle == null) {
-            CharSequence title = getDelegate().getSupportActionBar().getTitle();
-            if (title != null) {
-                mTitle = mSharedPreferences.getString(PreferenceHelper.TITLE, title.toString());
-            }
-        }
-        setTitle(mTitle);
     }
 
     private void setupNavigationView() {
