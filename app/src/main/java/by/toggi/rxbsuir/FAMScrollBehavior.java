@@ -99,8 +99,10 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<ViewGroup> {
 
         if (dyConsumed > 0 && mButton.getVisibility() == View.VISIBLE) {
             mButton.hide();
+            mButton.setClickable(false);
         } else if (dyConsumed < 0 && mButton.getVisibility() != View.VISIBLE) {
             mButton.show();
+            mButton.setClickable(true);
         }
     }
 
