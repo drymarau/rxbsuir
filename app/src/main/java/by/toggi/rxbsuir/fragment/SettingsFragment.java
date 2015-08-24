@@ -21,14 +21,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         addPreferencesFromResource(R.xml.preferences);
 
-        findPreference(PreferenceHelper.KEY_IS_DARK_THEME).setOnPreferenceChangeListener(this);
+        findPreference(PreferenceHelper.IS_DARK_THEME).setOnPreferenceChangeListener(this);
         findPreference("build_version").setSummary(BuildConfig.VERSION_NAME);
         findPreference("rate_app").setOnPreferenceClickListener(this);
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference.getKey().equals(PreferenceHelper.KEY_IS_DARK_THEME)) {
+        if (preference.getKey().equals(PreferenceHelper.IS_DARK_THEME)) {
             Utils.restartApp(getActivity());
         }
         return true;

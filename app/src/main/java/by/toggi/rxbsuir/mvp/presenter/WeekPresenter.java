@@ -18,8 +18,8 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
-import static by.toggi.rxbsuir.PreferenceHelper.KEY_IS_GROUP_SCHEDULE;
-import static by.toggi.rxbsuir.PreferenceHelper.KEY_SYNC_ID;
+import static by.toggi.rxbsuir.PreferenceHelper.IS_GROUP_SCHEDULE;
+import static by.toggi.rxbsuir.PreferenceHelper.SYNC_ID;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 public class WeekPresenter extends Presenter<WeekView> {
@@ -32,7 +32,7 @@ public class WeekPresenter extends Presenter<WeekView> {
     private Subscription mSubscription;
 
     @Inject
-    public WeekPresenter(@Named(KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule, @Nullable @Named(KEY_SYNC_ID) String syncId, int weekNumber, StorIOSQLite storIOSQLite) {
+    public WeekPresenter(@Named(IS_GROUP_SCHEDULE) boolean isGroupSchedule, @Nullable @Named(SYNC_ID) String syncId, int weekNumber, StorIOSQLite storIOSQLite) {
         mWeekNumber = weekNumber;
         mStorIOSQLite = storIOSQLite;
         mSyncId = syncId;

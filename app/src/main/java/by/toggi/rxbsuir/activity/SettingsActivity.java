@@ -18,7 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
 
-    @Inject @Named(PreferenceHelper.KEY_IS_DARK_THEME) boolean mIsDarkTheme;
+    @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

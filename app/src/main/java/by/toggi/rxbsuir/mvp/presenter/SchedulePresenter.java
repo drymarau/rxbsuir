@@ -28,8 +28,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-import static by.toggi.rxbsuir.PreferenceHelper.KEY_IS_GROUP_SCHEDULE;
-import static by.toggi.rxbsuir.PreferenceHelper.KEY_SYNC_ID;
+import static by.toggi.rxbsuir.PreferenceHelper.IS_GROUP_SCHEDULE;
+import static by.toggi.rxbsuir.PreferenceHelper.SYNC_ID;
 import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
@@ -51,7 +51,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
      * @param storIOSQLite the storIOSQlite
      */
     @Inject
-    public SchedulePresenter(@Named(KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule, @Nullable @Named(KEY_SYNC_ID) String syncId, BsuirService service, StorIOSQLite storIOSQLite) {
+    public SchedulePresenter(@Named(IS_GROUP_SCHEDULE) boolean isGroupSchedule, @Nullable @Named(SYNC_ID) String syncId, BsuirService service, StorIOSQLite storIOSQLite) {
         mService = service;
         mStorIOSQLite = storIOSQLite;
         mSyncId = syncId;

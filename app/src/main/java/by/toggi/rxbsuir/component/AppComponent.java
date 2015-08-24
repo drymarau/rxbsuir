@@ -43,11 +43,11 @@ public interface AppComponent {
 
     Preference<Boolean> rxIsGroupSchedule();
 
-    @Named(PreferenceHelper.KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule();
+    @Named(PreferenceHelper.IS_GROUP_SCHEDULE) boolean isGroupSchedule();
 
-    @Named(PreferenceHelper.KEY_IS_DARK_THEME) boolean isDarkTheme();
+    @Named(PreferenceHelper.IS_DARK_THEME) boolean isDarkTheme();
 
-    @Nullable @Named(PreferenceHelper.KEY_SYNC_ID) String syncId();
+    @Nullable @Named(PreferenceHelper.SYNC_ID) String syncId();
 
     void inject(AddGroupDialogFragment addGroupDialogFragment);
 

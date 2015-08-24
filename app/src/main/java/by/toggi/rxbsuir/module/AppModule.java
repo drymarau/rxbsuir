@@ -37,22 +37,22 @@ public class AppModule {
     }
 
     @Provides
-    @Named(PreferenceHelper.KEY_IS_GROUP_SCHEDULE)
+    @Named(PreferenceHelper.IS_GROUP_SCHEDULE)
     boolean provideIsGroupSchedule(SharedPreferences preferences) {
-        return preferences.getBoolean(PreferenceHelper.KEY_IS_GROUP_SCHEDULE, true);
+        return preferences.getBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, true);
     }
 
     @Provides
-    @Named(PreferenceHelper.KEY_IS_DARK_THEME)
+    @Named(PreferenceHelper.IS_DARK_THEME)
     boolean provideIsDarkTheme(SharedPreferences preferences) {
-        return preferences.getBoolean(PreferenceHelper.KEY_IS_DARK_THEME, false);
+        return preferences.getBoolean(PreferenceHelper.IS_DARK_THEME, false);
     }
 
     @Nullable
     @Provides
-    @Named(PreferenceHelper.KEY_SYNC_ID)
+    @Named(PreferenceHelper.SYNC_ID)
     String provideSyncId(SharedPreferences preferences) {
-        return preferences.getString(PreferenceHelper.KEY_SYNC_ID, null);
+        return preferences.getString(PreferenceHelper.SYNC_ID, null);
     }
 
     @Provides
@@ -64,12 +64,12 @@ public class AppModule {
     @Provides
     @Singleton
     Preference<String> provideRxSyncId(RxSharedPreferences preferences) {
-        return preferences.getString(PreferenceHelper.KEY_SYNC_ID, null);
+        return preferences.getString(PreferenceHelper.SYNC_ID, null);
     }
 
     @Provides
     Preference<Boolean> provideRxIsGroupSchedule(RxSharedPreferences preferences) {
-        return preferences.getBoolean(PreferenceHelper.KEY_IS_GROUP_SCHEDULE, true);
+        return preferences.getBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, true);
     }
 
 }

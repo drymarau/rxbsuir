@@ -78,7 +78,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
-    @Inject @Named(PreferenceHelper.KEY_IS_DARK_THEME) boolean mIsDarkTheme;
+    @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
     @Inject Preference<String> mSyncId;
     @Inject Preference<Boolean> mIsGroupSchedule;
 
@@ -186,7 +186,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     public void setTitle(CharSequence title) {
         mTitle = title;
         if (mTitle != null) {
-            mSharedPreferences.edit().putString(PreferenceHelper.KEY_TITLE, title.toString()).apply();
+            mSharedPreferences.edit().putString(PreferenceHelper.TITLE, title.toString()).apply();
         }
         getDelegate().getSupportActionBar().setTitle(mTitle);
     }
@@ -214,11 +214,11 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 return true;
             case R.id.action_subgroup_1:
                 item.setChecked(!item.isChecked());
-                mSharedPreferences.edit().putBoolean(PreferenceHelper.KEY_SUBGROUP_1, item.isChecked()).apply();
+                mSharedPreferences.edit().putBoolean(PreferenceHelper.SUBGROUP_1, item.isChecked()).apply();
                 return true;
             case R.id.action_subgroup_2:
                 item.setChecked(!item.isChecked());
-                mSharedPreferences.edit().putBoolean(PreferenceHelper.KEY_SUBGROUP_2, item.isChecked()).apply();
+                mSharedPreferences.edit().putBoolean(PreferenceHelper.SUBGROUP_2, item.isChecked()).apply();
                 return true;
             case R.id.action_delete:
                 mSchedulePresenter.remove(mSyncId.get(), mIsGroupSchedule.get());
@@ -242,10 +242,10 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         menu.setGroupVisible(R.id.group_items, isMenuItemEnabled());
         MenuItem item = menu.findItem(R.id.action_subgroup_1);
         item.setVisible(isMenuItemEnabled());
-        item.setChecked(mSharedPreferences.getBoolean(PreferenceHelper.KEY_SUBGROUP_1, true));
+        item.setChecked(mSharedPreferences.getBoolean(PreferenceHelper.SUBGROUP_1, true));
         item = menu.findItem(R.id.action_subgroup_2);
         item.setVisible(isMenuItemEnabled());
-        item.setChecked(mSharedPreferences.getBoolean(PreferenceHelper.KEY_SUBGROUP_2, true));
+        item.setChecked(mSharedPreferences.getBoolean(PreferenceHelper.SUBGROUP_2, true));
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -322,7 +322,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         if (mTitle == null) {
             CharSequence title = getDelegate().getSupportActionBar().getTitle();
             if (title != null) {
-                mTitle = mSharedPreferences.getString(PreferenceHelper.KEY_TITLE, title.toString());
+                mTitle = mSharedPreferences.getString(PreferenceHelper.TITLE, title.toString());
             }
         }
         setTitle(mTitle);
