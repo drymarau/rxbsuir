@@ -27,8 +27,6 @@ public class WeekScheduleActivity extends ScheduleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        mNavigationView.getMenu().findItem(R.id.navigation_view_week_view).setChecked(true);
-
         setupTabs();
         showToday();
     }

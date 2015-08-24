@@ -15,10 +15,6 @@ import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.db.model.LessonStorIOISQLiteGetResolver;
 import by.toggi.rxbsuir.db.model.LessonStorIOSQLiteDeleteResolver;
 import by.toggi.rxbsuir.db.model.LessonStorIOSQLitePutResolver;
-import by.toggi.rxbsuir.rest.model.AcademicCalendar;
-import by.toggi.rxbsuir.rest.model.AcademicCalendarStorIOSQLiteDeleteResolver;
-import by.toggi.rxbsuir.rest.model.AcademicCalendarStorIOSQLiteGetResolver;
-import by.toggi.rxbsuir.rest.model.AcademicCalendarStorIOSQLitePutResolver;
 import by.toggi.rxbsuir.rest.model.Employee;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
 import by.toggi.rxbsuir.rest.model.StudentGroupStorIOSQLiteDeleteResolver;
@@ -55,11 +51,6 @@ public class DbModule {
                         .putResolver(new EmployeeStorIOSQLitePutResolver())
                         .getResolver(new EmployeeStorIOISQLiteGetResolver())
                         .deleteResolver(new EmployeeStorIOSQLiteDeleteResolver())
-                        .build())
-                .addTypeMapping(AcademicCalendar.class, SQLiteTypeMapping.<AcademicCalendar>builder()
-                        .putResolver(new AcademicCalendarStorIOSQLitePutResolver())
-                        .getResolver(new AcademicCalendarStorIOSQLiteGetResolver())
-                        .deleteResolver(new AcademicCalendarStorIOSQLiteDeleteResolver())
                         .build())
                 .build();
     }

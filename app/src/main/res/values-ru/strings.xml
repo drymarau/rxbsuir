@@ -28,8 +28,6 @@
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Группы</string>
     <string name="navigation_view_employees">Преподаватели</string>
-    <string name="navigation_view_week_view">Неделя</string>
-    <string name="navigation_view_term_view">Семестр (beta)</string>
     <string name="navigation_view_send_feedback">Отправить отзыв</string>
     <!-- Send feedback intent -->
     <string name="intent_feedback">Отправить отзыв…</string>

@@ -4,16 +4,6 @@ import android.provider.BaseColumns;
 
 public class RxBsuirContract {
 
-    public static class AcademicCalendarEntry {
-
-        public static final String TABLE_NAME = "academic_calendars";
-
-        public static final String COL_COURSE = "course";
-        public static final String COL_START_DATE = "start_date";
-        public static final String COL_END_DATE = "end_date";
-
-    }
-
     public static class EmployeeEntry implements HelperColumns {
 
         public static final String TABLE_NAME = "employees";
