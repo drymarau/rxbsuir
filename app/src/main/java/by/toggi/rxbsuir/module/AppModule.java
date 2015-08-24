@@ -39,8 +39,8 @@ public class AppModule {
 
     @Provides
     @Named(PreferenceHelper.IS_GROUP_SCHEDULE)
-    boolean provideIsGroupSchedule(@Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> preference) {
-        return preference.get().booleanValue();
+    Boolean provideIsGroupSchedule(@Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> preference) {
+        return preference.get();
     }
 
     @Provides
