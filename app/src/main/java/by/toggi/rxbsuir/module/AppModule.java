@@ -82,4 +82,10 @@ public class AppModule {
         return preferences.getString(PreferenceHelper.TITLE, mApplication.getString(R.string.app_name));
     }
 
+    @Provides
+    @Singleton
+    Preference<Integer> provideRxItemId(RxSharedPreferences preferences) {
+        return preferences.getInteger(PreferenceHelper.ITEM_ID, -1);
+    }
+
 }

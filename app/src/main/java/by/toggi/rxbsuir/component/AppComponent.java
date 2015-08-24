@@ -45,6 +45,8 @@ public interface AppComponent {
 
     @Named(PreferenceHelper.TITLE) Preference<String> rxTitle();
 
+    Preference<Integer> rxItemId();
+
     @Named(PreferenceHelper.IS_GROUP_SCHEDULE) boolean isGroupSchedule();
 
     @Named(PreferenceHelper.IS_DARK_THEME) boolean isDarkTheme();
