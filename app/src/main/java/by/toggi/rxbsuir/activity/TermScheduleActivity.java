@@ -125,7 +125,7 @@ public class TermScheduleActivity extends ScheduleActivity implements TermView, 
             case ScheduleActivity.KEY_SUBGROUP_2:
                 boolean subgroup1 = preferences.getBoolean(ScheduleActivity.KEY_SUBGROUP_1, true);
                 boolean subgroup2 = preferences.getBoolean(ScheduleActivity.KEY_SUBGROUP_2, true);
-                mPresenter.setSubgroupNumber(subgroup1, subgroup2, isGroupSchedule);
+                mPresenter.setSubgroupNumber(subgroup1, subgroup2);
                 break;
         }
     }
