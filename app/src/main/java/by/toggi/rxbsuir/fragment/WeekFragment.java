@@ -1,6 +1,5 @@
 package by.toggi.rxbsuir.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.f2prateek.rx.preferences.Preference;
 
 import java.util.List;
 
@@ -30,6 +31,9 @@ import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.module.WeekFragmentModule;
 import by.toggi.rxbsuir.mvp.presenter.WeekPresenter;
 import by.toggi.rxbsuir.mvp.view.WeekView;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class WeekFragment extends Fragment implements WeekView, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -42,9 +46,12 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
     @Inject LessonAdapter mAdapter;
     @Inject WeekPresenter mPresenter;
     @Inject SharedPreferences mSharedPreferences;
+    @Inject Preference<String> mSyncIdPreference;
+    @Inject Preference<Boolean> mIsGroupSchedulePreference;
 
     private Parcelable mLayoutManagerState;
     private int mWeekNumber;
+    private CompositeSubscription mCompositeSubscription;
 
     /**
      * Instantiates a new {@code WeekFragment}.
@@ -166,11 +173,18 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
     public void onResume() {
         super.onResume();
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription.add(
+                getSyncIdSubscription()
+        );
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
+            mCompositeSubscription.unsubscribe();
+        }
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
@@ -178,10 +192,6 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         boolean isGroupSchedule = preferences.getBoolean(ScheduleActivity.KEY_IS_GROUP_SCHEDULE, true);
         switch (key) {
-            case ScheduleActivity.KEY_SYNC_ID:
-                mRecyclerView.setVisibility(View.GONE);
-                mPresenter.setSyncId(preferences.getString(key, null), isGroupSchedule);
-                break;
             case ScheduleActivity.KEY_SUBGROUP_1:
             case ScheduleActivity.KEY_SUBGROUP_2:
                 boolean subgroup1 = preferences.getBoolean(ScheduleActivity.KEY_SUBGROUP_1, true);
@@ -189,5 +199,14 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
                 mPresenter.setSubgroupNumber(subgroup1, subgroup2, isGroupSchedule);
                 break;
         }
+    }
+
+    private Subscription getSyncIdSubscription() {
+        return mSyncIdPreference.asObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(s -> {
+                    mRecyclerView.setVisibility(View.GONE);
+                    mPresenter.setSyncId(s, mSharedPreferences.getBoolean(ScheduleActivity.KEY_IS_GROUP_SCHEDULE, true));
+                });
     }
 }
