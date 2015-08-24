@@ -39,7 +39,7 @@ public interface AppComponent {
 
     RxSharedPreferences rxSharedPreferences();
 
-    Preference<String> rxSyncId();
+    @Named(PreferenceHelper.SYNC_ID) Preference<String> rxSyncId();
 
     Preference<Boolean> rxIsGroupSchedule();
 

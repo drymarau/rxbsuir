@@ -63,6 +63,7 @@ public class AppModule {
 
     @Provides
     @Singleton
+    @Named(PreferenceHelper.SYNC_ID)
     Preference<String> provideRxSyncId(RxSharedPreferences preferences) {
         return preferences.getString(PreferenceHelper.SYNC_ID, null);
     }

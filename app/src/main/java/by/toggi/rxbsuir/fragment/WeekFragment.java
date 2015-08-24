@@ -18,6 +18,7 @@ import com.f2prateek.rx.preferences.Preference;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,7 +47,7 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
     @Inject LessonAdapter mAdapter;
     @Inject WeekPresenter mPresenter;
     @Inject SharedPreferences mSharedPreferences;
-    @Inject Preference<String> mSyncIdPreference;
+    @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject Preference<Boolean> mIsGroupSchedulePreference;
 
     private Parcelable mLayoutManagerState;
