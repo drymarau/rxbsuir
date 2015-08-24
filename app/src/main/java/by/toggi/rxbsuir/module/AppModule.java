@@ -11,6 +11,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.PreferenceHelper;
+import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import dagger.Module;
 import dagger.Provides;
@@ -72,6 +73,13 @@ public class AppModule {
     @Singleton
     Preference<Boolean> provideRxIsGroupSchedule(RxSharedPreferences preferences) {
         return preferences.getBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, true);
+    }
+
+    @Provides
+    @Singleton
+    @Named(PreferenceHelper.TITLE)
+    Preference<String> provideRxTitle(RxSharedPreferences preferences) {
+        return preferences.getString(PreferenceHelper.TITLE, mApplication.getString(R.string.app_name));
     }
 
 }

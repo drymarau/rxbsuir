@@ -80,6 +80,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncId;
+    @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
     @Inject Preference<Boolean> mIsGroupSchedule;
 
     @State int mItemId;

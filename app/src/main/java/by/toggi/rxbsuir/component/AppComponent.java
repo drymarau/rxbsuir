@@ -43,6 +43,8 @@ public interface AppComponent {
 
     Preference<Boolean> rxIsGroupSchedule();
 
+    @Named(PreferenceHelper.TITLE) Preference<String> rxTitle();
+
     @Named(PreferenceHelper.IS_GROUP_SCHEDULE) boolean isGroupSchedule();
 
     @Named(PreferenceHelper.IS_DARK_THEME) boolean isDarkTheme();
