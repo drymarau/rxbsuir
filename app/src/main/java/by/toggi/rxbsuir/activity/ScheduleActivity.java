@@ -397,7 +397,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 .map(s -> TextUtils.split(s, " "))
                 .map(strings -> {
                     if (strings.length == 3) {
-                        return String.format(mTitleFormat, strings[0], strings[1], strings[2]);
+                        return String.format(mTitleFormat, strings);
                     } else {
                         return TextUtils.join(" ", strings);
                     }
