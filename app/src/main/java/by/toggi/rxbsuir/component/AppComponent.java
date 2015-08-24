@@ -41,7 +41,7 @@ public interface AppComponent {
 
     @Named(PreferenceHelper.SYNC_ID) Preference<String> rxSyncId();
 
-    Preference<Boolean> rxIsGroupSchedule();
+    @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> rxIsGroupSchedule();
 
     @Named(PreferenceHelper.TITLE) Preference<String> rxTitle();
 

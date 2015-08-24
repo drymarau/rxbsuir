@@ -39,8 +39,8 @@ public class AppModule {
 
     @Provides
     @Named(PreferenceHelper.IS_GROUP_SCHEDULE)
-    boolean provideIsGroupSchedule(SharedPreferences preferences) {
-        return preferences.getBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, true);
+    boolean provideIsGroupSchedule(@Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> preference) {
+        return preference.get().booleanValue();
     }
 
     @Provides
@@ -52,8 +52,8 @@ public class AppModule {
     @Nullable
     @Provides
     @Named(PreferenceHelper.SYNC_ID)
-    String provideSyncId(SharedPreferences preferences) {
-        return preferences.getString(PreferenceHelper.SYNC_ID, null);
+    String provideSyncId(@Named(PreferenceHelper.SYNC_ID) Preference<String> preference) {
+        return preference.get();
     }
 
     @Provides
@@ -71,6 +71,7 @@ public class AppModule {
 
     @Provides
     @Singleton
+    @Named(PreferenceHelper.IS_GROUP_SCHEDULE)
     Preference<Boolean> provideRxIsGroupSchedule(RxSharedPreferences preferences) {
         return preferences.getBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, true);
     }

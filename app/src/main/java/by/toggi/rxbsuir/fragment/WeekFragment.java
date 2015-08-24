@@ -48,7 +48,7 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
     @Inject WeekPresenter mPresenter;
     @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
-    @Inject Preference<Boolean> mIsGroupSchedulePreference;
+    @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
 
     private Parcelable mLayoutManagerState;
     private int mWeekNumber;
