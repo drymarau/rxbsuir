@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static by.toggi.rxbsuir.db.RxBsuirContract.AcademicCalendarEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
@@ -16,15 +15,6 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
 
     public RxBsuirOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    private static String getAcademicCalendarsCreateQuery() {
-        return "create table " +
-                AcademicCalendarEntry.TABLE_NAME + " (" +
-                AcademicCalendarEntry.COL_COURSE + " integer primary key, " +
-                AcademicCalendarEntry.COL_START_DATE + " text not null, " +
-                AcademicCalendarEntry.COL_END_DATE + " text not null, " +
-                "unique (" + AcademicCalendarEntry.COL_COURSE + ") on conflict replace" + ");";
     }
 
     private static String getEmployeesCreateQuery() {
@@ -72,7 +62,6 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(getAcademicCalendarsCreateQuery());
         db.execSQL(getStudentGroupsCreateQuery());
         db.execSQL(getLessonsCreateQuery());
         db.execSQL(getEmployeesCreateQuery());
@@ -80,14 +69,5 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        int upgradeTo = oldVersion + 1;
-        while (upgradeTo <= newVersion) {
-            switch (upgradeTo) {
-                case 2:
-                    db.execSQL(getAcademicCalendarsCreateQuery());
-                    break;
-            }
-            upgradeTo++;
-        }
     }
 }

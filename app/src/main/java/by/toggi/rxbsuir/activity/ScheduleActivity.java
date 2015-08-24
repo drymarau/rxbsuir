@@ -37,7 +37,6 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
@@ -60,7 +59,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     public static final String KEY_SUBGROUP_2 = "subgroup_2";
     public static final String KEY_IS_DARK_THEME = "is_dark_theme";
     public static final String KEY_SYNC_ID = "sync_id";
-    public static final String KEY_IS_WEEK_VIEW = "is_week_view";
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
     private static final String KEY_TITLE = "title";
@@ -86,7 +84,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(KEY_IS_GROUP_SCHEDULE) boolean mIsGroupSchedule;
     @Inject @Named(KEY_IS_DARK_THEME) boolean mIsDarkTheme;
-    @Inject @Named(KEY_IS_WEEK_VIEW) boolean mIsWeekView;
     @Nullable @Inject @Named(KEY_SYNC_ID) String mSyncId;
 
     @State CharSequence mTitle;
@@ -305,18 +302,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
             }
             if (itemId == R.id.navigation_view_settings) {
                 startActivity(new Intent(this, SettingsActivity.class));
-            }
-            if (itemId == R.id.navigation_view_week_view) {
-                if (!mIsWeekView) {
-                    mSharedPreferences.edit().putBoolean(KEY_IS_WEEK_VIEW, true).apply();
-                    Utils.restartApp(this);
-                }
-            }
-            if (itemId == R.id.navigation_view_term_view) {
-                if (mIsWeekView) {
-                    mSharedPreferences.edit().putBoolean(KEY_IS_WEEK_VIEW, false).apply();
-                    Utils.restartApp(this);
-                }
             }
             if (itemId == R.id.navigation_view_feedback) {
                 Intent feedbackIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", mFeedbackEmail, null));

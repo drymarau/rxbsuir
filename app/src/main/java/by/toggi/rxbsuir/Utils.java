@@ -11,9 +11,6 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.Month;
 import org.threeten.bp.temporal.ChronoUnit;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import rx.Subscription;
 
@@ -36,26 +33,6 @@ public class Utils {
         final Intent intent = IntentCompat.makeMainActivity(componentName);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
-    }
-
-    /**
-     * Gets date list.
-     *
-     * @param startDate the start date
-     * @param endDate   the end date
-     * @return the date list
-     */
-    public static List<LocalDate> getDateList(@NonNull String startDate, @NonNull String endDate) {
-        List<LocalDate> dateList = new ArrayList<>();
-        LocalDate start = LocalDate.parse(startDate);
-        LocalDate end = LocalDate.parse(endDate);
-        while (!start.isAfter(end)) {
-            if (start.getDayOfWeek() != DayOfWeek.SUNDAY) {
-                dateList.add(start);
-            }
-            start = start.plusDays(1);
-        }
-        return dateList;
     }
 
     /**

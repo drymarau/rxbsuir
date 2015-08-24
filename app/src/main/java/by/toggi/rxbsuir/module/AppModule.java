@@ -52,10 +52,4 @@ public class AppModule {
         return preferences.getString(ScheduleActivity.KEY_SYNC_ID, null);
     }
 
-    @Provides
-    @Named(value = ScheduleActivity.KEY_IS_WEEK_VIEW)
-    boolean provideIsWeekView(SharedPreferences preferences) {
-        return preferences.getBoolean(ScheduleActivity.KEY_IS_WEEK_VIEW, true);
-    }
-
 }

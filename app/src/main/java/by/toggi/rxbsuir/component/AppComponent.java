@@ -13,11 +13,9 @@ import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
-import by.toggi.rxbsuir.module.AcademicCalendarServiceModule;
 import by.toggi.rxbsuir.module.AppModule;
 import by.toggi.rxbsuir.module.BsuirServiceModule;
 import by.toggi.rxbsuir.module.DbModule;
-import by.toggi.rxbsuir.rest.AcademicCalendarService;
 import by.toggi.rxbsuir.rest.BsuirService;
 import dagger.Component;
 
@@ -25,7 +23,6 @@ import dagger.Component;
 @Component(modules = {
         AppModule.class,
         BsuirServiceModule.class,
-        AcademicCalendarServiceModule.class,
         DbModule.class
 })
 public interface AppComponent {
@@ -34,8 +31,6 @@ public interface AppComponent {
 
     BsuirService bsuirService();
 
-    AcademicCalendarService academicCalendarService();
-
     StorIOSQLite storIOSQLite();
 
     SharedPreferences sharedPreferences();
@@ -43,8 +38,6 @@ public interface AppComponent {
     @Named(ScheduleActivity.KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule();
 
     @Named(ScheduleActivity.KEY_IS_DARK_THEME) boolean isDarkTheme();
-
-    @Named(ScheduleActivity.KEY_IS_WEEK_VIEW) boolean isWeekView();
 
     @Nullable @Named(ScheduleActivity.KEY_SYNC_ID) String syncId();
 

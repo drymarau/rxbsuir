@@ -1,6 +1,7 @@
 package by.toggi.rxbsuir.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -63,8 +64,8 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         Bundle args = getArguments();
         if (args != null) {
             mWeekNumber = args.getInt(ARGS_WEEK_NUMBER);

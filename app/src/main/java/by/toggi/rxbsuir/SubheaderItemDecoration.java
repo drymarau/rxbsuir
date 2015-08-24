@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import by.toggi.rxbsuir.adapter.LessonAdapter;
-import by.toggi.rxbsuir.adapter.LessonWithDateAdapter;
 
 import static android.view.View.MeasureSpec;
 
@@ -40,8 +39,6 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
                     RecyclerView.ViewHolder holder = parent.getChildViewHolder(child);
                     if (holder instanceof LessonAdapter.ViewHolder) {
                         drawText(c, ((LessonAdapter.ViewHolder) holder).getWeekDay(), child.getTop() - mSubheaderHeight - params.topMargin);
-                    } else if (holder instanceof LessonWithDateAdapter.ViewHolder) {
-                        drawText(c, ((LessonWithDateAdapter.ViewHolder) holder).getWeekDay(), child.getTop() - mSubheaderHeight - params.topMargin);
                     }
                     break;
             }
