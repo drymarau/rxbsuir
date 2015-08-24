@@ -3,6 +3,8 @@ package by.toggi.rxbsuir.component;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
+import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import javax.inject.Named;
@@ -34,6 +36,12 @@ public interface AppComponent {
     StorIOSQLite storIOSQLite();
 
     SharedPreferences sharedPreferences();
+
+    RxSharedPreferences rxSharedPreferences();
+
+    Preference<String> rxSyncId();
+
+    Preference<Boolean> rxIsGroupSchedule();
 
     @Named(ScheduleActivity.KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule();
 

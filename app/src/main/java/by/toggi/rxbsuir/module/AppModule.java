@@ -4,6 +4,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
+import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences.RxSharedPreferences;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -50,6 +53,23 @@ public class AppModule {
     @Named(value = ScheduleActivity.KEY_SYNC_ID)
     String provideSyncId(SharedPreferences preferences) {
         return preferences.getString(ScheduleActivity.KEY_SYNC_ID, null);
+    }
+
+    @Provides
+    @Singleton
+    RxSharedPreferences provideRxSharedPreferences(SharedPreferences preferences) {
+        return RxSharedPreferences.create(preferences);
+    }
+
+    @Provides
+    @Singleton
+    Preference<String> provideRxSyncId(RxSharedPreferences preferences) {
+        return preferences.getString(ScheduleActivity.KEY_SYNC_ID, null);
+    }
+
+    @Provides
+    Preference<Boolean> provideRxIsGroupSchedule(RxSharedPreferences preferences) {
+        return preferences.getBoolean(ScheduleActivity.KEY_IS_GROUP_SCHEDULE, true);
     }
 
 }
