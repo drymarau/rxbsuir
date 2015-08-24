@@ -82,9 +82,9 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
-    @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncId;
+    @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
-    @Inject Preference<Boolean> mIsGroupSchedule;
+    @Inject Preference<Boolean> mIsGroupSchedulePreference;
     @Inject Preference<Integer> mItemIdPreference;
 
     private CompositeSubscription mCompositeSubscription;
@@ -224,7 +224,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 mSharedPreferences.edit().putBoolean(PreferenceHelper.SUBGROUP_2, item.isChecked()).apply();
                 return true;
             case R.id.action_delete:
-                mSchedulePresenter.remove(mSyncId.get(), mIsGroupSchedule.get());
+                mSchedulePresenter.remove(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
                 resetSyncId();
                 return true;
             default:
@@ -233,7 +233,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private void resetSyncId() {
-        mSyncId.set(null);
+        mSyncIdPreference.set(null);
         mTitlePreference.set(mTitlePreference.defaultValue());
         supportInvalidateOptionsMenu();
     }
@@ -314,9 +314,9 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     private void selectGroupOrEmployee(int id, String s, boolean isGroupSchedule) {
         mItemIdPreference.set(id);
-        mSyncId.set(isGroupSchedule ? s : String.valueOf(id));
-        mIsGroupSchedule.set(isGroupSchedule);
-        mSchedulePresenter.setSyncId(mSyncId.get(), mIsGroupSchedule.get());
+        mSyncIdPreference.set(isGroupSchedule ? s : String.valueOf(id));
+        mIsGroupSchedulePreference.set(isGroupSchedule);
+        mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
         mTitlePreference.set(s);
         supportInvalidateOptionsMenu();
     }
@@ -330,7 +330,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private boolean isMenuItemEnabled() {
-        return mSyncId != null;
+        return mSyncIdPreference.get() != null;
     }
 
     private void disableScrollFlags() {
