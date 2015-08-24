@@ -50,6 +50,9 @@ import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import icepick.Icepick;
 import icepick.State;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
@@ -84,6 +87,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject Preference<Boolean> mIsGroupSchedule;
 
     @State int mItemId;
+    private CompositeSubscription mCompositeSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +113,23 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
         Icepick.restoreInstanceState(this, savedInstanceState);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription.add(
+                getTitlePreferenceSubscription()
+        );
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
+            mCompositeSubscription.unsubscribe();
+        }
     }
 
     @LayoutRes
@@ -221,7 +242,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     private void resetSyncId() {
         mSyncId.set(null);
-        setTitle(R.string.app_name);
+        mTitlePreference.set(mTitlePreference.defaultValue());
         supportInvalidateOptionsMenu();
     }
 
@@ -304,7 +325,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         mSyncId.set(isGroupSchedule ? s : String.valueOf(id));
         mIsGroupSchedule.set(isGroupSchedule);
         mSchedulePresenter.setSyncId(mSyncId.get(), mIsGroupSchedule.get());
-        setTitle(s);
+        mTitlePreference.set(s);
         supportInvalidateOptionsMenu();
     }
 
@@ -376,5 +397,11 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 PropertyValuesHolder.ofInt("alpha", 0)
         ).setDuration(200).start();
         mFloatingActionMenu.setClickable(false);
+    }
+
+    private Subscription getTitlePreferenceSubscription() {
+        return mTitlePreference.asObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setTitle);
     }
 }
