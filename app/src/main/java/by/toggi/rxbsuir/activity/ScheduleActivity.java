@@ -49,7 +49,6 @@ import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import icepick.Icepick;
-import icepick.State;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -85,8 +84,8 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncId;
     @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
     @Inject Preference<Boolean> mIsGroupSchedule;
+    @Inject Preference<Integer> mItemIdPreference;
 
-    @State int mItemId;
     private CompositeSubscription mCompositeSubscription;
 
     @Override
@@ -110,8 +109,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
         mDrawerPresenter.attachView(this);
         mDrawerPresenter.onCreate();
-
-        Icepick.restoreInstanceState(this, savedInstanceState);
 
     }
 
@@ -297,7 +294,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         int itemId = menuItem.getItemId();
-        if (mItemId != menuItem.getItemId()) {
+        if (mItemIdPreference.get() != menuItem.getItemId()) {
             switch (menuItem.getGroupId()) {
                 case R.id.navigation_view_groups:
                     selectGroupOrEmployee(itemId, menuItem.getTitle().toString(), true);
@@ -321,7 +318,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private void selectGroupOrEmployee(int id, String s, boolean isGroupSchedule) {
-        mItemId = id;
+        mItemIdPreference.set(id);
         mSyncId.set(isGroupSchedule ? s : String.valueOf(id));
         mIsGroupSchedule.set(isGroupSchedule);
         mSchedulePresenter.setSyncId(mSyncId.get(), mIsGroupSchedule.get());
