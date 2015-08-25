@@ -1,10 +1,8 @@
 package by.toggi.rxbsuir.component;
 
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
 
 import com.f2prateek.rx.preferences.Preference;
-import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import javax.inject.Named;
@@ -37,8 +35,6 @@ public interface AppComponent {
 
     SharedPreferences sharedPreferences();
 
-    RxSharedPreferences rxSharedPreferences();
-
     @Named(PreferenceHelper.SYNC_ID) Preference<String> rxSyncId();
 
     @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> rxIsGroupSchedule();
@@ -47,11 +43,7 @@ public interface AppComponent {
 
     Preference<Integer> rxItemId();
 
-    @Named(PreferenceHelper.IS_GROUP_SCHEDULE) boolean isGroupSchedule();
-
     @Named(PreferenceHelper.IS_DARK_THEME) boolean isDarkTheme();
-
-    @Nullable @Named(PreferenceHelper.SYNC_ID) String syncId();
 
     void inject(AddGroupDialogFragment addGroupDialogFragment);
 

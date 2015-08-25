@@ -2,7 +2,6 @@ package by.toggi.rxbsuir.module;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
@@ -38,22 +37,9 @@ public class AppModule {
     }
 
     @Provides
-    @Named(PreferenceHelper.IS_GROUP_SCHEDULE)
-    Boolean provideIsGroupSchedule(@Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> preference) {
-        return preference.get();
-    }
-
-    @Provides
     @Named(PreferenceHelper.IS_DARK_THEME)
     boolean provideIsDarkTheme(SharedPreferences preferences) {
         return preferences.getBoolean(PreferenceHelper.IS_DARK_THEME, false);
-    }
-
-    @Nullable
-    @Provides
-    @Named(PreferenceHelper.SYNC_ID)
-    String provideSyncId(@Named(PreferenceHelper.SYNC_ID) Preference<String> preference) {
-        return preference.get();
     }
 
     @Provides
