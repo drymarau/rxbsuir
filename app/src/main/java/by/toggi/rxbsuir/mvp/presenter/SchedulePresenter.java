@@ -1,5 +1,8 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
@@ -56,37 +59,39 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
      *
      * @param syncId the group number
      */
-    public void setSyncId(String syncId, Boolean isGroupSchedule) {
-        // Set syncId and isGroupSchedule
-        mSyncId = syncId;
-        mIsGroupSchedule = isGroupSchedule;
-        // View.showLoading()
-        if (isViewAttached()) {
-            getView().showLoading();
+    public void setSyncId(@Nullable String syncId, Boolean isGroupSchedule) {
+        if (syncId != null) {
+            // Set syncId and isGroupSchedule
+            mSyncId = syncId;
+            mIsGroupSchedule = isGroupSchedule;
+            // View.showLoading()
+            if (isViewAttached()) {
+                getView().showLoading();
+            }
+            Observable.concat(
+                    // If database contains syncId, View.showContent()
+                    mStorIOSQLite.get()
+                            .listOfObjects(Lesson.class)
+                            .withQuery(Query.builder()
+                                    .table(LessonEntry.TABLE_NAME)
+                                    .where(LessonEntry.getSyncIdAndTypeQuery())
+                                    .whereArgs(syncId, isGroupSchedule ? 1 : 0)
+                                    .build())
+                            .prepare()
+                            .createObservable()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .take(1)
+                            .doOnNext(lessonList1 -> Timber.d("size: %s", lessonList1.size())),
+                    // If database doesn't contain syncId, make a network request and store result in database
+                    getLessonListFromNetworkObservable(syncId, isGroupSchedule))
+                    .first(lessonList -> !lessonList.isEmpty())
+                    .subscribe(lessonList -> {
+                        // View.showContent()
+                        if (isViewAttached()) {
+                            getView().showContent();
+                        }
+                    }, this::onError);
         }
-        Observable.concat(
-                // If database contains syncId, View.showContent()
-                mStorIOSQLite.get()
-                        .listOfObjects(Lesson.class)
-                        .withQuery(Query.builder()
-                                .table(LessonEntry.TABLE_NAME)
-                                .where(LessonEntry.getSyncIdAndTypeQuery())
-                                .whereArgs(syncId, isGroupSchedule ? 1 : 0)
-                                .build())
-                        .prepare()
-                        .createObservable()
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .take(1)
-                        .doOnNext(lessonList1 -> Timber.d("size: %s", lessonList1.size())),
-                // If database doesn't contain syncId, make a network request and store result in database
-                getLessonListFromNetworkObservable(syncId, isGroupSchedule))
-                .first(lessonList -> !lessonList.isEmpty())
-                .subscribe(lessonList -> {
-                    // View.showContent()
-                    if (isViewAttached()) {
-                        getView().showContent();
-                    }
-                }, this::onError);
     }
 
     /**
@@ -209,7 +214,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         return lessonList;
     }
 
-    private Observable<List<Lesson>> getLessonListFromNetworkObservable(String syncId, boolean isGroupSchedule) {
+    private Observable<List<Lesson>> getLessonListFromNetworkObservable(@NonNull String syncId, boolean isGroupSchedule) {
         Observable<ScheduleXmlModels> scheduleXmlModelsObservable = isGroupSchedule
                 ? mService.getGroupSchedule(syncId.replace("М", "M"))
                 : mService.getEmployeeSchedule(syncId);

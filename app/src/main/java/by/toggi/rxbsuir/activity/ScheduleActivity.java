@@ -167,7 +167,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public void showError(Error error) {
         mProgressBar.setVisibility(View.GONE);
-        resetSyncId();
         switch (error) {
             case NETWORK:
                 Snackbar.make(mCoordinatorLayout, getString(R.string.error_network), Snackbar.LENGTH_LONG)
@@ -175,6 +174,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                         .show();
                 break;
             case EMPTY_SCHEDULE:
+                resetSyncId();
                 Snackbar.make(mCoordinatorLayout, getString(R.string.error_empty_schedule), Snackbar.LENGTH_LONG)
                         .show();
                 break;

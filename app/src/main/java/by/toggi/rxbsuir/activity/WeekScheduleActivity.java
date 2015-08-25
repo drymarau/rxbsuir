@@ -62,7 +62,7 @@ public class WeekScheduleActivity extends ScheduleActivity {
     @Override
     public void showError(SchedulePresenter.Error error) {
         super.showError(error);
-        mViewPager.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.VISIBLE);
     }
 
     @Override
