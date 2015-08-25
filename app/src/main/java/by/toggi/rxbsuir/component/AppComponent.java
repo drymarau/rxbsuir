@@ -16,6 +16,7 @@ import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.module.AppModule;
 import by.toggi.rxbsuir.module.BsuirServiceModule;
 import by.toggi.rxbsuir.module.DbModule;
+import by.toggi.rxbsuir.module.PreferencesModule;
 import by.toggi.rxbsuir.rest.BsuirService;
 import dagger.Component;
 
@@ -23,7 +24,8 @@ import dagger.Component;
 @Component(modules = {
         AppModule.class,
         BsuirServiceModule.class,
-        DbModule.class
+        DbModule.class,
+        PreferencesModule.class
 })
 public interface AppComponent {
 
