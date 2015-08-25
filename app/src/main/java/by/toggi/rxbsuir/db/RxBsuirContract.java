@@ -2,6 +2,8 @@ package by.toggi.rxbsuir.db;
 
 import android.provider.BaseColumns;
 
+import by.toggi.rxbsuir.SubgroupFilter;
+
 public class RxBsuirContract {
 
     public static class EmployeeEntry implements HelperColumns {
@@ -58,28 +60,28 @@ public class RxBsuirContract {
         /**
          * Gets sync id type subgroup and week number query.
          *
-         * @param subgroupNumber the subgroup number
-         * @return where query
+         * @param filter subgroup filter
+         * @return the sync id type subgroup and week number query
          */
-        public static String getSyncIdTypeSubgroupAndWeekNumberQuery(int subgroupNumber) {
-            return getSyncIdAndTypeQuery() + " and " + COL_WEEK_NUMBER_LIST + " like ?" + " and (" + filterBySubgroup(subgroupNumber) + ")";
+        public static String getSyncIdTypeSubgroupAndWeekNumberQuery(SubgroupFilter filter) {
+            return getSyncIdAndTypeQuery() + " and " + COL_WEEK_NUMBER_LIST + " like ?" + " and (" + filterBySubgroup(filter) + ")";
         }
 
-        private static String filterBySubgroup(int subgroupNumber) {
+        private static String filterBySubgroup(SubgroupFilter filter) {
             String commonQuery = COL_NUM_SUBGROUP + " = 0";
             String subgroup1Query = COL_NUM_SUBGROUP + " = 1";
             String subgroup2Query = COL_NUM_SUBGROUP + " = 2";
-            switch (subgroupNumber) {
-                case 0:
+            switch (filter) {
+                case BOTH:
                     return commonQuery + " or " + subgroup1Query + " or " + subgroup2Query;
-                case 1:
+                case FIRST:
                     return commonQuery + " or " + subgroup1Query;
-                case 2:
+                case SECOND:
                     return commonQuery + " or " + subgroup2Query;
-                case 3:
+                case NONE:
                     return commonQuery;
                 default:
-                    throw new IllegalArgumentException("Unknown subgroup number: " + subgroupNumber);
+                    throw new IllegalArgumentException("Unknown subgroup filter: " + filter);
             }
         }
 

@@ -25,6 +25,7 @@ import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.component.DaggerWeekFragmentComponent;
@@ -49,6 +50,7 @@ public class WeekFragment extends Fragment implements WeekView {
     @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
+    @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
 
     private Parcelable mLayoutManagerState;
     private int mWeekNumber;
@@ -173,9 +175,9 @@ public class WeekFragment extends Fragment implements WeekView {
     @Override
     public void onResume() {
         super.onResume();
-        mCompositeSubscription = new CompositeSubscription();
-        mCompositeSubscription.add(
-                getSyncIdSubscription()
+        mCompositeSubscription = new CompositeSubscription(
+                getSyncIdSubscription(),
+                getSubgroupFilterSubscription()
         );
     }
 
@@ -194,5 +196,11 @@ public class WeekFragment extends Fragment implements WeekView {
                     mRecyclerView.setVisibility(View.GONE);
                     mPresenter.setSyncId(s, mIsGroupSchedulePreference.get());
                 });
+    }
+
+    private Subscription getSubgroupFilterSubscription() {
+        return mSubgroupFilterPreference.asObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(filter -> mPresenter.setSubgroupNumber(filter, mIsGroupSchedulePreference.get()));
     }
 }
