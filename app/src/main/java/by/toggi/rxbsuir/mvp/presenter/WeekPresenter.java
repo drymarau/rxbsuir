@@ -8,8 +8,8 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
+import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
@@ -18,8 +18,6 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
-import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_IS_GROUP_SCHEDULE;
-import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_SYNC_ID;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 public class WeekPresenter extends Presenter<WeekView> {
@@ -27,20 +25,14 @@ public class WeekPresenter extends Presenter<WeekView> {
     private final StorIOSQLite mStorIOSQLite;
     private final int mWeekNumber;
     private Observable<List<Lesson>> mScheduleObservable;
-    private int mSubgroupNumber = 0;
+    private SubgroupFilter mSubgroupFilter = SubgroupFilter.BOTH;
     private String mSyncId;
     private Subscription mSubscription;
 
     @Inject
-    public WeekPresenter(@Named(KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule, @Nullable @Named(KEY_SYNC_ID) String syncId, int weekNumber, StorIOSQLite storIOSQLite) {
-        mWeekNumber = weekNumber;
+    public WeekPresenter(StorIOSQLite storIOSQLite, int weekNumber) {
         mStorIOSQLite = storIOSQLite;
-        mSyncId = syncId;
-        if (isGroupSchedule) {
-            mScheduleObservable = getGroupScheduleObservable(mSyncId, mSubgroupNumber, mWeekNumber);
-        } else {
-            mScheduleObservable = getEmployeeListObservable(mSyncId, mSubgroupNumber, mWeekNumber);
-        }
+        mWeekNumber = weekNumber;
     }
 
     /**
@@ -48,39 +40,20 @@ public class WeekPresenter extends Presenter<WeekView> {
      *
      * @param syncId the group number
      */
-    public void setSyncId(String syncId, boolean isGroupSchedule) {
+    public void setSyncId(@Nullable String syncId, Boolean isGroupSchedule) {
         mSyncId = syncId;
-        if (isGroupSchedule) {
-            mScheduleObservable = getGroupScheduleObservable(mSyncId, mSubgroupNumber, mWeekNumber);
-        } else {
-            mScheduleObservable = getEmployeeListObservable(mSyncId, mSubgroupNumber, mWeekNumber);
-        }
+        mScheduleObservable = getLessonListObservable(mSyncId, isGroupSchedule, mSubgroupFilter);
         onCreate();
     }
 
     /**
      * Sets subgroup number.
      *
-     * @param subgroup1 the subgroup 1 state
-     * @param subgroup2 the subgroup 2 state
+     * @param filter          subgroup filter
+     * @param isGroupSchedule is group schedule
      */
-    public void setSubgroupNumber(boolean subgroup1, boolean subgroup2, boolean isGroupSchedule) {
-        if (subgroup1 && subgroup2) {
-            mSubgroupNumber = 0;
-        } else if (!subgroup1 && !subgroup2) {
-            mSubgroupNumber = 3;
-        } else {
-            if (subgroup1) {
-                mSubgroupNumber = 1;
-            } else {
-                mSubgroupNumber = 2;
-            }
-        }
-        if (isGroupSchedule) {
-            mScheduleObservable = getGroupScheduleObservable(mSyncId, mSubgroupNumber, mWeekNumber);
-        } else {
-            mScheduleObservable = getEmployeeListObservable(mSyncId, mSubgroupNumber, mWeekNumber);
-        }
+    public void setSubgroupNumber(SubgroupFilter filter, Boolean isGroupSchedule) {
+        mScheduleObservable = getLessonListObservable(mSyncId, isGroupSchedule, filter);
         onCreate();
     }
 
@@ -105,24 +78,13 @@ public class WeekPresenter extends Presenter<WeekView> {
         return this.getClass().getSimpleName() + "_" + mWeekNumber;
     }
 
-    private Observable<List<Lesson>> getGroupScheduleObservable(@Nullable String syncId, int subgroupNumber, int weekNumber) {
+    private Observable<List<Lesson>> getLessonListObservable(@Nullable String syncId, boolean isGroupSchedule, SubgroupFilter filter) {
         return syncId == null ? Observable.empty() : mStorIOSQLite.get()
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
                         .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.filterByGroupSubgroupAndWeek(syncId, subgroupNumber, weekNumber))
-                        .build())
-                .prepare()
-                .createObservable()
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    private Observable<List<Lesson>> getEmployeeListObservable(@Nullable String syncId, int subgroupNumber, int weekNumber) {
-        return syncId == null ? Observable.empty() : mStorIOSQLite.get()
-                .listOfObjects(Lesson.class)
-                .withQuery(Query.builder()
-                        .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.filterByEmployeeSubgroupAndWeek(syncId, subgroupNumber, weekNumber))
+                        .where(LessonEntry.getSyncIdTypeSubgroupAndWeekNumberQuery(filter))
+                        .whereArgs(syncId, isGroupSchedule ? 1 : 0, "%" + mWeekNumber + "%")
                         .build())
                 .prepare()
                 .createObservable()

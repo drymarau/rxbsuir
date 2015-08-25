@@ -27,6 +27,11 @@
     <string name="action_subgroup_1">Subgroup 1</string>
     <string name="action_subgroup_2">Subgroup 2</string>
     <string name="action_delete">Delete</string>
+    <string name="action_filter">Subgroups</string>
+    <string name="action_filter_both">First and second</string>
+    <string name="action_filter_first">First only</string>
+    <string name="action_filter_second">Second only</string>
+    <string name="action_filter_none">Hide both</string>
 
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Groups</string>
@@ -61,5 +66,8 @@
     <string name="key_pref_build_version" translatable="false">build_version</string>
     <string name="title_pref_rate_app">Rate app!</string>
     <string name="play_store_not_found">Play Store appears to be missing</string>
+
+    <!-- Title format portrait (Awesome C.T.)-->
+    <string name="title_format" translatable="false">%s %.1s.%.1s.</string>
 
 </resources>

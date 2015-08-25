@@ -8,8 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -19,12 +17,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import com.f2prateek.rx.preferences.Preference;
 
 import java.util.Map;
 
@@ -36,7 +37,9 @@ import butterknife.BindDimen;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
@@ -46,22 +49,17 @@ import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
-import icepick.Icepick;
-import icepick.State;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
 
 public abstract class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 
-    public static final String KEY_IS_GROUP_SCHEDULE = "is_group_schedule";
-    public static final String KEY_SUBGROUP_1 = "subgroup_1";
-    public static final String KEY_SUBGROUP_2 = "subgroup_2";
-    public static final String KEY_IS_DARK_THEME = "is_dark_theme";
-    public static final String KEY_SYNC_ID = "sync_id";
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
-    private static final String KEY_TITLE = "title";
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.progress_bar) ProgressBar mProgressBar;
@@ -78,16 +76,19 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @BindString(R.string.intent_feedback) String mSendFeedbackTitle;
     @BindString(R.string.email_feedback) String mFeedbackEmail;
     @BindString(R.string.subject_feedback) String mFeedbackSubject;
+    @BindString(R.string.title_format) String mTitleFormat;
 
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
-    @Inject @Named(KEY_IS_GROUP_SCHEDULE) boolean mIsGroupSchedule;
-    @Inject @Named(KEY_IS_DARK_THEME) boolean mIsDarkTheme;
-    @Nullable @Inject @Named(KEY_SYNC_ID) String mSyncId;
+    @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
+    @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
+    @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
+    @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
+    @Inject Preference<Integer> mItemIdPreference;
+    @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
 
-    @State CharSequence mTitle;
-    @State int mItemId;
+    private CompositeSubscription mCompositeSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,14 +107,28 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         setupNavigationView();
 
         mSchedulePresenter.attachView(this);
-        mSchedulePresenter.onCreate();
+        mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
         mDrawerPresenter.attachView(this);
         mDrawerPresenter.onCreate();
 
-        Icepick.restoreInstanceState(this, savedInstanceState);
-        setupTitle();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription.add(
+                getTitlePreferenceSubscription()
+        );
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
+            mCompositeSubscription.unsubscribe();
+        }
     }
 
     @LayoutRes
@@ -152,7 +167,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public void showError(Error error) {
         mProgressBar.setVisibility(View.GONE);
-        resetSyncId();
         switch (error) {
             case NETWORK:
                 Snackbar.make(mCoordinatorLayout, getString(R.string.error_network), Snackbar.LENGTH_LONG)
@@ -160,6 +174,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                         .show();
                 break;
             case EMPTY_SCHEDULE:
+                resetSyncId();
                 Snackbar.make(mCoordinatorLayout, getString(R.string.error_empty_schedule), Snackbar.LENGTH_LONG)
                         .show();
                 break;
@@ -187,21 +202,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        if (mTitle != null) {
-            mSharedPreferences.edit().putString(KEY_TITLE, title.toString()).apply();
-        }
-        getDelegate().getSupportActionBar().setTitle(mTitle);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule_activity, menu);
         return true;
@@ -216,27 +216,35 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
             case R.id.action_today:
                 showToday();
                 return true;
-            case R.id.action_subgroup_1:
-                item.setChecked(!item.isChecked());
-                mSharedPreferences.edit().putBoolean(KEY_SUBGROUP_1, item.isChecked()).apply();
-                return true;
-            case R.id.action_subgroup_2:
-                item.setChecked(!item.isChecked());
-                mSharedPreferences.edit().putBoolean(KEY_SUBGROUP_2, item.isChecked()).apply();
-                return true;
             case R.id.action_delete:
-                mSchedulePresenter.remove(mSyncId, mIsGroupSchedule);
+                mSchedulePresenter.remove(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
                 resetSyncId();
+                return true;
+            case R.id.action_filter_both:
+                setFilter(item, SubgroupFilter.BOTH);
+                return true;
+            case R.id.action_filter_first:
+                setFilter(item, SubgroupFilter.FIRST);
+                return true;
+            case R.id.action_filter_second:
+                setFilter(item, SubgroupFilter.SECOND);
+                return true;
+            case R.id.action_filter_none:
+                setFilter(item, SubgroupFilter.NONE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private void setFilter(MenuItem item, SubgroupFilter filter) {
+        item.setChecked(true);
+        mSubgroupFilterPreference.set(filter);
+    }
+
     private void resetSyncId() {
-        mSharedPreferences.edit().putString(KEY_SYNC_ID, null).apply();
-        mSyncId = null;
-        setTitle(R.string.app_name);
+        mSyncIdPreference.set(null);
+        mTitlePreference.set(mTitlePreference.defaultValue());
         supportInvalidateOptionsMenu();
     }
 
@@ -245,12 +253,20 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.setGroupVisible(R.id.group_items, isMenuItemEnabled());
-        MenuItem item = menu.findItem(R.id.action_subgroup_1);
-        item.setVisible(isMenuItemEnabled());
-        item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_1, true));
-        item = menu.findItem(R.id.action_subgroup_2);
-        item.setVisible(isMenuItemEnabled());
-        item.setChecked(mSharedPreferences.getBoolean(KEY_SUBGROUP_2, true));
+        switch (mSubgroupFilterPreference.get()) {
+            case BOTH:
+                menu.findItem(R.id.action_filter_both).setChecked(true);
+                break;
+            case FIRST:
+                menu.findItem(R.id.action_filter_first).setChecked(true);
+                break;
+            case SECOND:
+                menu.findItem(R.id.action_filter_second).setChecked(true);
+                break;
+            case NONE:
+                menu.findItem(R.id.action_filter_none).setChecked(true);
+                break;
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -291,7 +307,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         int itemId = menuItem.getItemId();
-        if (mItemId != menuItem.getItemId()) {
+        if (mItemIdPreference.get() != menuItem.getItemId()) {
             switch (menuItem.getGroupId()) {
                 case R.id.navigation_view_groups:
                     selectGroupOrEmployee(itemId, menuItem.getTitle().toString(), true);
@@ -315,26 +331,12 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private void selectGroupOrEmployee(int id, String s, boolean isGroupSchedule) {
-        mItemId = id;
-        mSyncId = isGroupSchedule ? s : String.valueOf(id);
-        mIsGroupSchedule = isGroupSchedule;
-        mSharedPreferences.edit()
-                .putString(KEY_SYNC_ID, mSyncId)
-                .putBoolean(KEY_IS_GROUP_SCHEDULE, isGroupSchedule)
-                .apply();
-        mSchedulePresenter.setSyncId(mSyncId, mIsGroupSchedule);
-        setTitle(s);
+        mItemIdPreference.set(id);
+        mSyncIdPreference.set(isGroupSchedule ? s : String.valueOf(id));
+        mIsGroupSchedulePreference.set(isGroupSchedule);
+        mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
+        mTitlePreference.set(s);
         supportInvalidateOptionsMenu();
-    }
-
-    private void setupTitle() {
-        if (mTitle == null) {
-            CharSequence title = getDelegate().getSupportActionBar().getTitle();
-            if (title != null) {
-                mTitle = mSharedPreferences.getString(KEY_TITLE, title.toString());
-            }
-        }
-        setTitle(mTitle);
     }
 
     private void setupNavigationView() {
@@ -346,19 +348,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private boolean isMenuItemEnabled() {
-        return mSyncId != null;
-    }
-
-    private void disableScrollFlags() {
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
-        params.setScrollFlags(0);
-        mToolbar.setLayoutParams(params);
-    }
-
-    private void enableScrollFlags() {
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
-        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-        mToolbar.setLayoutParams(params);
+        return mSyncIdPreference.get() != null;
     }
 
     private void addStorageFragment() {
@@ -405,5 +395,19 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 PropertyValuesHolder.ofInt("alpha", 0)
         ).setDuration(200).start();
         mFloatingActionMenu.setClickable(false);
+    }
+
+    private Subscription getTitlePreferenceSubscription() {
+        return mTitlePreference.asObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(s -> TextUtils.split(s, " "))
+                .map(strings -> {
+                    if (strings.length == 3) {
+                        return String.format(mTitleFormat, strings);
+                    } else {
+                        return TextUtils.join(" ", strings);
+                    }
+                })
+                .subscribe(this::setTitle);
     }
 }

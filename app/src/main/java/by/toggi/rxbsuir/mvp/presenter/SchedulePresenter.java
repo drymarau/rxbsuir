@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
@@ -11,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
@@ -28,8 +28,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_IS_GROUP_SCHEDULE;
-import static by.toggi.rxbsuir.activity.ScheduleActivity.KEY_SYNC_ID;
 import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
@@ -51,11 +49,9 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
      * @param storIOSQLite the storIOSQlite
      */
     @Inject
-    public SchedulePresenter(@Named(KEY_IS_GROUP_SCHEDULE) boolean isGroupSchedule, @Nullable @Named(KEY_SYNC_ID) String syncId, BsuirService service, StorIOSQLite storIOSQLite) {
+    public SchedulePresenter(BsuirService service, StorIOSQLite storIOSQLite) {
         mService = service;
         mStorIOSQLite = storIOSQLite;
-        mSyncId = syncId;
-        mIsGroupSchedule = isGroupSchedule;
     }
 
     /**
@@ -63,37 +59,39 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
      *
      * @param syncId the group number
      */
-    public void setSyncId(String syncId, boolean isGroupSchedule) {
-        // Set syncId and isGroupSchedule
-        mSyncId = syncId;
-        mIsGroupSchedule = isGroupSchedule;
-        // View.showLoading()
-        if (isViewAttached()) {
-            getView().showLoading();
+    public void setSyncId(@Nullable String syncId, Boolean isGroupSchedule) {
+        if (syncId != null) {
+            // Set syncId and isGroupSchedule
+            mSyncId = syncId;
+            mIsGroupSchedule = isGroupSchedule;
+            // View.showLoading()
+            if (isViewAttached()) {
+                getView().showLoading();
+            }
+            Observable.concat(
+                    // If database contains syncId, View.showContent()
+                    mStorIOSQLite.get()
+                            .listOfObjects(Lesson.class)
+                            .withQuery(Query.builder()
+                                    .table(LessonEntry.TABLE_NAME)
+                                    .where(LessonEntry.getSyncIdAndTypeQuery())
+                                    .whereArgs(syncId, isGroupSchedule ? 1 : 0)
+                                    .build())
+                            .prepare()
+                            .createObservable()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .take(1)
+                            .doOnNext(lessonList1 -> Timber.d("size: %s", lessonList1.size())),
+                    // If database doesn't contain syncId, make a network request and store result in database
+                    getLessonListFromNetworkObservable(syncId, isGroupSchedule))
+                    .first(lessonList -> !lessonList.isEmpty())
+                    .subscribe(lessonList -> {
+                        // View.showContent()
+                        if (isViewAttached()) {
+                            getView().showContent();
+                        }
+                    }, this::onError);
         }
-        Observable.concat(
-                // If database contains syncId, View.showContent()
-                mStorIOSQLite.get()
-                        .listOfObjects(Lesson.class)
-                        .withQuery(Query.builder()
-                                .table(LessonEntry.TABLE_NAME)
-                                .where(LessonEntry.getSyncIdAndTypeQuery())
-                                .whereArgs(syncId, isGroupSchedule ? 1 : 0)
-                                .build())
-                        .prepare()
-                        .createObservable()
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .take(1)
-                        .doOnNext(lessonList1 -> Timber.d("size: %s", lessonList1.size())),
-                // If database doesn't contain syncId, make a network request and store result in database
-                getLessonListFromNetworkObservable(syncId, isGroupSchedule))
-                .first(lessonList -> !lessonList.isEmpty())
-                .subscribe(lessonList -> {
-                    // View.showContent()
-                    if (isViewAttached()) {
-                        getView().showContent();
-                    }
-                }, this::onError);
     }
 
     /**
@@ -118,7 +116,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
     /**
      * Remove current syncId from db.
      */
-    public void remove(String syncId, boolean isGroupSchedule) {
+    public void remove(String syncId, Boolean isGroupSchedule) {
         // Remove all records from db with supplied syncId;
         Observable.concat(
                 getDeleteSyncIdObservable(syncId, isGroupSchedule),
@@ -140,9 +138,6 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
 
     @Override
     public void onCreate() {
-        if (mSyncId != null) {
-            setSyncId(mSyncId, mIsGroupSchedule);
-        }
     }
 
     @Override
@@ -219,7 +214,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
         return lessonList;
     }
 
-    private Observable<List<Lesson>> getLessonListFromNetworkObservable(String syncId, boolean isGroupSchedule) {
+    private Observable<List<Lesson>> getLessonListFromNetworkObservable(@NonNull String syncId, boolean isGroupSchedule) {
         Observable<ScheduleXmlModels> scheduleXmlModelsObservable = isGroupSchedule
                 ? mService.getGroupSchedule(syncId.replace("М", "M"))
                 : mService.getEmployeeSchedule(syncId);
