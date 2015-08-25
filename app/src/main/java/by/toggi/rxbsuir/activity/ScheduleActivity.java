@@ -218,6 +218,12 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 mSchedulePresenter.remove(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
                 resetSyncId();
                 return true;
+            case R.id.action_filter_both:
+            case R.id.action_filter_first:
+            case R.id.action_filter_second:
+            case R.id.action_filter_none:
+                item.setChecked(true);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

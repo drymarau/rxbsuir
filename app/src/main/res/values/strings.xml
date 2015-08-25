@@ -27,6 +27,11 @@
     <string name="action_subgroup_1">Subgroup 1</string>
     <string name="action_subgroup_2">Subgroup 2</string>
     <string name="action_delete">Delete</string>
+    <string name="action_filter">Subgroups</string>
+    <string name="action_filter_both">First and second</string>
+    <string name="action_filter_first">First only</string>
+    <string name="action_filter_second">Second only</string>
+    <string name="action_filter_none">Hide both</string>
 
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Groups</string>

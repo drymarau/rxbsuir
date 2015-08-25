@@ -24,6 +24,11 @@
     <string name="action_subgroup_1">Подгруппа 1</string>
     <string name="action_subgroup_2">Подгруппа 2</string>
     <string name="action_delete">Удалить</string>
+    <string name="action_filter">Подгруппы</string>
+    <string name="action_filter_both">Первая и вторая</string>
+    <string name="action_filter_first">Только первая</string>
+    <string name="action_filter_second">Только вторая</string>
+    <string name="action_filter_none">Скрыть</string>
 
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Группы</string>
