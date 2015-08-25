@@ -8,7 +8,6 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
@@ -18,8 +17,6 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
-import static by.toggi.rxbsuir.PreferenceHelper.IS_GROUP_SCHEDULE;
-import static by.toggi.rxbsuir.PreferenceHelper.SYNC_ID;
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 public class WeekPresenter extends Presenter<WeekView> {
@@ -32,11 +29,9 @@ public class WeekPresenter extends Presenter<WeekView> {
     private Subscription mSubscription;
 
     @Inject
-    public WeekPresenter(@Named(IS_GROUP_SCHEDULE) boolean isGroupSchedule, @Nullable @Named(SYNC_ID) String syncId, int weekNumber, StorIOSQLite storIOSQLite) {
-        mWeekNumber = weekNumber;
+    public WeekPresenter(StorIOSQLite storIOSQLite, int weekNumber) {
         mStorIOSQLite = storIOSQLite;
-        mSyncId = syncId;
-        mScheduleObservable = getLessonListObservable(mSyncId, isGroupSchedule, mSubgroupNumber, mWeekNumber);
+        mWeekNumber = weekNumber;
     }
 
     /**
@@ -44,7 +39,7 @@ public class WeekPresenter extends Presenter<WeekView> {
      *
      * @param syncId the group number
      */
-    public void setSyncId(String syncId, boolean isGroupSchedule) {
+    public void setSyncId(String syncId, Boolean isGroupSchedule) {
         mSyncId = syncId;
         mScheduleObservable = getLessonListObservable(mSyncId, isGroupSchedule, mSubgroupNumber, mWeekNumber);
         onCreate();
@@ -56,7 +51,7 @@ public class WeekPresenter extends Presenter<WeekView> {
      * @param subgroup1 the subgroup 1 state
      * @param subgroup2 the subgroup 2 state
      */
-    public void setSubgroupNumber(boolean subgroup1, boolean subgroup2, boolean isGroupSchedule) {
+    public void setSubgroupNumber(boolean subgroup1, boolean subgroup2, Boolean isGroupSchedule) {
         if (subgroup1 && subgroup2) {
             mSubgroupNumber = 0;
         } else if (!subgroup1 && !subgroup2) {

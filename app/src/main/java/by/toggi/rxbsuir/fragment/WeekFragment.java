@@ -114,7 +114,7 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
         }
 
         mPresenter.attachView(this);
-        mPresenter.onCreate();
+        mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
         mRecyclerView.setVisibility(View.GONE);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -191,13 +191,12 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
-        boolean isGroupSchedule = preferences.getBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, true);
         switch (key) {
             case PreferenceHelper.SUBGROUP_1:
             case PreferenceHelper.SUBGROUP_2:
                 boolean subgroup1 = preferences.getBoolean(PreferenceHelper.SUBGROUP_1, true);
                 boolean subgroup2 = preferences.getBoolean(PreferenceHelper.SUBGROUP_2, true);
-                mPresenter.setSubgroupNumber(subgroup1, subgroup2, isGroupSchedule);
+                mPresenter.setSubgroupNumber(subgroup1, subgroup2, mIsGroupSchedulePreference.get());
                 break;
         }
     }
@@ -207,7 +206,7 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(s -> {
                     mRecyclerView.setVisibility(View.GONE);
-                    mPresenter.setSyncId(s, mSharedPreferences.getBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, true));
+                    mPresenter.setSyncId(s, mIsGroupSchedulePreference.get());
                 });
     }
 }
