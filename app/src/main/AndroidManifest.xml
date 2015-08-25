@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme.Dark">
         <activity
             android:name=".activity.WeekScheduleActivity"
-            android:theme="@style/AppTheme.Drawer.Dark">
+            android:theme="@style/AppTheme.Drawer.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
