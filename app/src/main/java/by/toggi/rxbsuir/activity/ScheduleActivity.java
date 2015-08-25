@@ -214,14 +214,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
             case R.id.action_today:
                 showToday();
                 return true;
-            case R.id.action_subgroup_1:
-                item.setChecked(!item.isChecked());
-                mSharedPreferences.edit().putBoolean(PreferenceHelper.SUBGROUP_1, item.isChecked()).apply();
-                return true;
-            case R.id.action_subgroup_2:
-                item.setChecked(!item.isChecked());
-                mSharedPreferences.edit().putBoolean(PreferenceHelper.SUBGROUP_2, item.isChecked()).apply();
-                return true;
             case R.id.action_delete:
                 mSchedulePresenter.remove(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
                 resetSyncId();
@@ -242,12 +234,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.setGroupVisible(R.id.group_items, isMenuItemEnabled());
-        MenuItem item = menu.findItem(R.id.action_subgroup_1);
-        item.setVisible(isMenuItemEnabled());
-        item.setChecked(mSharedPreferences.getBoolean(PreferenceHelper.SUBGROUP_1, true));
-        item = menu.findItem(R.id.action_subgroup_2);
-        item.setVisible(isMenuItemEnabled());
-        item.setChecked(mSharedPreferences.getBoolean(PreferenceHelper.SUBGROUP_2, true));
         return super.onPrepareOptionsMenu(menu);
     }
 

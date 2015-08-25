@@ -17,19 +17,5 @@
             android:orderInCategory="200"
             android:title="@string/action_delete"
             app:showAsAction="never"/>
-        <item
-            android:id="@+id/action_subgroup_1"
-            android:checkable="true"
-            android:checked="true"
-            android:orderInCategory="10"
-            android:title="@string/action_subgroup_1"
-            app:showAsAction="never"/>
-        <item
-            android:id="@+id/action_subgroup_2"
-            android:checkable="true"
-            android:checked="true"
-            android:orderInCategory="20"
-            android:title="@string/action_subgroup_2"
-            app:showAsAction="never"/>
     </group>
 </menu>

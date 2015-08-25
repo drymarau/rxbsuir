@@ -36,7 +36,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class WeekFragment extends Fragment implements WeekView, SharedPreferences.OnSharedPreferenceChangeListener {
+public class WeekFragment extends Fragment implements WeekView {
 
     public static final String TAG_STORAGE_FRAGMENT = "storage_fragment";
     public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
@@ -173,7 +173,6 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
     @Override
     public void onResume() {
         super.onResume();
-        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         mCompositeSubscription = new CompositeSubscription();
         mCompositeSubscription.add(
                 getSyncIdSubscription()
@@ -185,19 +184,6 @@ public class WeekFragment extends Fragment implements WeekView, SharedPreference
         super.onPause();
         if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
             mCompositeSubscription.unsubscribe();
-        }
-        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
-        switch (key) {
-            case PreferenceHelper.SUBGROUP_1:
-            case PreferenceHelper.SUBGROUP_2:
-                boolean subgroup1 = preferences.getBoolean(PreferenceHelper.SUBGROUP_1, true);
-                boolean subgroup2 = preferences.getBoolean(PreferenceHelper.SUBGROUP_2, true);
-                mPresenter.setSubgroupNumber(subgroup1, subgroup2, mIsGroupSchedulePreference.get());
-                break;
         }
     }
 
