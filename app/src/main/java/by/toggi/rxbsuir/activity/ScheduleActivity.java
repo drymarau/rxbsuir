@@ -39,6 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
@@ -85,6 +86,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
     @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
     @Inject Preference<Integer> mItemIdPreference;
+    @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
 
     private CompositeSubscription mCompositeSubscription;
 
@@ -219,14 +221,25 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 resetSyncId();
                 return true;
             case R.id.action_filter_both:
+                setFilter(item, SubgroupFilter.BOTH);
+                return true;
             case R.id.action_filter_first:
+                setFilter(item, SubgroupFilter.FIRST);
+                return true;
             case R.id.action_filter_second:
+                setFilter(item, SubgroupFilter.SECOND);
+                return true;
             case R.id.action_filter_none:
-                item.setChecked(true);
+                setFilter(item, SubgroupFilter.NONE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setFilter(MenuItem item, SubgroupFilter filter) {
+        item.setChecked(true);
+        mSubgroupFilterPreference.set(filter);
     }
 
     private void resetSyncId() {
@@ -240,6 +253,20 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.setGroupVisible(R.id.group_items, isMenuItemEnabled());
+        switch (mSubgroupFilterPreference.get()) {
+            case BOTH:
+                menu.findItem(R.id.action_filter_both).setChecked(true);
+                break;
+            case FIRST:
+                menu.findItem(R.id.action_filter_first).setChecked(true);
+                break;
+            case SECOND:
+                menu.findItem(R.id.action_filter_second).setChecked(true);
+                break;
+            case NONE:
+                menu.findItem(R.id.action_filter_none).setChecked(true);
+                break;
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 

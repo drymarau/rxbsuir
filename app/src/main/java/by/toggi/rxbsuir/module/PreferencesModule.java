@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.SubgroupFilter;
 import dagger.Module;
 import dagger.Provides;
 
@@ -61,6 +62,16 @@ public class PreferencesModule {
     @Singleton
     Preference<Integer> provideRxItemId(RxSharedPreferences preferences) {
         return preferences.getInteger(PreferenceHelper.ITEM_ID, -1);
+    }
+
+    @Provides
+    @Singleton
+    Preference<SubgroupFilter> provideRxSubgroupFilter(RxSharedPreferences preferences) {
+        return preferences.getEnum(
+                PreferenceHelper.SUBGROUP_FILTER,
+                SubgroupFilter.BOTH,
+                SubgroupFilter.class
+        );
     }
 
 }
