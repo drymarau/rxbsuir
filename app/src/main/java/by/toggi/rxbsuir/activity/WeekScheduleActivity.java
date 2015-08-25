@@ -28,7 +28,10 @@ public class WeekScheduleActivity extends ScheduleActivity {
         super.onCreate(savedInstanceState);
 
         setupTabs();
-        showToday();
+
+        if (savedInstanceState == null) {
+            showToday();
+        }
     }
 
     @Override
@@ -72,6 +75,5 @@ public class WeekScheduleActivity extends ScheduleActivity {
     public void showContent() {
         super.showContent();
         mViewPager.setVisibility(View.VISIBLE);
-        showToday();
     }
 }
