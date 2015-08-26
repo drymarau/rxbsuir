@@ -92,7 +92,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Override
     public void onTimeSet(RadialPickerLayout radialPickerLayout, int hour, int minute) {
-        LocalTime localTime = LocalTime.of(hour, minute);
-        mLocalTimePreference.set(localTime);
+        mLocalTimePreference.set(LocalTime.of(hour, minute));
     }
 }
