@@ -106,12 +106,16 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
         setupNavigationView();
 
-        mSchedulePresenter.attachView(this);
-        mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
-
         mDrawerPresenter.attachView(this);
         mDrawerPresenter.onCreate();
 
+        mSchedulePresenter.attachView(this);
+
+        if (savedInstanceState == null) {
+            mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
+        } else {
+            showContent();
+        }
     }
 
     @Override
@@ -358,13 +362,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         if (fragment == null) {
             fragment = new StorageFragment();
             manager.beginTransaction().add(fragment, WeekFragment.TAG_STORAGE_FRAGMENT).commit();
-            fragment.setPresenter(mSchedulePresenter.getTag(), mSchedulePresenter);
-        } else {
-            try {
-                mSchedulePresenter = (SchedulePresenter) fragment.getPresenter(mSchedulePresenter.getTag());
-            } catch (ClassCastException e) {
-                throw new ClassCastException("Presenter must be of class SchedulePresenter");
-            }
         }
     }
 
