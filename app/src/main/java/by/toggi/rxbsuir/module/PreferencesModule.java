@@ -74,4 +74,18 @@ public class PreferencesModule {
         );
     }
 
+    @Provides
+    @Singleton
+    @Named(PreferenceHelper.FAVORITE_SYNC_ID)
+    Preference<String> provideRxFavoriteSyncId(RxSharedPreferences preferences) {
+        return preferences.getString(PreferenceHelper.FAVORITE_SYNC_ID, null);
+    }
+
+    @Provides
+    @Singleton
+    @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE)
+    Preference<Boolean> provideRxFavoriteIsGroupSchedule(RxSharedPreferences preferences) {
+        return preferences.getBoolean(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE, true);
+    }
+
 }

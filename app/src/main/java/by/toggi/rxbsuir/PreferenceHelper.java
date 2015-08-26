@@ -8,6 +8,8 @@ public class PreferenceHelper {
     public static final String TITLE = "title";
     public static final String ITEM_ID = "item_id";
     public static final String SUBGROUP_FILTER = "subgroup_filter";
+    public static final String FAVORITE_SYNC_ID = "favorite_sync_id";
+    public static final String FAVORITE_IS_GROUP_SCHEDULE = "favorite_is_group_schedule";
 
     private PreferenceHelper() {
     }

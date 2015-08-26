@@ -53,6 +53,10 @@ public interface AppComponent {
 
     @Named(PreferenceHelper.IS_DARK_THEME) boolean isDarkTheme();
 
+    @Named(PreferenceHelper.FAVORITE_SYNC_ID) Preference<String> rxFavoriteSyncId();
+
+    @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE) Preference<Boolean> rxFavoriteIsGroupSchedule();
+
     void inject(AddGroupDialogFragment addGroupDialogFragment);
 
     void inject(AddEmployeeDialogFragment addEmployeeDialogFragment);

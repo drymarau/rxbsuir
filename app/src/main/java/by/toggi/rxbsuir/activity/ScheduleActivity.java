@@ -86,6 +86,8 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
     @Inject Preference<Integer> mItemIdPreference;
     @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
+    @Inject @Named(PreferenceHelper.FAVORITE_SYNC_ID) Preference<String> mFavoriteSyncIdPreference;
+    @Inject @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE) Preference<Boolean> mFavoriteIsGroupSchedulePreference;
 
     private CompositeSubscription mCompositeSubscription;
 
@@ -247,11 +249,13 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     private void setFavoriteState(MenuItem item) {
         if (item.isChecked()) {
-            item.setChecked(false);
-            item.setIcon(R.drawable.ic_action_favorite_off);
+            item.setChecked(false).setIcon(R.drawable.ic_action_favorite_off);
+            mFavoriteSyncIdPreference.set(mFavoriteSyncIdPreference.defaultValue());
+            mFavoriteIsGroupSchedulePreference.set(mFavoriteIsGroupSchedulePreference.defaultValue());
         } else {
-            item.setChecked(true);
-            item.setIcon(R.drawable.ic_action_favorite_on);
+            item.setChecked(true).setIcon(R.drawable.ic_action_favorite_on);
+            mFavoriteSyncIdPreference.set(mSyncIdPreference.get());
+            mFavoriteIsGroupSchedulePreference.set(mIsGroupSchedulePreference.get());
         }
     }
 
@@ -272,6 +276,12 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.setGroupVisible(R.id.group_items, isMenuItemEnabled());
+        MenuItem favoriteItem = menu.findItem(R.id.action_favorite);
+        if (mSyncIdPreference.get() != null && mSyncIdPreference.get().equals(mFavoriteSyncIdPreference.get())) {
+            favoriteItem.setChecked(true).setIcon(R.drawable.ic_action_favorite_on);
+        } else {
+            favoriteItem.setChecked(false).setIcon(R.drawable.ic_action_favorite_off);
+        }
         switch (mSubgroupFilterPreference.get()) {
             case BOTH:
                 menu.findItem(R.id.action_filter_both).setChecked(true);
