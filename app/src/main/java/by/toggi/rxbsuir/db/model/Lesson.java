@@ -206,4 +206,14 @@ public class Lesson {
     public boolean isGroupSchedule() {
         return isGroupSchedule;
     }
+
+    public String getPrettyLesson() {
+        return String.format(
+                "%s-%s %s (%s) @ %s",
+                getPrettyLessonTimeStart(),
+                getPrettyLessonTimeEnd(),
+                subject, getLessonType(),
+                getPrettyAuditoryList()
+        );
+    }
 }

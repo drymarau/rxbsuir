@@ -22,6 +22,7 @@ import by.toggi.rxbsuir.module.PreferencesModule;
 import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.rest.BsuirService;
+import by.toggi.rxbsuir.service.LessonReminderService;
 import dagger.Component;
 
 @Singleton
@@ -64,6 +65,8 @@ public interface AppComponent {
     void inject(SettingsActivity settingsActivity);
 
     void inject(ScheduleActivity scheduleActivity);
+
+    void inject(LessonReminderService lessonReminderService);
 
     SchedulePresenter schedulePresenter();
 
