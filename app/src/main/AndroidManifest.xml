@@ -29,6 +29,10 @@
                 android:value=".activity.WeekScheduleActivity"/>
         </activity>
 
+        <receiver android:name=".receiver.AlarmReceiver"/>
+
+        <service android:name=".service.LessonReminderService"/>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="aedd177c4bd42ca01848f855c0e22dc3001068cc"/>
