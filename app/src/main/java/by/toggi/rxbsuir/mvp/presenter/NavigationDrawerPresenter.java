@@ -5,8 +5,6 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.rest.model.Employee;
@@ -26,7 +24,6 @@ public class NavigationDrawerPresenter extends Presenter<NavigationDrawerView> {
     private final Observable<List<Employee>> mEmployeeListObservable;
     private CompositeSubscription mCompositeSubscription;
 
-    @Inject
     public NavigationDrawerPresenter(StorIOSQLite storIOSQLite) {
         mStorIOSQLite = storIOSQLite;
         mStudentGroupObservable = getGroupObservable();

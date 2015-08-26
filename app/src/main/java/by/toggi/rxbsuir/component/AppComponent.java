@@ -18,6 +18,8 @@ import by.toggi.rxbsuir.module.AppModule;
 import by.toggi.rxbsuir.module.BsuirServiceModule;
 import by.toggi.rxbsuir.module.DbModule;
 import by.toggi.rxbsuir.module.PreferencesModule;
+import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
+import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.rest.BsuirService;
 import dagger.Component;
 
@@ -55,5 +57,9 @@ public interface AppComponent {
     void inject(AddEmployeeDialogFragment addEmployeeDialogFragment);
 
     void inject(SettingsActivity settingsActivity);
+
+    SchedulePresenter schedulePresenter();
+
+    NavigationDrawerPresenter navigationDrawerPresenter();
 
 }

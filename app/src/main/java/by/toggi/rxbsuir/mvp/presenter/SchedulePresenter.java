@@ -11,8 +11,6 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
@@ -48,7 +46,6 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
      * @param service      the bsuirService
      * @param storIOSQLite the storIOSQlite
      */
-    @Inject
     public SchedulePresenter(BsuirService service, StorIOSQLite storIOSQLite) {
         mService = service;
         mStorIOSQLite = storIOSQLite;
