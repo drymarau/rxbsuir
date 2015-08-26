@@ -250,6 +250,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     private void resetSyncId() {
         mSyncIdPreference.set(null);
         mTitlePreference.set(mTitlePreference.defaultValue());
+        mItemIdPreference.set(mItemIdPreference.defaultValue());
         supportInvalidateOptionsMenu();
     }
 
