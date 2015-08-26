@@ -38,6 +38,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
@@ -143,7 +144,9 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         mDrawerPresenter.onDestroy();
     }
 
-    protected abstract void initializeComponent();
+    private void initializeComponent() {
+        ((RxBsuirApplication) getApplication()).getAppComponent().inject(this);
+    }
 
     @OnClick(R.id.fab)
     public void onFloatingActionButtonClick() {

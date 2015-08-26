@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SubgroupFilter;
+import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
@@ -57,6 +58,8 @@ public interface AppComponent {
     void inject(AddEmployeeDialogFragment addEmployeeDialogFragment);
 
     void inject(SettingsActivity settingsActivity);
+
+    void inject(ScheduleActivity scheduleActivity);
 
     SchedulePresenter schedulePresenter();
 

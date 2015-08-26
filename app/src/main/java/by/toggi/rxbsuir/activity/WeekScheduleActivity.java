@@ -5,23 +5,16 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
-import by.toggi.rxbsuir.component.DaggerWeekScheduleActivityComponent;
-import by.toggi.rxbsuir.module.WeekScheduleActivityModule;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 
 public class WeekScheduleActivity extends ScheduleActivity {
 
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
     @Bind(R.id.view_pager) ViewPager mViewPager;
-
-    @Inject WeekPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,20 +33,15 @@ public class WeekScheduleActivity extends ScheduleActivity {
     }
 
     @Override
-    protected void initializeComponent() {
-        DaggerWeekScheduleActivityComponent.builder()
-                .weekScheduleActivityModule(new WeekScheduleActivityModule(this))
-                .appComponent(((RxBsuirApplication) getApplication()).getAppComponent())
-                .build().inject(this);
-    }
-
-    @Override
     protected void showToday() {
         mViewPager.setCurrentItem(Utils.getCurrentWeekNumber() - 1);
     }
 
     private void setupTabs() {
-        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setAdapter(new WeekPagerAdapter(
+                getSupportFragmentManager(),
+                getResources().getStringArray(R.array.tabs)
+        ));
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(mPageMargin);
         mTabLayout.setupWithViewPager(mViewPager);
