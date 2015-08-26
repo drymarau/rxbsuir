@@ -3,7 +3,6 @@ package by.toggi.rxbsuir.activity;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -80,7 +79,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
-    @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
