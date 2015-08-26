@@ -237,8 +237,21 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
             case R.id.action_filter_none:
                 setFilter(item, SubgroupFilter.NONE);
                 return true;
+            case R.id.action_favorite:
+                setFavoriteState(item);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setFavoriteState(MenuItem item) {
+        if (item.isChecked()) {
+            item.setChecked(false);
+            item.setIcon(R.drawable.ic_action_favorite_off);
+        } else {
+            item.setChecked(true);
+            item.setIcon(R.drawable.ic_action_favorite_on);
         }
     }
 
