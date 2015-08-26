@@ -84,6 +84,8 @@ dependencies {
 
     compile 'com.jenzz:materialpreference:1.3'
 
+    compile 'com.wdullaer:materialdatetimepicker:1.4.2'
+
     compile 'com.pushtorefresh.storio:sqlite:1.2.1'
     compile 'com.pushtorefresh.storio:sqlite-annotations:1.2.1'
     apt 'com.pushtorefresh.storio:sqlite-annotations-processor:1.2.1'
