@@ -46,7 +46,7 @@
     <string name="label_settings">Настройки</string>
 
     <!-- PREFERENCES -->
-    <string name="title_pref_dark_theme">Использовать темную тему</string>
+    <string name="title_pref_dark_theme">Темная тема</string>
     <string name="summary_pref_dark_theme_enabled">Приложение использует темную тему</string>
     <string name="summary_pref_dark_theme_disabled">Приложение использует светлую тему</string>
     <string name="category_appearance">Оформление</string>
