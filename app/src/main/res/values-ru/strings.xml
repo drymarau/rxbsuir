@@ -56,5 +56,8 @@
     <string name="play_store_not_found">Похоже, что Play Маркет не установлен</string>
     <string name="title_notifications">Уведомления</string>
     <string name="title_notification_time">Время уведомления о занятиях</string>
+    <string name="summary_notification_sound_disabled">Звук уведомления выключен</string>
+    <string name="summary_notification_sound_enabled">Звук уведомления включен</string>
+    <string name="title_notification_sound">Звук уведомления</string>
 
 </resources>
