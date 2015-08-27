@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Расписание БГУИР</string>
-
     <!-- SNACKBAR -->
     <!-- Error message when something went wrong with schedule -->
     <string name="error_empty_schedule">Пустое расписание</string>
@@ -29,6 +27,7 @@
     <string name="action_filter_first">Только первая</string>
     <string name="action_filter_second">Только вторая</string>
     <string name="action_filter_none">Скрыть</string>
+    <string name="action_favorite">Избранное</string>
 
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Группы</string>
@@ -47,7 +46,7 @@
     <string name="label_settings">Настройки</string>
 
     <!-- PREFERENCES -->
-    <string name="title_pref_dark_theme">Использовать темную тему</string>
+    <string name="title_pref_dark_theme">Темная тема</string>
     <string name="summary_pref_dark_theme_enabled">Приложение использует темную тему</string>
     <string name="summary_pref_dark_theme_disabled">Приложение использует светлую тему</string>
     <string name="category_appearance">Оформление</string>
@@ -55,5 +54,10 @@
     <string name="title_build_version">Версия</string>
     <string name="title_pref_rate_app">Оцените приложение!</string>
     <string name="play_store_not_found">Похоже, что Play Маркет не установлен</string>
+    <string name="title_notifications">Уведомления</string>
+    <string name="title_notification_time">Время уведомления о занятиях</string>
+    <string name="summary_notification_sound_disabled">Звук уведомления выключен</string>
+    <string name="summary_notification_sound_enabled">Звук уведомления включен</string>
+    <string name="title_notification_sound">Звук уведомления</string>
 
 </resources>

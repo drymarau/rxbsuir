@@ -1,7 +1,6 @@
 package by.toggi.rxbsuir.fragment;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -47,7 +46,6 @@ public class WeekFragment extends Fragment implements WeekView {
     @Inject LinearLayoutManager mLayoutManager;
     @Inject LessonAdapter mAdapter;
     @Inject WeekPresenter mPresenter;
-    @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
     @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;

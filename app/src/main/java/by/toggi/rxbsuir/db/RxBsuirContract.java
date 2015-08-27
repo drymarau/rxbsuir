@@ -67,6 +67,10 @@ public class RxBsuirContract {
             return getSyncIdAndTypeQuery() + " and " + COL_WEEK_NUMBER_LIST + " like ?" + " and (" + filterBySubgroup(filter) + ")";
         }
 
+        public static String getSyncIdTypeDayOfWeekAndWeekNumberQuery() {
+            return getSyncIdAndTypeQuery() + " and " + COL_WEEKDAY + " = ? and " + COL_WEEK_NUMBER_LIST + " like ?";
+        }
+
         private static String filterBySubgroup(SubgroupFilter filter) {
             String commonQuery = COL_NUM_SUBGROUP + " = 0";
             String subgroup1Query = COL_NUM_SUBGROUP + " = 1";

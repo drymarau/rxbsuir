@@ -11,6 +11,20 @@
             android:title="@string/title_pref_dark_theme"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
+    <com.jenzz.materialpreference.PreferenceCategory android:title="@string/title_notifications">
+        <com.jenzz.materialpreference.Preference
+            android:key="notification_time"
+            android:title="@string/title_notification_time"/>
+
+        <com.jenzz.materialpreference.CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="notification_time"
+            android:key="notification_sound_enabled"
+            android:summaryOff="@string/summary_notification_sound_disabled"
+            android:summaryOn="@string/summary_notification_sound_enabled"
+            android:title="@string/title_notification_sound"/>
+    </com.jenzz.materialpreference.PreferenceCategory>
+
     <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_about">
         <com.jenzz.materialpreference.Preference
             android:key="rate_app"

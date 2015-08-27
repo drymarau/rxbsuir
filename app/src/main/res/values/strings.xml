@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BSUIR Schedule</string>
+    <string name="app_name" translatable="false">RxBSUIR</string>
     <!-- bsuir.by endpoint for retrofit -->
     <string name="schedule_endpoint" translatable="false">http://www.bsuir.by/schedule/rest</string>
 
@@ -32,6 +32,7 @@
     <string name="action_filter_first">First only</string>
     <string name="action_filter_second">Second only</string>
     <string name="action_filter_none">Hide both</string>
+    <string name="action_favorite">Favorite</string>
 
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Groups</string>
@@ -57,7 +58,7 @@
 
     <!-- PREFERENCES -->
     <string name="key_pref_dark_theme" translatable="false">is_dark_theme</string>
-    <string name="title_pref_dark_theme">Use dark theme</string>
+    <string name="title_pref_dark_theme">Dark theme</string>
     <string name="summary_pref_dark_theme_enabled">App uses dark theme</string>
     <string name="summary_pref_dark_theme_disabled">App uses light theme</string>
     <string name="category_appearance">Appearance</string>
@@ -66,6 +67,11 @@
     <string name="key_pref_build_version" translatable="false">build_version</string>
     <string name="title_pref_rate_app">Rate app!</string>
     <string name="play_store_not_found">Play Store appears to be missing</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_notification_time">Lessons notification time</string>
+    <string name="summary_notification_sound_disabled">Notification sound is disabled</string>
+    <string name="summary_notification_sound_enabled">Notification sound is enabled</string>
+    <string name="title_notification_sound">Enable notification sound</string>
 
     <!-- Title format portrait (Awesome C.T.)-->
     <string name="title_format" translatable="false">%s %.1s.%.1s.</string>
