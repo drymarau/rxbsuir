@@ -68,7 +68,7 @@
     <string name="title_pref_rate_app">Rate app!</string>
     <string name="play_store_not_found">Play Store appears to be missing</string>
     <string name="title_notifications">Notifications</string>
-    <string name="title_notification_time">Notification time</string>
+    <string name="title_notification_time">Lessons notification time</string>
 
     <!-- Title format portrait (Awesome C.T.)-->
     <string name="title_format" translatable="false">%s %.1s.%.1s.</string>

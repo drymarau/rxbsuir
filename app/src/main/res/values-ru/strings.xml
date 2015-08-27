@@ -55,6 +55,6 @@
     <string name="title_pref_rate_app">Оцените приложение!</string>
     <string name="play_store_not_found">Похоже, что Play Маркет не установлен</string>
     <string name="title_notifications">Уведомления</string>
-    <string name="title_notification_time">Время уведомления</string>
+    <string name="title_notification_time">Время уведомления о занятиях</string>
 
 </resources>
