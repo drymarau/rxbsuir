@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.TextUtils;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
@@ -14,6 +15,8 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.FormatStyle;
 
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class LessonReminderService extends IntentService {
     @Inject StorIOSQLite mStorIOSQLite;
     @Inject @Named(PreferenceHelper.FAVORITE_SYNC_ID) Preference<String> mFavoriteSyncIdPreference;
     @Inject @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE) Preference<Boolean> mFavoriteIsGroupSchedule;
+    @Inject @Named(PreferenceHelper.FAVORITE_TITLE) Preference<String> mFavoriteTitlePreference;
 
     public LessonReminderService() {
         super(LessonReminderService.class.getSimpleName());
@@ -79,7 +83,21 @@ public class LessonReminderService extends IntentService {
 
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        String contentTitle = mFavoriteTitlePreference.asObservable()
+                .map(s -> TextUtils.split(s, " "))
+                .map(strings -> {
+                    if (strings.length == 3) {
+                        return String.format("%s %.1s.%.1s", strings);
+                    } else {
+                        return TextUtils.join(" ", strings);
+                    }
+                }).toBlocking().first();
+        contentTitle = mFavoriteIsGroupSchedule.get() ? "Группа " + contentTitle : contentTitle;
+
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        inboxStyle.setBigContentTitle(contentTitle);
+        inboxStyle.setSummaryText(LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
         for (int i = 0, size = lessonList.size(); i < size; i++) {
             inboxStyle.addLine(lessonList.get(i).getPrettyLesson());
         }
@@ -87,7 +105,9 @@ public class LessonReminderService extends IntentService {
                 .setSmallIcon(R.drawable.ic_notification)
                 .setStyle(inboxStyle)
                 .setAutoCancel(true)
-                .setContentTitle("RxBSUIR")
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(contentTitle)
+                .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_LIGHTS)
                 .setContentIntent(resultPendingIntent);
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
         managerCompat.notify(100, builder.build());
