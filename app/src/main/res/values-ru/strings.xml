@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Расписание БГУИР</string>
-
     <!-- SNACKBAR -->
     <!-- Error message when something went wrong with schedule -->
     <string name="error_empty_schedule">Пустое расписание</string>
