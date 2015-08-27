@@ -27,15 +27,22 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
     @Inject com.f2prateek.rx.preferences.Preference<LocalTime> mLocalTimePreference;
+    @Inject @Named(PreferenceHelper.FAVORITE_SYNC_ID) com.f2prateek.rx.preferences.Preference<String> mFavoriteSyncIdPrerefence;
 
     private Subscription mSubscription;
+    private Preference mNotificationTimePreference;
 
     @Override
     public void onResume() {
         super.onResume();
         mSubscription = mLocalTimePreference.asObservable()
                 .subscribe(localTime -> {
-                    findPreference("notification_time").setSummary(localTime.toString());
+                    if (mNotificationTimePreference != null) {
+                        mNotificationTimePreference.setSummary(localTime.toString());
+                    }
+                    if (mFavoriteSyncIdPrerefence.get() != null) {
+                        Utils.setAlarm(getActivity(), localTime);
+                    }
                 });
     }
 
@@ -56,7 +63,9 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         findPreference(PreferenceHelper.IS_DARK_THEME).setOnPreferenceChangeListener(this);
         findPreference("build_version").setSummary(BuildConfig.VERSION_NAME);
         findPreference("rate_app").setOnPreferenceClickListener(this);
-        findPreference("notification_time").setOnPreferenceClickListener(this);
+        mNotificationTimePreference = findPreference("notification_time");
+        mNotificationTimePreference.setEnabled(mFavoriteSyncIdPrerefence.get() != null);
+        mNotificationTimePreference.setOnPreferenceClickListener(this);
     }
 
     @Override
