@@ -26,6 +26,8 @@ import android.widget.RelativeLayout;
 
 import com.f2prateek.rx.preferences.Preference;
 
+import org.threeten.bp.LocalTime;
+
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -40,6 +42,7 @@ import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SubgroupFilter;
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
@@ -88,6 +91,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
     @Inject @Named(PreferenceHelper.FAVORITE_SYNC_ID) Preference<String> mFavoriteSyncIdPreference;
     @Inject @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE) Preference<Boolean> mFavoriteIsGroupSchedulePreference;
+    @Inject Preference<LocalTime> mLocalTimePreference;
 
     private CompositeSubscription mCompositeSubscription;
 
@@ -240,6 +244,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 setFilter(item, SubgroupFilter.NONE);
                 return true;
             case R.id.action_favorite:
+                mDrawerPresenter.onCreate();
                 setFavoriteState(item);
                 return true;
             default:
@@ -249,10 +254,12 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     private void setFavoriteState(MenuItem item) {
         if (item.isChecked()) {
+            Utils.cancelAlarm(this);
             item.setChecked(false).setIcon(R.drawable.ic_action_favorite_off);
             mFavoriteSyncIdPreference.set(mFavoriteSyncIdPreference.defaultValue());
             mFavoriteIsGroupSchedulePreference.set(mFavoriteIsGroupSchedulePreference.defaultValue());
         } else {
+            Utils.setAlarm(this, mLocalTimePreference.get());
             item.setChecked(true).setIcon(R.drawable.ic_action_favorite_on);
             mFavoriteSyncIdPreference.set(mSyncIdPreference.get());
             mFavoriteIsGroupSchedulePreference.set(mIsGroupSchedulePreference.get());
@@ -265,7 +272,11 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private void resetSyncId() {
-        mSyncIdPreference.set(null);
+        String favoriteSyncId = mFavoriteSyncIdPreference.get();
+        if (favoriteSyncId != null && favoriteSyncId.equals(mSyncIdPreference.get())) {
+            mFavoriteSyncIdPreference.set(mFavoriteSyncIdPreference.defaultValue());
+        }
+        mSyncIdPreference.set(mSyncIdPreference.defaultValue());
         mTitlePreference.set(mTitlePreference.defaultValue());
         mItemIdPreference.set(mItemIdPreference.defaultValue());
         supportInvalidateOptionsMenu();
