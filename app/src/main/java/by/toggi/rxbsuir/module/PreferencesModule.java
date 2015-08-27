@@ -93,6 +93,13 @@ public class PreferencesModule {
 
     @Provides
     @Singleton
+    @Named(PreferenceHelper.FAVORITE_TITLE)
+    Preference<String> provideRxFavoriteTitle(RxSharedPreferences preferences) {
+        return preferences.getString(PreferenceHelper.FAVORITE_TITLE, null);
+    }
+
+    @Provides
+    @Singleton
     Preference<LocalTime> provideRxNotificationTime(RxSharedPreferences preferences) {
         return preferences.getObject(PreferenceHelper.NOTIFICATION_TIME, LocalTime.of(7, 0), LocalTimeAdapter.INSTANCE);
     }

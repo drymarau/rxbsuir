@@ -91,6 +91,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
     @Inject @Named(PreferenceHelper.FAVORITE_SYNC_ID) Preference<String> mFavoriteSyncIdPreference;
     @Inject @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE) Preference<Boolean> mFavoriteIsGroupSchedulePreference;
+    @Inject @Named(PreferenceHelper.FAVORITE_TITLE) Preference<String> mFavoriteTitlePreference;
     @Inject Preference<LocalTime> mLocalTimePreference;
 
     private CompositeSubscription mCompositeSubscription;
@@ -258,11 +259,13 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
             item.setChecked(false).setIcon(R.drawable.ic_action_favorite_off);
             mFavoriteSyncIdPreference.set(mFavoriteSyncIdPreference.defaultValue());
             mFavoriteIsGroupSchedulePreference.set(mFavoriteIsGroupSchedulePreference.defaultValue());
+            mFavoriteTitlePreference.set(mFavoriteTitlePreference.defaultValue());
         } else {
             Utils.setAlarm(this, mLocalTimePreference.get());
             item.setChecked(true).setIcon(R.drawable.ic_action_favorite_on);
             mFavoriteSyncIdPreference.set(mSyncIdPreference.get());
             mFavoriteIsGroupSchedulePreference.set(mIsGroupSchedulePreference.get());
+            mFavoriteTitlePreference.set(mTitlePreference.get());
         }
     }
 
@@ -275,6 +278,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         String favoriteSyncId = mFavoriteSyncIdPreference.get();
         if (favoriteSyncId != null && favoriteSyncId.equals(mSyncIdPreference.get())) {
             mFavoriteSyncIdPreference.set(mFavoriteSyncIdPreference.defaultValue());
+            mFavoriteTitlePreference.set(mFavoriteTitlePreference.defaultValue());
         }
         mSyncIdPreference.set(mSyncIdPreference.defaultValue());
         mTitlePreference.set(mTitlePreference.defaultValue());
