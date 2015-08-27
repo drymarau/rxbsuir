@@ -94,7 +94,6 @@ public class LessonReminderService extends IntentService {
                         return TextUtils.join(" ", strings);
                     }
                 }).toBlocking().first();
-        contentTitle = mFavoriteIsGroupSchedule.get() ? "Группа " + contentTitle : contentTitle;
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle(contentTitle);
@@ -103,16 +102,15 @@ public class LessonReminderService extends IntentService {
             inboxStyle.addLine(lessonList.get(i).getPrettyLesson());
         }
 
-        int defaults = mNotificationSoundEnabledPreference.get()
-                ? NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_LIGHTS
-                : NotificationCompat.DEFAULT_LIGHTS;
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setStyle(inboxStyle)
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(contentTitle)
-                .setDefaults(defaults)
+                .setDefaults(mNotificationSoundEnabledPreference.get()
+                        ? NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_LIGHTS
+                        : NotificationCompat.DEFAULT_LIGHTS)
                 .setContentIntent(resultPendingIntent);
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
         managerCompat.notify(100, builder.build());
