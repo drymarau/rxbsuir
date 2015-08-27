@@ -63,7 +63,7 @@ public class LessonReminderService extends IntentService {
                     .listOfObjects(Lesson.class)
                     .withQuery(query)
                     .prepare().executeAsBlocking();
-            if (lessonList.size() > 0) {
+            if (!lessonList.isEmpty()) {
                 showNotification(lessonList);
             }
         }
@@ -84,7 +84,7 @@ public class LessonReminderService extends IntentService {
             inboxStyle.addLine(lessonList.get(i).getPrettyLesson());
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_action_favorite_on)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setStyle(inboxStyle)
                 .setAutoCancel(true)
                 .setContentTitle("RxBSUIR")
