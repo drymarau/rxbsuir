@@ -11,10 +11,10 @@
             android:title="@string/title_pref_dark_theme"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
-    <com.jenzz.materialpreference.PreferenceCategory android:title="Notifications">
+    <com.jenzz.materialpreference.PreferenceCategory android:title="@string/title_notifications">
         <com.jenzz.materialpreference.Preference
             android:key="notification_time"
-            android:title="Time"/>
+            android:title="@string/title_notification_time"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_about">
