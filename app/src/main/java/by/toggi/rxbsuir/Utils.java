@@ -1,17 +1,26 @@
 package by.toggi.rxbsuir;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.IntentCompat;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.LocalTime;
 import org.threeten.bp.Month;
+import org.threeten.bp.ZoneId;
 import org.threeten.bp.temporal.ChronoUnit;
 
+import java.util.concurrent.TimeUnit;
+
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
+import by.toggi.rxbsuir.receiver.AlarmReceiver;
 import rx.Subscription;
 
 /**
@@ -19,7 +28,46 @@ import rx.Subscription;
  */
 public class Utils {
 
+    public static final int REQUEST_CODE_LESSON_REMINDER = 15613;
+
     private Utils() {
+    }
+
+    /**
+     * Sets alarm.
+     *
+     * @param context   the context
+     * @param localTime the local time
+     */
+    public static void setAlarm(Context context, LocalTime localTime) {
+        PendingIntent pendingIntent = getLessonReminderPendingIntent(context);
+
+        LocalDateTime dateTime;
+        if (LocalTime.now().isAfter(localTime)) {
+            dateTime = LocalDateTime.of(LocalDate.now().plusDays(1), localTime);
+        } else {
+            dateTime = LocalDateTime.of(LocalDate.now(), localTime);
+        }
+        long triggerMillis = dateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
+        AlarmManager manager = getAlarmManager(context);
+        manager.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
+                triggerMillis,
+                TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS),
+                pendingIntent
+        );
+    }
+
+    /**
+     * Cancels alarm.
+     *
+     * @param context the context
+     */
+    public static void cancelAlarm(Context context) {
+        PendingIntent intent = getLessonReminderPendingIntent(context);
+        AlarmManager manager = getAlarmManager(context);
+        manager.cancel(intent);
+        intent.cancel();
     }
 
     /**
@@ -99,6 +147,19 @@ public class Utils {
             return LocalDate.of(localDate.getYear() - 1, Month.SEPTEMBER, 1);
         }
         return LocalDate.of(localDate.getYear(), Month.SEPTEMBER, 1);
+    }
+
+    private static AlarmManager getAlarmManager(Context context) {
+        return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    }
+
+    private static PendingIntent getLessonReminderPendingIntent(Context context) {
+        return PendingIntent.getBroadcast(
+                context,
+                REQUEST_CODE_LESSON_REMINDER,
+                new Intent(context, AlarmReceiver.class),
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
     }
 
 }
