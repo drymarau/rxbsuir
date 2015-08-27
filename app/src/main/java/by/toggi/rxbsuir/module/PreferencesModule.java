@@ -104,6 +104,13 @@ public class PreferencesModule {
         return preferences.getObject(PreferenceHelper.NOTIFICATION_TIME, LocalTime.of(7, 0), LocalTimeAdapter.INSTANCE);
     }
 
+    @Provides
+    @Singleton
+    @Named(PreferenceHelper.NOTIFICATION_SOUND_ENABLED)
+    Preference<Boolean> provideRxNotificationSoundEnabled(RxSharedPreferences preferences) {
+        return preferences.getBoolean(PreferenceHelper.NOTIFICATION_SOUND_ENABLED, false);
+    }
+
     private static final class LocalTimeAdapter implements Preference.Adapter<LocalTime> {
 
         static final LocalTimeAdapter INSTANCE = new LocalTimeAdapter();

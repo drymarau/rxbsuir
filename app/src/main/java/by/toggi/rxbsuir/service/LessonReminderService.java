@@ -38,6 +38,7 @@ public class LessonReminderService extends IntentService {
     @Inject @Named(PreferenceHelper.FAVORITE_SYNC_ID) Preference<String> mFavoriteSyncIdPreference;
     @Inject @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE) Preference<Boolean> mFavoriteIsGroupSchedule;
     @Inject @Named(PreferenceHelper.FAVORITE_TITLE) Preference<String> mFavoriteTitlePreference;
+    @Inject @Named(PreferenceHelper.NOTIFICATION_SOUND_ENABLED) Preference<Boolean> mNotificationSoundEnabledPreference;
 
     public LessonReminderService() {
         super(LessonReminderService.class.getSimpleName());
@@ -101,13 +102,17 @@ public class LessonReminderService extends IntentService {
         for (int i = 0, size = lessonList.size(); i < size; i++) {
             inboxStyle.addLine(lessonList.get(i).getPrettyLesson());
         }
+
+        int defaults = mNotificationSoundEnabledPreference.get()
+                ? NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_LIGHTS
+                : NotificationCompat.DEFAULT_LIGHTS;
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setStyle(inboxStyle)
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(contentTitle)
-                .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_LIGHTS)
+                .setDefaults(defaults)
                 .setContentIntent(resultPendingIntent);
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
         managerCompat.notify(100, builder.build());

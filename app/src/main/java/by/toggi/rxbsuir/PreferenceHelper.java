@@ -12,6 +12,7 @@ public class PreferenceHelper {
     public static final String FAVORITE_IS_GROUP_SCHEDULE = "favorite_is_group_schedule";
     public static final String FAVORITE_TITLE = "favorite_title";
     public static final String NOTIFICATION_TIME = "notification_time";
+    public static final String NOTIFICATION_SOUND_ENABLED = "notification_sound_enabled";
 
     private PreferenceHelper() {
     }
