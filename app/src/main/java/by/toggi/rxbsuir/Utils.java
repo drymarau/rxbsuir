@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.IntentCompat;
 
@@ -21,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import by.toggi.rxbsuir.receiver.AlarmReceiver;
+import by.toggi.rxbsuir.receiver.BootReceiver;
 import rx.Subscription;
 
 /**
@@ -56,6 +58,7 @@ public class Utils {
                 TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS),
                 pendingIntent
         );
+        setBootReceiverEnabled(context, true);
     }
 
     /**
@@ -64,6 +67,7 @@ public class Utils {
      * @param context the context
      */
     public static void cancelAlarm(Context context) {
+        setBootReceiverEnabled(context, false);
         PendingIntent intent = getLessonReminderPendingIntent(context);
         AlarmManager manager = getAlarmManager(context);
         manager.cancel(intent);
@@ -159,6 +163,17 @@ public class Utils {
                 REQUEST_CODE_LESSON_REMINDER,
                 new Intent(context, AlarmReceiver.class),
                 PendingIntent.FLAG_UPDATE_CURRENT
+        );
+    }
+
+    private static void setBootReceiverEnabled(Context context, boolean enabled) {
+        ComponentName receiver = new ComponentName(context, BootReceiver.class);
+        PackageManager manager = context.getPackageManager();
+        manager.setComponentEnabledSetting(
+                receiver,
+                enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                        : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
         );
     }
 
