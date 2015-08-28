@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -71,7 +72,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Bind(R.id.fab_employee) FloatingActionButton mFabEmployee;
     @Bind(R.id.fam) RelativeLayout mFloatingActionMenu;
     @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
-    @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
+    @Nullable @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
     @Bind(R.id.navigation_view) NavigationView mNavigationView;
 
     @BindDimen(R.dimen.view_pager_page_margin) int mPageMargin;
@@ -370,7 +371,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 return true;
             }
         }
-        mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout != null) mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -385,9 +386,11 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     private void setupNavigationView() {
         getDelegate().setSupportActionBar(mToolbar);
-        getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setNavigationIcon(R.drawable.ic_action_navigation_menu);
-        mToolbar.setNavigationOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
+        if (mDrawerLayout != null) {
+            getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            mToolbar.setNavigationOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
+            mToolbar.setNavigationIcon(R.drawable.ic_action_navigation_menu);
+        }
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -406,7 +409,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private void showFloatingActionMenu() {
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
+        if (mDrawerLayout != null) mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
         mFloatingActionMenu.setClickable(true);
         mFloatingActionMenu.setOnClickListener(v -> hideFloatingActionMenu());
         ObjectAnimator.ofPropertyValuesHolder(
@@ -421,7 +424,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private void hideFloatingActionMenu() {
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
+        if (mDrawerLayout != null) mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
         mFabGroup.hide();
         mFabEmployee.hide();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
