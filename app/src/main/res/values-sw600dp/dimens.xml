@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="keyline_first">24dp</dimen>
+    <dimen name="keyline_second">80dp</dimen>
+
+    <!-- FAB dimens (for elevation of 6dp) -->
+    <dimen name="fab_margin">12dp</dimen>
+    <dimen name="fab_margin_mini">20dp</dimen>
+    <dimen name="fab_margin_top">-20dp</dimen>
+
+</resources>
