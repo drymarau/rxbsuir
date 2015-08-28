@@ -9,11 +9,13 @@
     <color name="card_background_light">@android:color/white</color>
     <color name="fam_protection_light">#E6E3E3E3</color>
     <color name="mdtp_accent_color">@color/accent</color>
+    <color name="navigation_view_background_light">#FDFDFD</color>
 
     <!-- DARK THEME -->
     <color name="window_background_dark">#303030</color>
     <color name="card_background_dark">#424242</color>
     <color name="fam_protection_dark">#E6303030</color>
     <color name="mdtp_accent_color_dark">@color/accent</color>
+    <color name="navigation_view_background_dark">#333333</color>
 
 </resources>
