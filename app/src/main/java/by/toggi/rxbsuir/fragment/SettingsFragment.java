@@ -6,6 +6,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -66,6 +70,11 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         mNotificationTimePreference = findPreference("notification_time");
         mNotificationTimePreference.setEnabled(mFavoriteSyncIdPrerefence.get() != null);
         mNotificationTimePreference.setOnPreferenceClickListener(this);
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.preference_list_view, container, false);
     }
 
     @Override
