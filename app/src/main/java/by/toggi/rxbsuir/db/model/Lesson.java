@@ -212,7 +212,8 @@ public class Lesson {
                 "%s-%s %s (%s) @ %s",
                 getPrettyLessonTimeStart(),
                 getPrettyLessonTimeEnd(),
-                subject, getLessonType(),
+                getSubjectWithSubgroup(),
+                getLessonType(),
                 getPrettyAuditoryList()
         );
     }
