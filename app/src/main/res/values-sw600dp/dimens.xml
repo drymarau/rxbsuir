@@ -8,4 +8,7 @@
     <dimen name="fab_margin_mini">20dp</dimen>
     <dimen name="fab_margin_top">-20dp</dimen>
 
+    <!-- Padding for custom settings layout -->
+    <dimen name="settings_padding">64dp</dimen>
+
 </resources>

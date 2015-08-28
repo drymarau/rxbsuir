@@ -22,4 +22,7 @@
     <!-- ProgressBar padding for centering purposes -->
     <dimen name="progress_bar_padding_top">104dp</dimen>
 
+    <!-- Padding for custom settings layout -->
+    <dimen name="settings_padding">8dp</dimen>
+
 </resources>
