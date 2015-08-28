@@ -3,6 +3,9 @@
     <dimen name="keyline_first">16dp</dimen>
     <dimen name="keyline_second">72dp</dimen>
 
+    <dimen name="list_lesson_type_margin_left">@dimen/keyline_first</dimen>
+    <dimen name="list_lesson_type_margin_right">@dimen/keyline_first</dimen>
+    
     <dimen name="list_item_two_line_avatar">72dp</dimen>
     <dimen name="list_item_three_line_avatar">88dp</dimen>
 
