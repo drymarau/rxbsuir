@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="AppTheme.Drawer.Light" parent="AppTheme.Light"/>
+
+    <style name="AppTheme.Drawer.Dark" parent="AppTheme.Dark"/>
+
+</resources>

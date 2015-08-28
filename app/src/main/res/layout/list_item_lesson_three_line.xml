@@ -15,8 +15,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="false"
-        android:layout_marginLeft="@dimen/keyline_first"
-        android:layout_marginRight="@dimen/keyline_first"/>
+        android:layout_marginEnd="@dimen/list_lesson_type_margin_right"
+        android:layout_marginLeft="@dimen/list_lesson_type_margin_left"
+        android:layout_marginRight="@dimen/list_lesson_type_margin_right"
+        android:layout_marginStart="@dimen/list_lesson_type_margin_left"/>
 
     <include
         layout="@layout/list_item_lesson_time"
