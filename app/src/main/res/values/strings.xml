@@ -89,6 +89,6 @@
 
     <!-- FRAGMENTS -->
     <string name="empty_state_today">There are no lessons today.\nHave fun!</string>
-    <string name="empty_state_week">There are no lessons this week.\nHave fun!</string>
+    <string name="empty_state_week">There are no lessons this week</string>
 
 </resources>

@@ -73,7 +73,7 @@
 
     <!-- FRAGMENTS -->
     <string name="empty_state_today">Сегодня нет занятий.\nПриятного дня!</string>
-    <string name="empty_state_week">На этой неделе нет занятий.\nПриятного дня!</string>
+    <string name="empty_state_week">На этой неделе нет занятий</string>
 
 
 </resources>
