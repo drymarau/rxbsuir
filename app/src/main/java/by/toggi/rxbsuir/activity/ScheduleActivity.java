@@ -158,10 +158,14 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     @OnClick(R.id.fab)
     public void onFloatingActionButtonClick() {
-        if (mFabGroup.getVisibility() == View.VISIBLE) {
-            hideFloatingActionMenu();
+        if (Utils.hasNetworkConnection(this)) {
+            if (mFabGroup.getVisibility() == View.VISIBLE) {
+                hideFloatingActionMenu();
+            } else {
+                showFloatingActionMenu();
+            }
         } else {
-            showFloatingActionMenu();
+            Snackbar.make(mCoordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -409,7 +413,8 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private void showFloatingActionMenu() {
-        if (mDrawerLayout != null) mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
+        if (mDrawerLayout != null)
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
         mFloatingActionMenu.setClickable(true);
         mFloatingActionMenu.setOnClickListener(v -> hideFloatingActionMenu());
         ObjectAnimator.ofPropertyValuesHolder(
@@ -424,7 +429,8 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private void hideFloatingActionMenu() {
-        if (mDrawerLayout != null) mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
+        if (mDrawerLayout != null)
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
         mFabGroup.hide();
         mFabEmployee.hide();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
