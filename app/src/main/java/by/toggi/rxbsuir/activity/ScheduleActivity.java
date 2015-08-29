@@ -2,7 +2,11 @@ package by.toggi.rxbsuir.activity;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -96,6 +100,12 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject Preference<LocalTime> mLocalTimePreference;
 
     private CompositeSubscription mCompositeSubscription;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ScheduleActivity.this.invalidateOptionsMenu();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +142,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         mCompositeSubscription.add(
                 getTitlePreferenceSubscription()
         );
+        registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
@@ -140,6 +151,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
             mCompositeSubscription.unsubscribe();
         }
+        unregisterReceiver(mReceiver);
     }
 
     @LayoutRes
@@ -158,10 +170,14 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     @OnClick(R.id.fab)
     public void onFloatingActionButtonClick() {
-        if (mFabGroup.getVisibility() == View.VISIBLE) {
-            hideFloatingActionMenu();
+        if (Utils.hasNetworkConnection(this)) {
+            if (mFabGroup.getVisibility() == View.VISIBLE) {
+                hideFloatingActionMenu();
+            } else {
+                showFloatingActionMenu();
+            }
         } else {
-            showFloatingActionMenu();
+            Snackbar.make(mCoordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -312,6 +328,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 menu.findItem(R.id.action_filter_none).setChecked(true);
                 break;
         }
+        menu.findItem(R.id.action_refresh).setEnabled(Utils.hasNetworkConnection(this));
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -409,7 +426,8 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private void showFloatingActionMenu() {
-        if (mDrawerLayout != null) mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
+        if (mDrawerLayout != null)
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
         mFloatingActionMenu.setClickable(true);
         mFloatingActionMenu.setOnClickListener(v -> hideFloatingActionMenu());
         ObjectAnimator.ofPropertyValuesHolder(
@@ -424,7 +442,8 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     }
 
     private void hideFloatingActionMenu() {
-        if (mDrawerLayout != null) mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
+        if (mDrawerLayout != null)
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
         mFabGroup.hide();
         mFabEmployee.hide();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -7,6 +7,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v4.content.IntentCompat;
 
@@ -33,6 +35,18 @@ public class Utils {
     public static final int REQUEST_CODE_LESSON_REMINDER = 15613;
 
     private Utils() {
+    }
+
+    /**
+     * Checks for network connection.
+     *
+     * @param context the context
+     * @return the boolean
+     */
+    public static boolean hasNetworkConnection(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = manager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
     /**
