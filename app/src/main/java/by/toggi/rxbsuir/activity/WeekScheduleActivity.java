@@ -32,6 +32,10 @@ public class WeekScheduleActivity extends ScheduleActivity {
         ((RxBsuirApplication) getApplication()).getAppComponent().inject(this);
 
         setupTabs();
+
+        if (savedInstanceState == null && !mIsTodayEnabledPreference.get()) {
+            showToday();
+        }
     }
 
     @Override
@@ -56,9 +60,6 @@ public class WeekScheduleActivity extends ScheduleActivity {
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(mPageMargin);
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabMode(mIsTodayEnabledPreference.get()
-                ? TabLayout.MODE_SCROLLABLE
-                : TabLayout.MODE_FIXED);
     }
 
     @Override
