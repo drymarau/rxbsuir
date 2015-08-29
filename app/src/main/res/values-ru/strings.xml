@@ -17,7 +17,7 @@
     <string name="error_list_group">Пожалуйста, выберите группу из списка</string>
 
     <!-- MENU -->
-    <string name="action_today">Сегодня</string>
+    <string name="action_today">Текущая неделя</string>
     <string name="action_refresh">Обновить</string>
     <string name="action_subgroup_1">Подгруппа 1</string>
     <string name="action_subgroup_2">Подгруппа 2</string>
