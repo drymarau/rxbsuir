@@ -21,10 +21,6 @@ public class WeekScheduleActivity extends ScheduleActivity {
         super.onCreate(savedInstanceState);
 
         setupTabs();
-
-        if (savedInstanceState == null) {
-            showToday();
-        }
     }
 
     @Override
