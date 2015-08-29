@@ -89,7 +89,7 @@ public class WeekFragment extends Fragment implements LessonListView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_week, container, false);
+        View view = inflater.inflate(R.layout.fragment_lesson_list, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -118,7 +118,7 @@ public class WeekFragment extends Fragment implements LessonListView {
         mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new LessonAdapter(new ArrayList<>());
+        mAdapter = new LessonAdapter(new ArrayList<>(), false);
 
         mRecyclerView.setVisibility(View.GONE);
         mRecyclerView.setLayoutManager(mLayoutManager);
