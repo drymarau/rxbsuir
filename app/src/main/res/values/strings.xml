@@ -52,6 +52,14 @@
         <item>Week 4</item>
     </array>
 
+    <array name="tabs_with_today">
+        <item>Today</item>
+        <item>Week 1</item>
+        <item>Week 2</item>
+        <item>Week 3</item>
+        <item>Week 4</item>
+    </array>
+
     <!-- Main FAB tag for FAM -->
     <string name="tag_fab" translatable="false">fab</string>
     <string name="label_settings">Settings</string>

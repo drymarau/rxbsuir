@@ -43,6 +43,14 @@
         <item>Неделя 4</item>
     </array>
 
+    <array name="tabs_with_today">
+        <item>Сегодня</item>
+        <item>Неделя 1</item>
+        <item>Неделя 2</item>
+        <item>Неделя 3</item>
+        <item>Неделя 4</item>
+    </array>
+
     <string name="label_settings">Настройки</string>
 
     <!-- PREFERENCES -->
