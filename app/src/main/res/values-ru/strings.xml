@@ -17,7 +17,7 @@
     <string name="error_list_group">Пожалуйста, выберите группу из списка</string>
 
     <!-- MENU -->
-    <string name="action_today">Сегодня</string>
+    <string name="action_today">Текущая неделя</string>
     <string name="action_refresh">Обновить</string>
     <string name="action_subgroup_1">Подгруппа 1</string>
     <string name="action_subgroup_2">Подгруппа 2</string>
@@ -43,6 +43,14 @@
         <item>Неделя 4</item>
     </array>
 
+    <array name="tabs_with_today">
+        <item>Сегодня</item>
+        <item>Неделя 1</item>
+        <item>Неделя 2</item>
+        <item>Неделя 3</item>
+        <item>Неделя 4</item>
+    </array>
+
     <string name="label_settings">Настройки</string>
 
     <!-- PREFERENCES -->
@@ -59,5 +67,13 @@
     <string name="summary_notification_sound_disabled">Звук уведомления выключен</string>
     <string name="summary_notification_sound_enabled">Звук уведомления включен</string>
     <string name="title_notification_sound">Звук уведомления</string>
+    <string name="summary_is_today_enabled_disabled">Вкладка \"Сегодня\" выключена</string>
+    <string name="summary_is_today_enabled_enabled">Вкладка \"Сегодня\" включена</string>
+    <string name="title_is_today_enabled">Вкладка \"Сегодня\"</string>
+
+    <!-- FRAGMENTS -->
+    <string name="empty_state_today">Сегодня нет занятий.\nПриятного дня!</string>
+    <string name="empty_state_week">На этой неделе нет занятий</string>
+
 
 </resources>

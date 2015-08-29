@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,19 +22,17 @@ import rx.android.schedulers.AndroidSchedulers;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
-public class WeekPresenter extends Presenter<LessonListView> {
+public class TodayPresenter extends Presenter<LessonListView> {
 
     private final StorIOSQLite mStorIOSQLite;
-    private final int mWeekNumber;
     private Observable<List<Lesson>> mScheduleObservable;
     private SubgroupFilter mSubgroupFilter = SubgroupFilter.BOTH;
     private String mSyncId;
     private Subscription mSubscription;
 
     @Inject
-    public WeekPresenter(StorIOSQLite storIOSQLite, int weekNumber) {
+    public TodayPresenter(StorIOSQLite storIOSQLite) {
         mStorIOSQLite = storIOSQLite;
-        mWeekNumber = weekNumber;
     }
 
     /**
@@ -75,18 +75,17 @@ public class WeekPresenter extends Presenter<LessonListView> {
         detachView();
     }
 
-    @Override
-    public String getTag() {
-        return this.getClass().getSimpleName() + "_" + mWeekNumber;
-    }
-
     private Observable<List<Lesson>> getLessonListObservable(@Nullable String syncId, boolean isGroupSchedule, SubgroupFilter filter) {
         return syncId == null ? Observable.empty() : mStorIOSQLite.get()
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
                         .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.getSyncIdTypeSubgroupAndWeekNumberQuery(filter))
-                        .whereArgs(syncId, isGroupSchedule ? 1 : 0, "%" + mWeekNumber + "%")
+                        .where(LessonEntry.getSyncIdTypeDayOfWeekWeekNumberAndSubgroupQuery(filter))
+                        .whereArgs(
+                                syncId,
+                                isGroupSchedule ? 1 : 0,
+                                LocalDate.now().getDayOfWeek().toString(),
+                                "%" + Utils.getCurrentWeekNumber() + "%")
                         .build())
                 .prepare()
                 .createObservable()

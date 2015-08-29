@@ -26,6 +26,7 @@ import javax.inject.Named;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import by.toggi.rxbsuir.db.model.Lesson;
@@ -39,6 +40,7 @@ public class LessonReminderService extends IntentService {
     @Inject @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE) Preference<Boolean> mFavoriteIsGroupSchedule;
     @Inject @Named(PreferenceHelper.FAVORITE_TITLE) Preference<String> mFavoriteTitlePreference;
     @Inject @Named(PreferenceHelper.NOTIFICATION_SOUND_ENABLED) Preference<Boolean> mNotificationSoundEnabledPreference;
+    @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
 
     public LessonReminderService() {
         super(LessonReminderService.class.getSimpleName());
@@ -58,7 +60,7 @@ public class LessonReminderService extends IntentService {
             int weekNumber = Utils.getCurrentWeekNumber();
             Query query = Query.builder()
                     .table(LessonEntry.TABLE_NAME)
-                    .where(LessonEntry.getSyncIdTypeDayOfWeekAndWeekNumberQuery())
+                    .where(LessonEntry.getSyncIdTypeDayOfWeekWeekNumberAndSubgroupQuery(mSubgroupFilterPreference.get()))
                     .whereArgs(
                             mFavoriteSyncIdPreference.get(),
                             mFavoriteIsGroupSchedule.get() ? 1 : 0,

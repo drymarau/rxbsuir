@@ -2,7 +2,6 @@ package by.toggi.rxbsuir.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,66 +29,42 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
-import by.toggi.rxbsuir.component.DaggerWeekFragmentComponent;
 import by.toggi.rxbsuir.db.model.Lesson;
-import by.toggi.rxbsuir.module.WeekFragmentModule;
-import by.toggi.rxbsuir.mvp.presenter.WeekPresenter;
+import by.toggi.rxbsuir.mvp.presenter.TodayPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class WeekFragment extends Fragment implements LessonListView {
-
-    public static final String TAG_STORAGE_FRAGMENT = "storage_fragment";
-    public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
-    private static final String ARGS_WEEK_NUMBER = "week_number";
+public class TodayFragment extends Fragment implements LessonListView {
 
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
     @Bind(R.id.empty_state) TextView mEmptyState;
 
-    @BindString(R.string.empty_state_week) String mEmptyStateText;
+    @BindString(R.string.empty_state_today) String mEmptyStateText;
 
-    @Inject WeekPresenter mPresenter;
+    @Inject TodayPresenter mPresenter;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
     @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
 
-    private Parcelable mLayoutManagerState;
-    private int mWeekNumber;
     private CompositeSubscription mCompositeSubscription;
-    private LinearLayoutManager mLayoutManager;
     private LessonAdapter mAdapter;
 
     /**
-     * Instantiates a new {@code WeekFragment}.
+     * Instantiates a new {@code TodayFragment}.
      *
-     * @param weekNumber the week number
-     * @return the week fragment
+     * @return the TodayFragment instance
      */
-    public static WeekFragment newInstance(int weekNumber) {
-        if (weekNumber < 1 || weekNumber > 4) {
-            throw new IllegalArgumentException("WeekFragment can only accept weekNumber from 1 to 4. Supplied weekNumber: " + weekNumber);
-        }
-        Bundle args = new Bundle();
-        args.putInt(ARGS_WEEK_NUMBER, weekNumber);
-        WeekFragment fragment = new WeekFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public static TodayFragment newInstance() {
+        return new TodayFragment();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Bundle args = getArguments();
-        if (args != null) {
-            mWeekNumber = args.getInt(ARGS_WEEK_NUMBER);
-        }
 
-        DaggerWeekFragmentComponent.builder()
-                .appComponent(((RxBsuirApplication) getActivity().getApplication()).getAppComponent())
-                .weekFragmentModule(new WeekFragmentModule(mWeekNumber))
-                .build().inject(this);
+        ((RxBsuirApplication) getActivity().getApplication()).getAppComponent().inject(this);
     }
 
     @Nullable
@@ -105,7 +80,7 @@ public class WeekFragment extends Fragment implements LessonListView {
         super.onViewCreated(view, savedInstanceState);
 
         FragmentManager manager = getFragmentManager();
-        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(TAG_STORAGE_FRAGMENT);
+        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(WeekFragment.TAG_STORAGE_FRAGMENT);
 
         if (fragment == null) {
             throw new IllegalStateException("Storage fragment should already be added");
@@ -114,7 +89,7 @@ public class WeekFragment extends Fragment implements LessonListView {
             fragment.setPresenter(mPresenter.getTag(), mPresenter);
         } else {
             try {
-                mPresenter = (WeekPresenter) fragment.getPresenter(mPresenter.getTag());
+                mPresenter = (TodayPresenter) fragment.getPresenter(mPresenter.getTag());
             } catch (ClassCastException e) {
                 throw new ClassCastException("Presenter must be of class WeekPresenter");
             }
@@ -125,11 +100,10 @@ public class WeekFragment extends Fragment implements LessonListView {
         mPresenter.attachView(this);
         mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new LessonAdapter(new ArrayList<>(), false);
+        mAdapter = new LessonAdapter(new ArrayList<>(), true);
 
         mRecyclerView.setVisibility(View.GONE);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new SubheaderItemDecoration(
                 LayoutInflater.from(getActivity()).inflate(R.layout.list_item_subheader, mRecyclerView, false),
@@ -140,10 +114,6 @@ public class WeekFragment extends Fragment implements LessonListView {
     @Override
     public void showLessonList(List<Lesson> lessonList) {
         mAdapter.setLessonList(lessonList);
-        if (mLayoutManagerState != null) {
-            mLayoutManager.onRestoreInstanceState(mLayoutManagerState);
-            mLayoutManagerState = null;
-        }
         mRecyclerView.setVisibility(View.VISIBLE);
         mEmptyState.setVisibility(View.GONE);
     }
@@ -164,20 +134,6 @@ public class WeekFragment extends Fragment implements LessonListView {
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(KEY_LAYOUT_MANAGER_STATE, mLayoutManager.onSaveInstanceState());
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            mLayoutManagerState = savedInstanceState.getParcelable(KEY_LAYOUT_MANAGER_STATE);
-        }
     }
 
     @Override

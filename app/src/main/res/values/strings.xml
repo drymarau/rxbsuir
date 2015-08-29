@@ -22,7 +22,7 @@
     <string name="error_list_group">Please choose group from the list</string>
 
     <!-- MENU -->
-    <string name="action_today">Today</string>
+    <string name="action_today">Current week</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_subgroup_1">Subgroup 1</string>
     <string name="action_subgroup_2">Subgroup 2</string>
@@ -52,6 +52,14 @@
         <item>Week 4</item>
     </array>
 
+    <array name="tabs_with_today">
+        <item>Today</item>
+        <item>Week 1</item>
+        <item>Week 2</item>
+        <item>Week 3</item>
+        <item>Week 4</item>
+    </array>
+
     <!-- Main FAB tag for FAM -->
     <string name="tag_fab" translatable="false">fab</string>
     <string name="label_settings">Settings</string>
@@ -72,8 +80,15 @@
     <string name="summary_notification_sound_disabled">Notification sound is disabled</string>
     <string name="summary_notification_sound_enabled">Notification sound is enabled</string>
     <string name="title_notification_sound">Enable notification sound</string>
+    <string name="summary_is_today_enabled_disabled">Today tab is disabled</string>
+    <string name="summary_is_today_enabled_enabled">Today tab is enabled</string>
+    <string name="title_is_today_enabled">Today tab</string>
 
     <!-- Title format portrait (Awesome C.T.)-->
     <string name="title_format" translatable="false">%s %.1s.%.1s.</string>
+
+    <!-- FRAGMENTS -->
+    <string name="empty_state_today">There are no lessons today.\nHave fun!</string>
+    <string name="empty_state_week">There are no lessons this week</string>
 
 </resources>

@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.FormatStyle;
+
 import java.util.List;
 
 import butterknife.Bind;
@@ -16,10 +20,12 @@ import by.toggi.rxbsuir.db.model.Lesson;
 
 public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> implements LessonViewType {
 
+    private final boolean mShowToday;
     private List<Lesson> mLessonList;
 
-    public LessonAdapter(List<Lesson> lessonList) {
+    public LessonAdapter(List<Lesson> lessonList, boolean showToday) {
         mLessonList = lessonList;
+        mShowToday = showToday;
     }
 
     /**
@@ -96,7 +102,9 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
                 viewHolder.mLessonEmployee.setText(lesson.getPrettyStudentGroupList());
             }
         }
-        viewHolder.setWeekDay(lesson.getPrettyWeekday());
+        viewHolder.setWeekDay(mShowToday
+                ? LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+                : lesson.getPrettyWeekday());
     }
 
     @Override

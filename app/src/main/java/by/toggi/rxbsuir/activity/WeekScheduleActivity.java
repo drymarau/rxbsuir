@@ -5,10 +5,17 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import com.f2prateek.rx.preferences.Preference;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import butterknife.Bind;
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
-import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
+import by.toggi.rxbsuir.adapter.LessonListPagerAdapter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 
 public class WeekScheduleActivity extends ScheduleActivity {
@@ -16,13 +23,17 @@ public class WeekScheduleActivity extends ScheduleActivity {
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
     @Bind(R.id.view_pager) ViewPager mViewPager;
 
+    @Inject @Named(PreferenceHelper.IS_TODAY_ENABLED) Preference<Boolean> mIsTodayEnabledPreference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ((RxBsuirApplication) getApplication()).getAppComponent().inject(this);
+
         setupTabs();
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null && !mIsTodayEnabledPreference.get()) {
             showToday();
         }
     }
@@ -34,13 +45,17 @@ public class WeekScheduleActivity extends ScheduleActivity {
 
     @Override
     protected void showToday() {
-        mViewPager.setCurrentItem(Utils.getCurrentWeekNumber() - 1);
+        mViewPager.setCurrentItem(mIsTodayEnabledPreference.get()
+                ? Utils.getCurrentWeekNumber()
+                : Utils.getCurrentWeekNumber() - 1);
     }
 
     private void setupTabs() {
-        mViewPager.setAdapter(new WeekPagerAdapter(
+        mViewPager.setAdapter(new LessonListPagerAdapter(
                 getSupportFragmentManager(),
-                getResources().getStringArray(R.array.tabs)
+                getResources().getStringArray(mIsTodayEnabledPreference.get()
+                        ? R.array.tabs_with_today
+                        : R.array.tabs)
         ));
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(mPageMargin);

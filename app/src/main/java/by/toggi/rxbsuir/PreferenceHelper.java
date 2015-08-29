@@ -13,6 +13,7 @@ public class PreferenceHelper {
     public static final String FAVORITE_TITLE = "favorite_title";
     public static final String NOTIFICATION_TIME = "notification_time";
     public static final String NOTIFICATION_SOUND_ENABLED = "notification_sound_enabled";
+    public static final String IS_TODAY_ENABLED = "is_today_enabled";
 
     private PreferenceHelper() {
     }

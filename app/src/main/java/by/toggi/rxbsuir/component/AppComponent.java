@@ -11,9 +11,11 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
+import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.SettingsFragment;
+import by.toggi.rxbsuir.fragment.TodayFragment;
 import by.toggi.rxbsuir.module.AppModule;
 import by.toggi.rxbsuir.module.BsuirServiceModule;
 import by.toggi.rxbsuir.module.DbModule;
@@ -51,5 +53,9 @@ public interface AppComponent {
     void inject(LessonReminderService lessonReminderService);
 
     void inject(SettingsFragment settingsFragment);
+
+    void inject(TodayFragment todayFragment);
+
+    void inject(WeekScheduleActivity weekScheduleActivity);
 
 }
