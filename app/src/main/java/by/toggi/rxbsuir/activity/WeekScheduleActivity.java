@@ -8,7 +8,7 @@ import android.view.View;
 import butterknife.Bind;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
-import by.toggi.rxbsuir.adapter.WeekPagerAdapter;
+import by.toggi.rxbsuir.adapter.LessonListPagerAdapter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 
 public class WeekScheduleActivity extends ScheduleActivity {
@@ -38,9 +38,9 @@ public class WeekScheduleActivity extends ScheduleActivity {
     }
 
     private void setupTabs() {
-        mViewPager.setAdapter(new WeekPagerAdapter(
+        mViewPager.setAdapter(new LessonListPagerAdapter(
                 getSupportFragmentManager(),
-                getResources().getStringArray(R.array.tabs)
+                getResources().getStringArray(R.array.tabs_with_today)
         ));
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(mPageMargin);
