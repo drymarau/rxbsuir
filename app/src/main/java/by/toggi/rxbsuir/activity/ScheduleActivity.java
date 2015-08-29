@@ -2,7 +2,11 @@ package by.toggi.rxbsuir.activity;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -96,6 +100,12 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject Preference<LocalTime> mLocalTimePreference;
 
     private CompositeSubscription mCompositeSubscription;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ScheduleActivity.this.invalidateOptionsMenu();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +142,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         mCompositeSubscription.add(
                 getTitlePreferenceSubscription()
         );
+        registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
@@ -140,6 +151,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
             mCompositeSubscription.unsubscribe();
         }
+        unregisterReceiver(mReceiver);
     }
 
     @LayoutRes
@@ -316,6 +328,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 menu.findItem(R.id.action_filter_none).setChecked(true);
                 break;
         }
+        menu.findItem(R.id.action_refresh).setEnabled(Utils.hasNetworkConnection(this));
         return super.onPrepareOptionsMenu(menu);
     }
 
