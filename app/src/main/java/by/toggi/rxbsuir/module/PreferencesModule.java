@@ -111,6 +111,13 @@ public class PreferencesModule {
         return preferences.getBoolean(PreferenceHelper.NOTIFICATION_SOUND_ENABLED, false);
     }
 
+    @Provides
+    @Singleton
+    @Named(PreferenceHelper.IS_TODAY_ENABLED)
+    Preference<Boolean> provideRxIsTodayEnabled(RxSharedPreferences preferences) {
+        return preferences.getBoolean(PreferenceHelper.IS_TODAY_ENABLED, true);
+    }
+
     private static final class LocalTimeAdapter implements Preference.Adapter<LocalTime> {
 
         static final LocalTimeAdapter INSTANCE = new LocalTimeAdapter();

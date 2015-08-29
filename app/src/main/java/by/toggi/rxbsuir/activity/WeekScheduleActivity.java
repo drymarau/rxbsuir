@@ -5,8 +5,15 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import com.f2prateek.rx.preferences.Preference;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import butterknife.Bind;
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.adapter.LessonListPagerAdapter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
@@ -16,9 +23,13 @@ public class WeekScheduleActivity extends ScheduleActivity {
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
     @Bind(R.id.view_pager) ViewPager mViewPager;
 
+    @Inject @Named(PreferenceHelper.IS_TODAY_ENABLED) Preference<Boolean> mIsTodayEnabledPreference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((RxBsuirApplication) getApplication()).getAppComponent().inject(this);
 
         setupTabs();
     }
@@ -30,7 +41,7 @@ public class WeekScheduleActivity extends ScheduleActivity {
 
     @Override
     protected void showToday() {
-        mViewPager.setCurrentItem(mViewPager.getChildCount() > 4
+        mViewPager.setCurrentItem(mIsTodayEnabledPreference.get()
                 ? Utils.getCurrentWeekNumber()
                 : Utils.getCurrentWeekNumber() - 1);
     }
@@ -38,11 +49,16 @@ public class WeekScheduleActivity extends ScheduleActivity {
     private void setupTabs() {
         mViewPager.setAdapter(new LessonListPagerAdapter(
                 getSupportFragmentManager(),
-                getResources().getStringArray(R.array.tabs_with_today)
+                getResources().getStringArray(mIsTodayEnabledPreference.get()
+                        ? R.array.tabs_with_today
+                        : R.array.tabs)
         ));
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setPageMargin(mPageMargin);
         mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setTabMode(mIsTodayEnabledPreference.get()
+                ? TabLayout.MODE_SCROLLABLE
+                : TabLayout.MODE_FIXED);
     }
 
     @Override

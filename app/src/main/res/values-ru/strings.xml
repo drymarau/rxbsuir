@@ -67,9 +67,13 @@
     <string name="summary_notification_sound_disabled">Звук уведомления выключен</string>
     <string name="summary_notification_sound_enabled">Звук уведомления включен</string>
     <string name="title_notification_sound">Звук уведомления</string>
+    <string name="summary_is_today_enabled_disabled">Вкладка \"Сегодня\" выключена</string>
+    <string name="summary_is_today_enabled_enabled">Вкладка \"Сегодня\" включена</string>
+    <string name="title_is_today_enabled">Вкладка \"Сегодня\"</string>
 
     <!-- FRAGMENTS -->
     <string name="empty_state_today">Сегодня нет занятий.\nПриятного дня!</string>
     <string name="empty_state_week">На этой неделе нет занятий.\nПриятного дня!</string>
+
 
 </resources>

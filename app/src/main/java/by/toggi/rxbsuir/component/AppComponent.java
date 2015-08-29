@@ -11,6 +11,7 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
+import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.SettingsFragment;
@@ -54,5 +55,7 @@ public interface AppComponent {
     void inject(SettingsFragment settingsFragment);
 
     void inject(TodayFragment todayFragment);
+
+    void inject(WeekScheduleActivity weekScheduleActivity);
 
 }
