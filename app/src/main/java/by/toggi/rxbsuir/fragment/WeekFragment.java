@@ -31,12 +31,12 @@ import by.toggi.rxbsuir.component.DaggerWeekFragmentComponent;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.module.WeekFragmentModule;
 import by.toggi.rxbsuir.mvp.presenter.WeekPresenter;
-import by.toggi.rxbsuir.mvp.view.WeekView;
+import by.toggi.rxbsuir.mvp.view.LessonListView;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class WeekFragment extends Fragment implements WeekView {
+public class WeekFragment extends Fragment implements LessonListView {
 
     public static final String TAG_STORAGE_FRAGMENT = "storage_fragment";
     public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";

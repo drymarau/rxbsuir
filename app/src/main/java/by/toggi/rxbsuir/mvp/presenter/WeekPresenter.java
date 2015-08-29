@@ -13,14 +13,14 @@ import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
-import by.toggi.rxbsuir.mvp.view.WeekView;
+import by.toggi.rxbsuir.mvp.view.LessonListView;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
-public class WeekPresenter extends Presenter<WeekView> {
+public class WeekPresenter extends Presenter<LessonListView> {
 
     private final StorIOSQLite mStorIOSQLite;
     private final int mWeekNumber;
