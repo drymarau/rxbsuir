@@ -84,4 +84,8 @@
     <!-- Title format portrait (Awesome C.T.)-->
     <string name="title_format" translatable="false">%s %.1s.%.1s.</string>
 
+    <!-- FRAGMENTS -->
+    <string name="empty_state_today">There are no lessons today.\nHave fun!</string>
+    <string name="empty_state_week">There are no lessons this week.\nHave fun!</string>
+
 </resources>

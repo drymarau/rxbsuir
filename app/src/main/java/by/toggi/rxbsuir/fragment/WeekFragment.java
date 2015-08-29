@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -21,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
@@ -42,7 +44,11 @@ public class WeekFragment extends Fragment implements LessonListView {
     public static final String TAG_STORAGE_FRAGMENT = "storage_fragment";
     public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
     private static final String ARGS_WEEK_NUMBER = "week_number";
+
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
+    @Bind(R.id.empty_state) TextView mEmptyState;
+
+    @BindString(R.string.empty_state_week) String mEmptyStateText;
 
     @Inject WeekPresenter mPresenter;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
@@ -114,6 +120,8 @@ public class WeekFragment extends Fragment implements LessonListView {
             }
         }
 
+        mEmptyState.setText(mEmptyStateText);
+
         mPresenter.attachView(this);
         mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
@@ -137,6 +145,13 @@ public class WeekFragment extends Fragment implements LessonListView {
             mLayoutManagerState = null;
         }
         mRecyclerView.setVisibility(View.VISIBLE);
+        mEmptyState.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showEmptyState() {
+        mRecyclerView.setVisibility(View.GONE);
+        mEmptyState.setVisibility(View.VISIBLE);
     }
 
     @Override

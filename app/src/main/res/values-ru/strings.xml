@@ -68,4 +68,8 @@
     <string name="summary_notification_sound_enabled">Звук уведомления включен</string>
     <string name="title_notification_sound">Звук уведомления</string>
 
+    <!-- FRAGMENTS -->
+    <string name="empty_state_today">Сегодня нет занятий.\nПриятного дня!</string>
+    <string name="empty_state_week">На этой неделе нет занятий.\nПриятного дня!</string>
+
 </resources>

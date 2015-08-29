@@ -9,4 +9,6 @@ public interface LessonListView extends View {
 
     void showLessonList(List<Lesson> lessonList);
 
+    void showEmptyState();
+
 }

@@ -63,6 +63,8 @@ public class WeekPresenter extends Presenter<LessonListView> {
         mSubscription = mScheduleObservable.subscribe(lessons -> {
             if (lessons.size() > 0) {
                 showLessonList(lessons);
+            } else {
+                if (isViewAttached()) getView().showEmptyState();
             }
         });
     }

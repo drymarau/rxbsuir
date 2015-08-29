@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
@@ -37,6 +39,9 @@ import rx.subscriptions.CompositeSubscription;
 public class TodayFragment extends Fragment implements LessonListView {
 
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
+    @Bind(R.id.empty_state) TextView mEmptyState;
+
+    @BindString(R.string.empty_state_today) String mEmptyStateText;
 
     @Inject TodayPresenter mPresenter;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
@@ -44,7 +49,6 @@ public class TodayFragment extends Fragment implements LessonListView {
     @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
 
     private CompositeSubscription mCompositeSubscription;
-    private LinearLayoutManager mLayoutManager;
     private LessonAdapter mAdapter;
 
     /**
@@ -91,14 +95,15 @@ public class TodayFragment extends Fragment implements LessonListView {
             }
         }
 
+        mEmptyState.setText(mEmptyStateText);
+
         mPresenter.attachView(this);
         mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
-        mLayoutManager = new LinearLayoutManager(getActivity());
         mAdapter = new LessonAdapter(new ArrayList<>(), true);
 
         mRecyclerView.setVisibility(View.GONE);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new SubheaderItemDecoration(
                 LayoutInflater.from(getActivity()).inflate(R.layout.list_item_subheader, mRecyclerView, false),
@@ -110,6 +115,13 @@ public class TodayFragment extends Fragment implements LessonListView {
     public void showLessonList(List<Lesson> lessonList) {
         mAdapter.setLessonList(lessonList);
         mRecyclerView.setVisibility(View.VISIBLE);
+        mEmptyState.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showEmptyState() {
+        mRecyclerView.setVisibility(View.GONE);
+        mEmptyState.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -122,12 +134,6 @@ public class TodayFragment extends Fragment implements LessonListView {
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(WeekFragment.KEY_LAYOUT_MANAGER_STATE, mLayoutManager.onSaveInstanceState());
     }
 
     @Override
