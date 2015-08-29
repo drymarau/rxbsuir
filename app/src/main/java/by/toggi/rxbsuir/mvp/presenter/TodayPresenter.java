@@ -80,7 +80,7 @@ public class TodayPresenter extends Presenter<LessonListView> {
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
                         .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.getSyncIdTypeDayOfWeekAndWeekNumberQuery())
+                        .where(LessonEntry.getSyncIdTypeDayOfWeekWeekNumberAndSubgroupQuery(filter))
                         .whereArgs(
                                 syncId,
                                 isGroupSchedule ? 1 : 0,
