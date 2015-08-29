@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.f2prateek.rx.preferences.Preference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,8 +44,6 @@ public class WeekFragment extends Fragment implements LessonListView {
     private static final String ARGS_WEEK_NUMBER = "week_number";
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
 
-    @Inject LinearLayoutManager mLayoutManager;
-    @Inject LessonAdapter mAdapter;
     @Inject WeekPresenter mPresenter;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
@@ -53,6 +52,8 @@ public class WeekFragment extends Fragment implements LessonListView {
     private Parcelable mLayoutManagerState;
     private int mWeekNumber;
     private CompositeSubscription mCompositeSubscription;
+    private LinearLayoutManager mLayoutManager;
+    private LessonAdapter mAdapter;
 
     /**
      * Instantiates a new {@code WeekFragment}.
@@ -81,7 +82,7 @@ public class WeekFragment extends Fragment implements LessonListView {
 
         DaggerWeekFragmentComponent.builder()
                 .appComponent(((RxBsuirApplication) getActivity().getApplication()).getAppComponent())
-                .weekFragmentModule(new WeekFragmentModule(this))
+                .weekFragmentModule(new WeekFragmentModule(mWeekNumber))
                 .build().inject(this);
     }
 
@@ -115,6 +116,9 @@ public class WeekFragment extends Fragment implements LessonListView {
 
         mPresenter.attachView(this);
         mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
+
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mAdapter = new LessonAdapter(new ArrayList<>());
 
         mRecyclerView.setVisibility(View.GONE);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -159,15 +163,6 @@ public class WeekFragment extends Fragment implements LessonListView {
         if (savedInstanceState != null) {
             mLayoutManagerState = savedInstanceState.getParcelable(KEY_LAYOUT_MANAGER_STATE);
         }
-    }
-
-    /**
-     * Gets week number of the fragment.
-     *
-     * @return the week number
-     */
-    public int getWeekNumber() {
-        return mWeekNumber;
     }
 
     @Override
