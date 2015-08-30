@@ -132,6 +132,7 @@ public class WeekFragment extends Fragment implements LessonListView {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new SubheaderItemDecoration(
+                getActivity(),
                 LayoutInflater.from(getActivity()).inflate(R.layout.list_item_subheader, mRecyclerView, false),
                 getResources().getDimensionPixelSize(R.dimen.list_subheader_height)
         ));

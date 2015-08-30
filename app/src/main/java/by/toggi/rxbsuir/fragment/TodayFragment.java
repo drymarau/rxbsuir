@@ -106,6 +106,7 @@ public class TodayFragment extends Fragment implements LessonListView {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new SubheaderItemDecoration(
+                getActivity(),
                 LayoutInflater.from(getActivity()).inflate(R.layout.list_item_subheader, mRecyclerView, false),
                 getResources().getDimensionPixelSize(R.dimen.list_subheader_height)
         ));

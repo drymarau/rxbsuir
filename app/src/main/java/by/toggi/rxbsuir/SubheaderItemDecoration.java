@@ -1,7 +1,10 @@
 package by.toggi.rxbsuir;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -14,8 +17,9 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
 
     private final TextView mHeaderView;
     private final int mSubheaderHeight;
+    private final Drawable mShadow;
 
-    public SubheaderItemDecoration(View headerView, int subheaderHeight) {
+    public SubheaderItemDecoration(Context context, View headerView, int subheaderHeight) {
         mHeaderView = (TextView) headerView;
         mSubheaderHeight = subheaderHeight;
         mHeaderView.measure(
@@ -23,6 +27,11 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         );
         mHeaderView.layout(0, 0, mHeaderView.getMeasuredWidth(), mHeaderView.getMeasuredHeight());
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mShadow = context.getResources().getDrawable(R.drawable.header_shadow);
+        } else {
+            mShadow = null;
+        }
     }
 
     @Override
@@ -32,15 +41,17 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
             View child = parent.getChildAt(i);
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
             int adapterPosition = parent.getChildAdapterPosition(child);
+            LessonAdapter.ViewHolder holder = (LessonAdapter.ViewHolder) parent.getChildViewHolder(child);
             switch (parent.getAdapter().getItemViewType(adapterPosition)) {
                 case LessonAdapter.VIEW_TYPE_LESSON_ONE_LINE_WITH_WEEKDAY:
                 case LessonAdapter.VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY:
                 case LessonAdapter.VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY:
-                    RecyclerView.ViewHolder holder = parent.getChildViewHolder(child);
-                    if (holder instanceof LessonAdapter.ViewHolder) {
-                        drawText(c, ((LessonAdapter.ViewHolder) holder).getWeekDay(), child.getTop() - mSubheaderHeight - params.topMargin);
-                    }
+                    drawText(c, holder.getWeekDay(), child.getTop() - mSubheaderHeight - params.topMargin);
+
                     break;
+            }
+            if (holder.isLast() && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                drawShadow(c, parent, child, params);
             }
         }
     }
@@ -57,6 +68,15 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
             default:
                 super.getItemOffsets(outRect, view, parent, state);
         }
+    }
+
+    private void drawShadow(Canvas c, RecyclerView parent, View child, RecyclerView.LayoutParams params) {
+        final int top = child.getBottom() + params.bottomMargin;
+        final int bottom = top + mShadow.getIntrinsicHeight();
+        final int left = parent.getPaddingLeft();
+        final int right = parent.getWidth() - parent.getPaddingRight();
+        mShadow.setBounds(left, top, right, bottom);
+        mShadow.draw(c);
     }
 
     private void drawText(Canvas c, String text, float dy) {

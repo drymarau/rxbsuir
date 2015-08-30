@@ -105,6 +105,9 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         viewHolder.setWeekDay(mShowToday
                 ? LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
                 : lesson.getPrettyWeekday());
+        if (position < mLessonList.size() - 1) {
+            viewHolder.setIsLast(!lesson.getWeekday().equals(mLessonList.get(position + 1).getWeekday()));
+        }
     }
 
     @Override
@@ -123,6 +126,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         @Nullable @Bind(R.id.lesson_class) TextView mLessonClass;
 
         private String mWeekDay;
+        private boolean mIsLast;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -135,6 +139,14 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
 
         public void setWeekDay(String weekDay) {
             mWeekDay = weekDay;
+        }
+
+        public boolean isLast() {
+            return mIsLast;
+        }
+
+        public void setIsLast(boolean isLast) {
+            mIsLast = isLast;
         }
     }
 
