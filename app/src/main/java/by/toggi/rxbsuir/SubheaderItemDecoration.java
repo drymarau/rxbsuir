@@ -5,7 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,17 +22,21 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mBottomShadow;
     private Drawable mTopShadow;
 
-    public SubheaderItemDecoration(Context context, View headerView, int subheaderHeight) {
-        mHeaderView = (TextView) headerView;
-        mSubheaderHeight = subheaderHeight;
+    public SubheaderItemDecoration(Context context, RecyclerView recyclerView) {
+        mHeaderView = (TextView) LayoutInflater.from(context).inflate(
+                R.layout.list_item_subheader,
+                recyclerView,
+                false
+        );
+        mSubheaderHeight = context.getResources().getDimensionPixelSize(R.dimen.list_subheader_height);
         mHeaderView.measure(
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         );
         mHeaderView.layout(0, 0, mHeaderView.getMeasuredWidth(), mHeaderView.getMeasuredHeight());
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            mBottomShadow = context.getResources().getDrawable(R.drawable.header_shadow);
-            mTopShadow = context.getResources().getDrawable(R.drawable.top_shadow);
+            mBottomShadow = ContextCompat.getDrawable(context, R.drawable.header_shadow);
+            mTopShadow = ContextCompat.getDrawable(context, R.drawable.top_shadow);
         }
     }
 
