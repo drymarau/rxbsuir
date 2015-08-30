@@ -17,8 +17,8 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
 
     private final TextView mHeaderView;
     private final int mSubheaderHeight;
-    private Drawable mBottomShadow = null;
-    private Drawable mTopShadow = null;
+    private Drawable mBottomShadow;
+    private Drawable mTopShadow;
 
     public SubheaderItemDecoration(Context context, View headerView, int subheaderHeight) {
         mHeaderView = (TextView) headerView;
@@ -36,8 +36,9 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
 
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
+        final int left = parent.getPaddingLeft();
+        final int right = parent.getWidth() - parent.getPaddingRight();
+        for (int i = 0, childCount = parent.getChildCount(); i < childCount; i++) {
             View child = parent.getChildAt(i);
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
             LessonAdapter.ViewHolder holder = (LessonAdapter.ViewHolder) parent.getChildViewHolder(child);
@@ -46,39 +47,35 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
             }
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 if (holder.isLast()) {
-                    drawBottomShadow(c, parent, child, params);
+                    drawBottomShadow(c, child, left, right, params);
                 }
                 if (holder.isFirst()) {
-                    drawTopShadow(c, parent, child, params);
+                    drawTopShadow(c, child, left, right);
                 }
             }
         }
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        LessonAdapter.ViewHolder holder = (LessonAdapter.ViewHolder) parent.getChildViewHolder(view);
+    public void getItemOffsets(Rect outRect, View child, RecyclerView parent, RecyclerView.State state) {
+        LessonAdapter.ViewHolder holder = (LessonAdapter.ViewHolder) parent.getChildViewHolder(child);
         if (holder.isFirst()) {
             outRect.set(0, mSubheaderHeight, 0, 0);
         } else {
-            super.getItemOffsets(outRect, view, parent, state);
+            super.getItemOffsets(outRect, child, parent, state);
         }
     }
 
-    private void drawBottomShadow(Canvas c, RecyclerView parent, View child, RecyclerView.LayoutParams params) {
+    private void drawBottomShadow(Canvas c, View child, int left, int right, RecyclerView.LayoutParams params) {
         final int top = child.getBottom() + params.bottomMargin;
         final int bottom = top + mBottomShadow.getIntrinsicHeight();
-        final int left = parent.getPaddingLeft();
-        final int right = parent.getWidth() - parent.getPaddingRight();
         mBottomShadow.setBounds(left, top, right, bottom);
         mBottomShadow.draw(c);
     }
 
-    private void drawTopShadow(Canvas c, RecyclerView parent, View child, RecyclerView.LayoutParams params) {
+    private void drawTopShadow(Canvas c, View child, int left, int right) {
         final int top = child.getTop() - mTopShadow.getIntrinsicHeight();
         final int bottom = child.getTop();
-        final int left = parent.getPaddingLeft();
-        final int right = parent.getWidth() - parent.getPaddingRight();
         mTopShadow.setBounds(left, top, right, bottom);
         mTopShadow.draw(c);
     }
