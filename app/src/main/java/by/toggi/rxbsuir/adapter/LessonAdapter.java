@@ -18,7 +18,11 @@ import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.db.model.Lesson;
 
-public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> implements LessonViewType {
+public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> {
+
+    private static final int VIEW_TYPE_LESSON_ONE_LINE = 0;
+    private static final int VIEW_TYPE_LESSON_TWO_LINE = 1;
+    private static final int VIEW_TYPE_LESSON_THREE_LINE = 2;
 
     private final boolean mShowToday;
     private List<Lesson> mLessonList;
@@ -43,38 +47,26 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     public int getItemViewType(int position) {
         Lesson lesson = mLessonList.get(position);
 
-        if (position != 0 && lesson.getWeekday().equals(mLessonList.get(position - 1).getWeekday())) {
-            if (lesson.getPrettyAuditoryList().isEmpty()) {
-                return VIEW_TYPE_LESSON_ONE_LINE;
-            }
-            return lesson.getPrettyEmployeeList().isEmpty()
-                    ? VIEW_TYPE_LESSON_TWO_LINE
-                    : VIEW_TYPE_LESSON_THREE_LINE;
-        } else {
-            if (lesson.getPrettyAuditoryList().isEmpty()) {
-                return VIEW_TYPE_LESSON_ONE_LINE_WITH_WEEKDAY;
-            }
-            return lesson.getPrettyEmployeeList().isEmpty()
-                    ? VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY
-                    : VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY;
+        if (lesson.getPrettyAuditoryList().isEmpty()) {
+            return VIEW_TYPE_LESSON_ONE_LINE;
         }
+        return lesson.getPrettyEmployeeList().isEmpty()
+                ? VIEW_TYPE_LESSON_TWO_LINE
+                : VIEW_TYPE_LESSON_THREE_LINE;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view;
         switch (viewType) {
-            case VIEW_TYPE_LESSON_ONE_LINE_WITH_WEEKDAY:
             case VIEW_TYPE_LESSON_ONE_LINE:
                 view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.list_item_lesson_one_line, viewGroup, false);
                 break;
-            case VIEW_TYPE_LESSON_TWO_LINE_WITH_WEEKDAY:
             case VIEW_TYPE_LESSON_TWO_LINE:
                 view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.list_item_lesson_two_line, viewGroup, false);
                 break;
-            case VIEW_TYPE_LESSON_THREE_LINE_WITH_WEEKDAY:
             case VIEW_TYPE_LESSON_THREE_LINE:
                 view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.list_item_lesson_three_line, viewGroup, false);
@@ -108,6 +100,11 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         if (position < mLessonList.size() - 1) {
             viewHolder.setIsLast(!lesson.getWeekday().equals(mLessonList.get(position + 1).getWeekday()));
         }
+        if (position == 0) {
+            viewHolder.setIsFirst(true);
+        } else {
+            viewHolder.setIsFirst(!lesson.getWeekday().equals(mLessonList.get(position - 1).getWeekday()));
+        }
     }
 
     @Override
@@ -127,6 +124,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
 
         private String mWeekDay;
         private boolean mIsLast;
+        private boolean mIsFirst;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -147,6 +145,14 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
 
         public void setIsLast(boolean isLast) {
             mIsLast = isLast;
+        }
+
+        public boolean isFirst() {
+            return mIsFirst;
+        }
+
+        public void setIsFirst(boolean isFirst) {
+            mIsFirst = isFirst;
         }
     }
 
