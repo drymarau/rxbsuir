@@ -71,6 +71,7 @@ public class WeekFragment extends Fragment implements LessonListView {
         @Override
         public void onReceive(Context context, Intent intent) {
             Timber.d(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
+            mPresenter.setSubjectFilter(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
         }
     };
 

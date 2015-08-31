@@ -1,10 +1,14 @@
 package by.toggi.rxbsuir.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +32,7 @@ import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
+import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.TodayPresenter;
@@ -35,6 +40,7 @@ import by.toggi.rxbsuir.mvp.view.LessonListView;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class TodayFragment extends Fragment implements LessonListView {
 
@@ -50,6 +56,13 @@ public class TodayFragment extends Fragment implements LessonListView {
 
     private CompositeSubscription mCompositeSubscription;
     private LessonAdapter mAdapter;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Timber.d(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
+            mPresenter.setSearch(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
+        }
+    };
 
     /**
      * Instantiates a new {@code TodayFragment}.
@@ -140,6 +153,10 @@ public class TodayFragment extends Fragment implements LessonListView {
                 getSyncIdSubscription(),
                 getSubgroupFilterSubscription()
         );
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+                mBroadcastReceiver,
+                new IntentFilter(ScheduleActivity.ACTION_SEARCH_QUERY)
+        );
     }
 
     @Override
@@ -148,6 +165,8 @@ public class TodayFragment extends Fragment implements LessonListView {
         if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
             mCompositeSubscription.unsubscribe();
         }
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(mBroadcastReceiver);
     }
 
     private Subscription getSyncIdSubscription() {
@@ -162,6 +181,6 @@ public class TodayFragment extends Fragment implements LessonListView {
     private Subscription getSubgroupFilterSubscription() {
         return mSubgroupFilterPreference.asObservable()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(filter -> mPresenter.setSubgroupNumber(filter, mIsGroupSchedulePreference.get()));
+                .subscribe(mPresenter::setSubgroupNumber);
     }
 }

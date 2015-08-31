@@ -24,11 +24,11 @@ public class WeekPresenter extends Presenter<LessonListView> {
 
     private final StorIOSQLite mStorIOSQLite;
     private final int mWeekNumber;
-    private Observable<List<Lesson>> mScheduleObservable;
     private SubgroupFilter mSubgroupFilter = SubgroupFilter.BOTH;
     private String mSyncId;
     private boolean mIsGroupSchedule;
     private Subscription mSubscription;
+    private String mSubjectFilter = null;
 
     @Inject
     public WeekPresenter(StorIOSQLite storIOSQLite, int weekNumber) {
@@ -44,7 +44,7 @@ public class WeekPresenter extends Presenter<LessonListView> {
     public void setSyncId(@Nullable String syncId, Boolean isGroupSchedule) {
         mSyncId = syncId;
         mIsGroupSchedule = isGroupSchedule;
-        mScheduleObservable = getLessonListObservable(mSyncId, isGroupSchedule, mSubgroupFilter);
+        mSubjectFilter = null;
         onCreate();
     }
 
@@ -54,20 +54,31 @@ public class WeekPresenter extends Presenter<LessonListView> {
      * @param filter subgroup filter
      */
     public void setSubgroupNumber(SubgroupFilter filter) {
-        mScheduleObservable = getLessonListObservable(mSyncId, mIsGroupSchedule, filter);
+        mSubgroupFilter = filter;
+        onCreate();
+    }
+
+    /**
+     * Sets subject filter.
+     *
+     * @param subjectFilter the subject filter
+     */
+    public void setSubjectFilter(String subjectFilter) {
+        mSubjectFilter = subjectFilter;
         onCreate();
     }
 
     @Override
     public void onCreate() {
         Utils.unsubscribe(mSubscription);
-        mSubscription = mScheduleObservable.subscribe(lessons -> {
-            if (lessons.size() > 0) {
-                showLessonList(lessons);
-            } else {
-                if (isViewAttached()) getView().showEmptyState();
-            }
-        });
+        mSubscription = getLessonListObservable(mSubgroupFilter, mSubjectFilter)
+                .subscribe(lessons -> {
+                    if (lessons.size() > 0) {
+                        showLessonList(lessons);
+                    } else {
+                        if (isViewAttached()) getView().showEmptyState();
+                    }
+                });
     }
 
     @Override
@@ -81,20 +92,24 @@ public class WeekPresenter extends Presenter<LessonListView> {
         return this.getClass().getSimpleName() + "_" + mWeekNumber;
     }
 
-    private Observable<List<Lesson>> getLessonListObservable(@Nullable String syncId, boolean isGroupSchedule, SubgroupFilter filter) {
-        return syncId == null ? Observable.empty() : mStorIOSQLite.get()
+    private Observable<List<Lesson>> getLessonListObservable(LessonEntry.Query query) {
+        return query.getSyncId() == null ? Observable.empty() : mStorIOSQLite.get()
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
                         .table(LessonEntry.TABLE_NAME)
-                        .where(new LessonEntry.Query.Builder(mSyncId, isGroupSchedule)
-                                .weekNumber(mWeekNumber)
-                                .subgroupFilter(filter)
-                                .build()
-                                .toString())
+                        .where(query.toString())
                         .build())
                 .prepare()
                 .createObservable()
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private Observable<List<Lesson>> getLessonListObservable(SubgroupFilter filter, String subjectFilter) {
+        return getLessonListObservable(LessonEntry.Query.builder(mSyncId, mIsGroupSchedule)
+                .subgroupFilter(filter)
+                .search(subjectFilter)
+                .weekNumber(mWeekNumber)
+                .build());
     }
 
     private void showLessonList(List<Lesson> lessonList) {
