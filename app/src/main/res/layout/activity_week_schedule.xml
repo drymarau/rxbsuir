@@ -34,28 +34,16 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:foreground="@drawable/header_shadow"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <include layout="@layout/widget_view_pager"/>
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true"
-                android:paddingTop="@dimen/progress_bar_padding_top"
-                android:visibility="gone"/>
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"/>
-
-        </FrameLayout>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:paddingTop="@dimen/progress_bar_padding_top"
+            android:visibility="gone"/>
 
         <include layout="@layout/floating_action_menu"/>
 
