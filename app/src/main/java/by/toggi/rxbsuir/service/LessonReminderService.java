@@ -57,15 +57,16 @@ public class LessonReminderService extends IntentService {
         // Get lesson list for current day
         if (mFavoriteSyncIdPreference.get() != null) {
             DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
-            int weekNumber = Utils.getCurrentWeekNumber();
             Query query = Query.builder()
                     .table(LessonEntry.TABLE_NAME)
-                    .where(LessonEntry.getSyncIdTypeDayOfWeekWeekNumberAndSubgroupQuery(mSubgroupFilterPreference.get()))
-                    .whereArgs(
-                            mFavoriteSyncIdPreference.get(),
-                            mFavoriteIsGroupSchedule.get() ? 1 : 0,
-                            dayOfWeek.toString(),
-                            "%" + weekNumber + "%").build();
+                    .where(new LessonEntry.Query
+                            .Builder(mFavoriteSyncIdPreference.get(), mFavoriteIsGroupSchedule.get())
+                            .weekDay(dayOfWeek)
+                            .subgroupFilter(mSubgroupFilterPreference.get())
+                            .weekNumber(Utils.getCurrentWeekNumber())
+                            .build()
+                            .toString())
+                    .build();
             List<Lesson> lessonList = mStorIOSQLite.get()
                     .listOfObjects(Lesson.class)
                     .withQuery(query)
