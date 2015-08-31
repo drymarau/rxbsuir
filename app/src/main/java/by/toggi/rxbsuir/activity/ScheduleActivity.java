@@ -2,7 +2,6 @@ package by.toggi.rxbsuir.activity;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +17,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -65,12 +65,14 @@ import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
 
 public abstract class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
+
+    public static final String ACTION_SEARCH_QUERY = "by.toggi.rxbsuir.action.search_query";
+    public static final String EXTRA_SEARCH_QUERY = "by.toggi.rxbsuir.extra.search_query";
 
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
@@ -113,6 +115,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         }
     };
     private Subscription mSearchViewSubscription;
+    private LocalBroadcastManager mLocalBroadcastManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,24 +143,20 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         } else {
             showContent();
         }
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mCompositeSubscription = new CompositeSubscription();
-        mCompositeSubscription.add(
-                getTitlePreferenceSubscription()
-        );
+        mCompositeSubscription = new CompositeSubscription(getTitlePreferenceSubscription());
         registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
-            mCompositeSubscription.unsubscribe();
-        }
+        Utils.unsubscribeComposite(mCompositeSubscription);
         Utils.unsubscribe(mSearchViewSubscription);
         unregisterReceiver(mReceiver);
     }
@@ -242,9 +241,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule_activity, menu);
         MenuItem item = menu.findItem(R.id.action_search);
-        SearchManager manager = (SearchManager) getSystemService(SEARCH_SERVICE);
         SearchView searchView = (SearchView) item.getActionView();
-        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
         MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
@@ -265,7 +262,11 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         return RxSearchView.queryTextChanges(searchView)
                 .observeOn(AndroidSchedulers.mainThread())
                 .debounce(300, TimeUnit.MILLISECONDS)
-                .subscribe(charSequence -> Timber.d(charSequence.toString()));
+                .subscribe(charSequence -> {
+                    Intent queryIntent = new Intent(ACTION_SEARCH_QUERY);
+                    queryIntent.putExtra(EXTRA_SEARCH_QUERY, charSequence);
+                    mLocalBroadcastManager.sendBroadcast(queryIntent);
+                });
     }
 
     @Override
