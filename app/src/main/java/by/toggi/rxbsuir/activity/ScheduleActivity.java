@@ -245,28 +245,27 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                mSearchViewSubscription = getSearchViewSubscription(searchView);
+                mSearchViewSubscription = RxSearchView.queryTextChanges(searchView)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .debounce(500, TimeUnit.MILLISECONDS)
+                        .subscribe(charSequence -> {
+                            Intent queryIntent = new Intent(ACTION_SEARCH_QUERY);
+                            queryIntent.putExtra(EXTRA_SEARCH_QUERY, charSequence);
+                            mLocalBroadcastManager.sendBroadcast(queryIntent);
+                        });
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 Utils.unsubscribe(mSearchViewSubscription);
+                Intent queryIntent = new Intent(ACTION_SEARCH_QUERY);
+                queryIntent.putExtra(EXTRA_SEARCH_QUERY, "");
+                mLocalBroadcastManager.sendBroadcast(queryIntent);
                 return true;
             }
         });
         return true;
-    }
-
-    private Subscription getSearchViewSubscription(SearchView searchView) {
-        return RxSearchView.queryTextChanges(searchView)
-                .observeOn(AndroidSchedulers.mainThread())
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .subscribe(charSequence -> {
-                    Intent queryIntent = new Intent(ACTION_SEARCH_QUERY);
-                    queryIntent.putExtra(EXTRA_SEARCH_QUERY, charSequence);
-                    mLocalBroadcastManager.sendBroadcast(queryIntent);
-                });
     }
 
     @Override
