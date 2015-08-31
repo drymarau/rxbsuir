@@ -1,6 +1,9 @@
 package by.toggi.rxbsuir.db;
 
 import android.provider.BaseColumns;
+import android.support.annotation.Nullable;
+
+import org.threeten.bp.DayOfWeek;
 
 import by.toggi.rxbsuir.SubgroupFilter;
 
@@ -48,47 +51,84 @@ public class RxBsuirContract {
         public static final String COL_AUDITORY_LIST = "auditory_list";
         public static final String COL_IS_GROUP_SCHEDULE = "is_group_schedule";
 
-        /**
-         * Get sql query with syncId and schedule type.
-         *
-         * @return where query
-         */
-        public static String getSyncIdAndTypeQuery() {
-            return COL_SYNC_ID + " = ?" + " and " + COL_IS_GROUP_SCHEDULE + " = ?";
-        }
+        public static class Query {
 
-        /**
-         * Gets sync id type subgroup and week number query.
-         *
-         * @param filter subgroup filter
-         * @return the sync id type subgroup and week number query
-         */
-        public static String getSyncIdTypeSubgroupAndWeekNumberQuery(SubgroupFilter filter) {
-            return getSyncIdAndTypeQuery() + " and " + COL_WEEK_NUMBER_LIST + " like ?" + " and (" + filterBySubgroup(filter) + ")";
-        }
+            private String syncId;
+            private boolean isGroupSchedule;
+            private SubgroupFilter subgroupFilter;
+            private DayOfWeek weekDay;
+            private Integer weekNumber;
 
-        public static String getSyncIdTypeDayOfWeekWeekNumberAndSubgroupQuery(SubgroupFilter filter) {
-            return getSyncIdAndTypeQuery() + " and "
-                    + COL_WEEKDAY + " = ? and "
-                    + COL_WEEK_NUMBER_LIST + " like ?"
-                    + " and (" + filterBySubgroup(filter) + ")";
-        }
+            private Query(Builder builder) {
+                syncId = builder.syncId;
+                isGroupSchedule = builder.isGroupSchedule;
+                subgroupFilter = builder.subgroupFilter;
+                weekDay = builder.weekDay;
+                weekNumber = builder.weekNumber;
+            }
 
-        private static String filterBySubgroup(SubgroupFilter filter) {
-            String commonQuery = COL_NUM_SUBGROUP + " = 0";
-            String subgroup1Query = COL_NUM_SUBGROUP + " = 1";
-            String subgroup2Query = COL_NUM_SUBGROUP + " = 2";
-            switch (filter) {
-                case BOTH:
-                    return commonQuery + " or " + subgroup1Query + " or " + subgroup2Query;
-                case FIRST:
-                    return commonQuery + " or " + subgroup1Query;
-                case SECOND:
-                    return commonQuery + " or " + subgroup2Query;
-                case NONE:
-                    return commonQuery;
-                default:
-                    throw new IllegalArgumentException("Unknown subgroup filter: " + filter);
+            @Override
+            public String toString() {
+                String query = COL_SYNC_ID + " = '" + syncId + "' and " +
+                        COL_IS_GROUP_SCHEDULE + " = '" + (isGroupSchedule ? 1 : 0) + "'";
+                if (weekDay != null) {
+                    query += " and " + COL_WEEKDAY + " = '" + weekDay.toString() + "'";
+                }
+                if (weekNumber != null) {
+                    query += " and " + COL_WEEK_NUMBER_LIST + " like '%" + weekNumber + "%'";
+                }
+                if (subgroupFilter != null) {
+                    switch (subgroupFilter) {
+                        case BOTH:
+                            query += " and " + COL_NUM_SUBGROUP + " in ('0', '1', '2')";
+                            break;
+                        case FIRST:
+                            query += " and " + COL_NUM_SUBGROUP + " in ('0', '1')";
+                            break;
+                        case SECOND:
+                            query += " and " + COL_NUM_SUBGROUP + " in ('0', '2')";
+                            break;
+                        case NONE:
+                            query += " and " + COL_NUM_SUBGROUP + " = '0'";
+                            break;
+                    }
+                }
+                return query;
+            }
+
+            public static class Builder {
+                // Required parameters
+                private final String syncId;
+                private final boolean isGroupSchedule;
+                // Optional parameters
+                private SubgroupFilter subgroupFilter;
+                private DayOfWeek weekDay;
+                private Integer weekNumber;
+
+                public Builder(@Nullable String syncId, boolean isGroupSchedule) {
+                    this.syncId = syncId;
+                    this.isGroupSchedule = isGroupSchedule;
+                }
+
+                public Builder weekDay(DayOfWeek weekDay) {
+                    this.weekDay = weekDay;
+                    return this;
+                }
+
+                public Builder weekNumber(int weekNumber) {
+                    this.weekNumber = weekNumber;
+                    return this;
+                }
+
+                public Builder subgroupFilter(SubgroupFilter subgroupFilter) {
+                    this.subgroupFilter = subgroupFilter;
+                    return this;
+                }
+
+                public Query build() {
+                    return new Query(this);
+                }
+
             }
         }
 

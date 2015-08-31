@@ -80,12 +80,13 @@ public class TodayPresenter extends Presenter<LessonListView> {
                 .listOfObjects(Lesson.class)
                 .withQuery(Query.builder()
                         .table(LessonEntry.TABLE_NAME)
-                        .where(LessonEntry.getSyncIdTypeDayOfWeekWeekNumberAndSubgroupQuery(filter))
-                        .whereArgs(
-                                syncId,
-                                isGroupSchedule ? 1 : 0,
-                                LocalDate.now().getDayOfWeek().toString(),
-                                "%" + Utils.getCurrentWeekNumber() + "%")
+                        .where(new LessonEntry.Query
+                                .Builder(syncId, isGroupSchedule)
+                                .weekDay(LocalDate.now().getDayOfWeek())
+                                .subgroupFilter(filter)
+                                .weekNumber(Utils.getCurrentWeekNumber())
+                                .build()
+                                .toString())
                         .build())
                 .prepare()
                 .createObservable()
