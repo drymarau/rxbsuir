@@ -33,6 +33,7 @@
     <string name="action_filter_second">Second only</string>
     <string name="action_filter_none">Hide both</string>
     <string name="action_favorite">Favorite</string>
+    <string name="action_search">Search</string>
 
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Groups</string>
