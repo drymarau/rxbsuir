@@ -17,9 +17,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -30,10 +33,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.f2prateek.rx.preferences.Preference;
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 
 import org.threeten.bp.LocalTime;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -65,6 +70,9 @@ import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
 
 public abstract class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
+
+    public static final String ACTION_SEARCH_QUERY = "by.toggi.rxbsuir.action.search_query";
+    public static final String EXTRA_SEARCH_QUERY = "by.toggi.rxbsuir.extra.search_query";
 
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
@@ -106,6 +114,8 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
             ScheduleActivity.this.invalidateOptionsMenu();
         }
     };
+    private Subscription mSearchViewSubscription;
+    private LocalBroadcastManager mLocalBroadcastManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,24 +143,21 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         } else {
             showContent();
         }
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mCompositeSubscription = new CompositeSubscription();
-        mCompositeSubscription.add(
-                getTitlePreferenceSubscription()
-        );
+        mCompositeSubscription = new CompositeSubscription(getTitlePreferenceSubscription());
         registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
-            mCompositeSubscription.unsubscribe();
-        }
+        Utils.unsubscribeComposite(mCompositeSubscription);
+        Utils.unsubscribe(mSearchViewSubscription);
         unregisterReceiver(mReceiver);
     }
 
@@ -233,6 +240,31 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule_activity, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) item.getActionView();
+        MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                mSearchViewSubscription = RxSearchView.queryTextChanges(searchView)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .debounce(500, TimeUnit.MILLISECONDS)
+                        .subscribe(charSequence -> {
+                            Intent queryIntent = new Intent(ACTION_SEARCH_QUERY);
+                            queryIntent.putExtra(EXTRA_SEARCH_QUERY, charSequence);
+                            mLocalBroadcastManager.sendBroadcast(queryIntent);
+                        });
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Utils.unsubscribe(mSearchViewSubscription);
+                Intent queryIntent = new Intent(ACTION_SEARCH_QUERY);
+                queryIntent.putExtra(EXTRA_SEARCH_QUERY, "");
+                mLocalBroadcastManager.sendBroadcast(queryIntent);
+                return true;
+            }
+        });
         return true;
     }
 

@@ -28,6 +28,7 @@
     <string name="action_filter_second">Только вторая</string>
     <string name="action_filter_none">Скрыть</string>
     <string name="action_favorite">Избранное</string>
+    <string name="action_search">Поиск</string>
 
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Группы</string>

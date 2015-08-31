@@ -26,6 +26,7 @@ import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import by.toggi.rxbsuir.receiver.AlarmReceiver;
 import by.toggi.rxbsuir.receiver.BootReceiver;
 import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Utils class with all RxBsuir goodies.
@@ -156,6 +157,17 @@ public class Utils {
     public static void unsubscribe(Subscription subscription) {
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
+        }
+    }
+
+    /**
+     * RxJava composite subscription unsubscribe helper.
+     *
+     * @param compositeSubscription {@link CompositeSubscription}
+     */
+    public static void unsubscribeComposite(CompositeSubscription compositeSubscription) {
+        if (compositeSubscription != null && !compositeSubscription.isUnsubscribed() && compositeSubscription.hasSubscriptions()) {
+            compositeSubscription.unsubscribe();
         }
     }
 
