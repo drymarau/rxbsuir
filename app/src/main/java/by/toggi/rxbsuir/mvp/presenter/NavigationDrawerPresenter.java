@@ -5,6 +5,7 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.List;
 
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.rest.model.Employee;
@@ -40,9 +41,7 @@ public class NavigationDrawerPresenter extends Presenter<NavigationDrawerView> {
 
     @Override
     public void onDestroy() {
-        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions() && !mCompositeSubscription.isUnsubscribed()) {
-            mCompositeSubscription.unsubscribe();
-        }
+        Utils.unsubscribeComposite(mCompositeSubscription);
         detachView();
     }
 
