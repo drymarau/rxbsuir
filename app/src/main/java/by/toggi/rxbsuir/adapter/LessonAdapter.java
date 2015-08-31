@@ -99,6 +99,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
                 : lesson.getPrettyWeekday());
         if (position < mLessonList.size() - 1) {
             viewHolder.setIsLast(!lesson.getWeekday().equals(mLessonList.get(position + 1).getWeekday()));
+        } else if (position == mLessonList.size() - 1) {
+            viewHolder.setIsLast(true);
         }
         if (position == 0) {
             viewHolder.setIsFirst(true);
