@@ -58,6 +58,7 @@ public class RxBsuirContract {
             private SubgroupFilter subgroupFilter;
             private DayOfWeek weekDay;
             private Integer weekNumber;
+            private String search;
 
             private Query(Builder builder) {
                 syncId = builder.syncId;
@@ -65,12 +66,24 @@ public class RxBsuirContract {
                 subgroupFilter = builder.subgroupFilter;
                 weekDay = builder.weekDay;
                 weekNumber = builder.weekNumber;
+                search = builder.search;
+            }
+
+            public static Builder builder(@Nullable String syncId, boolean isGroupSchedule) {
+                return new Builder(syncId, isGroupSchedule);
+            }
+
+            public String getSyncId() {
+                return syncId;
             }
 
             @Override
             public String toString() {
                 String query = COL_SYNC_ID + " = '" + syncId + "' and " +
                         COL_IS_GROUP_SCHEDULE + " = '" + (isGroupSchedule ? 1 : 0) + "'";
+                if (search != null) {
+                    query += " and (" + COL_SUBJECT + " || " + COL_EMPLOYEE_LIST + " || " + COL_STUDENT_GROUP_LIST + ") like '%" + search + "%'";
+                }
                 if (weekDay != null) {
                     query += " and " + COL_WEEKDAY + " = '" + weekDay.toString() + "'";
                 }
@@ -104,8 +117,9 @@ public class RxBsuirContract {
                 private SubgroupFilter subgroupFilter;
                 private DayOfWeek weekDay;
                 private Integer weekNumber;
+                private String search;
 
-                public Builder(@Nullable String syncId, boolean isGroupSchedule) {
+                private Builder(@Nullable String syncId, boolean isGroupSchedule) {
                     this.syncId = syncId;
                     this.isGroupSchedule = isGroupSchedule;
                 }
@@ -122,6 +136,11 @@ public class RxBsuirContract {
 
                 public Builder subgroupFilter(SubgroupFilter subgroupFilter) {
                     this.subgroupFilter = subgroupFilter;
+                    return this;
+                }
+
+                public Builder search(String search) {
+                    this.search = search;
                     return this;
                 }
 

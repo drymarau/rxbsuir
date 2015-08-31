@@ -59,8 +59,7 @@ public class LessonReminderService extends IntentService {
             DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
             Query query = Query.builder()
                     .table(LessonEntry.TABLE_NAME)
-                    .where(new LessonEntry.Query
-                            .Builder(mFavoriteSyncIdPreference.get(), mFavoriteIsGroupSchedule.get())
+                    .where(LessonEntry.Query.builder(mFavoriteSyncIdPreference.get(), mFavoriteIsGroupSchedule.get())
                             .weekDay(dayOfWeek)
                             .subgroupFilter(mSubgroupFilterPreference.get())
                             .weekNumber(Utils.getCurrentWeekNumber())
