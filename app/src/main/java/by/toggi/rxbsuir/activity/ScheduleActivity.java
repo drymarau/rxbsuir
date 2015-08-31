@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.activity;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +19,10 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -30,10 +33,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.f2prateek.rx.preferences.Preference;
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 
 import org.threeten.bp.LocalTime;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -60,6 +65,7 @@ import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
@@ -106,6 +112,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
             ScheduleActivity.this.invalidateOptionsMenu();
         }
     };
+    private Subscription mSearchViewSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +158,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
             mCompositeSubscription.unsubscribe();
         }
+        Utils.unsubscribe(mSearchViewSubscription);
         unregisterReceiver(mReceiver);
     }
 
@@ -233,7 +241,31 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule_activity, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchManager manager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+        MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                mSearchViewSubscription = getSearchViewSubscription(searchView);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Utils.unsubscribe(mSearchViewSubscription);
+                return true;
+            }
+        });
         return true;
+    }
+
+    private Subscription getSearchViewSubscription(SearchView searchView) {
+        return RxSearchView.queryTextChanges(searchView)
+                .observeOn(AndroidSchedulers.mainThread())
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .subscribe(charSequence -> Timber.d(charSequence.toString()));
     }
 
     @Override
