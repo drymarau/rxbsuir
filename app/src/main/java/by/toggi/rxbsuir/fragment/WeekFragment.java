@@ -197,11 +197,10 @@ public class WeekFragment extends Fragment implements LessonListView {
                 getSyncIdSubscription(),
                 getSubgroupFilterSubscription()
         );
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(
-                        mBroadcastReceiver,
-                        new IntentFilter(ScheduleActivity.ACTION_SEARCH_QUERY)
-                );
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+                mBroadcastReceiver,
+                new IntentFilter(ScheduleActivity.ACTION_SEARCH_QUERY)
+        );
     }
 
     @Override
@@ -224,6 +223,6 @@ public class WeekFragment extends Fragment implements LessonListView {
     private Subscription getSubgroupFilterSubscription() {
         return mSubgroupFilterPreference.asObservable()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(filter -> mPresenter.setSubgroupNumber(filter, mIsGroupSchedulePreference.get()));
+                .subscribe(mPresenter::setSubgroupNumber);
     }
 }

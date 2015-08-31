@@ -27,6 +27,7 @@ public class WeekPresenter extends Presenter<LessonListView> {
     private Observable<List<Lesson>> mScheduleObservable;
     private SubgroupFilter mSubgroupFilter = SubgroupFilter.BOTH;
     private String mSyncId;
+    private boolean mIsGroupSchedule;
     private Subscription mSubscription;
 
     @Inject
@@ -42,6 +43,7 @@ public class WeekPresenter extends Presenter<LessonListView> {
      */
     public void setSyncId(@Nullable String syncId, Boolean isGroupSchedule) {
         mSyncId = syncId;
+        mIsGroupSchedule = isGroupSchedule;
         mScheduleObservable = getLessonListObservable(mSyncId, isGroupSchedule, mSubgroupFilter);
         onCreate();
     }
@@ -49,11 +51,10 @@ public class WeekPresenter extends Presenter<LessonListView> {
     /**
      * Sets subgroup number.
      *
-     * @param filter          subgroup filter
-     * @param isGroupSchedule is group schedule
+     * @param filter subgroup filter
      */
-    public void setSubgroupNumber(SubgroupFilter filter, Boolean isGroupSchedule) {
-        mScheduleObservable = getLessonListObservable(mSyncId, isGroupSchedule, filter);
+    public void setSubgroupNumber(SubgroupFilter filter) {
+        mScheduleObservable = getLessonListObservable(mSyncId, mIsGroupSchedule, filter);
         onCreate();
     }
 
