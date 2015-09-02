@@ -82,6 +82,9 @@ dependencies {
     compile 'io.reactivex:rxjava:1.0.14'
     compile 'io.reactivex:rxandroid:1.0.1'
 
+    compile 'com.trello:rxlifecycle:0.2.0'
+    compile 'com.trello:rxlifecycle-components:0.2.0'
+
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.0'
 
     compile 'com.afollestad:material-dialogs:0.7.8.0'
