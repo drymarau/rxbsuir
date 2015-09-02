@@ -178,7 +178,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                 .listOfObjects(StudentGroup.class)
                 .withQuery(Query.builder()
                         .table(StudentGroupEntry.TABLE_NAME)
-                        .where(StudentGroupEntry.COL_NAME + " = ?")
+                        .where(StudentGroupEntry.COL_ID + " = ?")
                         .whereArgs(mSyncId)
                         .build())
                 .prepare()
