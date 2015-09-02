@@ -11,7 +11,7 @@ import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 public class RxBsuirOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "rxbsuir.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public RxBsuirOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -69,5 +69,26 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        int upgradeTo = oldVersion + 1;
+        while (upgradeTo <= newVersion) {
+            switch (upgradeTo) {
+                case 3:
+                    db.execSQL(getSwitchSyncIdQuery());
+                    break;
+            }
+            upgradeTo++;
+        }
+    }
+
+    private static String getSwitchSyncIdQuery() {
+        return "update " +
+                LessonEntry.TABLE_NAME + " set " +
+                LessonEntry.COL_SYNC_ID + " = ifnull((select " +
+                StudentGroupEntry.COL_ID + " from " +
+                StudentGroupEntry.TABLE_NAME + " where " +
+                LessonEntry.TABLE_NAME + "." + LessonEntry.COL_SYNC_ID + " = " +
+                StudentGroupEntry.COL_NAME + "), " +
+                LessonEntry.TABLE_NAME + "." + LessonEntry.COL_SYNC_ID + ") where " +
+                LessonEntry.COL_IS_GROUP_SCHEDULE + " = 1";
     }
 }
