@@ -41,7 +41,15 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".receiver.MyPackageReplacedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+            </intent-filter>
+        </receiver>
+
         <service android:name=".service.LessonReminderService"/>
+
+        <service android:name=".service.ReplaceSyncIdService"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

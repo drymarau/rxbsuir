@@ -21,6 +21,7 @@ import by.toggi.rxbsuir.module.BsuirServiceModule;
 import by.toggi.rxbsuir.module.DbModule;
 import by.toggi.rxbsuir.module.PreferencesModule;
 import by.toggi.rxbsuir.service.LessonReminderService;
+import by.toggi.rxbsuir.service.ReplaceSyncIdService;
 import dagger.Component;
 
 @Singleton
@@ -57,5 +58,7 @@ public interface AppComponent {
     void inject(TodayFragment todayFragment);
 
     void inject(WeekScheduleActivity weekScheduleActivity);
+
+    void inject(ReplaceSyncIdService replaceSyncIdService);
 
 }
