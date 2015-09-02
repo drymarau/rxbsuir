@@ -21,7 +21,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -34,6 +33,7 @@ import android.widget.RelativeLayout;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import org.threeten.bp.LocalTime;
 
@@ -64,12 +64,11 @@ import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
 
-public abstract class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
+public abstract class ScheduleActivity extends RxAppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 
     public static final String ACTION_SEARCH_QUERY = "by.toggi.rxbsuir.action.search_query";
     public static final String EXTRA_SEARCH_QUERY = "by.toggi.rxbsuir.extra.search_query";
@@ -107,7 +106,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject @Named(PreferenceHelper.FAVORITE_TITLE) Preference<String> mFavoriteTitlePreference;
     @Inject Preference<LocalTime> mLocalTimePreference;
 
-    private CompositeSubscription mCompositeSubscription;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -149,14 +147,13 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     protected void onResume() {
         super.onResume();
-        mCompositeSubscription = new CompositeSubscription(getTitlePreferenceSubscription());
+        getTitlePreferenceSubscription();
         registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Utils.unsubscribeComposite(mCompositeSubscription);
         Utils.unsubscribe(mSearchViewSubscription);
         unregisterReceiver(mReceiver);
     }
@@ -499,6 +496,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                         return TextUtils.join(" ", strings);
                     }
                 })
+                .compose(bindToLifecycle())
                 .subscribe(this::setTitle);
     }
 }
