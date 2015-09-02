@@ -426,7 +426,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     private void selectGroupOrEmployee(int id, String s, boolean isGroupSchedule) {
         mItemIdPreference.set(id);
-        mSyncIdPreference.set(isGroupSchedule ? s : String.valueOf(id));
+        mSyncIdPreference.set(String.valueOf(id));
         mIsGroupSchedulePreference.set(isGroupSchedule);
         mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
         mTitlePreference.set(s);
