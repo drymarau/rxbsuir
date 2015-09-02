@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
@@ -44,6 +45,10 @@ public class ReplaceSyncIdService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         changeSyncId(mSyncIdPreference, mIsGroupSchedulePreference);
         changeSyncId(mFavoriteSyncIdPreference, mFavoriteIsGroupSchedulePreference);
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .edit()
+                .putBoolean(PreferenceHelper.IS_SURPRISE_API_FIX_APPLIED, true)
+                .apply();
     }
 
     private void changeSyncId(Preference<String> syncIdPreference, Preference<Boolean> isGroupSchedulePreference) {
