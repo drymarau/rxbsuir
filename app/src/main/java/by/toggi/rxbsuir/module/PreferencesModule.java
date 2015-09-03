@@ -36,6 +36,12 @@ public class PreferencesModule {
 
     @Provides
     @Singleton
+    SubgroupFilter provideSubgroupFilter(Preference<SubgroupFilter> preference) {
+        return preference.get();
+    }
+
+    @Provides
+    @Singleton
     RxSharedPreferences provideRxSharedPreferences(SharedPreferences preferences) {
         return RxSharedPreferences.create(preferences);
     }
