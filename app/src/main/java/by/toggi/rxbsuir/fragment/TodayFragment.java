@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
-import com.trello.rxlifecycle.components.support.RxFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.TodayPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
 
-public class TodayFragment extends RxFragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener {
+public class TodayFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
     @Bind(R.id.empty_state) TextView mEmptyState;
