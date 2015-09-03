@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import by.toggi.rxbsuir.fragment.TodayFragment;
-import by.toggi.rxbsuir.fragment.WeekFragment;
+import by.toggi.rxbsuir.fragment.LessonListFragment;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
 
 public class LessonListPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -20,14 +20,34 @@ public class LessonListPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         if (getCount() == 4) {
             // Only weeks are shown
-            return WeekFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    return LessonListFragment.newInstance(LessonListPresenter.Type.WEEK_ONE);
+                case 1:
+                    return LessonListFragment.newInstance(LessonListPresenter.Type.WEEK_TWO);
+                case 2:
+                    return LessonListFragment.newInstance(LessonListPresenter.Type.WEEK_THREE);
+                case 3:
+                    return LessonListFragment.newInstance(LessonListPresenter.Type.WEEK_FOUR);
+            }
         } else {
-            if (position == 0) {
-                // Today tab and weeks are shown
-                return TodayFragment.newInstance();
+            // Today tab and weeks are shown
+            switch (position) {
+                case 0:
+                    return LessonListFragment.newInstance(LessonListPresenter.Type.TODAY);
+                case 1:
+                    return LessonListFragment.newInstance(LessonListPresenter.Type.TOMORROW);
+                case 2:
+                    return LessonListFragment.newInstance(LessonListPresenter.Type.WEEK_ONE);
+                case 3:
+                    return LessonListFragment.newInstance(LessonListPresenter.Type.WEEK_TWO);
+                case 4:
+                    return LessonListFragment.newInstance(LessonListPresenter.Type.WEEK_THREE);
+                case 5:
+                    return LessonListFragment.newInstance(LessonListPresenter.Type.WEEK_FOUR);
             }
         }
-        return WeekFragment.newInstance(position);
+        return null;
     }
 
     @Override
