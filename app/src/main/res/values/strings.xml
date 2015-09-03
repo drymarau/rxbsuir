@@ -55,6 +55,7 @@
 
     <array name="tabs_with_today">
         <item>Today</item>
+        <item>Tomorrow</item>
         <item>Week 1</item>
         <item>Week 2</item>
         <item>Week 3</item>
@@ -81,15 +82,16 @@
     <string name="summary_notification_sound_disabled">Notification sound is disabled</string>
     <string name="summary_notification_sound_enabled">Notification sound is enabled</string>
     <string name="title_notification_sound">Enable notification sound</string>
-    <string name="summary_is_today_enabled_disabled">Today tab is disabled</string>
-    <string name="summary_is_today_enabled_enabled">Today tab is enabled</string>
-    <string name="title_is_today_enabled">Today tab</string>
+    <string name="summary_is_today_enabled_disabled">Today and tomorrow tabs are disabled</string>
+    <string name="summary_is_today_enabled_enabled">Today and tomorrow tabs are enabled</string>
+    <string name="title_is_today_enabled">Today and tomorrow tabs</string>
 
     <!-- Title format portrait (Awesome C.T.)-->
     <string name="title_format" translatable="false">%s %.1s.%.1s.</string>
 
     <!-- FRAGMENTS -->
     <string name="empty_state_today">There are no lessons today.\nHave fun!</string>
+    <string name="empty_state_tomorrow">There are no lessons tomorrow.\nHave fun!</string>
     <string name="empty_state_week">There are no lessons this week</string>
 
 </resources>
