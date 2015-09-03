@@ -1,4 +1,4 @@
-package by.toggi.rxbsuir.component;
+package by.toggi.rxbsuir.dagger.component;
 
 import android.content.SharedPreferences;
 
@@ -13,13 +13,13 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
+import by.toggi.rxbsuir.dagger.module.AppModule;
+import by.toggi.rxbsuir.dagger.module.BsuirServiceModule;
+import by.toggi.rxbsuir.dagger.module.DbModule;
+import by.toggi.rxbsuir.dagger.module.PreferencesModule;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.SettingsFragment;
-import by.toggi.rxbsuir.module.AppModule;
-import by.toggi.rxbsuir.module.BsuirServiceModule;
-import by.toggi.rxbsuir.module.DbModule;
-import by.toggi.rxbsuir.module.PreferencesModule;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.service.LessonReminderService;
 import by.toggi.rxbsuir.service.ReplaceSyncIdService;

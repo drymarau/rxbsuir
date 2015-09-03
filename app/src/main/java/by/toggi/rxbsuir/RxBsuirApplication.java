@@ -5,10 +5,10 @@ import android.app.Application;
 import com.crashlytics.android.Crashlytics;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
-import by.toggi.rxbsuir.component.AppComponent;
-import by.toggi.rxbsuir.component.DaggerAppComponent;
-import by.toggi.rxbsuir.module.AppModule;
-import by.toggi.rxbsuir.module.BsuirServiceModule;
+import by.toggi.rxbsuir.dagger.component.AppComponent;
+import by.toggi.rxbsuir.dagger.component.DaggerAppComponent;
+import by.toggi.rxbsuir.dagger.module.AppModule;
+import by.toggi.rxbsuir.dagger.module.BsuirServiceModule;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
