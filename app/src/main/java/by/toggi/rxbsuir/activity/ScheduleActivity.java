@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
@@ -95,6 +96,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
 
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
+    @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
@@ -421,12 +423,14 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
         return true;
     }
 
-    private void selectGroupOrEmployee(int id, String s, boolean isGroupSchedule) {
+    private void selectGroupOrEmployee(int id, String title, boolean isGroupSchedule) {
         mItemIdPreference.set(id);
-        mSyncIdPreference.set(String.valueOf(id));
-        mIsGroupSchedulePreference.set(isGroupSchedule);
-        mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
-        mTitlePreference.set(s);
+        mSharedPreferences.edit()
+                .putString(PreferenceHelper.SYNC_ID, String.valueOf(id))
+                .putBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, isGroupSchedule)
+                .apply();
+        mSchedulePresenter.setSyncId(String.valueOf(id), isGroupSchedule);
+        mTitlePreference.set(title);
         supportInvalidateOptionsMenu();
     }
 
