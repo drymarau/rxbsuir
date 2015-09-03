@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
@@ -38,51 +37,46 @@ import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.component.DaggerWeekFragmentComponent;
 import by.toggi.rxbsuir.db.model.Lesson;
-import by.toggi.rxbsuir.module.WeekFragmentModule;
-import by.toggi.rxbsuir.mvp.presenter.WeekPresenter;
+import by.toggi.rxbsuir.module.LessonListFragmentModule;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
 
-public class WeekFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener {
+public class LessonListFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String TAG_STORAGE_FRAGMENT = "storage_fragment";
     public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
-    private static final String ARGS_WEEK_NUMBER = "week_number";
+    private static final String ARGS_VIEW_TYPE = "week_number";
 
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
     @Bind(R.id.empty_state) TextView mEmptyState;
 
-    @BindString(R.string.empty_state_week) String mEmptyStateText;
-
-    @Inject WeekPresenter mPresenter;
+    @Inject LessonListPresenter mPresenter;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
     @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
     @Inject SharedPreferences mSharedPreferences;
 
     private Parcelable mLayoutManagerState;
-    private int mWeekNumber;
+    private LessonListPresenter.Type mType;
     private LinearLayoutManager mLayoutManager;
     private LessonAdapter mAdapter;
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mPresenter.setSubjectFilter(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
+            mPresenter.setSearchQuery(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
         }
     };
 
     /**
      * Instantiates a new {@code WeekFragment}.
      *
-     * @param weekNumber the week number
+     * @param type view type of the presenter
      * @return the week fragment
      */
-    public static WeekFragment newInstance(int weekNumber) {
-        if (weekNumber < 1 || weekNumber > 4) {
-            throw new IllegalArgumentException("WeekFragment can only accept weekNumber from 1 to 4. Supplied weekNumber: " + weekNumber);
-        }
+    public static LessonListFragment newInstance(LessonListPresenter.Type type) {
         Bundle args = new Bundle();
-        args.putInt(ARGS_WEEK_NUMBER, weekNumber);
-        WeekFragment fragment = new WeekFragment();
+        args.putSerializable(ARGS_VIEW_TYPE, type);
+        LessonListFragment fragment = new LessonListFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -92,12 +86,12 @@ public class WeekFragment extends Fragment implements LessonListView, SharedPref
         super.onAttach(context);
         Bundle args = getArguments();
         if (args != null) {
-            mWeekNumber = args.getInt(ARGS_WEEK_NUMBER);
+            mType = (LessonListPresenter.Type) args.getSerializable(ARGS_VIEW_TYPE);
         }
 
         DaggerWeekFragmentComponent.builder()
                 .appComponent(((RxBsuirApplication) getActivity().getApplication()).getAppComponent())
-                .weekFragmentModule(new WeekFragmentModule(mWeekNumber))
+                .lessonListFragmentModule(new LessonListFragmentModule(mType))
                 .build().inject(this);
     }
 
@@ -123,19 +117,29 @@ public class WeekFragment extends Fragment implements LessonListView, SharedPref
             fragment.setPresenter(mPresenter.getTag(), mPresenter);
         } else {
             try {
-                mPresenter = (WeekPresenter) fragment.getPresenter(mPresenter.getTag());
+                mPresenter = (LessonListPresenter) fragment.getPresenter(mPresenter.getTag());
             } catch (ClassCastException e) {
                 throw new ClassCastException("Presenter must be of class WeekPresenter");
             }
         }
 
-        mEmptyState.setText(mEmptyStateText);
+        switch (mType) {
+            case TODAY:
+                mEmptyState.setText(R.string.empty_state_today);
+                break;
+            case TOMORROW:
+                mEmptyState.setText(R.string.empty_state_tomorrow);
+                break;
+            default:
+                mEmptyState.setText(R.string.empty_state_week);
+                break;
+        }
 
         mPresenter.attachView(this);
         mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new LessonAdapter(new ArrayList<>(), false);
+        mAdapter = new LessonAdapter(new ArrayList<>(), mType);
 
         mRecyclerView.setVisibility(View.GONE);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -212,7 +216,7 @@ public class WeekFragment extends Fragment implements LessonListView, SharedPref
                 mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
                 break;
             case PreferenceHelper.SUBGROUP_FILTER:
-                mPresenter.setSubgroupNumber(mSubgroupFilterPreference.get());
+                mPresenter.setSubgroupFilter(mSubgroupFilterPreference.get());
                 break;
         }
     }
