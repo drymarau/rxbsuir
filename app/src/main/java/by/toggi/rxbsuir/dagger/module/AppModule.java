@@ -1,4 +1,4 @@
-package by.toggi.rxbsuir.module;
+package by.toggi.rxbsuir.dagger.module;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 

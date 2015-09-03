@@ -1,8 +1,8 @@
-package by.toggi.rxbsuir.component;
+package by.toggi.rxbsuir.dagger.component;
 
 import by.toggi.rxbsuir.Fragment;
+import by.toggi.rxbsuir.dagger.module.LessonListFragmentModule;
 import by.toggi.rxbsuir.fragment.LessonListFragment;
-import by.toggi.rxbsuir.module.LessonListFragmentModule;
 import dagger.Component;
 
 @Fragment
