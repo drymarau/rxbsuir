@@ -29,6 +29,8 @@
     <string name="action_filter_none">Скрыть</string>
     <string name="action_favorite">Избранное</string>
     <string name="action_search">Поиск</string>
+    <string name="action_share">Отправить</string>
+    <string name="action_share_intent">Отправить с помощью…</string>
 
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Группы</string>

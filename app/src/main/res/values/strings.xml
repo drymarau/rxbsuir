@@ -34,6 +34,8 @@
     <string name="action_filter_none">Hide both</string>
     <string name="action_favorite">Favorite</string>
     <string name="action_search">Search</string>
+    <string name="action_share">Share</string>
+    <string name="action_share_intent">Share via…</string>
 
     <!-- NAVIGATION VIEW -->
     <string name="navigation_view_groups">Groups</string>
