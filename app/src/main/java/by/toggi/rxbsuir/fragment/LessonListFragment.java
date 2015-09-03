@@ -43,7 +43,6 @@ import by.toggi.rxbsuir.mvp.view.LessonListView;
 
 public class LessonListFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public static final String TAG_STORAGE_FRAGMENT = "storage_fragment";
     public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
     private static final String ARGS_VIEW_TYPE = "week_number";
 
@@ -108,7 +107,7 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
         super.onViewCreated(view, savedInstanceState);
 
         FragmentManager manager = getFragmentManager();
-        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(TAG_STORAGE_FRAGMENT);
+        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(ScheduleActivity.TAG_STORAGE_FRAGMENT);
 
         if (fragment == null) {
             throw new IllegalStateException("Storage fragment should already be added");
