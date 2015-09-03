@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
@@ -21,7 +22,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -34,6 +34,7 @@ import android.widget.RelativeLayout;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import org.threeten.bp.LocalTime;
 
@@ -64,12 +65,11 @@ import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
 
-public abstract class ScheduleActivity extends AppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
+public abstract class ScheduleActivity extends RxAppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 
     public static final String ACTION_SEARCH_QUERY = "by.toggi.rxbsuir.action.search_query";
     public static final String EXTRA_SEARCH_QUERY = "by.toggi.rxbsuir.extra.search_query";
@@ -96,6 +96,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
+    @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
@@ -107,7 +108,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Inject @Named(PreferenceHelper.FAVORITE_TITLE) Preference<String> mFavoriteTitlePreference;
     @Inject Preference<LocalTime> mLocalTimePreference;
 
-    private CompositeSubscription mCompositeSubscription;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -149,14 +149,25 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
     @Override
     protected void onResume() {
         super.onResume();
-        mCompositeSubscription = new CompositeSubscription(getTitlePreferenceSubscription());
+        mTitlePreference.asObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(s -> TextUtils.split(s, " "))
+                .map(strings -> {
+                    if (strings.length == 3) {
+                        return String.format(mTitleFormat, strings);
+                    } else {
+                        return TextUtils.join(" ", strings);
+                    }
+                })
+                .compose(bindToLifecycle())
+                .subscribe(this::setTitle);
+
         registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Utils.unsubscribeComposite(mCompositeSubscription);
         Utils.unsubscribe(mSearchViewSubscription);
         unregisterReceiver(mReceiver);
     }
@@ -339,7 +350,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.setGroupVisible(R.id.group_items, isMenuItemEnabled());
+        menu.setGroupVisible(R.id.group_items, mSyncIdPreference.get() != null);
         MenuItem favoriteItem = menu.findItem(R.id.action_favorite);
         if (mSyncIdPreference.get() != null && mSyncIdPreference.get().equals(mFavoriteSyncIdPreference.get())) {
             favoriteItem.setChecked(true).setIcon(R.drawable.ic_action_favorite_on);
@@ -424,12 +435,14 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
         return true;
     }
 
-    private void selectGroupOrEmployee(int id, String s, boolean isGroupSchedule) {
+    private void selectGroupOrEmployee(int id, String title, boolean isGroupSchedule) {
         mItemIdPreference.set(id);
-        mSyncIdPreference.set(String.valueOf(id));
-        mIsGroupSchedulePreference.set(isGroupSchedule);
-        mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
-        mTitlePreference.set(s);
+        mSharedPreferences.edit()
+                .putString(PreferenceHelper.SYNC_ID, String.valueOf(id))
+                .putBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, isGroupSchedule)
+                .apply();
+        mSchedulePresenter.setSyncId(String.valueOf(id), isGroupSchedule);
+        mTitlePreference.set(title);
         supportInvalidateOptionsMenu();
     }
 
@@ -441,10 +454,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
             mToolbar.setNavigationIcon(R.drawable.ic_action_navigation_menu);
         }
         mNavigationView.setNavigationItemSelectedListener(this);
-    }
-
-    private boolean isMenuItemEnabled() {
-        return mSyncIdPreference.get() != null;
     }
 
     private void addStorageFragment() {
@@ -486,19 +495,5 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Sche
                 PropertyValuesHolder.ofInt("alpha", 0)
         ).setDuration(200).start();
         mFloatingActionMenu.setClickable(false);
-    }
-
-    private Subscription getTitlePreferenceSubscription() {
-        return mTitlePreference.asObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(s -> TextUtils.split(s, " "))
-                .map(strings -> {
-                    if (strings.length == 3) {
-                        return String.format(mTitleFormat, strings);
-                    } else {
-                        return TextUtils.join(" ", strings);
-                    }
-                })
-                .subscribe(this::setTitle);
     }
 }

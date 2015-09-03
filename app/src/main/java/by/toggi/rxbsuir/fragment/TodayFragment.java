@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -37,12 +38,8 @@ import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.TodayPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
-public class TodayFragment extends Fragment implements LessonListView {
+public class TodayFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
     @Bind(R.id.empty_state) TextView mEmptyState;
@@ -53,13 +50,12 @@ public class TodayFragment extends Fragment implements LessonListView {
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
     @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
+    @Inject SharedPreferences mSharedPreferences;
 
-    private CompositeSubscription mCompositeSubscription;
     private LessonAdapter mAdapter;
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Timber.d(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
             mPresenter.setSearch(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
         }
     };
@@ -149,10 +145,7 @@ public class TodayFragment extends Fragment implements LessonListView {
     @Override
     public void onResume() {
         super.onResume();
-        mCompositeSubscription = new CompositeSubscription(
-                getSyncIdSubscription(),
-                getSubgroupFilterSubscription()
-        );
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
                 mBroadcastReceiver,
                 new IntentFilter(ScheduleActivity.ACTION_SEARCH_QUERY)
@@ -162,25 +155,21 @@ public class TodayFragment extends Fragment implements LessonListView {
     @Override
     public void onPause() {
         super.onPause();
-        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
-            mCompositeSubscription.unsubscribe();
-        }
+        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         LocalBroadcastManager.getInstance(getActivity())
                 .unregisterReceiver(mBroadcastReceiver);
     }
 
-    private Subscription getSyncIdSubscription() {
-        return mSyncIdPreference.asObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(s -> {
-                    mRecyclerView.setVisibility(View.GONE);
-                    mPresenter.setSyncId(s, mIsGroupSchedulePreference.get());
-                });
-    }
-
-    private Subscription getSubgroupFilterSubscription() {
-        return mSubgroupFilterPreference.asObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mPresenter::setSubgroupNumber);
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
+        switch (key) {
+            case PreferenceHelper.SYNC_ID:
+                mRecyclerView.setVisibility(View.GONE);
+                mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
+                break;
+            case PreferenceHelper.SUBGROUP_FILTER:
+                mPresenter.setSubgroupNumber(mSubgroupFilterPreference.get());
+                break;
+        }
     }
 }
