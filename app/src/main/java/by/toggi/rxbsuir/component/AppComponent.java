@@ -1,5 +1,7 @@
 package by.toggi.rxbsuir.component;
 
+import android.content.SharedPreferences;
+
 import com.f2prateek.rx.preferences.Preference;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
@@ -36,6 +38,8 @@ public interface AppComponent {
     RxBsuirApplication app();
 
     StorIOSQLite storIOSQLite();
+
+    SharedPreferences preferences();
 
     @Named(PreferenceHelper.SYNC_ID) Preference<String> rxSyncId();
 
