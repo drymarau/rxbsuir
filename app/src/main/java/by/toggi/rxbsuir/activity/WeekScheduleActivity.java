@@ -45,9 +45,10 @@ public class WeekScheduleActivity extends ScheduleActivity {
 
     @Override
     protected void showToday() {
+        int weekNumber = Utils.getCurrentWeekNumber();
         mViewPager.setCurrentItem(mIsTodayEnabledPreference.get()
-                ? Utils.getCurrentWeekNumber()
-                : Utils.getCurrentWeekNumber() - 1);
+                ? weekNumber + 1
+                : weekNumber - 1);
     }
 
     private void setupTabs() {
