@@ -17,6 +17,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
 
 public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> {
 
@@ -24,12 +25,12 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     private static final int VIEW_TYPE_LESSON_TWO_LINE = 1;
     private static final int VIEW_TYPE_LESSON_THREE_LINE = 2;
 
-    private final boolean mShowToday;
+    private final LessonListPresenter.Type mType;
     private List<Lesson> mLessonList;
 
-    public LessonAdapter(List<Lesson> lessonList, boolean showToday) {
+    public LessonAdapter(List<Lesson> lessonList, LessonListPresenter.Type type) {
         mLessonList = lessonList;
-        mShowToday = showToday;
+        mType = type;
     }
 
     /**
@@ -94,9 +95,20 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
                 viewHolder.mLessonEmployee.setText(lesson.getPrettyStudentGroupList());
             }
         }
-        viewHolder.setWeekDay(mShowToday
-                ? LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
-                : lesson.getPrettyWeekday());
+        switch (mType) {
+            case TODAY:
+                viewHolder.setHeaderText(LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
+                break;
+            case TOMORROW:
+                viewHolder.setHeaderText(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
+                break;
+            case WEEK_ONE:
+            case WEEK_TWO:
+            case WEEK_THREE:
+            case WEEK_FOUR:
+                viewHolder.setHeaderText(lesson.getPrettyWeekday());
+                break;
+        }
         if (position < mLessonList.size() - 1) {
             viewHolder.setIsLast(!lesson.getWeekday().equals(mLessonList.get(position + 1).getWeekday()));
         } else if (position == mLessonList.size() - 1) {
@@ -124,7 +136,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         @Nullable @Bind(R.id.lesson_employee) TextView mLessonEmployee;
         @Nullable @Bind(R.id.lesson_class) TextView mLessonClass;
 
-        private String mWeekDay;
+        private String mHeaderText;
         private boolean mIsLast;
         private boolean mIsFirst;
 
@@ -133,12 +145,12 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
             ButterKnife.bind(this, itemView);
         }
 
-        public String getWeekDay() {
-            return mWeekDay;
+        public String getHeaderText() {
+            return mHeaderText;
         }
 
-        public void setWeekDay(String weekDay) {
-            mWeekDay = weekDay;
+        public void setHeaderText(String headerText) {
+            mHeaderText = headerText;
         }
 
         public boolean isLast() {
