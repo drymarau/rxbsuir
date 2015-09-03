@@ -23,6 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import by.toggi.rxbsuir.IntentUtils;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
@@ -104,12 +105,24 @@ public class LessonReminderService extends IntentService {
             inboxStyle.addLine(lessonList.get(i).getPrettyLesson());
         }
 
+        PendingIntent sharePendingIntent = PendingIntent.getActivity(
+                context,
+                0,
+                Intent.createChooser(IntentUtils.getDayScheduleShareIntent(
+                        lessonList,
+                        mFavoriteTitlePreference.get(),
+                        LocalDate.now()
+                ), getString(R.string.action_share_intent)),
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setStyle(inboxStyle)
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(contentTitle)
+                .addAction(R.drawable.ic_action_share, getString(R.string.action_share), sharePendingIntent)
                 .setDefaults(mNotificationSoundEnabledPreference.get()
                         ? NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_LIGHTS
                         : NotificationCompat.DEFAULT_LIGHTS)

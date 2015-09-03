@@ -208,13 +208,22 @@ public class Lesson {
     }
 
     public String getPrettyLesson() {
-        return String.format(
-                "%s-%s %s (%s) @ %s",
-                getPrettyLessonTimeStart(),
-                getPrettyLessonTimeEnd(),
-                getSubjectWithSubgroup(),
-                getLessonType(),
-                getPrettyAuditoryList()
-        );
+        if (getPrettyAuditoryList().isEmpty()) {
+            return String.format(
+                    "%s-%s %s (%s)",
+                    getPrettyLessonTimeStart(),
+                    getPrettyLessonTimeEnd(),
+                    getSubjectWithSubgroup(),
+                    getLessonType()
+            );
+        } else {
+            return String.format(
+                    "%s-%s %s (%s) @ %s",
+                    getPrettyLessonTimeStart(),
+                    getPrettyLessonTimeEnd(),
+                    getSubjectWithSubgroup(),
+                    getLessonType(),
+                    getPrettyAuditoryList());
+        }
     }
 }
