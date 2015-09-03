@@ -7,7 +7,7 @@ import dagger.Component;
 
 @Fragment
 @Component(dependencies = AppComponent.class, modules = LessonListFragmentModule.class)
-public interface WeekFragmentComponent {
+public interface LessonListFragmentComponent {
 
     void inject(LessonListFragment lessonListFragment);
 

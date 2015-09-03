@@ -52,12 +52,12 @@ import butterknife.OnClick;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
 import by.toggi.rxbsuir.fragment.StorageFragment;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
@@ -66,7 +66,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
-
 
 public abstract class ScheduleActivity extends RxAppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 

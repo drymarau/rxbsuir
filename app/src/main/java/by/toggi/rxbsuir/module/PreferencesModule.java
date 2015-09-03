@@ -15,7 +15,7 @@ import javax.inject.Singleton;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.SubgroupFilter;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import dagger.Module;
 import dagger.Provides;
 

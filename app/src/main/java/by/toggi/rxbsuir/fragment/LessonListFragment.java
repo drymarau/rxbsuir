@@ -31,14 +31,14 @@ import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
-import by.toggi.rxbsuir.component.DaggerWeekFragmentComponent;
+import by.toggi.rxbsuir.component.DaggerLessonListFragmentComponent;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.module.LessonListFragmentModule;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
 
 public class LessonListFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -88,7 +88,7 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
             mType = (LessonListPresenter.Type) args.getSerializable(ARGS_VIEW_TYPE);
         }
 
-        DaggerWeekFragmentComponent.builder()
+        DaggerLessonListFragmentComponent.builder()
                 .appComponent(((RxBsuirApplication) getActivity().getApplication()).getAppComponent())
                 .lessonListFragmentModule(new LessonListFragmentModule(mType))
                 .build().inject(this);

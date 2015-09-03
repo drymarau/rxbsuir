@@ -10,7 +10,6 @@ import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
@@ -21,6 +20,7 @@ import by.toggi.rxbsuir.module.AppModule;
 import by.toggi.rxbsuir.module.BsuirServiceModule;
 import by.toggi.rxbsuir.module.DbModule;
 import by.toggi.rxbsuir.module.PreferencesModule;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.service.LessonReminderService;
 import by.toggi.rxbsuir.service.ReplaceSyncIdService;
 import dagger.Component;

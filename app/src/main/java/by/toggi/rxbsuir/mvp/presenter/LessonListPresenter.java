@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
@@ -138,6 +137,12 @@ public class LessonListPresenter extends Presenter<LessonListView> {
     @Override
     public String getTag() {
         return LessonListPresenter.class.getSimpleName() + "_" + mType;
+    }
+
+    public enum SubgroupFilter {
+
+        BOTH, FIRST, SECOND, NONE
+
     }
 
     public enum Type {
