@@ -49,7 +49,7 @@ public class SubheaderItemDecoration extends RecyclerView.ItemDecoration {
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
             LessonAdapter.ViewHolder holder = (LessonAdapter.ViewHolder) parent.getChildViewHolder(child);
             if (holder.isFirst()) {
-                drawText(c, holder.getWeekDay(), child.getTop() - mSubheaderHeight - params.topMargin);
+                drawText(c, holder.getHeaderText(), child.getTop() - mSubheaderHeight - params.topMargin);
             }
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 if (holder.isLast()) {

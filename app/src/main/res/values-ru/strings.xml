@@ -46,6 +46,7 @@
 
     <array name="tabs_with_today">
         <item>Сегодня</item>
+        <item>Завтра</item>
         <item>Неделя 1</item>
         <item>Неделя 2</item>
         <item>Неделя 3</item>
@@ -68,12 +69,13 @@
     <string name="summary_notification_sound_disabled">Звук уведомления выключен</string>
     <string name="summary_notification_sound_enabled">Звук уведомления включен</string>
     <string name="title_notification_sound">Звук уведомления</string>
-    <string name="summary_is_today_enabled_disabled">Вкладка \"Сегодня\" выключена</string>
-    <string name="summary_is_today_enabled_enabled">Вкладка \"Сегодня\" включена</string>
-    <string name="title_is_today_enabled">Вкладка \"Сегодня\"</string>
+    <string name="summary_is_today_enabled_disabled">Вкладки \"Сегодня\" и \"Завтра\" выключены</string>
+    <string name="summary_is_today_enabled_enabled">Вкладки \"Сегодня\" и \"Завтра\" включены</string>
+    <string name="title_is_today_enabled">Вкладки \"Сегодня\" и \"Завтра\"</string>
 
     <!-- FRAGMENTS -->
     <string name="empty_state_today">Сегодня нет занятий.\nПриятного дня!</string>
+    <string name="empty_state_tomorrow">Завтра нет занятий.\nПриятного дня!</string>
     <string name="empty_state_week">На этой неделе нет занятий</string>
 
 

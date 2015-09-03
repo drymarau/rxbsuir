@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 
 import org.threeten.bp.DayOfWeek;
 
-import by.toggi.rxbsuir.SubgroupFilter;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 
 public class RxBsuirContract {
 

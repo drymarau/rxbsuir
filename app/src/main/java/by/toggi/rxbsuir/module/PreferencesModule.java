@@ -15,7 +15,7 @@ import javax.inject.Singleton;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.SubgroupFilter;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import dagger.Module;
 import dagger.Provides;
 
@@ -32,6 +32,12 @@ public class PreferencesModule {
     @Named(PreferenceHelper.IS_DARK_THEME)
     boolean provideIsDarkTheme(SharedPreferences preferences) {
         return preferences.getBoolean(PreferenceHelper.IS_DARK_THEME, false);
+    }
+
+    @Provides
+    @Singleton
+    SubgroupFilter provideSubgroupFilter(Preference<SubgroupFilter> preference) {
+        return preference.get();
     }
 
     @Provides

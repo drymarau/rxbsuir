@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,54 +27,71 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
+import by.toggi.rxbsuir.component.DaggerLessonListFragmentComponent;
 import by.toggi.rxbsuir.db.model.Lesson;
-import by.toggi.rxbsuir.mvp.presenter.TodayPresenter;
+import by.toggi.rxbsuir.module.LessonListFragmentModule;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
 
-public class TodayFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener {
+public class LessonListFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener {
+
+    public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
+    private static final String ARGS_VIEW_TYPE = "week_number";
 
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
     @Bind(R.id.empty_state) TextView mEmptyState;
 
-    @BindString(R.string.empty_state_today) String mEmptyStateText;
-
-    @Inject TodayPresenter mPresenter;
+    @Inject LessonListPresenter mPresenter;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
     @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
     @Inject SharedPreferences mSharedPreferences;
 
+    private Parcelable mLayoutManagerState;
+    private LessonListPresenter.Type mType;
+    private LinearLayoutManager mLayoutManager;
     private LessonAdapter mAdapter;
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mPresenter.setSearch(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
+            mPresenter.setSearchQuery(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
         }
     };
 
     /**
-     * Instantiates a new {@code TodayFragment}.
+     * Instantiates a new {@code WeekFragment}.
      *
-     * @return the TodayFragment instance
+     * @param type view type of the presenter
+     * @return the week fragment
      */
-    public static TodayFragment newInstance() {
-        return new TodayFragment();
+    public static LessonListFragment newInstance(LessonListPresenter.Type type) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARGS_VIEW_TYPE, type);
+        LessonListFragment fragment = new LessonListFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Bundle args = getArguments();
+        if (args != null) {
+            mType = (LessonListPresenter.Type) args.getSerializable(ARGS_VIEW_TYPE);
+        }
 
-        ((RxBsuirApplication) getActivity().getApplication()).getAppComponent().inject(this);
+        DaggerLessonListFragmentComponent.builder()
+                .appComponent(((RxBsuirApplication) getActivity().getApplication()).getAppComponent())
+                .lessonListFragmentModule(new LessonListFragmentModule(mType))
+                .build().inject(this);
     }
 
     @Nullable
@@ -89,7 +107,7 @@ public class TodayFragment extends Fragment implements LessonListView, SharedPre
         super.onViewCreated(view, savedInstanceState);
 
         FragmentManager manager = getFragmentManager();
-        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(WeekFragment.TAG_STORAGE_FRAGMENT);
+        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(ScheduleActivity.TAG_STORAGE_FRAGMENT);
 
         if (fragment == null) {
             throw new IllegalStateException("Storage fragment should already be added");
@@ -98,21 +116,32 @@ public class TodayFragment extends Fragment implements LessonListView, SharedPre
             fragment.setPresenter(mPresenter.getTag(), mPresenter);
         } else {
             try {
-                mPresenter = (TodayPresenter) fragment.getPresenter(mPresenter.getTag());
+                mPresenter = (LessonListPresenter) fragment.getPresenter(mPresenter.getTag());
             } catch (ClassCastException e) {
                 throw new ClassCastException("Presenter must be of class WeekPresenter");
             }
         }
 
-        mEmptyState.setText(mEmptyStateText);
+        switch (mType) {
+            case TODAY:
+                mEmptyState.setText(R.string.empty_state_today);
+                break;
+            case TOMORROW:
+                mEmptyState.setText(R.string.empty_state_tomorrow);
+                break;
+            default:
+                mEmptyState.setText(R.string.empty_state_week);
+                break;
+        }
 
         mPresenter.attachView(this);
         mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
-        mAdapter = new LessonAdapter(new ArrayList<>(), true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mAdapter = new LessonAdapter(new ArrayList<>(), mType);
 
         mRecyclerView.setVisibility(View.GONE);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new SubheaderItemDecoration(getActivity(), mRecyclerView));
     }
@@ -120,6 +149,10 @@ public class TodayFragment extends Fragment implements LessonListView, SharedPre
     @Override
     public void showLessonList(List<Lesson> lessonList) {
         mAdapter.setLessonList(lessonList);
+        if (mLayoutManagerState != null) {
+            mLayoutManager.onRestoreInstanceState(mLayoutManagerState);
+            mLayoutManagerState = null;
+        }
         mRecyclerView.setVisibility(View.VISIBLE);
         mEmptyState.setVisibility(View.GONE);
     }
@@ -143,6 +176,20 @@ public class TodayFragment extends Fragment implements LessonListView, SharedPre
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_LAYOUT_MANAGER_STATE, mLayoutManager.onSaveInstanceState());
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            mLayoutManagerState = savedInstanceState.getParcelable(KEY_LAYOUT_MANAGER_STATE);
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -161,14 +208,14 @@ public class TodayFragment extends Fragment implements LessonListView, SharedPre
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         switch (key) {
             case PreferenceHelper.SYNC_ID:
                 mRecyclerView.setVisibility(View.GONE);
                 mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
                 break;
             case PreferenceHelper.SUBGROUP_FILTER:
-                mPresenter.setSubgroupNumber(mSubgroupFilterPreference.get());
+                mPresenter.setSubgroupFilter(mSubgroupFilterPreference.get());
                 break;
         }
     }

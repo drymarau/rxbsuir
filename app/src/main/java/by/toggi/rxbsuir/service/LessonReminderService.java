@@ -26,10 +26,10 @@ import javax.inject.Named;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 

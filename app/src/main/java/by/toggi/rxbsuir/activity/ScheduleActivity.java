@@ -52,13 +52,12 @@ import butterknife.OnClick;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
-import by.toggi.rxbsuir.SubgroupFilter;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
 import by.toggi.rxbsuir.fragment.StorageFragment;
-import by.toggi.rxbsuir.fragment.WeekFragment;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
@@ -68,11 +67,12 @@ import rx.android.schedulers.AndroidSchedulers;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
-
 public abstract class ScheduleActivity extends RxAppCompatActivity implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 
     public static final String ACTION_SEARCH_QUERY = "by.toggi.rxbsuir.action.search_query";
     public static final String EXTRA_SEARCH_QUERY = "by.toggi.rxbsuir.extra.search_query";
+
+    public static final String TAG_STORAGE_FRAGMENT = "storage_fragment";
 
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
@@ -286,7 +286,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
                 mSchedulePresenter.retry();
                 return true;
             case R.id.action_today:
-                showToday();
+                showCurrentWeek();
                 return true;
             case R.id.action_delete:
                 mSchedulePresenter.remove(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
@@ -346,7 +346,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
         supportInvalidateOptionsMenu();
     }
 
-    protected abstract void showToday();
+    protected abstract void showCurrentWeek();
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -458,11 +458,11 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
 
     private void addStorageFragment() {
         FragmentManager manager = getSupportFragmentManager();
-        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(WeekFragment.TAG_STORAGE_FRAGMENT);
+        StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(TAG_STORAGE_FRAGMENT);
 
         if (fragment == null) {
             fragment = new StorageFragment();
-            manager.beginTransaction().add(fragment, WeekFragment.TAG_STORAGE_FRAGMENT).commit();
+            manager.beginTransaction().add(fragment, TAG_STORAGE_FRAGMENT).commit();
         }
     }
 
