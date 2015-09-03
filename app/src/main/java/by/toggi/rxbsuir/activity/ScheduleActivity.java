@@ -149,7 +149,19 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     @Override
     protected void onResume() {
         super.onResume();
-        getTitlePreferenceSubscription();
+        mTitlePreference.asObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(s -> TextUtils.split(s, " "))
+                .map(strings -> {
+                    if (strings.length == 3) {
+                        return String.format(mTitleFormat, strings);
+                    } else {
+                        return TextUtils.join(" ", strings);
+                    }
+                })
+                .compose(bindToLifecycle())
+                .subscribe(this::setTitle);
+
         registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
@@ -338,7 +350,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.setGroupVisible(R.id.group_items, isMenuItemEnabled());
+        menu.setGroupVisible(R.id.group_items, mSyncIdPreference.get() != null);
         MenuItem favoriteItem = menu.findItem(R.id.action_favorite);
         if (mSyncIdPreference.get() != null && mSyncIdPreference.get().equals(mFavoriteSyncIdPreference.get())) {
             favoriteItem.setChecked(true).setIcon(R.drawable.ic_action_favorite_on);
@@ -444,10 +456,6 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
-    private boolean isMenuItemEnabled() {
-        return mSyncIdPreference.get() != null;
-    }
-
     private void addStorageFragment() {
         FragmentManager manager = getSupportFragmentManager();
         StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(WeekFragment.TAG_STORAGE_FRAGMENT);
@@ -487,20 +495,5 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
                 PropertyValuesHolder.ofInt("alpha", 0)
         ).setDuration(200).start();
         mFloatingActionMenu.setClickable(false);
-    }
-
-    private Subscription getTitlePreferenceSubscription() {
-        return mTitlePreference.asObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(s -> TextUtils.split(s, " "))
-                .map(strings -> {
-                    if (strings.length == 3) {
-                        return String.format(mTitleFormat, strings);
-                    } else {
-                        return TextUtils.join(" ", strings);
-                    }
-                })
-                .compose(bindToLifecycle())
-                .subscribe(this::setTitle);
     }
 }
