@@ -58,7 +58,7 @@ public class WeekScheduleActivity extends ScheduleActivity {
                         ? R.array.tabs_with_today
                         : R.array.tabs)
         ));
-        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setOffscreenPageLimit(mViewPager.getAdapter().getCount());
         mViewPager.setPageMargin(mPageMargin);
         mTabLayout.setupWithViewPager(mViewPager);
     }
