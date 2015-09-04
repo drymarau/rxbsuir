@@ -32,6 +32,7 @@ import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
+import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.dagger.component.DaggerLessonListFragmentComponent;
@@ -222,5 +223,6 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
 
     @Override
     public void onItemClicked(Lesson lesson) {
+        LessonActivity.start(getContext(), lesson);
     }
 }
