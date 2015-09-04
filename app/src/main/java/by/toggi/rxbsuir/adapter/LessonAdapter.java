@@ -119,6 +119,11 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         } else {
             viewHolder.setIsFirst(!lesson.getWeekday().equals(mLessonList.get(position - 1).getWeekday()));
         }
+        if (lesson.getNote() != null && !lesson.getNote().isEmpty()) {
+            viewHolder.mLessonSubjectSubgroup.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_note, 0);
+        } else {
+            viewHolder.mLessonSubjectSubgroup.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        }
     }
 
     @Override
