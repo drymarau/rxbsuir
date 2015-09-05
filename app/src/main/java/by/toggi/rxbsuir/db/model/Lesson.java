@@ -20,22 +20,23 @@ import timber.log.Timber;
 @Parcel
 public class Lesson {
 
-    private Long _id;
-    private String syncId;
-    private List<String> auditoryList;
-    private List<Employee> employeeList;
-    private LocalTime lessonTimeStart;
-    private LocalTime lessonTimeEnd;
-    private String lessonType;
-    private String note;
-    private int numSubgroup;
-    private List<String> studentGroupList;
-    private String subject;
-    private List<Integer> weekNumberList;
-    private DayOfWeek weekday;
-    private boolean isGroupSchedule;
+    Long _id;
+    String syncId;
+    List<String> auditoryList;
+    List<Employee> employeeList;
+    LocalTime lessonTimeStart;
+    LocalTime lessonTimeEnd;
+    String lessonType;
+    String note;
+    int numSubgroup;
+    List<String> studentGroupList;
+    String subject;
+    List<Integer> weekNumberList;
+    DayOfWeek weekday;
+    boolean isGroupSchedule;
 
-    public Lesson() {}
+    public Lesson() {
+    }
 
     public Lesson(@Nullable Long _id, @NonNull String syncId, List<String> auditoryList, List<Employee> employeeList, LocalTime lessonTimeStart, LocalTime lessonTimeEnd, String lessonType, String note, int numSubgroup, List<String> studentGroupList, String subject, List<Integer> weekNumberList, DayOfWeek weekday, boolean isGroupSchedule) {
         this._id = _id;
@@ -229,5 +230,16 @@ public class Lesson {
                     getLessonType(),
                     getPrettyAuditoryList());
         }
+    }
+
+    public String getPrettyWeekNumberList() {
+        if (weekNumberList != null && !weekNumberList.isEmpty()) {
+            if (weekNumberList.contains(0)) {
+                return null;
+            } else {
+                return TextUtils.join(", ", weekNumberList);
+            }
+        }
+        return null;
     }
 }
