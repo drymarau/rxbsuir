@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
@@ -75,6 +78,32 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
     @Override
     public void showLessonDetail(List<DetailItem> detailItemList) {
         mAdapter.setDetailItemList(detailItemList);
+    }
+
+    @OnClick(R.id.fab)
+    public void onFloatingActionButtonClick() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.title_add_note)
+                .input(getString(R.string.hint_note), mPresenter.getLessonNote(), true, (materialDialog, charSequence) -> mPresenter.setLessonNote(charSequence.toString()))
+                .neutralText(R.string.neutral_clear)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onNeutral(MaterialDialog dialog) {
+                        super.onNeutral(dialog);
+                        mPresenter.setLessonNote(null);
+                        dialog.dismiss();
+                    }
+                })
+                .positiveText(R.string.positive_add)
+                .negativeText(android.R.string.cancel)
+                .autoDismiss(true)
+                .show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
     }
 
     private void setupToolbar() {
