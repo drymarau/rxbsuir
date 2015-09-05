@@ -22,6 +22,7 @@ import javax.inject.Named;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import by.toggi.rxbsuir.DetailItemDecoration;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
@@ -70,6 +71,7 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
         mAdapter = new DetailItemAdapter(this, new ArrayList<>());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DetailItemDecoration(this));
 
         mPresenter.attachView(this);
         mPresenter.setLesson(lesson);

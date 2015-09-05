@@ -63,6 +63,12 @@ public class DetailItemAdapter extends RecyclerView.Adapter<DetailItemAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         DetailItem detailItem = mDetailItemList.get(position);
         holder.mIcon.setVisibility(detailItem.isIconVisible() ? View.VISIBLE : View.GONE);
+        holder.setIsFirst(detailItem.isIconVisible());
+        if (position < mDetailItemList.size() - 1) {
+            holder.setIsLast(!(detailItem.getType() == mDetailItemList.get(position + 1).getType()));
+        } else if (position == mDetailItemList.size() - 1) {
+            holder.setIsLast(true);
+        }
         switch (detailItem.getType()) {
             case TIME:
                 holder.mIcon.setImageResource(R.drawable.ic_time);
@@ -102,10 +108,30 @@ public class DetailItemAdapter extends RecyclerView.Adapter<DetailItemAdapter.Vi
         @Bind(R.id.lesson_detail_text) TextView mText;
         @Nullable @Bind(R.id.lesson_detail_summary) TextView mSummary;
 
+        private boolean isFirst;
+        private boolean isLast;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+
+        public boolean isLast() {
+            return isLast;
+        }
+
+        public void setIsLast(boolean isLast) {
+            this.isLast = isLast;
+        }
+
+        public boolean isFirst() {
+            return isFirst;
+        }
+
+        public void setIsFirst(boolean isFirst) {
+            this.isFirst = isFirst;
+        }
+
     }
 
 }
