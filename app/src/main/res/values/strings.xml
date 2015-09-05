@@ -100,5 +100,12 @@
     <string name="empty_state_today">There are no lessons today.\nHave fun!</string>
     <string name="empty_state_tomorrow">There are no lessons tomorrow.\nHave fun!</string>
     <string name="empty_state_week">There are no lessons this week</string>
+    
+    <!-- LESSON ACTIVITY -->
+    <string name="weekly">Weekly</string>
+    <plurals name="week">
+        <item quantity="one">Week</item>
+        <item quantity="many">Weeks</item>
+    </plurals>
 
 </resources>

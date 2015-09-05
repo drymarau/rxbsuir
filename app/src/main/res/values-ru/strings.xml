@@ -86,5 +86,13 @@
     <string name="empty_state_tomorrow">Завтра нет занятий.\nПриятного дня!</string>
     <string name="empty_state_week">На этой неделе нет занятий</string>
 
+    <!-- LESSON ACTIVITY -->
+    <string name="weekly">Еженедельно</string>
+    <plurals name="week">
+        <item quantity="one">Неделя %1s</item>
+        <item quantity="few">Недели %1s</item>
+        <item quantity="many">Недели %1s</item>
+    </plurals>
+
 
 </resources>

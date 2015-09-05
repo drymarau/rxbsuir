@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.adapter;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,9 +20,12 @@ public class DetailItemAdapter extends RecyclerView.Adapter<DetailItemAdapter.Vi
 
     private static final int VIEW_TYPE_DETAIL = 0;
     private static final int VIEW_TYPE_DETAIL_SUMMARY = 1;
+
+    private final Context mContext;
     private List<DetailItem> mDetailItemList;
 
-    public DetailItemAdapter(List<DetailItem> detailItemList) {
+    public DetailItemAdapter(Context context, List<DetailItem> detailItemList) {
+        mContext = context;
         mDetailItemList = detailItemList;
     }
 
@@ -81,7 +85,9 @@ public class DetailItemAdapter extends RecyclerView.Adapter<DetailItemAdapter.Vi
         }
         holder.mText.setText(detailItem.getText());
         if (holder.mSummary != null) {
-            holder.mSummary.setText(detailItem.getSummary() == null ? "Еженедельно" : "Неделя " + detailItem.getSummary());
+            holder.mSummary.setText(detailItem.getSummary() == null
+                    ? mContext.getString(R.string.weekly)
+                    : mContext.getResources().getQuantityString(R.plurals.week, detailItem.getSummary().length(), detailItem.getSummary()));
         }
     }
 

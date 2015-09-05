@@ -67,7 +67,7 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
 
         mCollapsingToolbarLayout.setTitle(lesson.getSubjectWithSubgroup());
 
-        mAdapter = new DetailItemAdapter(new ArrayList<>());
+        mAdapter = new DetailItemAdapter(this, new ArrayList<>());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
