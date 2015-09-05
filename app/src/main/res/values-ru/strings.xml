@@ -16,6 +16,12 @@
     <string name="error_list_employee">Пожалуйста, выберите преподавателя из списка</string>
     <string name="error_list_group">Пожалуйста, выберите группу из списка</string>
 
+
+    <!-- ADD NOTE DIALOG -->
+    <string name="hint_note">Заметка</string>
+    <string name="title_add_note">Добавить заметку</string>
+    <string name="neutral_clear">Очистить</string>
+
     <!-- MENU -->
     <string name="action_today">Текущая неделя</string>
     <string name="action_refresh">Обновить</string>

@@ -20,6 +20,11 @@
     <string name="positive_add">Add</string>
     <string name="error_list_employee">Please choose employee from the list</string>
     <string name="error_list_group">Please choose group from the list</string>
+    
+    <!-- ADD NOTE DIALOG -->
+    <string name="hint_note">Note</string>
+    <string name="title_add_note">Add note</string>
+    <string name="neutral_clear">Clear</string>
 
     <!-- MENU -->
     <string name="action_today">Current week</string>
