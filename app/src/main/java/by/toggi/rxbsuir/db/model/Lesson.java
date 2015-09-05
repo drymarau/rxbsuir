@@ -242,4 +242,8 @@ public class Lesson {
         }
         return null;
     }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 }
