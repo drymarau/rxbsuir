@@ -26,9 +26,11 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     private static final int VIEW_TYPE_LESSON_THREE_LINE = 2;
 
     private final LessonListPresenter.Type mType;
+    private final OnItemClickListener mListener;
     private List<Lesson> mLessonList;
 
-    public LessonAdapter(List<Lesson> lessonList, LessonListPresenter.Type type) {
+    public LessonAdapter(OnItemClickListener listener, List<Lesson> lessonList, LessonListPresenter.Type type) {
+        mListener = listener;
         mLessonList = lessonList;
         mType = type;
     }
@@ -81,6 +83,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Lesson lesson = mLessonList.get(position);
+        viewHolder.itemView.setOnClickListener(view -> mListener.onItemClicked(lesson));
         viewHolder.mLessonType.setText(lesson.getLessonType());
         viewHolder.mLessonSubjectSubgroup.setText(lesson.getSubjectWithSubgroup());
         viewHolder.mLessonTimeStart.setText(lesson.getPrettyLessonTimeStart());
@@ -119,11 +122,22 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         } else {
             viewHolder.setIsFirst(!lesson.getWeekday().equals(mLessonList.get(position - 1).getWeekday()));
         }
+        if (lesson.getNote() != null && !lesson.getNote().isEmpty()) {
+            viewHolder.mLessonSubjectSubgroup.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_note_small, 0);
+        } else {
+            viewHolder.mLessonSubjectSubgroup.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        }
     }
 
     @Override
     public int getItemCount() {
         return mLessonList.size();
+    }
+
+    public interface OnItemClickListener {
+
+        void onItemClicked(Lesson lesson);
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

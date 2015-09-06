@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="cardBackground" format="reference"/>
+    <attr name="cardBackgroundColor" format="reference"/>
     <attr name="drawerBackground" format="reference"/>
     <attr name="famProtection" format="reference"/>
+    <attr name="iconTint" format="reference"/>
 
     <item name="lesson_time_start" type="id"/>
     <item name="lesson_time_end" type="id"/>

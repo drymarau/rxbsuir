@@ -1,10 +1,12 @@
 package by.toggi.rxbsuir.rest.model;
 
+import org.parceler.Parcel;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 
 import java.util.List;
 
+@Parcel
 public class Employee {
 
     @Element(name = "id")

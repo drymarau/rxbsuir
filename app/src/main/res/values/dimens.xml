@@ -28,4 +28,7 @@
     <!-- Padding for custom settings layout -->
     <dimen name="settings_padding">8dp</dimen>
 
+    <!-- Padding between detail item and divider -->
+    <dimen name="divider_padding">8dp</dimen>
+
 </resources>

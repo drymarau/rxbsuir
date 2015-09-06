@@ -16,6 +16,12 @@
     <string name="error_list_employee">Пожалуйста, выберите преподавателя из списка</string>
     <string name="error_list_group">Пожалуйста, выберите группу из списка</string>
 
+
+    <!-- ADD NOTE DIALOG -->
+    <string name="hint_note">Заметка</string>
+    <string name="title_add_note">Добавить заметку</string>
+    <string name="neutral_clear">Очистить</string>
+
     <!-- MENU -->
     <string name="action_today">Текущая неделя</string>
     <string name="action_refresh">Обновить</string>
@@ -79,6 +85,14 @@
     <string name="empty_state_today">Сегодня нет занятий.\nПриятного дня!</string>
     <string name="empty_state_tomorrow">Завтра нет занятий.\nПриятного дня!</string>
     <string name="empty_state_week">На этой неделе нет занятий</string>
+
+    <!-- LESSON ACTIVITY -->
+    <string name="weekly">Еженедельно</string>
+    <plurals name="week">
+        <item quantity="one">Неделя %1s</item>
+        <item quantity="few">Недели %1s</item>
+        <item quantity="many">Недели %1s</item>
+    </plurals>
 
 
 </resources>

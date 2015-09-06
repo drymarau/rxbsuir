@@ -32,6 +32,7 @@ import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
+import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.dagger.component.DaggerLessonListFragmentComponent;
@@ -41,7 +42,7 @@ import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
 
-public class LessonListFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener {
+public class LessonListFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener, LessonAdapter.OnItemClickListener {
 
     public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
     private static final String ARGS_VIEW_TYPE = "week_number";
@@ -138,7 +139,7 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
         mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new LessonAdapter(new ArrayList<>(), mType);
+        mAdapter = new LessonAdapter(this, new ArrayList<>(), mType);
 
         mRecyclerView.setVisibility(View.GONE);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -218,5 +219,10 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
                 mPresenter.setSubgroupFilter(mSubgroupFilterPreference.get());
                 break;
         }
+    }
+
+    @Override
+    public void onItemClicked(Lesson lesson) {
+        LessonActivity.start(getContext(), lesson);
     }
 }

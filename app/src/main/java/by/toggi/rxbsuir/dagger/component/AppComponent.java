@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
@@ -63,5 +64,7 @@ public interface AppComponent {
     void inject(WeekScheduleActivity weekScheduleActivity);
 
     void inject(ReplaceSyncIdService replaceSyncIdService);
+
+    void inject(LessonActivity lessonActivity);
 
 }

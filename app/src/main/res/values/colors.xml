@@ -10,6 +10,7 @@
     <color name="fam_protection_light">#E6E3E3E3</color>
     <color name="mdtp_accent_color">@color/accent</color>
     <color name="navigation_view_background_light">#FDFDFD</color>
+    <color name="icon_tint_light">#737373</color>
 
     <!-- DARK THEME -->
     <color name="window_background_dark">#303030</color>
@@ -17,5 +18,6 @@
     <color name="fam_protection_dark">#E6303030</color>
     <color name="mdtp_accent_color_dark">@color/accent</color>
     <color name="navigation_view_background_dark">#333333</color>
+    <color name="icon_tint_dark">@android:color/white</color>
 
 </resources>

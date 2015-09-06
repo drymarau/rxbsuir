@@ -7,9 +7,11 @@
         <item name="colorAccent">@color/accent</item>
         <item name="toolbarStyle">@style/Toolbar.Light</item>
         <item name="android:windowBackground">@color/window_background_light</item>
-        <item name="cardBackground">@color/card_background_light</item>
+        <item name="cardBackground">@drawable/card_background_light</item>
+        <item name="cardBackgroundColor">@color/card_background_light</item>
         <item name="drawerBackground">@color/navigation_view_background_light</item>
         <item name="famProtection">@color/fam_protection_light</item>
+        <item name="iconTint">@color/icon_tint_light</item>
     </style>
 
     <style name="AppThemeBaseDark" parent="@style/Theme.AppCompat.NoActionBar">
@@ -18,9 +20,11 @@
         <item name="colorAccent">@color/accent</item>
         <item name="toolbarStyle">@style/Toolbar.Dark</item>
         <item name="android:windowBackground">@color/window_background_dark</item>
-        <item name="cardBackground">@color/card_background_dark</item>
+        <item name="cardBackground">@drawable/card_background_dark</item>
+        <item name="cardBackgroundColor">@color/card_background_dark</item>
         <item name="drawerBackground">@color/navigation_view_background_dark</item>
         <item name="famProtection">@color/fam_protection_dark</item>
+        <item name="iconTint">@color/icon_tint_dark</item>
     </style>
 
     <style name="AppTheme.Light" parent="AppThemeBase"/>
