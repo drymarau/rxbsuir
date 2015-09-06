@@ -107,6 +107,16 @@ public class LessonDetailPresenter extends Presenter<LessonDetailView> {
                         i == 0
                 ));
             }
+            if (lesson.getStudentGroupList().size() > 1) {
+                for (int i = 0, size = lesson.getStudentGroupList().size(); i < size; i++) {
+                    String group = lesson.getStudentGroupList().get(i);
+                    detailItemList.add(DetailItem.newInstance(
+                            DetailItem.Type.GROUP,
+                            group,
+                            i == 0
+                    ));
+                }
+            }
         } else {
             for (int i = 0, size = lesson.getStudentGroupList().size(); i < size; i++) {
                 String group = lesson.getStudentGroupList().get(i);
@@ -115,6 +125,16 @@ public class LessonDetailPresenter extends Presenter<LessonDetailView> {
                         group,
                         i == 0
                 ));
+            }
+            if (lesson.getEmployeeList().size() > 1) {
+                for (int i = 0, size = lesson.getEmployeeList().size(); i < size; i++) {
+                    Employee employee = lesson.getEmployeeList().get(i);
+                    detailItemList.add(DetailItem.newInstance(
+                            DetailItem.Type.EMPLOYEE,
+                            employee.toString(),
+                            i == 0
+                    ));
+                }
             }
         }
         if (lesson.getNote() != null && !lesson.getNote().isEmpty()) {
