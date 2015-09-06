@@ -1,7 +1,6 @@
 package by.toggi.rxbsuir.activity;
 
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -28,7 +26,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -116,6 +113,8 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     };
     private Subscription mSearchViewSubscription;
     private LocalBroadcastManager mLocalBroadcastManager;
+    private ValueAnimator mFabValueAnimator;
+    private ValueAnimator mFamBackgroundValueAnimator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +143,8 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
             showContent();
         }
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
+
+        initializeAnimations();
     }
 
     @Override
@@ -189,11 +190,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     @OnClick(R.id.fab)
     public void onFloatingActionButtonClick() {
         if (Utils.hasNetworkConnection(this)) {
-            if (mFabGroup.getVisibility() == View.VISIBLE) {
-                hideFloatingActionMenu();
-            } else {
-                showFloatingActionMenu();
-            }
+            toggleFloatingActionMenu(mFabGroup.getVisibility() != View.VISIBLE);
         } else {
             Snackbar.make(mCoordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT).show();
         }
@@ -244,7 +241,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
 
     @Override
     public void onPositiveButtonClicked(int id, String name, boolean isGroupSchedule) {
-        hideFloatingActionMenu();
+        toggleFloatingActionMenu(false);
         selectGroupOrEmployee(id, name, isGroupSchedule);
     }
 
@@ -466,34 +463,38 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
         }
     }
 
-    private void showFloatingActionMenu() {
-        if (mDrawerLayout != null)
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
-        mFloatingActionMenu.setClickable(true);
-        mFloatingActionMenu.setOnClickListener(v -> hideFloatingActionMenu());
-        ObjectAnimator.ofPropertyValuesHolder(
-                mFloatingActionMenu.getBackground(),
-                PropertyValuesHolder.ofInt("alpha", 255)
-        ).setDuration(200).start();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fab_rotate_in));
-        }
-        mFabGroup.show();
-        mFabEmployee.show();
+    @OnClick(R.id.fam)
+    public void onFamBackgroundClick() {
+        toggleFloatingActionMenu(false);
     }
 
-    private void hideFloatingActionMenu() {
-        if (mDrawerLayout != null)
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
-        mFabGroup.hide();
-        mFabEmployee.hide();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mFloatingActionButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fab_rotate_out));
+    private void toggleFloatingActionMenu(boolean enabled) {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.setDrawerLockMode(enabled
+                    ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+                    : DrawerLayout.LOCK_MODE_UNLOCKED);
         }
-        ObjectAnimator.ofPropertyValuesHolder(
-                mFloatingActionMenu.getBackground(),
-                PropertyValuesHolder.ofInt("alpha", 0)
-        ).setDuration(200).start();
-        mFloatingActionMenu.setClickable(false);
+        mFloatingActionMenu.setClickable(enabled);
+        if (enabled) {
+            mFabGroup.show();
+            mFabEmployee.show();
+            mFamBackgroundValueAnimator.start();
+            mFabValueAnimator.start();
+        } else {
+            mFabGroup.hide();
+            mFabEmployee.hide();
+            mFamBackgroundValueAnimator.reverse();
+            mFabValueAnimator.reverse();
+        }
+    }
+
+    private void initializeAnimations() {
+        mFabValueAnimator = ValueAnimator.ofInt(0, 10000).setDuration(200);
+        mFabValueAnimator.addUpdateListener(a -> mFloatingActionButton.getDrawable()
+                .setLevel((int) a.getAnimatedValue()));
+
+        mFamBackgroundValueAnimator = ValueAnimator.ofInt(0, 255).setDuration(200);
+        mFamBackgroundValueAnimator.addUpdateListener(a -> mFloatingActionMenu.getBackground()
+                .setAlpha((int) a.getAnimatedValue()));
     }
 }
