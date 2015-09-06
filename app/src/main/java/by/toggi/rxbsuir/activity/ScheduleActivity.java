@@ -73,6 +73,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
 
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
+    private static final long ANIMATION_DURATION = 250;
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.progress_bar) ProgressBar mProgressBar;
@@ -499,11 +500,11 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     }
 
     private void initializeAnimations() {
-        mFabValueAnimator = ValueAnimator.ofInt(0, 10000).setDuration(200);
+        mFabValueAnimator = ValueAnimator.ofInt(0, 10000).setDuration(ANIMATION_DURATION);
         mFabValueAnimator.addUpdateListener(a -> mFloatingActionButton.getDrawable()
                 .setLevel((int) a.getAnimatedValue()));
 
-        mFamBackgroundValueAnimator = ValueAnimator.ofInt(0, 255).setDuration(200);
+        mFamBackgroundValueAnimator = ValueAnimator.ofInt(0, 255).setDuration(ANIMATION_DURATION);
         mFamBackgroundValueAnimator.addUpdateListener(a -> mFloatingActionMenu.getBackground()
                 .setAlpha((int) a.getAnimatedValue()));
     }
