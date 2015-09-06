@@ -108,7 +108,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ScheduleActivity.this.invalidateOptionsMenu();
+            ScheduleActivity.this.supportInvalidateOptionsMenu();
         }
     };
     private Subscription mSearchViewSubscription;
@@ -282,7 +282,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
             case R.id.action_refresh:
                 mSchedulePresenter.retry();
                 return true;
-            case R.id.action_today:
+            case R.id.action_current_week:
                 showCurrentWeek();
                 return true;
             case R.id.action_delete:
@@ -366,6 +366,20 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
                 break;
             case NONE:
                 menu.findItem(R.id.action_filter_none).setChecked(true);
+                break;
+        }
+        switch (Utils.getCurrentWeekNumber()) {
+            case 1:
+                menu.findItem(R.id.action_current_week).setIcon(R.drawable.ic_action_week_one);
+                break;
+            case 2:
+                menu.findItem(R.id.action_current_week).setIcon(R.drawable.ic_action_week_two);
+                break;
+            case 3:
+                menu.findItem(R.id.action_current_week).setIcon(R.drawable.ic_action_week_three);
+                break;
+            case 4:
+                menu.findItem(R.id.action_current_week).setIcon(R.drawable.ic_action_week_four);
                 break;
         }
         menu.findItem(R.id.action_refresh).setEnabled(Utils.hasNetworkConnection(this));
@@ -470,8 +484,8 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
                     : DrawerLayout.LOCK_MODE_UNLOCKED);
         }
         mFloatingActionMenu.setClickable(enabled);
-        if (enabled) mFloatingActionMenu.setOnClickListener(view -> toggleFloatingActionMenu(false));
         if (enabled) {
+            mFloatingActionMenu.setOnClickListener(view -> toggleFloatingActionMenu(false));
             mFabGroup.show();
             mFabEmployee.show();
             mFamBackgroundValueAnimator.start();
