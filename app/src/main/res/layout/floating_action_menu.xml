@@ -22,7 +22,7 @@
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
         android:layout_marginTop="@dimen/fab_margin_top"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_add_rotate"
         android:tag="@string/tag_fab"
         app:borderWidth="0dp"
         app:elevation="@dimen/fab_elevation"
