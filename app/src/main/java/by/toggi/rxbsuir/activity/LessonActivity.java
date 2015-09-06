@@ -3,11 +3,12 @@ package by.toggi.rxbsuir.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -21,7 +22,6 @@ import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import by.toggi.rxbsuir.DetailItemDecoration;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
@@ -36,7 +36,6 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
     private static final String EXTRA_LESSON = "by.toggi.rxbsuir.extra.lesson";
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbarLayout;
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
 
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
@@ -63,10 +62,10 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
 
         setupToolbar();
 
-
         Lesson lesson = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_LESSON));
 
-        mCollapsingToolbarLayout.setTitle(lesson.getSubjectWithSubgroup());
+        getDelegate().getSupportActionBar().setTitle(lesson.getSubjectWithSubgroup());
+        getDelegate().getSupportActionBar().setSubtitle(lesson.getLessonType());
 
         mAdapter = new DetailItemAdapter(this, new ArrayList<>());
         mRecyclerView.setAdapter(mAdapter);
@@ -82,8 +81,35 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
         mAdapter.setDetailItemList(detailItemList);
     }
 
-    @OnClick(R.id.fab)
-    public void onFloatingActionButtonClick() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
+    }
+
+    private void setupToolbar() {
+        setSupportActionBar(mToolbar);
+        getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_lesson_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                showEditDialog();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showEditDialog() {
         new MaterialDialog.Builder(this)
                 .title(R.string.title_add_note)
                 .input(getString(R.string.hint_note), mPresenter.getLessonNote(), true, (materialDialog, charSequence) -> mPresenter.setLessonNote(charSequence.toString()))
@@ -100,18 +126,6 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
                 .negativeText(android.R.string.cancel)
                 .autoDismiss(true)
                 .show();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mPresenter.onDestroy();
-    }
-
-    private void setupToolbar() {
-        setSupportActionBar(mToolbar);
-        getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     public static class DetailItem {
