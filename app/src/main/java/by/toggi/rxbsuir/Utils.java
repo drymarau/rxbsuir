@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v4.content.IntentCompat;
+import android.text.TextUtils;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
@@ -36,6 +37,21 @@ public class Utils {
     public static final int REQUEST_CODE_LESSON_REMINDER = 15613;
 
     private Utils() {
+    }
+
+    /**
+     * Gets formatted title.
+     *
+     * @param titleFormat title format
+     * @param strings strings
+     * @return formatted title
+     */
+    public static String getFormattedTitle(String titleFormat, String... strings) {
+        if (strings.length == 3) {
+            return String.format(titleFormat, strings);
+        } else {
+            return TextUtils.join(" ", strings);
+        }
     }
 
     /**

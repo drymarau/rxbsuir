@@ -90,13 +90,9 @@ public class LessonReminderService extends IntentService {
 
         String contentTitle = mFavoriteTitlePreference.asObservable()
                 .map(s -> TextUtils.split(s, " "))
-                .map(strings -> {
-                    if (strings.length == 3) {
-                        return String.format("%s %.1s.%.1s", strings);
-                    } else {
-                        return TextUtils.join(" ", strings);
-                    }
-                }).toBlocking().first();
+                .map(strings -> Utils.getFormattedTitle("%s %.1s.%.1s", strings))
+                .toBlocking()
+                .first();
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle(contentTitle);

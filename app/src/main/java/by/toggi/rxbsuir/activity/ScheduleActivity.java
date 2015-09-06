@@ -154,16 +154,9 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
         mTitlePreference.asObservable()
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(s -> TextUtils.split(s, " "))
-                .map(strings -> {
-                    if (strings.length == 3) {
-                        return String.format(mTitleFormat, strings);
-                    } else {
-                        return TextUtils.join(" ", strings);
-                    }
-                })
+                .map(strings -> Utils.getFormattedTitle(mTitleFormat, strings))
                 .compose(bindToLifecycle())
                 .subscribe(this::setTitle);
-
         registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
