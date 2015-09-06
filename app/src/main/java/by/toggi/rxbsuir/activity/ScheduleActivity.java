@@ -463,11 +463,6 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
         }
     }
 
-    @OnClick(R.id.fam)
-    public void onFamBackgroundClick() {
-        toggleFloatingActionMenu(false);
-    }
-
     private void toggleFloatingActionMenu(boolean enabled) {
         if (mDrawerLayout != null) {
             mDrawerLayout.setDrawerLockMode(enabled
@@ -475,6 +470,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
                     : DrawerLayout.LOCK_MODE_UNLOCKED);
         }
         mFloatingActionMenu.setClickable(enabled);
+        if (enabled) mFloatingActionMenu.setOnClickListener(view -> toggleFloatingActionMenu(false));
         if (enabled) {
             mFabGroup.show();
             mFabEmployee.show();
