@@ -68,6 +68,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         findPreference("build_version").setSummary(BuildConfig.VERSION_NAME);
         findPreference("rate_app").setOnPreferenceClickListener(this);
         findPreference(PreferenceHelper.IS_TODAY_ENABLED).setOnPreferenceChangeListener(this);
+        findPreference(PreferenceHelper.ARE_CIRCLES_COLORED).setOnPreferenceChangeListener(this);
         mNotificationTimePreference = findPreference("notification_time");
         mNotificationTimePreference.setEnabled(mFavoriteSyncIdPrerefence.get() != null);
         mNotificationTimePreference.setOnPreferenceClickListener(this);
@@ -83,6 +84,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         switch (preference.getKey()) {
             case PreferenceHelper.IS_DARK_THEME:
             case PreferenceHelper.IS_TODAY_ENABLED:
+            case PreferenceHelper.ARE_CIRCLES_COLORED:
                 Utils.restartApp(getActivity());
                 break;
         }
