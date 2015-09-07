@@ -78,8 +78,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
                             .prepare()
                             .createObservable()
                             .observeOn(AndroidSchedulers.mainThread())
-                            .take(1)
-                            .doOnNext(lessonList1 -> Timber.d("size: %s", lessonList1.size())),
+                            .take(1),
                     // If database doesn't contain syncId, make a network request and store result in database
                     getLessonListFromNetworkObservable(syncId, isGroupSchedule))
                     .first(lessonList -> !lessonList.isEmpty())
