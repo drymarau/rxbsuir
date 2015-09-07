@@ -35,7 +35,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         app:cardBackgroundColor="?attr/cardColor"
         app:cardCornerRadius="2dp"
-        app:elevation="8dp">
+        app:cardElevation="5dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
