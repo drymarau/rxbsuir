@@ -43,7 +43,7 @@ public class Utils {
      * Gets formatted title.
      *
      * @param titleFormat title format
-     * @param strings strings
+     * @param strings     strings
      * @return formatted title
      */
     public static String getFormattedTitle(String titleFormat, String... strings) {
@@ -190,9 +190,9 @@ public class Utils {
     private static LocalDate getStartYear() {
         LocalDate localDate = LocalDate.now();
         if (localDate.getMonth().compareTo(Month.SEPTEMBER) < 0) {
-            return LocalDate.of(localDate.getYear() - 1, Month.SEPTEMBER, 1);
+            return LocalDate.of(localDate.getYear() - 1, Month.SEPTEMBER, 1).with(DayOfWeek.MONDAY);
         }
-        return LocalDate.of(localDate.getYear(), Month.SEPTEMBER, 1);
+        return LocalDate.of(localDate.getYear(), Month.SEPTEMBER, 1).with(DayOfWeek.MONDAY);
     }
 
     private static AlarmManager getAlarmManager(Context context) {
