@@ -55,6 +55,7 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
     @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
     @Inject Preference<SubgroupFilter> mSubgroupFilterPreference;
     @Inject SharedPreferences mSharedPreferences;
+    @Inject @Named(PreferenceHelper.ARE_CIRCLES_COLORED) Preference<Boolean> mAreCirclesColoredPreference;
 
     private Parcelable mLayoutManagerState;
     private LessonListPresenter.Type mType;
@@ -139,7 +140,7 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
         mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new LessonAdapter(this, new ArrayList<>(), mType);
+        mAdapter = new LessonAdapter(this, new ArrayList<>(), mType, mAreCirclesColoredPreference.get());
 
         mRecyclerView.setVisibility(View.GONE);
         mRecyclerView.setLayoutManager(mLayoutManager);
