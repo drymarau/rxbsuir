@@ -15,6 +15,7 @@ public class PreferenceHelper {
     public static final String NOTIFICATION_SOUND_ENABLED = "notification_sound_enabled";
     public static final String IS_TODAY_ENABLED = "is_today_enabled";
     public static final String IS_SURPRISE_API_FIX_APPLIED = "is_surprise_api_fix_applied";
+    public static final String ARE_CIRCLES_COLORED = "are_circles_colored";
 
     private PreferenceHelper() {
     }

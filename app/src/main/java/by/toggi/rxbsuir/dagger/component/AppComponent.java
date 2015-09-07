@@ -45,6 +45,8 @@ public interface AppComponent {
 
     @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> rxIsGroupSchedule();
 
+    @Named(PreferenceHelper.ARE_CIRCLES_COLORED) Preference<Boolean> rxAreCirclesColored();
+
     Preference<SubgroupFilter> rxSubgroupFilter();
 
     SubgroupFilter subgroupFilter();

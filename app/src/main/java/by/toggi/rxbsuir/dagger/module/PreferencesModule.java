@@ -124,6 +124,13 @@ public class PreferencesModule {
         return preferences.getBoolean(PreferenceHelper.IS_TODAY_ENABLED, true);
     }
 
+    @Provides
+    @Singleton
+    @Named(PreferenceHelper.ARE_CIRCLES_COLORED)
+    Preference<Boolean> provideRxAreCirclesColored(RxSharedPreferences preferences) {
+        return preferences.getBoolean(PreferenceHelper.ARE_CIRCLES_COLORED, false);
+    }
+
     private static final class LocalTimeAdapter implements Preference.Adapter<LocalTime> {
 
         static final LocalTimeAdapter INSTANCE = new LocalTimeAdapter();

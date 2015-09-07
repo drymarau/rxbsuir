@@ -27,11 +27,13 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
 
     private final LessonListPresenter.Type mType;
     private final OnItemClickListener mListener;
+    private final boolean mAreCirclesColored;
     private List<Lesson> mLessonList;
 
-    public LessonAdapter(OnItemClickListener listener, List<Lesson> lessonList, LessonListPresenter.Type type) {
+    public LessonAdapter(OnItemClickListener listener, List<Lesson> lessonList, LessonListPresenter.Type type, boolean areCirclesColored) {
         mListener = listener;
         mLessonList = lessonList;
+        mAreCirclesColored = areCirclesColored;
         mType = type;
     }
 
@@ -85,6 +87,19 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         Lesson lesson = mLessonList.get(position);
         viewHolder.itemView.setOnClickListener(view -> mListener.onItemClicked(lesson));
         viewHolder.mLessonType.setText(lesson.getLessonType());
+        if (mAreCirclesColored) {
+            switch (lesson.getLessonType().toLowerCase()) {
+                case "лр":
+                    viewHolder.mLessonType.setBackgroundResource(R.drawable.circle_lab);
+                    break;
+                case "лк":
+                    viewHolder.mLessonType.setBackgroundResource(R.drawable.circle_lecture);
+                    break;
+                case "пз":
+                    viewHolder.mLessonType.setBackgroundResource(R.drawable.circle_practice);
+                    break;
+            }
+        }
         viewHolder.mLessonSubjectSubgroup.setText(lesson.getSubjectWithSubgroup());
         viewHolder.mLessonTimeStart.setText(lesson.getPrettyLessonTimeStart());
         viewHolder.mLessonTimeEnd.setText(lesson.getPrettyLessonTimeEnd());

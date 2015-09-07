@@ -65,8 +65,6 @@
 
     <!-- PREFERENCES -->
     <string name="title_pref_dark_theme">Темная тема</string>
-    <string name="summary_pref_dark_theme_enabled">Приложение использует темную тему</string>
-    <string name="summary_pref_dark_theme_disabled">Приложение использует светлую тему</string>
     <string name="category_appearance">Оформление</string>
     <string name="category_about">О приложении</string>
     <string name="title_build_version">Версия</string>
@@ -77,9 +75,8 @@
     <string name="summary_notification_sound_disabled">Звук уведомления выключен</string>
     <string name="summary_notification_sound_enabled">Звук уведомления включен</string>
     <string name="title_notification_sound">Звук уведомления</string>
-    <string name="summary_is_today_enabled_disabled">Вкладки \"Сегодня\" и \"Завтра\" выключены</string>
-    <string name="summary_is_today_enabled_enabled">Вкладки \"Сегодня\" и \"Завтра\" включены</string>
     <string name="title_is_today_enabled">Вкладки \"Сегодня\" и \"Завтра\"</string>
+    <string name="title_are_circles_colored">Разноцветный тип занятий</string>
 
     <!-- FRAGMENTS -->
     <string name="empty_state_today">Сегодня нет занятий.\nПриятного дня!</string>

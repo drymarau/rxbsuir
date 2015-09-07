@@ -76,8 +76,6 @@
     <!-- PREFERENCES -->
     <string name="key_pref_dark_theme" translatable="false">is_dark_theme</string>
     <string name="title_pref_dark_theme">Dark theme</string>
-    <string name="summary_pref_dark_theme_enabled">App uses dark theme</string>
-    <string name="summary_pref_dark_theme_disabled">App uses light theme</string>
     <string name="category_appearance">Appearance</string>
     <string name="category_about">About</string>
     <string name="title_build_version">Build version</string>
@@ -89,9 +87,8 @@
     <string name="summary_notification_sound_disabled">Notification sound is disabled</string>
     <string name="summary_notification_sound_enabled">Notification sound is enabled</string>
     <string name="title_notification_sound">Enable notification sound</string>
-    <string name="summary_is_today_enabled_disabled">Today and tomorrow tabs are disabled</string>
-    <string name="summary_is_today_enabled_enabled">Today and tomorrow tabs are enabled</string>
     <string name="title_is_today_enabled">Today and tomorrow tabs</string>
+    <string name="title_are_circles_colored">Multicolored lesson type</string>
 
     <!-- Title format portrait (Awesome C.T.)-->
     <string name="title_format" translatable="false">%s %.1s.%.1s.</string>
@@ -100,7 +97,7 @@
     <string name="empty_state_today">There are no lessons today.\nHave fun!</string>
     <string name="empty_state_tomorrow">There are no lessons tomorrow.\nHave fun!</string>
     <string name="empty_state_week">There are no lessons this week</string>
-    
+
     <!-- LESSON ACTIVITY -->
     <string name="weekly">Weekly</string>
     <plurals name="week">

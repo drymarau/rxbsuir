@@ -19,5 +19,10 @@
     <color name="mdtp_accent_color_dark">@color/accent</color>
     <color name="navigation_view_background_dark">#333333</color>
     <color name="icon_tint_dark">@android:color/white</color>
+    
+    <!-- COLORED CIRCLES -->
+    <color name="type_lab">@color/accent</color>
+    <color name="type_lecture">@color/primary</color>
+    <color name="type_practice">#388E3C</color>
 
 </resources>
