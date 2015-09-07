@@ -23,6 +23,6 @@
     <!-- COLORED CIRCLES -->
     <color name="type_lab">@color/accent</color>
     <color name="type_lecture">@color/primary</color>
-    <color name="type_practice">#388E3C</color>
+    <color name="type_practice">#009688</color>
 
 </resources>
