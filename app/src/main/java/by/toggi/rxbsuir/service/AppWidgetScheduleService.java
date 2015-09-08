@@ -3,12 +3,14 @@ package by.toggi.rxbsuir.service;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
+import org.parceler.Parcels;
 import org.threeten.bp.LocalDate;
 
 import java.util.List;
@@ -19,7 +21,7 @@ import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
-import timber.log.Timber;
+import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
@@ -46,7 +48,6 @@ public class AppWidgetScheduleService extends RemoteViewsService {
         private List<Lesson> mLessonList;
 
         public AppWidgetScheduleFactory(Context context, Intent intent, StorIOSQLite storIOSQLite) {
-            Timber.d(storIOSQLite.toString());
             mContext = context;
             mAppWidgetId = intent.getIntExtra(
                     AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -104,6 +105,12 @@ public class AppWidgetScheduleService extends RemoteViewsService {
             views.setTextViewText(R.id.lesson_class, lesson.getPrettyAuditoryList());
             views.setTextViewText(R.id.lesson_time_start, lesson.getPrettyLessonTimeStart());
             views.setTextViewText(R.id.lesson_time_end, lesson.getPrettyLessonTimeEnd());
+
+            Intent lessonActivityIntent = new Intent();
+            Bundle hackBundle = new Bundle();
+            hackBundle.putParcelable(AppWidgetScheduleProvider.EXTRA_LESSON, Parcels.wrap(lesson));
+            lessonActivityIntent.putExtra(AppWidgetScheduleProvider.EXTRA_LESSON, hackBundle);
+            views.setOnClickFillInIntent(R.id.item_lesson, lessonActivityIntent);
             return views;
         }
 

@@ -46,6 +46,7 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
     public static void start(Context context, Lesson lesson) {
         Intent intent = new Intent(context, LessonActivity.class);
         intent.putExtra(EXTRA_LESSON, Parcels.wrap(lesson));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

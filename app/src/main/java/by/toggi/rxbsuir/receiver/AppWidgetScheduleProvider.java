@@ -6,13 +6,38 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
+import org.parceler.Parcels;
+
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
+import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.service.AppWidgetScheduleService;
 
 public class AppWidgetScheduleProvider extends AppWidgetProvider {
+
+    public static final String ACTION_LESSON_ACTIVITY = "by.toggi.rxbsuir.action.ACTION_LESSON_ACTIVITY";
+    public static final String EXTRA_LESSON = "by.toggi.rxbsuir.extra.LESSON";
+
+
+    @Override
+    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        if (intent.getAction().equals(ACTION_LESSON_ACTIVITY)) {
+            int id = intent.getIntExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID
+            );
+            Bundle hackBundle = intent.getBundleExtra(EXTRA_LESSON);
+            Lesson lesson = Parcels.unwrap(hackBundle.getParcelable(EXTRA_LESSON));
+            LessonActivity.start(context, lesson);
+        }
+        super.onReceive(context, intent);
+    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -30,6 +55,18 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
             remoteViews.setRemoteAdapter(R.id.list_view, intent);
             remoteViews.setEmptyView(R.id.list_view, R.id.empty_state);
             remoteViews.setOnClickPendingIntent(R.id.icon, pendingIntent);
+
+            Intent lessonActivityIntent = new Intent(context, AppWidgetScheduleProvider.class);
+            lessonActivityIntent.setAction(ACTION_LESSON_ACTIVITY);
+            lessonActivityIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
+            lessonActivityIntent.setData(Uri.parse(lessonActivityIntent.toUri(Intent.URI_INTENT_SCHEME)));
+            PendingIntent lessonActivityPendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    0,
+                    lessonActivityIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            );
+            remoteViews.setPendingIntentTemplate(R.id.list_view, lessonActivityPendingIntent);
 
             appWidgetManager.updateAppWidget(id, remoteViews);
         }
