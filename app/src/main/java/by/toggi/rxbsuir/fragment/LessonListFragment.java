@@ -41,6 +41,7 @@ import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
+import timber.log.Timber;
 
 public class LessonListFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener, LessonAdapter.OnItemClickListener {
 
@@ -205,8 +206,12 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
     public void onPause() {
         super.onPause();
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(mBroadcastReceiver);
+        try {
+            LocalBroadcastManager.getInstance(getActivity())
+                    .unregisterReceiver(mBroadcastReceiver);
+        } catch (IllegalArgumentException e) {
+            Timber.e(e, "LocalBroadcastManager.unregisterReceiver error");
+        }
     }
 
     @Override
