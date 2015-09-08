@@ -61,6 +61,7 @@ import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
@@ -164,7 +165,11 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     protected void onPause() {
         super.onPause();
         Utils.unsubscribe(mSearchViewSubscription);
-        unregisterReceiver(mReceiver);
+        try {
+            unregisterReceiver(mReceiver);
+        } catch (IllegalArgumentException e) {
+            Timber.e(e, "unregisterReceiver error in ScheduleActivity");
+        }
     }
 
     @LayoutRes
