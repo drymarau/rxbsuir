@@ -22,6 +22,7 @@ import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.SettingsFragment;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
+import by.toggi.rxbsuir.service.AppWidgetScheduleService;
 import by.toggi.rxbsuir.service.LessonReminderService;
 import by.toggi.rxbsuir.service.ReplaceSyncIdService;
 import dagger.Component;
@@ -68,5 +69,7 @@ public interface AppComponent {
     void inject(ReplaceSyncIdService replaceSyncIdService);
 
     void inject(LessonActivity lessonActivity);
+
+    void inject(AppWidgetScheduleService appWidgetScheduleService);
 
 }
