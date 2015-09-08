@@ -6,8 +6,10 @@
 
     <LinearLayout
         android:id="@+id/header"
+        android:background="#80000000"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
         android:orientation="horizontal">
 
         <ImageView

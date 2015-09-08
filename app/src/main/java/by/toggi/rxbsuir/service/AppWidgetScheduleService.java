@@ -15,6 +15,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
@@ -62,7 +63,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
                             .table(LessonEntry.TABLE_NAME)
                             .where(LessonEntry.Query.builder("20084", true)
                                     .weekNumber(Utils.getCurrentWeekNumber())
-                                    .weekDay(LocalDate.now().getDayOfWeek())
+                                    .weekDay(LocalDate.now().plusDays(1).getDayOfWeek())
                                     .build().toString())
                             .build())
                     .prepare().executeAsBlocking();
@@ -85,8 +86,24 @@ public class AppWidgetScheduleService extends RemoteViewsService {
 
         @Override
         public RemoteViews getViewAt(int position) {
-            RemoteViews views = new RemoteViews(mContext.getPackageName(), android.R.layout.simple_list_item_1);
-            views.setTextViewText(android.R.id.text1, mLessonList.get(position).getPrettyLesson());
+            Lesson lesson = mLessonList.get(position);
+            RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.appwidget_item_dark);
+            switch (lesson.getLessonType().toLowerCase()) {
+                case "лр":
+                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_lab);
+                    break;
+                case "пз":
+                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_practice);
+                    break;
+                case "лк":
+                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_lecture);
+                    break;
+            }
+            views.setTextViewText(R.id.lesson_type, lesson.getLessonType());
+            views.setTextViewText(R.id.lesson_subject_subgroup, lesson.getSubjectWithSubgroup());
+            views.setTextViewText(R.id.lesson_class, lesson.getPrettyAuditoryList());
+            views.setTextViewText(R.id.lesson_time_start, lesson.getPrettyLessonTimeStart());
+            views.setTextViewText(R.id.lesson_time_end, lesson.getPrettyLessonTimeEnd());
             return views;
         }
 
