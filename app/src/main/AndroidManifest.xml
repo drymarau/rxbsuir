@@ -56,17 +56,22 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receiver.AppWidgetScheduleProvider" >
+        <receiver android:name=".receiver.AppWidgetScheduleProvider">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
-                       android:resource="@xml/appwidget_info" />
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_info"/>
         </receiver>
 
         <service android:name=".service.LessonReminderService"/>
 
         <service android:name=".service.ReplaceSyncIdService"/>
+
+        <service
+            android:name=".service.AppWidgetScheduleService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

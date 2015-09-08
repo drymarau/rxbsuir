@@ -4,10 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/appwidget_circle"
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/empty_state"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/circle"/>
+        android:gravity="center"
+        android:text="@string/empty_state_today"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
 </FrameLayout>
