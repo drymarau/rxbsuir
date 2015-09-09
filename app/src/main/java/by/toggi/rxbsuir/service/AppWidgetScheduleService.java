@@ -13,12 +13,15 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 import org.parceler.Parcels;
 import org.threeten.bp.LocalDate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
@@ -58,16 +61,21 @@ public class AppWidgetScheduleService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
-            mLessonList = mStorIOSQLite.get()
-                    .listOfObjects(Lesson.class)
-                    .withQuery(Query.builder()
-                            .table(LessonEntry.TABLE_NAME)
-                            .where(LessonEntry.Query.builder("20084", true)
-                                    .weekNumber(Utils.getCurrentWeekNumber())
-                                    .weekDay(LocalDate.now().plusDays(1).getDayOfWeek())
-                                    .build().toString())
-                            .build())
-                    .prepare().executeAsBlocking();
+            SyncIdItem syncIdItem = PreferenceHelper.getSyncIdItemPreference(mContext, mAppWidgetId);
+            if (syncIdItem != null) {
+                mLessonList = mStorIOSQLite.get()
+                        .listOfObjects(Lesson.class)
+                        .withQuery(Query.builder()
+                                .table(LessonEntry.TABLE_NAME)
+                                .where(LessonEntry.Query.builder(syncIdItem.getSyncId(), syncIdItem.isGroupSchedule())
+                                        .weekNumber(Utils.getCurrentWeekNumber())
+                                        .weekDay(LocalDate.now().getDayOfWeek())
+                                        .build().toString())
+                                .build())
+                        .prepare().executeAsBlocking();
+            } else {
+                mLessonList = new ArrayList<>();
+            }
         }
 
         @Override
