@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 
 public class AppWidgetConfigActivity extends AppCompatActivity {
@@ -41,6 +42,10 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
         }
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container_fragment_settings, AppWidgetConfigFragment.newInstance(mAppWidgetId))
+                .commit();
     }
 
     @Override

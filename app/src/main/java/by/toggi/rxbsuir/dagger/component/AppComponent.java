@@ -20,6 +20,7 @@ import by.toggi.rxbsuir.dagger.module.DbModule;
 import by.toggi.rxbsuir.dagger.module.PreferencesModule;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
+import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.fragment.SettingsFragment;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.service.AppWidgetScheduleService;
@@ -71,5 +72,7 @@ public interface AppComponent {
     void inject(LessonActivity lessonActivity);
 
     void inject(AppWidgetScheduleService appWidgetScheduleService);
+
+    void inject(AppWidgetConfigFragment appWidgetConfigFragment);
 
 }
