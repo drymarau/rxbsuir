@@ -12,11 +12,13 @@ import android.widget.RemoteViews;
 
 import org.parceler.Parcels;
 
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.service.AppWidgetScheduleService;
+import timber.log.Timber;
 
 public class AppWidgetScheduleProvider extends AppWidgetProvider {
 
@@ -69,6 +71,17 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
             remoteViews.setPendingIntentTemplate(R.id.list_view, lessonActivityPendingIntent);
 
             appWidgetManager.updateAppWidget(id, remoteViews);
+        }
+    }
+
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        super.onDeleted(context, appWidgetIds);
+        for (int i = 0, length = appWidgetIds.length; i < length; i++) {
+            int id = appWidgetIds[i];
+            Timber.d("%s deleted: %s",
+                    PreferenceHelper.getWidgetPreferencesName(id),
+                    PreferenceHelper.getWidgetPreferencesFile(context, id).delete());
         }
     }
 }
