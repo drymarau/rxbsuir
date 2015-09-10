@@ -10,7 +10,9 @@ import android.view.MenuItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 
@@ -19,6 +21,7 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
     @Bind(R.id.toolbar) Toolbar mToolbar;
 
     private int mAppWidgetId;
+    private Intent mResultIntent = new Intent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +32,6 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
 
         setupToolbar();
 
-        setResult(RESULT_CANCELED);
-
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
@@ -38,6 +39,9 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
                     AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
         }
+
+        mResultIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        setResult(RESULT_CANCELED, mResultIntent);
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
@@ -58,13 +62,16 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                Intent updateIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, this, AppWidgetScheduleProvider.class);
-                updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-                sendBroadcast(updateIntent);
+                SyncIdItem syncIdItem = PreferenceHelper.getSyncIdItemPreference(this, mAppWidgetId);
 
-                Intent resultValue = new Intent();
-                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-                setResult(RESULT_OK, resultValue);
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+                appWidgetManager.updateAppWidget(
+                        mAppWidgetId,
+                        AppWidgetScheduleProvider.getRemoteViews(this, mAppWidgetId, true, syncIdItem)
+                );
+
+
+                setResult(RESULT_OK, mResultIntent);
                 finish();
                 return true;
         }
