@@ -48,6 +48,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
         private final Context mContext;
         private final int mAppWidgetId;
         private final StorIOSQLite mStorIOSQLite;
+        private final boolean mIsToday;
         private List<Lesson> mLessonList;
 
         public AppWidgetScheduleFactory(Context context, Intent intent, StorIOSQLite storIOSQLite) {
@@ -56,6 +57,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
                     AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID
             );
+            mIsToday = intent.getBooleanExtra(AppWidgetScheduleProvider.EXTRA_IS_TODAY, true);
             mStorIOSQLite = storIOSQLite;
         }
 
@@ -63,13 +65,14 @@ public class AppWidgetScheduleService extends RemoteViewsService {
         public void onCreate() {
             SyncIdItem syncIdItem = PreferenceHelper.getSyncIdItemPreference(mContext, mAppWidgetId);
             if (syncIdItem != null) {
+                LocalDate date = mIsToday ? LocalDate.now() : LocalDate.now().plusDays(1);
                 mLessonList = mStorIOSQLite.get()
                         .listOfObjects(Lesson.class)
                         .withQuery(Query.builder()
                                 .table(LessonEntry.TABLE_NAME)
                                 .where(LessonEntry.Query.builder(syncIdItem.getSyncId(), syncIdItem.isGroupSchedule())
                                         .weekNumber(Utils.getCurrentWeekNumber())
-                                        .weekDay(LocalDate.now().getDayOfWeek())
+                                        .weekDay(date.getDayOfWeek())
                                         .build().toString())
                                 .build())
                         .prepare().executeAsBlocking();
@@ -80,7 +83,6 @@ public class AppWidgetScheduleService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
-
         }
 
         @Override
