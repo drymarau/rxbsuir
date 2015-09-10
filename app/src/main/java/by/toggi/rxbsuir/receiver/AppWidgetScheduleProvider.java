@@ -33,12 +33,12 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
      * Gets remote views.
      *
      * @param context the context
-     * @param id the id
+     * @param id      the id
      * @param isToday the is today
-     * @param item the {@code SyncIdItem}
+     * @param item    the {@code SyncIdItem}
      * @return the remote views
      */
-    public static RemoteViews getRemoteViews(Context context, int id, boolean isToday, SyncIdItem item) {
+    public static RemoteViews getRemoteViews(Context context, int id, boolean isToday, @NonNull SyncIdItem item) {
 
         Intent intent = new Intent(context, AppWidgetScheduleService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
@@ -53,9 +53,8 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
         remoteViews.setEmptyView(R.id.list_view, R.id.empty_state);
         remoteViews.setOnClickPendingIntent(R.id.icon, pendingIntent);
         remoteViews.setImageViewResource(R.id.action_next, isToday ? R.drawable.ic_action_next : R.drawable.ic_action_previous);
-        if (item != null) {
-            remoteViews.setTextViewText(R.id.title, context.getString(isToday ? R.string.widget_today : R.string.widget_tomorrow, item.getTitle()));
-        }
+        remoteViews.setTextViewText(R.id.title, context.getString(isToday ? R.string.widget_today : R.string.widget_tomorrow));
+        remoteViews.setTextViewText(R.id.subtitle, item.getTitle());
 
         Intent lessonActivityIntent = new Intent(context, AppWidgetScheduleProvider.class);
         lessonActivityIntent.setAction(ACTION_LESSON_ACTIVITY);
@@ -101,7 +100,13 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
                 break;
             case ACTION_ARROW_CLICK:
                 SyncIdItem item = PreferenceHelper.getSyncIdItemPreference(context, id);
-                appWidgetManager.updateAppWidget(id, getRemoteViews(context, id, !intent.getBooleanExtra(EXTRA_IS_TODAY, true), item));
+                if (item != null) {
+                    appWidgetManager.updateAppWidget(id, getRemoteViews(
+                            context,
+                            id,
+                            !intent.getBooleanExtra(EXTRA_IS_TODAY, true),
+                            item));
+                }
                 break;
         }
         super.onReceive(context, intent);

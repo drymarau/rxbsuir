@@ -107,8 +107,8 @@
     </plurals>
 
     <!-- WIDGET -->
-    <string name="widget_today">Today (%1s)</string>
-    <string name="widget_tomorrow">Tomorrow (%1s)</string>
+    <string name="widget_today">Today</string>
+    <string name="widget_tomorrow">Tomorrow</string>
     <string name="widget_empty_synciditem">Add at least one group or employee from main app!</string>
 
 </resources>
