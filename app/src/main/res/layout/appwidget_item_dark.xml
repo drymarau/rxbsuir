@@ -1,64 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/item_lesson"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="48dp"
-              android:background="#80000000"
-              android:orientation="horizontal"
-              android:padding="4dp">
+<RelativeLayout
+    android:id="@+id/item_lesson"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="#80000000"
+    android:orientation="horizontal"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
 
     <TextView
         android:id="@+id/lesson_type"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="@drawable/circle"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle_widget"
+        android:layout_centerVertical="true"
         android:gravity="center"
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         tools:text="ЛК"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/lesson_subject_subgroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tools:text="ПИСЭД (1)"/>
-
-        <TextView
-            android:id="@+id/lesson_class"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            tools:text="122-1"/>
-
-    </LinearLayout>
-
-    <LinearLayout
+        android:id="@+id/lesson_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/lesson_time_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             tools:text="11:40"/>
@@ -67,12 +42,40 @@
             android:id="@+id/lesson_time_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             tools:text="13:15"/>
 
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/lesson_type"
+        android:layout_toLeftOf="@id/lesson_time"
+        android:layout_toRightOf="@id/lesson_type"
+        android:layout_toStartOf="@id/lesson_time"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/lesson_subject_subgroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="ПИСЭД (1)"/>
+
+        <TextView
+            android:id="@+id/lesson_class"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            tools:text="122-1"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -101,13 +101,13 @@ public class AppWidgetScheduleService extends RemoteViewsService {
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.appwidget_item_dark);
             switch (lesson.getLessonType().toLowerCase()) {
                 case "лр":
-                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_lab);
+                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lab);
                     break;
                 case "пз":
-                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_practice);
+                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_practice);
                     break;
                 case "лк":
-                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_lecture);
+                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lecture);
                     break;
             }
             views.setTextViewText(R.id.lesson_type, lesson.getLessonType());

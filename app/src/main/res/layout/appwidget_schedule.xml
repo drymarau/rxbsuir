@@ -11,22 +11,37 @@
         android:layout_height="40dp"
         android:layout_marginBottom="1dp"
         android:background="#80000000"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="2dp"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
             android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:id="@+id/action_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_action_next"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/icon"
+            android:layout_toLeftOf="@id/action_next"
             android:layout_toRightOf="@id/icon"
+            android:layout_toStartOf="@id/action_next"
             android:orientation="vertical">
 
             <TextView
@@ -48,18 +63,6 @@
                 tools:text="111801"/>
 
         </LinearLayout>
-
-
-        <ImageView
-            android:id="@+id/action_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/ic_action_next"/>
 
     </RelativeLayout>
 
