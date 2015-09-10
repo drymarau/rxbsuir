@@ -49,6 +49,8 @@ public class AppWidgetScheduleService extends RemoteViewsService {
         private final int mAppWidgetId;
         private final StorIOSQLite mStorIOSQLite;
         private final boolean mIsToday;
+        private final SyncIdItem mSyncIdItem;
+        private boolean mAreCirclesColored;
         private List<Lesson> mLessonList;
 
         public AppWidgetScheduleFactory(Context context, Intent intent, StorIOSQLite storIOSQLite) {
@@ -59,18 +61,19 @@ public class AppWidgetScheduleService extends RemoteViewsService {
             );
             mIsToday = intent.getBooleanExtra(AppWidgetScheduleProvider.EXTRA_IS_TODAY, true);
             mStorIOSQLite = storIOSQLite;
+            mSyncIdItem = PreferenceHelper.getSyncIdItemPreference(mContext, mAppWidgetId);
+            mAreCirclesColored = PreferenceHelper.getAreCirclesColoredPreference(mContext, mAppWidgetId);
         }
 
         @Override
         public void onCreate() {
-            SyncIdItem syncIdItem = PreferenceHelper.getSyncIdItemPreference(mContext, mAppWidgetId);
-            if (syncIdItem != null) {
+            if (mSyncIdItem != null) {
                 LocalDate date = mIsToday ? LocalDate.now() : LocalDate.now().plusDays(1);
                 mLessonList = mStorIOSQLite.get()
                         .listOfObjects(Lesson.class)
                         .withQuery(Query.builder()
                                 .table(LessonEntry.TABLE_NAME)
-                                .where(LessonEntry.Query.builder(syncIdItem.getSyncId(), syncIdItem.isGroupSchedule())
+                                .where(LessonEntry.Query.builder(mSyncIdItem.getSyncId(), mSyncIdItem.isGroupSchedule())
                                         .weekNumber(Utils.getCurrentWeekNumber())
                                         .weekDay(date.getDayOfWeek())
                                         .build().toString())
@@ -99,16 +102,18 @@ public class AppWidgetScheduleService extends RemoteViewsService {
         public RemoteViews getViewAt(int position) {
             Lesson lesson = mLessonList.get(position);
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.appwidget_item_dark);
-            switch (lesson.getLessonType().toLowerCase()) {
-                case "лр":
-                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lab);
-                    break;
-                case "пз":
-                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_practice);
-                    break;
-                case "лк":
-                    views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lecture);
-                    break;
+            if (mAreCirclesColored) {
+                switch (lesson.getLessonType().toLowerCase()) {
+                    case "лр":
+                        views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lab);
+                        break;
+                    case "пз":
+                        views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_practice);
+                        break;
+                    case "лк":
+                        views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lecture);
+                        break;
+                }
             }
             views.setTextViewText(R.id.lesson_type, lesson.getLessonType());
             views.setTextViewText(R.id.lesson_subject_subgroup, lesson.getSubjectWithSubgroup());

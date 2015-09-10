@@ -79,6 +79,17 @@ public class PreferenceHelper {
         return getSyncIdItemRxPreference(context, id).get();
     }
 
+    /**
+     * Gets are circles colored preference for supplied widget id.
+     *
+     * @param context the context
+     * @param id the id
+     * @return the are circles colored preference
+     */
+    public static boolean getAreCirclesColoredPreference(Context  context, int id) {
+        return getWidgetPreferences(context, id).getBoolean(ARE_CIRCLES_COLORED, false);
+    }
+
     private static RxSharedPreferences getRxSharedPreferences(Context context, int id) {
         return RxSharedPreferences.create(getWidgetPreferences(context, id));
     }

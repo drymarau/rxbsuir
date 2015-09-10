@@ -8,4 +8,13 @@
             android:title="Selected group or employee"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
+    <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_appearance">
+
+        <com.jenzz.materialpreference.CheckBoxPreference
+            android:defaultValue="false"
+            android:key="are_circles_colored"
+            android:title="@string/title_are_circles_colored"/>
+
+    </com.jenzz.materialpreference.PreferenceCategory>
+
 </PreferenceScreen>
