@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -118,7 +119,12 @@ public class AppWidgetConfigFragment extends PreferenceFragment implements AppWi
     public void updateSyncIdList(List<SyncIdItem> syncIdItemList) {
         mSyncIdItemList.clear();
         mSyncIdItemList.addAll(syncIdItemList);
-        mSyncIdItemPreference.set(mSyncIdItemList.get(0));
+        if (mSyncIdItemList.size() > 0) {
+            mSyncIdItemPreference.set(mSyncIdItemList.get(0));
+        } else {
+            Toast.makeText(getActivity(), R.string.widget_empty_synciditem, Toast.LENGTH_LONG).show();
+            getActivity().finish();
+        }
     }
 
     private CharSequence[] getItems() {
