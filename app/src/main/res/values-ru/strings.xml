@@ -91,5 +91,8 @@
         <item quantity="many">Недели %1s</item>
     </plurals>
 
+    <!-- WIDGET -->
+    <string name="widget_today">Сегодня (%1s)</string>
+    <string name="widget_tomorrow">Завтра (%1s)</string>
 
 </resources>

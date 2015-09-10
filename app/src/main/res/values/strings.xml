@@ -106,4 +106,8 @@
         <item quantity="many">Weeks %1s</item>
     </plurals>
 
+    <!-- WIDGET -->
+    <string name="widget_today">Today (%1s)</string>
+    <string name="widget_tomorrow">Tomorrow (%1s)</string>
+
 </resources>
