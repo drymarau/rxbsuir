@@ -167,7 +167,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
         PreferenceHelper.setIsWidgetCollapsedPreference(context, appWidgetId,
-                newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH) <= 196);
+                newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH) <= 206);
         RemoteViews remoteViews = getRemoteViews(context, appWidgetId);
         if (remoteViews != null) {
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
