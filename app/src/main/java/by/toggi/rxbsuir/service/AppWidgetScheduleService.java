@@ -143,7 +143,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
 
         @Override
         public RemoteViews getLoadingView() {
-            return null;
+            return new RemoteViews(mContext.getPackageName(), R.layout.empty_view);
         }
 
         @Override
