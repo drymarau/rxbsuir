@@ -4,7 +4,7 @@
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="Group or employee">
         <com.jenzz.materialpreference.Preference
-            android:key="widget_sync_id_item"
+            android:key="sync_id_item"
             android:title="Selected group or employee"/>
 
         <com.afollestad.materialdialogs.prefs.MaterialListPreference
