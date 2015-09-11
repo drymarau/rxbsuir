@@ -20,7 +20,7 @@
     <string name="positive_add">Add</string>
     <string name="error_list_employee">Please choose employee from the list</string>
     <string name="error_list_group">Please choose group from the list</string>
-    
+
     <!-- ADD NOTE DIALOG -->
     <string name="hint_note">Note</string>
     <string name="title_add_note">Add note</string>
@@ -32,7 +32,7 @@
     <string name="action_subgroup_1">Subgroup 1</string>
     <string name="action_subgroup_2">Subgroup 2</string>
     <string name="action_delete">Delete</string>
-    <string name="action_filter">Subgroups</string>
+    <string name="action_subgroup_filter">Subgroups</string>
     <string name="action_filter_both">First and second</string>
     <string name="action_filter_first">First only</string>
     <string name="action_filter_second">Second only</string>
@@ -105,5 +105,28 @@
         <item quantity="other">Week %1s</item>
         <item quantity="many">Weeks %1s</item>
     </plurals>
+
+    <!-- WIDGET -->
+    <string name="widget_today">Today</string>
+    <string name="widget_tomorrow">Tomorrow</string>
+    <string name="widget_empty_synciditem">Add at least one group or employee from main app!</string>
+    <string-array name="widget_subgroup_filter" translatable="false">
+        <item>@string/action_filter_both</item>
+        <item>@string/action_filter_first</item>
+        <item>@string/action_filter_second</item>
+        <item>@string/action_filter_none</item>
+    </string-array>
+    <string-array name="widget_subgroup_filter_values" translatable="false">
+        <item>BOTH</item>
+        <item>FIRST</item>
+        <item>SECOND</item>
+        <item>NONE</item>
+    </string-array>
+    <string name="widget_subgroup_filter_default" translatable="false">BOTH</string>
+    <string name="widget_schedule">Schedule</string>
+    <string name="widget_sync_id_item">Group/employee</string>
+    <string name="widget_subgroup_filter" translatable="false">@string/action_subgroup_filter</string>
+    <string name="widget_config_activity_label">Widget configuration</string>
+    <string name="widget_action_done">Add</string>
 
 </resources>

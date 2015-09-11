@@ -22,7 +22,7 @@
             app:showAsAction="ifRoom"/>
         <item
             android:orderInCategory="100"
-            android:title="@string/action_filter"
+            android:title="@string/action_subgroup_filter"
             app:showAsAction="never">
             <menu>
                 <group android:checkableBehavior="single">
