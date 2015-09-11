@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.receiver;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -7,7 +8,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -61,32 +64,47 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
         boolean isDarkTheme = PreferenceHelper.getIsDarkThemePreference(context, id);
         SubgroupFilter subgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, id);
 
-        Intent intent = new Intent(context, AppWidgetScheduleService.class);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
-        intent.putExtra(EXTRA_IS_TODAY, isToday);
-        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-
-        Intent startActivity = new Intent(context, WeekScheduleActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, startActivity, 0);
-
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget_schedule);
-        remoteViews.setInt(
-                R.id.widget_background,
-                "setBackgroundResource",
-                isDarkTheme ? R.color.window_background_dark : R.color.window_background_light
-        );
-        remoteViews.setRemoteAdapter(R.id.list_view, intent);
-        remoteViews.setEmptyView(R.id.list_view, R.id.empty_state);
-        remoteViews.setTextColor(R.id.empty_state, isDarkTheme
-                ? ContextCompat.getColor(context, android.R.color.primary_text_dark)
-                : ContextCompat.getColor(context, android.R.color.primary_text_light));
-        remoteViews.setTextViewText(R.id.empty_state, isToday
-                ? context.getString(R.string.empty_state_today)
-                : context.getString(R.string.empty_state_tomorrow));
-        remoteViews.setOnClickPendingIntent(R.id.icon, pendingIntent);
-        remoteViews.setImageViewResource(R.id.action_next, isToday ? R.drawable.ic_action_next : R.drawable.ic_action_previous);
-        remoteViews.setTextViewText(R.id.title, context.getString(isToday ? R.string.widget_today : R.string.widget_tomorrow));
 
+        setupRemoteViews(context, id, isToday, isDarkTheme, remoteViews);
+
+        setupSubtitle(item, subgroupFilter, remoteViews);
+
+        setupOpenApp(context, remoteViews, R.id.icon);
+
+        setupItemPendingIntentTemplate(context, id, remoteViews);
+
+        setupArrow(context, id, isToday, remoteViews);
+
+        return remoteViews;
+    }
+
+    @Nullable
+    public static RemoteViews getSmallRemoteViews(Context context, int id, boolean isToday) {
+        SyncIdItem item = PreferenceHelper.getSyncIdItemPreference(context, id);
+        if (item == null) {
+            return null;
+        }
+
+        boolean isDarkTheme = PreferenceHelper.getIsDarkThemePreference(context, id);
+        SubgroupFilter subgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, id);
+
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget_schedule_small);
+
+        setupRemoteViews(context, id, isToday, isDarkTheme, remoteViews);
+
+        setupSubtitle(item, subgroupFilter, remoteViews);
+
+        setupOpenApp(context, remoteViews, R.id.title_subtitle);
+
+        setupItemPendingIntentTemplate(context, id, remoteViews);
+
+        setupArrow(context, id, isToday, remoteViews);
+
+        return remoteViews;
+    }
+
+    private static void setupSubtitle(SyncIdItem item, SubgroupFilter subgroupFilter, RemoteViews remoteViews) {
         String title = item.getTitle();
         switch (subgroupFilter) {
             case BOTH:
@@ -102,7 +120,37 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
                 remoteViews.setTextViewText(R.id.subtitle, title + " (0)");
                 break;
         }
+    }
 
+    private static void setupRemoteViews(Context context, int id, boolean isToday, boolean isDarkTheme, RemoteViews remoteViews) {
+        Intent intent = new Intent(context, AppWidgetScheduleService.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
+        intent.putExtra(EXTRA_IS_TODAY, isToday);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+
+        remoteViews.setRemoteAdapter(R.id.list_view, intent);
+        remoteViews.setEmptyView(R.id.list_view, R.id.empty_state);
+
+        remoteViews.setTextColor(R.id.empty_state, isDarkTheme
+                ? ContextCompat.getColor(context, android.R.color.primary_text_dark)
+                : ContextCompat.getColor(context, android.R.color.primary_text_light));
+        remoteViews.setTextViewText(R.id.empty_state, isToday
+                ? context.getString(R.string.empty_state_today)
+                : context.getString(R.string.empty_state_tomorrow));
+        remoteViews.setInt(
+                R.id.widget_background,
+                "setBackgroundResource",
+                isDarkTheme ? R.color.window_background_dark : R.color.window_background_light
+        );
+    }
+
+    private static void setupOpenApp(Context context, RemoteViews remoteViews, @IdRes int viewId) {
+        Intent startActivity = new Intent(context, WeekScheduleActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, startActivity, 0);
+        remoteViews.setOnClickPendingIntent(viewId, pendingIntent);
+    }
+
+    private static void setupItemPendingIntentTemplate(Context context, int id, RemoteViews remoteViews) {
         Intent lessonActivityIntent = new Intent(context, AppWidgetScheduleProvider.class);
         lessonActivityIntent.setAction(ACTION_LESSON_ACTIVITY);
         lessonActivityIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
@@ -114,7 +162,9 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
         remoteViews.setPendingIntentTemplate(R.id.list_view, lessonActivityPendingIntent);
+    }
 
+    private static void setupArrow(Context context, int id, boolean isToday, RemoteViews remoteViews) {
         Intent clickIntent = new Intent(context, AppWidgetScheduleProvider.class);
         clickIntent.setAction(ACTION_ARROW_CLICK);
         clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
@@ -128,8 +178,24 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
         );
 
         remoteViews.setOnClickPendingIntent(R.id.action_next, clickPendingIntent);
+        remoteViews.setImageViewResource(R.id.action_next,
+                isToday ? R.drawable.ic_action_next : R.drawable.ic_action_previous);
+        remoteViews.setTextViewText(R.id.title,
+                context.getString(isToday ? R.string.widget_today : R.string.widget_tomorrow));
+    }
 
-        return remoteViews;
+    @Override
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        RemoteViews remoteViews;
+        if (newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH) <= 196) {
+            remoteViews = getSmallRemoteViews(context, appWidgetId, true);
+        } else {
+            remoteViews = getRemoteViews(context, appWidgetId, true);
+        }
+        if (remoteViews != null) {
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+        }
     }
 
     @Override
