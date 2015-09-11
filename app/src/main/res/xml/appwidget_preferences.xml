@@ -6,6 +6,14 @@
         <com.jenzz.materialpreference.Preference
             android:key="widget_sync_id_item"
             android:title="Selected group or employee"/>
+
+        <com.afollestad.materialdialogs.prefs.MaterialListPreference
+            android:entries="@array/widget_subgroup_filter"
+            android:entryValues="@array/widget_subgroup_filter_values"
+            android:key="subgroup_filter"
+            android:layout="@layout/preference_custom"
+            android:defaultValue="@string/widget_subgroup_filter_default"
+            android:title="Subgroup"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_appearance">

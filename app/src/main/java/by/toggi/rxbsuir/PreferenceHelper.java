@@ -10,6 +10,8 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 
 import java.io.File;
 
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
+
 public class PreferenceHelper {
 
     public static final String IS_GROUP_SCHEDULE = "is_group_schedule";
@@ -60,7 +62,7 @@ public class PreferenceHelper {
      * Gets sync id item rx preference.
      *
      * @param context the context
-     * @param id the id
+     * @param id      the id
      * @return the sync id item rx preference
      */
     public static Preference<SyncIdItem> getSyncIdItemRxPreference(Context context, int id) {
@@ -71,7 +73,7 @@ public class PreferenceHelper {
      * Gets sync id item preference.
      *
      * @param context the context
-     * @param id the id
+     * @param id      the id
      * @return the sync id item preference
      */
     @Nullable
@@ -83,10 +85,10 @@ public class PreferenceHelper {
      * Gets are circles colored preference for supplied widget id.
      *
      * @param context the context
-     * @param id the id
+     * @param id      the id
      * @return the are circles colored preference
      */
-    public static boolean getAreCirclesColoredPreference(Context  context, int id) {
+    public static boolean getAreCirclesColoredPreference(Context context, int id) {
         return getWidgetPreferences(context, id).getBoolean(ARE_CIRCLES_COLORED, false);
     }
 
@@ -94,11 +96,35 @@ public class PreferenceHelper {
      * Gets is dark theme preference.
      *
      * @param context the context
-     * @param id the id
+     * @param id      the id
      * @return the is dark theme preference
      */
-    public static boolean getIsDarkThemePreference(Context  context, int id) {
+    public static boolean getIsDarkThemePreference(Context context, int id) {
         return getWidgetPreferences(context, id).getBoolean(IS_DARK_THEME, false);
+    }
+
+    /**
+     * Gets subgroup filter rx preference.
+     *
+     * @param context the context
+     * @param id the id
+     * @return the subgroup filter rx preference
+     */
+    public static Preference<SubgroupFilter> getSubgroupFilterRxPreference(Context context, int id) {
+        return getRxSharedPreferences(context, id).getEnum(SUBGROUP_FILTER,
+                SubgroupFilter.BOTH,
+                SubgroupFilter.class);
+    }
+
+    /**
+     * Gets subgroup filter preference.
+     *
+     * @param context the context
+     * @param id      the id
+     * @return the subgroup filter preference
+     */
+    public static SubgroupFilter getSubgroupFilterPreference(Context context, int id) {
+        return getSubgroupFilterRxPreference(context, id).get();
     }
 
     private static RxSharedPreferences getRxSharedPreferences(Context context, int id) {

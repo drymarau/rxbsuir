@@ -23,10 +23,11 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.mvp.presenter.AppWidgetConfigPresenter;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.AppWidgetConfigView;
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class AppWidgetConfigFragment extends PreferenceFragment implements AppWidgetConfigView, Preference.OnPreferenceClickListener {
 
@@ -35,7 +36,8 @@ public class AppWidgetConfigFragment extends PreferenceFragment implements AppWi
     private int mAppWidgetId;
     private List<SyncIdItem> mSyncIdItemList = new ArrayList<>();
     private com.f2prateek.rx.preferences.Preference<SyncIdItem> mSyncIdItemPreference;
-    private Subscription mSubscription;
+    private com.f2prateek.rx.preferences.Preference<SubgroupFilter> mSubgroupFilterPreference;
+    private CompositeSubscription mSubscription;
 
     public static AppWidgetConfigFragment newInstance(int id) {
         AppWidgetConfigFragment fragment = new AppWidgetConfigFragment();
@@ -59,10 +61,12 @@ public class AppWidgetConfigFragment extends PreferenceFragment implements AppWi
         getPreferenceManager().setSharedPreferencesName(PreferenceHelper.getWidgetPreferencesName(mAppWidgetId));
 
         mSyncIdItemPreference = PreferenceHelper.getSyncIdItemRxPreference(getActivity(), mAppWidgetId);
+        mSubgroupFilterPreference = PreferenceHelper.getSubgroupFilterRxPreference(getActivity(), mAppWidgetId);
 
         addPreferencesFromResource(R.xml.appwidget_preferences);
 
         findPreference(PreferenceHelper.WIDGET_SYNC_ID_ITEM).setOnPreferenceClickListener(this);
+        findPreference(PreferenceHelper.SUBGROUP_FILTER).setOnPreferenceClickListener(this);
 
         mPresenter.attachView(this);
         mPresenter.onCreate();
@@ -71,19 +75,41 @@ public class AppWidgetConfigFragment extends PreferenceFragment implements AppWi
     @Override
     public void onResume() {
         super.onResume();
-        mSubscription = mSyncIdItemPreference.asObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(syncIdItem -> {
-                    if (syncIdItem != null) {
-                        findPreference(PreferenceHelper.WIDGET_SYNC_ID_ITEM).setSummary(syncIdItem.getTitle());
-                    }
-                });
+        mSubscription = new CompositeSubscription(
+                mSyncIdItemPreference.asObservable()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(syncIdItem -> {
+                            if (syncIdItem != null) {
+                                findPreference(PreferenceHelper.WIDGET_SYNC_ID_ITEM).setSummary(syncIdItem.getTitle());
+                            }
+                        }),
+                mSubgroupFilterPreference.asObservable()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(subgroupFilter -> {
+                            Preference preference = findPreference(PreferenceHelper.SUBGROUP_FILTER);
+                            switch (subgroupFilter) {
+                                case BOTH:
+                                    preference.setSummary(R.string.action_filter_both);
+                                    break;
+                                case FIRST:
+                                    preference.setSummary(R.string.action_filter_first);
+                                    break;
+                                case SECOND:
+                                    preference.setSummary(R.string.action_filter_second);
+                                    break;
+                                case NONE:
+                                    preference.setSummary(R.string.action_filter_none);
+                                    break;
+                            }
+                        })
+        );
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Utils.unsubscribe(mSubscription);
+        Utils.unsubscribeComposite(mSubscription);
     }
 
     @Override
@@ -110,6 +136,8 @@ public class AppWidgetConfigFragment extends PreferenceFragment implements AppWi
                             return true;
                         }).build()
                         .show();
+                return true;
+            case PreferenceHelper.SUBGROUP_FILTER:
                 return true;
         }
         return false;
