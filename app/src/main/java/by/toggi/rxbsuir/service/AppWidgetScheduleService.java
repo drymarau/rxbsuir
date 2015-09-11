@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -129,9 +130,9 @@ public class AppWidgetScheduleService extends RemoteViewsService {
             views.setTextViewText(R.id.lesson_type, lesson.getLessonType());
             views.setTextViewText(R.id.lesson_subject_subgroup, lesson.getSubjectWithSubgroup());
             if (lesson.getNote() != null && !lesson.getNote().isEmpty()) {
-                views.setTextViewCompoundDrawables(R.id.lesson_subject_subgroup, 0, 0, R.drawable.ic_note_small, 0);
+                views.setInt(R.id.lesson_note, "setVisibility", View.VISIBLE);
             } else {
-                views.setTextViewCompoundDrawables(R.id.lesson_subject_subgroup, 0, 0, 0, 0);
+                views.setInt(R.id.lesson_note, "setVisibility", View.GONE);
             }
             views.setTextViewText(R.id.lesson_class, lesson.getPrettyAuditoryList());
             views.setTextViewText(R.id.lesson_time_start, lesson.getPrettyLessonTimeStart());
