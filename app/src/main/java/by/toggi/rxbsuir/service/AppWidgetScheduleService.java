@@ -24,6 +24,7 @@ import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -53,18 +54,20 @@ public class AppWidgetScheduleService extends RemoteViewsService {
         private final SyncIdItem mSyncIdItem;
         private final boolean mAreCirclesColored;
         private final boolean mIsDarkTheme;
+        private final SubgroupFilter mSubgroupFilter;
         private Subscription mSubscription;
         private List<Lesson> mLessonList = new ArrayList<>();
 
         public AppWidgetScheduleFactory(Context context, Intent intent, StorIOSQLite storIOSQLite) {
-            mContext = context;
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
+            mContext = context;
             mIsToday = intent.getBooleanExtra(AppWidgetScheduleProvider.EXTRA_IS_TODAY, true);
             mStorIOSQLite = storIOSQLite;
-            mSyncIdItem = PreferenceHelper.getSyncIdItemPreference(mContext, appWidgetId);
-            mAreCirclesColored = PreferenceHelper.getAreCirclesColoredPreference(mContext, appWidgetId);
-            mIsDarkTheme = PreferenceHelper.getIsDarkThemePreference(mContext, appWidgetId);
+            mSyncIdItem = PreferenceHelper.getSyncIdItemPreference(context, appWidgetId);
+            mAreCirclesColored = PreferenceHelper.getAreCirclesColoredPreference(context, appWidgetId);
+            mIsDarkTheme = PreferenceHelper.getIsDarkThemePreference(context, appWidgetId);
+            mSubgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, appWidgetId);
         }
 
         @Override
@@ -78,6 +81,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
                             .where(LessonEntry.Query.builder(mSyncIdItem.getSyncId(), mSyncIdItem.isGroupSchedule())
                                     .weekNumber(Utils.getCurrentWeekNumber())
                                     .weekDay(date.getDayOfWeek())
+                                    .subgroupFilter(mSubgroupFilter)
                                     .build().toString())
                             .build())
                     .prepare()

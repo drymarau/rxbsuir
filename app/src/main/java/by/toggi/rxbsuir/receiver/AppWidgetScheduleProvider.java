@@ -20,6 +20,7 @@ import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.service.AppWidgetScheduleService;
 import timber.log.Timber;
 
@@ -58,6 +59,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
         }
 
         boolean isDarkTheme = PreferenceHelper.getIsDarkThemePreference(context, id);
+        SubgroupFilter subgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, id);
 
         Intent intent = new Intent(context, AppWidgetScheduleService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
@@ -84,7 +86,22 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
         remoteViews.setOnClickPendingIntent(R.id.icon, pendingIntent);
         remoteViews.setImageViewResource(R.id.action_next, isToday ? R.drawable.ic_action_next : R.drawable.ic_action_previous);
         remoteViews.setTextViewText(R.id.title, context.getString(isToday ? R.string.widget_today : R.string.widget_tomorrow));
-        remoteViews.setTextViewText(R.id.subtitle, item.getTitle());
+
+        String title = item.getTitle();
+        switch (subgroupFilter) {
+            case BOTH:
+                remoteViews.setTextViewText(R.id.subtitle, title);
+                break;
+            case FIRST:
+                remoteViews.setTextViewText(R.id.subtitle, title + " (1)");
+                break;
+            case SECOND:
+                remoteViews.setTextViewText(R.id.subtitle, title + " (2)");
+                break;
+            case NONE:
+                remoteViews.setTextViewText(R.id.subtitle, title + " (0)");
+                break;
+        }
 
         Intent lessonActivityIntent = new Intent(context, AppWidgetScheduleProvider.class);
         lessonActivityIntent.setAction(ACTION_LESSON_ACTIVITY);
