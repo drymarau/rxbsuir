@@ -51,51 +51,28 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
      *
      * @param context the context
      * @param id      the id
-     * @param isToday the is today
      * @return the remote views
      */
     @Nullable
-    public static RemoteViews getRemoteViews(Context context, int id, boolean isToday) {
+    public static RemoteViews getRemoteViews(Context context, int id) {
         SyncIdItem item = PreferenceHelper.getSyncIdItemPreference(context, id);
         if (item == null) {
             return null;
         }
 
         boolean isDarkTheme = PreferenceHelper.getIsDarkThemePreference(context, id);
+        boolean isToday = PreferenceHelper.getIsTodayPreference(context, id);
+        boolean isSmall = PreferenceHelper.getIsSmallPreference(context, id);
         SubgroupFilter subgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, id);
 
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget_schedule);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                isSmall ? R.layout.appwidget_schedule_small : R.layout.appwidget_schedule);
 
         setupRemoteViews(context, id, isToday, isDarkTheme, remoteViews);
 
         setupSubtitle(item, subgroupFilter, remoteViews);
 
-        setupOpenApp(context, remoteViews, R.id.icon);
-
-        setupItemPendingIntentTemplate(context, id, remoteViews);
-
-        setupArrow(context, id, isToday, remoteViews);
-
-        return remoteViews;
-    }
-
-    @Nullable
-    public static RemoteViews getSmallRemoteViews(Context context, int id, boolean isToday) {
-        SyncIdItem item = PreferenceHelper.getSyncIdItemPreference(context, id);
-        if (item == null) {
-            return null;
-        }
-
-        boolean isDarkTheme = PreferenceHelper.getIsDarkThemePreference(context, id);
-        SubgroupFilter subgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, id);
-
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget_schedule_small);
-
-        setupRemoteViews(context, id, isToday, isDarkTheme, remoteViews);
-
-        setupSubtitle(item, subgroupFilter, remoteViews);
-
-        setupOpenApp(context, remoteViews, R.id.title_subtitle);
+        setupOpenApp(context, remoteViews, isSmall ? R.id.title_subtitle : R.id.icon);
 
         setupItemPendingIntentTemplate(context, id, remoteViews);
 
@@ -187,12 +164,9 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
     @Override
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
-        RemoteViews remoteViews;
-        if (newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH) <= 196) {
-            remoteViews = getSmallRemoteViews(context, appWidgetId, true);
-        } else {
-            remoteViews = getRemoteViews(context, appWidgetId, true);
-        }
+        PreferenceHelper.setIsSmallPreference(context, appWidgetId,
+                newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH) <= 196);
+        RemoteViews remoteViews = getRemoteViews(context, appWidgetId);
         if (remoteViews != null) {
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }
@@ -214,11 +188,8 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
                 );
                 break;
             case ACTION_ARROW_CLICK:
-                RemoteViews remoteViews = getRemoteViews(
-                        context,
-                        id,
-                        !intent.getBooleanExtra(EXTRA_IS_TODAY, true)
-                );
+                PreferenceHelper.setIsTodayPreference(context, id, !intent.getBooleanExtra(EXTRA_IS_TODAY, true));
+                RemoteViews remoteViews = getRemoteViews(context, id);
                 if (remoteViews != null) {
                     appWidgetManager.updateAppWidget(id, remoteViews);
                 }
@@ -238,7 +209,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
         for (int i = 0, length = appWidgetIds.length; i < length; i++) {
             int id = appWidgetIds[i];
 
-            RemoteViews remoteViews = getRemoteViews(context, id, true);
+            RemoteViews remoteViews = getRemoteViews(context, id);
             if (remoteViews != null) {
                 appWidgetManager.updateAppWidget(id, remoteViews);
             }

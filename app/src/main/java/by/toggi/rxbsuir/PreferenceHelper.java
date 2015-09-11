@@ -32,6 +32,8 @@ public class PreferenceHelper {
     // App widget preferences
     public static final String WIDGET_PREFERENCES = "by.toggi.rxbsuir.preferences.appwidget";
     public static final String WIDGET_SYNC_ID_ITEM = "widget_sync_id_item";
+    public static final String WIDGET_IS_TODAY = "is_today";
+    public static final String WIDGET_IS_SMALL = "is_small";
 
     private PreferenceHelper() {
     }
@@ -107,7 +109,7 @@ public class PreferenceHelper {
      * Gets subgroup filter rx preference.
      *
      * @param context the context
-     * @param id the id
+     * @param id      the id
      * @return the subgroup filter rx preference
      */
     public static Preference<SubgroupFilter> getSubgroupFilterRxPreference(Context context, int id) {
@@ -125,6 +127,50 @@ public class PreferenceHelper {
      */
     public static SubgroupFilter getSubgroupFilterPreference(Context context, int id) {
         return getSubgroupFilterRxPreference(context, id).get();
+    }
+
+    /**
+     * Gets is today preference.
+     *
+     * @param context the context
+     * @param id      the id
+     * @return the is today preference
+     */
+    public static boolean getIsTodayPreference(Context context, int id) {
+        return getWidgetPreferences(context, id).getBoolean(WIDGET_IS_TODAY, true);
+    }
+
+    /**
+     * Sets is today preference.
+     *
+     * @param context the context
+     * @param id      the id
+     * @param isToday the is today
+     */
+    public static void setIsTodayPreference(Context context, int id, boolean isToday) {
+        getWidgetPreferences(context, id).edit().putBoolean(WIDGET_IS_TODAY, isToday).commit();
+    }
+
+    /**
+     * Gets is small preference.
+     *
+     * @param context the context
+     * @param id      the id
+     * @return the is small preference
+     */
+    public static boolean getIsSmallPreference(Context context, int id) {
+        return getWidgetPreferences(context, id).getBoolean(WIDGET_IS_SMALL, false);
+    }
+
+    /**
+     * Sets is small preference.
+     *
+     * @param context the context
+     * @param id      the id
+     * @param isSmall the is small
+     */
+    public static void setIsSmallPreference(Context context, int id, boolean isSmall) {
+        getWidgetPreferences(context, id).edit().putBoolean(WIDGET_IS_SMALL, isSmall).commit();
     }
 
     private static RxSharedPreferences getRxSharedPreferences(Context context, int id) {

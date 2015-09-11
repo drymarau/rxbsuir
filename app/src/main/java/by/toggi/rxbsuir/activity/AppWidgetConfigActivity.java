@@ -72,7 +72,7 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                RemoteViews remoteViews = AppWidgetScheduleProvider.getRemoteViews(this, mAppWidgetId, true);
+                RemoteViews remoteViews = AppWidgetScheduleProvider.getRemoteViews(this, mAppWidgetId);
                 if (remoteViews != null) {
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
                     appWidgetManager.updateAppWidget(mAppWidgetId, remoteViews);
