@@ -7,12 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RemoteViews;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 
@@ -62,14 +61,11 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                SyncIdItem syncIdItem = PreferenceHelper.getSyncIdItemPreference(this, mAppWidgetId);
-
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-                appWidgetManager.updateAppWidget(
-                        mAppWidgetId,
-                        AppWidgetScheduleProvider.getRemoteViews(this, mAppWidgetId, true, syncIdItem)
-                );
-
+                RemoteViews remoteViews = AppWidgetScheduleProvider.getRemoteViews(this, mAppWidgetId, true);
+                if (remoteViews != null) {
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+                    appWidgetManager.updateAppWidget(mAppWidgetId, remoteViews);
+                }
 
                 setResult(RESULT_OK, mResultIntent);
                 finish();
