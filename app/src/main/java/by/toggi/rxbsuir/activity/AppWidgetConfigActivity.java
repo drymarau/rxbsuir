@@ -9,9 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RemoteViews;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 
@@ -19,11 +24,17 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
 
+    @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
+
     private int mAppWidgetId;
     private Intent mResultIntent = new Intent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((RxBsuirApplication) getApplication()).getAppComponent().inject(this);
+
+        setTheme(mIsDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appwidget_config);
 

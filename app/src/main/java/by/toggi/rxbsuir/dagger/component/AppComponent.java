@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.activity.AppWidgetConfigActivity;
 import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
@@ -74,5 +75,7 @@ public interface AppComponent {
     void inject(AppWidgetScheduleService appWidgetScheduleService);
 
     void inject(AppWidgetConfigFragment appWidgetConfigFragment);
+
+    void inject(AppWidgetConfigActivity appWidgetConfigActivity);
 
 }
