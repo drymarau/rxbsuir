@@ -2,10 +2,10 @@
 <!--suppress AndroidElementNotAllowed -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.jenzz.materialpreference.PreferenceCategory android:title="Group or employee">
+    <com.jenzz.materialpreference.PreferenceCategory android:title="@string/widget_schedule">
         <com.jenzz.materialpreference.Preference
             android:key="sync_id_item"
-            android:title="Selected group or employee"/>
+            android:title="@string/widget_sync_id_item"/>
 
         <com.afollestad.materialdialogs.prefs.MaterialListPreference
             android:entries="@array/widget_subgroup_filter"
@@ -13,7 +13,7 @@
             android:key="subgroup_filter"
             android:layout="@layout/preference_custom"
             android:defaultValue="@string/widget_subgroup_filter_default"
-            android:title="Subgroup"/>
+            android:title="@string/widget_subgroup_filter"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_appearance">

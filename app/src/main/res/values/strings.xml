@@ -32,7 +32,7 @@
     <string name="action_subgroup_1">Subgroup 1</string>
     <string name="action_subgroup_2">Subgroup 2</string>
     <string name="action_delete">Delete</string>
-    <string name="action_filter">Subgroups</string>
+    <string name="action_subgroup_filter">Subgroups</string>
     <string name="action_filter_both">First and second</string>
     <string name="action_filter_first">First only</string>
     <string name="action_filter_second">Second only</string>
@@ -123,5 +123,10 @@
         <item>NONE</item>
     </string-array>
     <string name="widget_subgroup_filter_default" translatable="false">BOTH</string>
+    <string name="widget_schedule">Schedule</string>
+    <string name="widget_sync_id_item">Group/employee</string>
+    <string name="widget_subgroup_filter" translatable="false">@string/action_subgroup_filter</string>
+    <string name="widget_config_activity_label">Widget configuration</string>
+    <string name="widget_action_done">Add</string>
 
 </resources>
