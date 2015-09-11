@@ -14,6 +14,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import org.parceler.Parcels;
@@ -62,17 +63,18 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
 
         boolean isDarkTheme = PreferenceHelper.getIsDarkThemePreference(context, id);
         boolean isToday = PreferenceHelper.getIsTodayPreference(context, id);
-        boolean isSmall = PreferenceHelper.getIsSmallPreference(context, id);
+        boolean isCollapsed = PreferenceHelper.getIsWidgetCollapsedPreference(context, id);
         SubgroupFilter subgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, id);
 
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-                isSmall ? R.layout.appwidget_schedule_small : R.layout.appwidget_schedule);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget_schedule);
+
+        remoteViews.setInt(R.id.icon, "setVisibility", isCollapsed ? View.GONE : View.VISIBLE);
 
         setupRemoteViews(context, id, isToday, isDarkTheme, remoteViews);
 
         setupSubtitle(item, subgroupFilter, remoteViews);
 
-        setupOpenApp(context, remoteViews, isSmall ? R.id.title_subtitle : R.id.icon);
+        setupOpenApp(context, remoteViews, isCollapsed ? R.id.title_subtitle : R.id.icon);
 
         setupItemPendingIntentTemplate(context, id, remoteViews);
 
@@ -164,11 +166,12 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
     @Override
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
-        PreferenceHelper.setIsSmallPreference(context, appWidgetId,
+        PreferenceHelper.setIsWidgetCollapsedPreference(context, appWidgetId,
                 newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH) <= 196);
         RemoteViews remoteViews = getRemoteViews(context, appWidgetId);
         if (remoteViews != null) {
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_view);
         }
     }
 

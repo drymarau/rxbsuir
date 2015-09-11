@@ -56,19 +56,22 @@ public class AppWidgetScheduleService extends RemoteViewsService {
         private final boolean mAreCirclesColored;
         private final boolean mIsDarkTheme;
         private final SubgroupFilter mSubgroupFilter;
+        private final int mAppWidgetId;
         private Subscription mSubscription;
         private List<Lesson> mLessonList = new ArrayList<>();
+        private boolean mIsCollapsed;
 
         public AppWidgetScheduleFactory(Context context, Intent intent, StorIOSQLite storIOSQLite) {
-            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+            mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             mContext = context;
             mIsToday = intent.getBooleanExtra(AppWidgetScheduleProvider.EXTRA_IS_TODAY, true);
             mStorIOSQLite = storIOSQLite;
-            mSyncIdItem = PreferenceHelper.getSyncIdItemPreference(context, appWidgetId);
-            mAreCirclesColored = PreferenceHelper.getAreCirclesColoredPreference(context, appWidgetId);
-            mIsDarkTheme = PreferenceHelper.getIsDarkThemePreference(context, appWidgetId);
-            mSubgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, appWidgetId);
+            mSyncIdItem = PreferenceHelper.getSyncIdItemPreference(context, mAppWidgetId);
+            mAreCirclesColored = PreferenceHelper.getAreCirclesColoredPreference(context, mAppWidgetId);
+            mIsDarkTheme = PreferenceHelper.getIsDarkThemePreference(context, mAppWidgetId);
+            mSubgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, mAppWidgetId);
+            mIsCollapsed = PreferenceHelper.getIsWidgetCollapsedPreference(mContext, mAppWidgetId);
         }
 
         @Override
@@ -96,6 +99,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
+            mIsCollapsed = PreferenceHelper.getIsWidgetCollapsedPreference(mContext, mAppWidgetId);
         }
 
         @Override
@@ -111,39 +115,54 @@ public class AppWidgetScheduleService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int position) {
             Lesson lesson = mLessonList.get(position);
-            RemoteViews views = new RemoteViews(mContext.getPackageName(), mIsDarkTheme
+            RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), mIsDarkTheme
                     ? R.layout.appwidget_item_dark
                     : R.layout.appwidget_item_light);
-            if (mAreCirclesColored) {
-                switch (lesson.getLessonType().toLowerCase()) {
-                    case "лр":
-                        views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lab);
-                        break;
-                    case "пз":
-                        views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_practice);
-                        break;
-                    case "лк":
-                        views.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lecture);
-                        break;
-                }
-            }
-            views.setTextViewText(R.id.lesson_type, lesson.getLessonType());
-            views.setTextViewText(R.id.lesson_subject_subgroup, lesson.getSubjectWithSubgroup());
-            if (lesson.getNote() != null && !lesson.getNote().isEmpty()) {
-                views.setInt(R.id.lesson_note, "setVisibility", View.VISIBLE);
-            } else {
-                views.setInt(R.id.lesson_note, "setVisibility", View.GONE);
-            }
-            views.setTextViewText(R.id.lesson_class, lesson.getPrettyAuditoryList());
-            views.setTextViewText(R.id.lesson_time_start, lesson.getPrettyLessonTimeStart());
-            views.setTextViewText(R.id.lesson_time_end, lesson.getPrettyLessonTimeEnd());
 
+            setupLessonType(remoteViews, lesson);
+
+            remoteViews.setTextViewText(R.id.lesson_type, lesson.getLessonType());
+            remoteViews.setTextViewText(R.id.lesson_subject_subgroup, lesson.getSubjectWithSubgroup());
+
+            setupLessonNote(lesson, remoteViews);
+
+            setupLessonAuditoryList(lesson, remoteViews);
+
+            setupLessonTime(lesson, remoteViews);
+
+            setupOnLessonClick(lesson, remoteViews);
+
+            return remoteViews;
+        }
+
+        private void setupOnLessonClick(Lesson lesson, RemoteViews remoteViews) {
             Intent lessonActivityIntent = new Intent();
             Bundle hackBundle = new Bundle();
             hackBundle.putParcelable(AppWidgetScheduleProvider.EXTRA_LESSON, Parcels.wrap(lesson));
             lessonActivityIntent.putExtra(AppWidgetScheduleProvider.EXTRA_LESSON, hackBundle);
-            views.setOnClickFillInIntent(R.id.item_lesson, lessonActivityIntent);
-            return views;
+            remoteViews.setOnClickFillInIntent(R.id.item_lesson, lessonActivityIntent);
+        }
+
+        private void setupLessonTime(Lesson lesson, RemoteViews remoteViews) {
+            remoteViews.setTextViewText(R.id.lesson_time_start, lesson.getPrettyLessonTimeStart());
+            remoteViews.setTextViewText(R.id.lesson_time_end, lesson.getPrettyLessonTimeEnd());
+        }
+
+        private void setupLessonAuditoryList(Lesson lesson, RemoteViews remoteViews) {
+            if (mIsCollapsed) {
+                remoteViews.setTextViewText(R.id.lesson_class,
+                        String.format("(%s) %s", lesson.getLessonType(), lesson.getPrettyAuditoryList()));
+            } else {
+                remoteViews.setTextViewText(R.id.lesson_class, lesson.getPrettyAuditoryList());
+            }
+        }
+
+        private void setupLessonNote(Lesson lesson, RemoteViews remoteViews) {
+            if (lesson.getNote() != null && !lesson.getNote().isEmpty()) {
+                remoteViews.setInt(R.id.lesson_note, "setVisibility", View.VISIBLE);
+            } else {
+                remoteViews.setInt(R.id.lesson_note, "setVisibility", View.GONE);
+            }
         }
 
         @Override
@@ -164,6 +183,29 @@ public class AppWidgetScheduleService extends RemoteViewsService {
         @Override
         public boolean hasStableIds() {
             return false;
+        }
+
+        private void setupLessonType(RemoteViews remoteViews, Lesson lesson) {
+            if (mIsCollapsed) {
+                remoteViews.setInt(R.id.lesson_type, "setVisibility", View.GONE);
+            } else {
+                remoteViews.setInt(R.id.lesson_type, "setVisibility", View.VISIBLE);
+                if (mAreCirclesColored) {
+                    switch (lesson.getLessonType().toLowerCase()) {
+                        case "лр":
+                            remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lab);
+                            break;
+                        case "пз":
+                            remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_practice);
+                            break;
+                        case "лк":
+                            remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lecture);
+                            break;
+                    }
+                } else {
+                    remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget);
+                }
+            }
         }
     }
 

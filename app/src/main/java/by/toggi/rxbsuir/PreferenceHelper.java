@@ -32,8 +32,8 @@ public class PreferenceHelper {
     // App widget preferences
     public static final String WIDGET_PREFERENCES = "by.toggi.rxbsuir.preferences.appwidget";
     public static final String WIDGET_SYNC_ID_ITEM = "widget_sync_id_item";
-    public static final String WIDGET_IS_TODAY = "is_today";
-    public static final String WIDGET_IS_SMALL = "is_small";
+    public static final String WIDGET_IS_TODAY = "widget_is_today";
+    public static final String WIDGET_IS_COLLAPSED = "widget_is_collapsed";
 
     private PreferenceHelper() {
     }
@@ -158,19 +158,19 @@ public class PreferenceHelper {
      * @param id      the id
      * @return the is small preference
      */
-    public static boolean getIsSmallPreference(Context context, int id) {
-        return getWidgetPreferences(context, id).getBoolean(WIDGET_IS_SMALL, false);
+    public static boolean getIsWidgetCollapsedPreference(Context context, int id) {
+        return getWidgetPreferences(context, id).getBoolean(WIDGET_IS_COLLAPSED, false);
     }
 
     /**
      * Sets is small preference.
      *
-     * @param context the context
-     * @param id      the id
-     * @param isSmall the is small
+     * @param context     the context
+     * @param id          the id
+     * @param isCollapsed the is collapsed
      */
-    public static void setIsSmallPreference(Context context, int id, boolean isSmall) {
-        getWidgetPreferences(context, id).edit().putBoolean(WIDGET_IS_SMALL, isSmall).commit();
+    public static void setIsWidgetCollapsedPreference(Context context, int id, boolean isCollapsed) {
+        getWidgetPreferences(context, id).edit().putBoolean(WIDGET_IS_COLLAPSED, isCollapsed).commit();
     }
 
     private static RxSharedPreferences getRxSharedPreferences(Context context, int id) {
