@@ -31,9 +31,9 @@ public class PreferenceHelper {
 
     // App widget preferences
     public static final String WIDGET_PREFERENCES = "by.toggi.rxbsuir.preferences.appwidget";
-    public static final String WIDGET_SYNC_ID_ITEM = "widget_sync_id_item";
-    public static final String WIDGET_IS_TODAY = "widget_is_today";
-    public static final String WIDGET_IS_COLLAPSED = "widget_is_collapsed";
+    public static final String WIDGET_SYNC_ID_ITEM = "sync_id_item";
+    public static final String WIDGET_IS_TODAY = "is_today";
+    public static final String WIDGET_IS_COLLAPSED = "is_collapsed";
 
     private PreferenceHelper() {
     }
