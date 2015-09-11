@@ -25,6 +25,8 @@ import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
@@ -46,42 +48,45 @@ public class AppWidgetScheduleService extends RemoteViewsService {
     public static class AppWidgetScheduleFactory implements RemoteViewsFactory {
 
         private final Context mContext;
-        private final int mAppWidgetId;
         private final StorIOSQLite mStorIOSQLite;
         private final boolean mIsToday;
         private final SyncIdItem mSyncIdItem;
-        private boolean mAreCirclesColored;
-        private List<Lesson> mLessonList;
+        private final boolean mAreCirclesColored;
+        private final boolean mIsDarkTheme;
+        private Subscription mSubscription;
+        private List<Lesson> mLessonList = new ArrayList<>();
 
         public AppWidgetScheduleFactory(Context context, Intent intent, StorIOSQLite storIOSQLite) {
             mContext = context;
-            mAppWidgetId = intent.getIntExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID
-            );
+            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID);
             mIsToday = intent.getBooleanExtra(AppWidgetScheduleProvider.EXTRA_IS_TODAY, true);
             mStorIOSQLite = storIOSQLite;
-            mSyncIdItem = PreferenceHelper.getSyncIdItemPreference(mContext, mAppWidgetId);
-            mAreCirclesColored = PreferenceHelper.getAreCirclesColoredPreference(mContext, mAppWidgetId);
+            mSyncIdItem = PreferenceHelper.getSyncIdItemPreference(mContext, appWidgetId);
+            mAreCirclesColored = PreferenceHelper.getAreCirclesColoredPreference(mContext, appWidgetId);
+            mIsDarkTheme = PreferenceHelper.getIsDarkThemePreference(mContext, appWidgetId);
         }
 
         @Override
         public void onCreate() {
-            if (mSyncIdItem != null) {
-                LocalDate date = mIsToday ? LocalDate.now() : LocalDate.now().plusDays(1);
-                mLessonList = mStorIOSQLite.get()
-                        .listOfObjects(Lesson.class)
-                        .withQuery(Query.builder()
-                                .table(LessonEntry.TABLE_NAME)
-                                .where(LessonEntry.Query.builder(mSyncIdItem.getSyncId(), mSyncIdItem.isGroupSchedule())
-                                        .weekNumber(Utils.getCurrentWeekNumber())
-                                        .weekDay(date.getDayOfWeek())
-                                        .build().toString())
-                                .build())
-                        .prepare().executeAsBlocking();
-            } else {
-                mLessonList = new ArrayList<>();
-            }
+            LocalDate date = mIsToday ? LocalDate.now() : LocalDate.now().plusDays(1);
+            Utils.unsubscribe(mSubscription);
+            mSubscription = mStorIOSQLite.get()
+                    .listOfObjects(Lesson.class)
+                    .withQuery(Query.builder()
+                            .table(LessonEntry.TABLE_NAME)
+                            .where(LessonEntry.Query.builder(mSyncIdItem.getSyncId(), mSyncIdItem.isGroupSchedule())
+                                    .weekNumber(Utils.getCurrentWeekNumber())
+                                    .weekDay(date.getDayOfWeek())
+                                    .build().toString())
+                            .build())
+                    .prepare()
+                    .createObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(lessonList -> {
+                        mLessonList = lessonList;
+                        AppWidgetScheduleProvider.updateNote(mContext);
+                    });
         }
 
         @Override
@@ -90,7 +95,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
 
         @Override
         public void onDestroy() {
-
+            Utils.unsubscribe(mSubscription);
         }
 
         @Override
@@ -101,7 +106,9 @@ public class AppWidgetScheduleService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int position) {
             Lesson lesson = mLessonList.get(position);
-            RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.appwidget_item_dark);
+            RemoteViews views = new RemoteViews(mContext.getPackageName(), mIsDarkTheme
+                    ? R.layout.appwidget_item_dark
+                    : R.layout.appwidget_item_light);
             if (mAreCirclesColored) {
                 switch (lesson.getLessonType().toLowerCase()) {
                     case "лр":
@@ -117,6 +124,11 @@ public class AppWidgetScheduleService extends RemoteViewsService {
             }
             views.setTextViewText(R.id.lesson_type, lesson.getLessonType());
             views.setTextViewText(R.id.lesson_subject_subgroup, lesson.getSubjectWithSubgroup());
+            if (lesson.getNote() != null && !lesson.getNote().isEmpty()) {
+                views.setTextViewCompoundDrawables(R.id.lesson_subject_subgroup, 0, 0, R.drawable.ic_note_small, 0);
+            } else {
+                views.setTextViewCompoundDrawables(R.id.lesson_subject_subgroup, 0, 0, 0, 0);
+            }
             views.setTextViewText(R.id.lesson_class, lesson.getPrettyAuditoryList());
             views.setTextViewText(R.id.lesson_time_start, lesson.getPrettyLessonTimeStart());
             views.setTextViewText(R.id.lesson_time_end, lesson.getPrettyLessonTimeEnd());

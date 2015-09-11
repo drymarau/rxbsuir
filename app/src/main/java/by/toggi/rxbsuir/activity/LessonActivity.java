@@ -30,6 +30,7 @@ import by.toggi.rxbsuir.adapter.DetailItemAdapter;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonDetailPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonDetailView;
+import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 
 public class LessonActivity extends AppCompatActivity implements LessonDetailView {
 
@@ -44,6 +45,12 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
     private DetailItemAdapter mAdapter;
 
     public static void start(Context context, Lesson lesson) {
+        Intent intent = new Intent(context, LessonActivity.class);
+        intent.putExtra(EXTRA_LESSON, Parcels.wrap(lesson));
+        context.startActivity(intent);
+    }
+
+    public static void startFromWidget(Context context, Lesson lesson) {
         Intent intent = new Intent(context, LessonActivity.class);
         intent.putExtra(EXTRA_LESSON, Parcels.wrap(lesson));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -113,13 +120,17 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
     private void showEditDialog() {
         new MaterialDialog.Builder(this)
                 .title(R.string.title_add_note)
-                .input(getString(R.string.hint_note), mPresenter.getLessonNote(), true, (materialDialog, charSequence) -> mPresenter.setLessonNote(charSequence.toString()))
+                .input(getString(R.string.hint_note), mPresenter.getLessonNote(), true, (materialDialog, charSequence) -> {
+                    mPresenter.setLessonNote(charSequence.toString());
+                    AppWidgetScheduleProvider.updateNote(this);
+                })
                 .neutralText(R.string.neutral_clear)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onNeutral(MaterialDialog dialog) {
                         super.onNeutral(dialog);
                         mPresenter.setLessonNote(null);
+                        AppWidgetScheduleProvider.updateNote(LessonActivity.this);
                         dialog.dismiss();
                     }
                 })
