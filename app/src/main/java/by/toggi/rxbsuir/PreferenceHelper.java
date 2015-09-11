@@ -90,6 +90,17 @@ public class PreferenceHelper {
         return getWidgetPreferences(context, id).getBoolean(ARE_CIRCLES_COLORED, false);
     }
 
+    /**
+     * Gets is dark theme preference.
+     *
+     * @param context the context
+     * @param id the id
+     * @return the is dark theme preference
+     */
+    public static boolean getIsDarkThemePreference(Context  context, int id) {
+        return getWidgetPreferences(context, id).getBoolean(IS_DARK_THEME, false);
+    }
+
     private static RxSharedPreferences getRxSharedPreferences(Context context, int id) {
         return RxSharedPreferences.create(getWidgetPreferences(context, id));
     }
