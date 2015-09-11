@@ -3,11 +3,14 @@ package by.toggi.rxbsuir.receiver;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.widget.RemoteViews;
 
 import org.parceler.Parcels;
@@ -17,7 +20,6 @@ import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
-import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.service.AppWidgetScheduleService;
 import timber.log.Timber;
 
@@ -28,6 +30,17 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
 
     private static final String ACTION_ARROW_CLICK = "by.toggi.rxbsuir.action.ARROW_CLICK";
     private static final String ACTION_LESSON_ACTIVITY = "by.toggi.rxbsuir.action.ACTION_LESSON_ACTIVITY";
+    private static final String ACTION_UPDATE_NOTE = "by.toggi.rxbsuir.action.ACTION_UPDATE_NOTE";
+
+    public static void updateNote(Context context) {
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        int[] ids = manager.getAppWidgetIds(new ComponentName(context, AppWidgetScheduleProvider.class));
+        Intent intent = new Intent(context, AppWidgetScheduleProvider.class);
+        intent.setAction(ACTION_UPDATE_NOTE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        context.sendBroadcast(intent);
+    }
 
     /**
      * Gets remote views.
@@ -35,10 +48,16 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
      * @param context the context
      * @param id      the id
      * @param isToday the is today
-     * @param item    the {@code SyncIdItem}
      * @return the remote views
      */
-    public static RemoteViews getRemoteViews(Context context, int id, boolean isToday, @NonNull SyncIdItem item) {
+    @Nullable
+    public static RemoteViews getRemoteViews(Context context, int id, boolean isToday) {
+        SyncIdItem item = PreferenceHelper.getSyncIdItemPreference(context, id);
+        if (item == null) {
+            return null;
+        }
+
+        boolean isDarkTheme = PreferenceHelper.getIsDarkThemePreference(context, id);
 
         Intent intent = new Intent(context, AppWidgetScheduleService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
@@ -49,8 +68,19 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, startActivity, 0);
 
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget_schedule);
+        remoteViews.setInt(
+                R.id.widget_background,
+                "setBackgroundResource",
+                isDarkTheme ? R.color.window_background_dark : R.color.window_background_light
+        );
         remoteViews.setRemoteAdapter(R.id.list_view, intent);
         remoteViews.setEmptyView(R.id.list_view, R.id.empty_state);
+        remoteViews.setTextColor(R.id.empty_state, isDarkTheme
+                ? ContextCompat.getColor(context, android.R.color.primary_text_dark)
+                : ContextCompat.getColor(context, android.R.color.primary_text_light));
+        remoteViews.setTextViewText(R.id.empty_state, isToday
+                ? context.getString(R.string.empty_state_today)
+                : context.getString(R.string.empty_state_tomorrow));
         remoteViews.setOnClickPendingIntent(R.id.icon, pendingIntent);
         remoteViews.setImageViewResource(R.id.action_next, isToday ? R.drawable.ic_action_next : R.drawable.ic_action_previous);
         remoteViews.setTextViewText(R.id.title, context.getString(isToday ? R.string.widget_today : R.string.widget_tomorrow));
@@ -95,18 +125,26 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
         switch (intent.getAction()) {
             case ACTION_LESSON_ACTIVITY:
                 Bundle hackBundle = intent.getBundleExtra(EXTRA_LESSON);
-                Lesson lesson = Parcels.unwrap(hackBundle.getParcelable(EXTRA_LESSON));
-                LessonActivity.start(context, lesson);
+                LessonActivity.startFromWidget(
+                        context,
+                        Parcels.unwrap(hackBundle.getParcelable(EXTRA_LESSON))
+                );
                 break;
             case ACTION_ARROW_CLICK:
-                SyncIdItem item = PreferenceHelper.getSyncIdItemPreference(context, id);
-                if (item != null) {
-                    appWidgetManager.updateAppWidget(id, getRemoteViews(
-                            context,
-                            id,
-                            !intent.getBooleanExtra(EXTRA_IS_TODAY, true),
-                            item));
+                RemoteViews remoteViews = getRemoteViews(
+                        context,
+                        id,
+                        !intent.getBooleanExtra(EXTRA_IS_TODAY, true)
+                );
+                if (remoteViews != null) {
+                    appWidgetManager.updateAppWidget(id, remoteViews);
                 }
+                break;
+            case ACTION_UPDATE_NOTE:
+                appWidgetManager.notifyAppWidgetViewDataChanged(
+                        intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS),
+                        R.id.list_view
+                );
                 break;
         }
         super.onReceive(context, intent);
@@ -117,9 +155,9 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
         for (int i = 0, length = appWidgetIds.length; i < length; i++) {
             int id = appWidgetIds[i];
 
-            SyncIdItem item = PreferenceHelper.getSyncIdItemPreference(context, id);
-            if (item != null) {
-                appWidgetManager.updateAppWidget(id, getRemoteViews(context, id, true, item));
+            RemoteViews remoteViews = getRemoteViews(context, id, true);
+            if (remoteViews != null) {
+                appWidgetManager.updateAppWidget(id, remoteViews);
             }
         }
     }
