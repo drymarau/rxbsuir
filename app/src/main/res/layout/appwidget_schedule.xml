@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/widget_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/widget_background"
-    android:background="@color/window_background_light"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/window_background_light">
 
     <RelativeLayout
         android:id="@+id/header"
@@ -22,6 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:src="@drawable/ic_notification"/>
 
         <ImageView
@@ -34,11 +36,11 @@
             android:src="@drawable/ic_action_next"/>
 
         <LinearLayout
+            android:id="@+id/title_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/icon"
             android:layout_toLeftOf="@id/action_next"
             android:layout_toRightOf="@id/icon"
