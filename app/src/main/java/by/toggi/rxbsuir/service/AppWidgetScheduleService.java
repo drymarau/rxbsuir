@@ -193,17 +193,17 @@ public class AppWidgetScheduleService extends RemoteViewsService {
                 if (mAreCirclesColored) {
                     switch (lesson.getLessonType().toLowerCase()) {
                         case "лр":
-                            remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lab);
+                            remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_lab);
                             break;
                         case "пз":
-                            remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_practice);
+                            remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_practice);
                             break;
                         case "лк":
-                            remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget_lecture);
+                            remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_lecture);
                             break;
                     }
                 } else {
-                    remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle_widget);
+                    remoteViews.setInt(R.id.lesson_type, "setBackgroundResource", R.drawable.circle);
                 }
             }
         }
