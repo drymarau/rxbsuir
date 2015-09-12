@@ -22,6 +22,7 @@ import org.parceler.Parcels;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
@@ -37,6 +38,11 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
     private static final String ACTION_LESSON_ACTIVITY = "by.toggi.rxbsuir.action.ACTION_LESSON_ACTIVITY";
     private static final String ACTION_UPDATE_NOTE = "by.toggi.rxbsuir.action.ACTION_UPDATE_NOTE";
 
+    /**
+     * Updates note in all available widgets.
+     *
+     * @param context the context
+     */
     public static void updateNote(Context context) {
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         int[] ids = manager.getAppWidgetIds(new ComponentName(context, AppWidgetScheduleProvider.class));
@@ -225,5 +231,17 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
                     PreferenceHelper.getWidgetPreferencesName(id),
                     PreferenceHelper.getWidgetPreferencesFile(context, id).delete());
         }
+    }
+
+    @Override
+    public void onEnabled(Context context) {
+        super.onEnabled(context);
+        Utils.setWidgetUpdateAlarm(context);
+    }
+
+    @Override
+    public void onDisabled(Context context) {
+        super.onDisabled(context);
+        Utils.cancelWidgetUpdateAlarm(context);
     }
 }
