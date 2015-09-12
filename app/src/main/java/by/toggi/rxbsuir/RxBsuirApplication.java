@@ -1,6 +1,7 @@
 package by.toggi.rxbsuir;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -45,8 +46,14 @@ public class RxBsuirApplication extends Application {
 
         @Override
         protected void log(int priority, String tag, String message, Throwable t) {
-            // TODO Add crashlytics logging
-            return;
+            if (priority == Log.VERBOSE || priority == Log.DEBUG) {
+                return;
+            }
+
+            Crashlytics.log(priority, tag, message);
+            if (t != null) {
+                Crashlytics.logException(t);
+            }
         }
     }
 
