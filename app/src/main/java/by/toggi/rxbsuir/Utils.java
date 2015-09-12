@@ -3,6 +3,7 @@ package by.toggi.rxbsuir;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -24,17 +25,16 @@ import org.threeten.bp.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
-import by.toggi.rxbsuir.receiver.AlarmReceiver;
+import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import by.toggi.rxbsuir.receiver.BootReceiver;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Utils class with all RxBsuir goodies.
  */
 public class Utils {
-
-    public static final int REQUEST_CODE_LESSON_REMINDER = 15613;
 
     private Utils() {
     }
@@ -73,7 +73,7 @@ public class Utils {
      * @param localTime the local time
      */
     public static void setNotificationAlarm(Context context, LocalTime localTime) {
-        PendingIntent pendingIntent = getNotificationPendingIntent(context);
+        PendingIntent pendingIntent = IntentUtils.getNotificationPendingIntent(context);
 
         LocalDateTime dateTime;
         if (LocalTime.now().isAfter(localTime)) {
@@ -81,8 +81,7 @@ public class Utils {
         } else {
             dateTime = LocalDateTime.of(LocalDate.now(), localTime);
         }
-        AlarmManager manager = getAlarmManager(context);
-        manager.setInexactRepeating(
+        getAlarmManager(context).setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
                 convertLocalDateTimeToMillis(dateTime),
                 TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS),
@@ -98,15 +97,40 @@ public class Utils {
      */
     public static void cancelNotificationAlarm(Context context) {
         setBootReceiverEnabled(context, false);
-        PendingIntent intent = getNotificationPendingIntent(context);
-        AlarmManager manager = getAlarmManager(context);
-        manager.cancel(intent);
-        intent.cancel();
+        cancelAlarm(context, IntentUtils.getNotificationPendingIntent(context));
     }
 
-    private static long convertLocalDateTimeToMillis(LocalDateTime localDateTime) {
-        return localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
+    /**
+     * Sets widget update alarm.
+     *
+     * @param context the context
+     */
+    public static void setWidgetUpdateAlarm(Context context) {
+        if (getAppWidgetCount(context) > 0) {
+            Timber.d("Setting WidgetUpdateAlarm...");
+            LocalDateTime dateTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.MIDNIGHT);
+
+            AlarmManager manager = getAlarmManager(context);
+            manager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    convertLocalDateTimeToMillis(dateTime),
+                    TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS),
+                    IntentUtils.getWidgetUpdatePendingIntent(context)
+            );
+            setBootReceiverEnabled(context, true);
+        }
     }
+
+
+    /**
+     * Cancel widget update alarm.
+     *
+     * @param context the context
+     */
+    public static void cancelWidgetUpdateAlarm(Context context) {
+        cancelAlarm(context, IntentUtils.getWidgetUpdatePendingIntent(context));
+    }
+
 
     /**
      * Restarts app.
@@ -202,15 +226,6 @@ public class Utils {
         return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    private static PendingIntent getNotificationPendingIntent(Context context) {
-        return PendingIntent.getBroadcast(
-                context,
-                REQUEST_CODE_LESSON_REMINDER,
-                new Intent(context, AlarmReceiver.class),
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
-    }
-
     private static void setBootReceiverEnabled(Context context, boolean enabled) {
         ComponentName receiver = new ComponentName(context, BootReceiver.class);
         PackageManager manager = context.getPackageManager();
@@ -220,6 +235,21 @@ public class Utils {
                         : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP
         );
+    }
+
+    private static int getAppWidgetCount(Context context) {
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        int[] ids = manager.getAppWidgetIds(new ComponentName(context, AppWidgetScheduleProvider.class));
+        return ids.length;
+    }
+
+    private static long convertLocalDateTimeToMillis(LocalDateTime localDateTime) {
+        return localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
+    }
+
+    private static void cancelAlarm(Context context, PendingIntent pendingIntent) {
+        getAlarmManager(context).cancel(pendingIntent);
+        pendingIntent.cancel();
     }
 
 }
