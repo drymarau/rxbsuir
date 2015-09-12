@@ -81,11 +81,10 @@ public class Utils {
         } else {
             dateTime = LocalDateTime.of(LocalDate.now(), localTime);
         }
-        long triggerMillis = dateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
         AlarmManager manager = getAlarmManager(context);
         manager.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
-                triggerMillis,
+                convertLocalDateTimeToMillis(dateTime),
                 TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS),
                 pendingIntent
         );
@@ -103,6 +102,10 @@ public class Utils {
         AlarmManager manager = getAlarmManager(context);
         manager.cancel(intent);
         intent.cancel();
+    }
+
+    private static long convertLocalDateTimeToMillis(LocalDateTime localDateTime) {
+        return localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
     }
 
     /**
