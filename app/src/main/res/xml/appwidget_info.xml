@@ -5,10 +5,10 @@
     android:configure="by.toggi.rxbsuir.activity.AppWidgetConfigActivity"
     android:initialLayout="@layout/appwidget_schedule"
     android:minHeight="110dp"
-    android:minResizeHeight="40dp"
+    android:minResizeHeight="110dp"
     android:minResizeWidth="110dp"
     android:minWidth="180dp"
     android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="21600000"
+    android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen|keyguard"
     tools:ignore="UnusedAttribute"/>
