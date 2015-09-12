@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.activity;
 
+import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,15 +20,15 @@ import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
+import timber.log.Timber;
 
 public class AppWidgetConfigActivity extends AppCompatActivity {
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-
-    @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
-
-    private int mAppWidgetId;
     private final Intent mResultIntent = new Intent();
+    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
+    private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    private int mResult = RESULT_CANCELED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
         }
 
         mResultIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-        setResult(RESULT_CANCELED, mResultIntent);
+        setResult(mResult, mResultIntent);
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
@@ -78,11 +79,31 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
                     appWidgetManager.updateAppWidget(mAppWidgetId, remoteViews);
                 }
 
-                setResult(RESULT_OK, mResultIntent);
+                setResult(mResult = RESULT_OK, mResultIntent);
                 finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mResult == RESULT_CANCELED) {
+            try {
+                // Phantom widget fix (kinda)
+                AppWidgetHost host = new AppWidgetHost(getApplicationContext(), Integer.MAX_VALUE);
+                host.deleteAppWidgetId(mAppWidgetId);
+            } catch (Exception e) {
+                Timber.e(e, "Widget configuration canceled, id deletion went wrong");
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     private void setupToolbar() {
