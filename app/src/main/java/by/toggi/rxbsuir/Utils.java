@@ -214,6 +214,17 @@ public class Utils {
         }
     }
 
+    /**
+     * Get app widget ids.
+     *
+     * @param context the context
+     * @return the int [ ]
+     */
+    public static int[] getAppWidgetIds(Context context) {
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        return manager.getAppWidgetIds(new ComponentName(context, AppWidgetScheduleProvider.class));
+    }
+
     private static LocalDate getStartYear() {
         LocalDate localDate = LocalDate.now();
         if (localDate.getMonth().compareTo(Month.SEPTEMBER) < 0) {
@@ -238,9 +249,7 @@ public class Utils {
     }
 
     private static int getAppWidgetCount(Context context) {
-        AppWidgetManager manager = AppWidgetManager.getInstance(context);
-        int[] ids = manager.getAppWidgetIds(new ComponentName(context, AppWidgetScheduleProvider.class));
-        return ids.length;
+        return getAppWidgetIds(context).length;
     }
 
     private static long convertLocalDateTimeToMillis(LocalDateTime localDateTime) {

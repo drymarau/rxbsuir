@@ -57,7 +57,9 @@ public class IntentUtils {
         return PendingIntent.getBroadcast(
                 context,
                 REQUEST_CODE_WIDGET_UPDATE,
-                new Intent(context, AppWidgetScheduleProvider.class).setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE),
+                new Intent(context, AppWidgetScheduleProvider.class)
+                        .setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+                        .putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, Utils.getAppWidgetIds(context)),
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
     }
