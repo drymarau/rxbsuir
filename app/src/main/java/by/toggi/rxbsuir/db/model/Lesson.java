@@ -55,8 +55,8 @@ public class Lesson {
         this.isGroupSchedule = isGroupSchedule;
     }
 
-    public Lesson(@Nullable Long _id, @NonNull String syncId, Schedule schedule, DayOfWeek weekday, boolean isGroupSchedule) {
-        this._id = _id;
+    public Lesson(@NonNull String syncId, Schedule schedule, DayOfWeek weekday, boolean isGroupSchedule) {
+        this._id = null;
         this.syncId = syncId;
         this.auditoryList = schedule.auditory;
         this.employeeList = schedule.employeeList;

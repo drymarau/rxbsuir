@@ -25,8 +25,6 @@
     <!-- MENU -->
     <string name="action_today">Текущая неделя</string>
     <string name="action_refresh">Обновить</string>
-    <string name="action_subgroup_1">Подгруппа 1</string>
-    <string name="action_subgroup_2">Подгруппа 2</string>
     <string name="action_delete">Удалить</string>
     <string name="action_subgroup_filter">Подгруппы</string>
     <string name="action_filter_both">Первая и вторая</string>
@@ -90,6 +88,7 @@
         <item quantity="few">Недели %1s</item>
         <item quantity="many">Недели %1s</item>
     </plurals>
+    <string name="action_edit_note">Редактировать заметку</string>
 
     <!-- WIDGET -->
     <string name="widget_today">Сегодня</string>

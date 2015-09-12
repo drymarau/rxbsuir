@@ -34,7 +34,7 @@ public class AppWidgetConfigFragment extends PreferenceFragment implements AppWi
     @Inject AppWidgetConfigPresenter mPresenter;
 
     private int mAppWidgetId;
-    private List<SyncIdItem> mSyncIdItemList = new ArrayList<>();
+    private final List<SyncIdItem> mSyncIdItemList = new ArrayList<>();
     private com.f2prateek.rx.preferences.Preference<SyncIdItem> mSyncIdItemPreference;
     private com.f2prateek.rx.preferences.Preference<SubgroupFilter> mSubgroupFilterPreference;
     private CompositeSubscription mSubscription;

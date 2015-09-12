@@ -27,7 +27,7 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
 
     private int mAppWidgetId;
-    private Intent mResultIntent = new Intent();
+    private final Intent mResultIntent = new Intent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -209,9 +209,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        for (int i = 0, length = appWidgetIds.length; i < length; i++) {
-            int id = appWidgetIds[i];
-
+        for (int id : appWidgetIds) {
             RemoteViews remoteViews = getRemoteViews(context, id);
             if (remoteViews != null) {
                 appWidgetManager.updateAppWidget(id, remoteViews);
@@ -222,8 +220,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
-        for (int i = 0, length = appWidgetIds.length; i < length; i++) {
-            int id = appWidgetIds[i];
+        for (int id : appWidgetIds) {
             Timber.d("%s deleted: %s",
                     PreferenceHelper.getWidgetPreferencesName(id),
                     PreferenceHelper.getWidgetPreferencesFile(context, id).delete());

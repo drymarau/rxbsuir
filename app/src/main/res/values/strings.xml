@@ -29,8 +29,6 @@
     <!-- MENU -->
     <string name="action_today">Current week</string>
     <string name="action_refresh">Refresh</string>
-    <string name="action_subgroup_1">Subgroup 1</string>
-    <string name="action_subgroup_2">Subgroup 2</string>
     <string name="action_delete">Delete</string>
     <string name="action_subgroup_filter">Subgroups</string>
     <string name="action_filter_both">First and second</string>
@@ -105,6 +103,7 @@
         <item quantity="other">Week %1s</item>
         <item quantity="many">Weeks %1s</item>
     </plurals>
+    <string name="action_edit_note">Edit note</string>
 
     <!-- WIDGET -->
     <string name="widget_today">Today</string>

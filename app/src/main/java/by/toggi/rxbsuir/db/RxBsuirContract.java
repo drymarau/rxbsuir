@@ -53,12 +53,12 @@ public class RxBsuirContract {
 
         public static class Query {
 
-            private String syncId;
-            private boolean isGroupSchedule;
-            private SubgroupFilter subgroupFilter;
-            private DayOfWeek weekDay;
-            private Integer weekNumber;
-            private String search;
+            private final String syncId;
+            private final boolean isGroupSchedule;
+            private final SubgroupFilter subgroupFilter;
+            private final DayOfWeek weekDay;
+            private final Integer weekNumber;
+            private final String search;
 
             private Query(Builder builder) {
                 syncId = builder.syncId;
@@ -71,10 +71,6 @@ public class RxBsuirContract {
 
             public static Builder builder(@Nullable String syncId, boolean isGroupSchedule) {
                 return new Builder(syncId, isGroupSchedule);
-            }
-
-            public String getSyncId() {
-                return syncId;
             }
 
             @Override
