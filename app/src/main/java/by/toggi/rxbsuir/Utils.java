@@ -67,13 +67,13 @@ public class Utils {
     }
 
     /**
-     * Sets alarm.
+     * Sets notification alarm.
      *
      * @param context   the context
      * @param localTime the local time
      */
-    public static void setAlarm(Context context, LocalTime localTime) {
-        PendingIntent pendingIntent = getLessonReminderPendingIntent(context);
+    public static void setNotificationAlarm(Context context, LocalTime localTime) {
+        PendingIntent pendingIntent = getNotificationPendingIntent(context);
 
         LocalDateTime dateTime;
         if (LocalTime.now().isAfter(localTime)) {
@@ -92,13 +92,13 @@ public class Utils {
     }
 
     /**
-     * Cancels alarm.
+     * Cancels notification alarm.
      *
      * @param context the context
      */
-    public static void cancelAlarm(Context context) {
+    public static void cancelNotificationAlarm(Context context) {
         setBootReceiverEnabled(context, false);
-        PendingIntent intent = getLessonReminderPendingIntent(context);
+        PendingIntent intent = getNotificationPendingIntent(context);
         AlarmManager manager = getAlarmManager(context);
         manager.cancel(intent);
         intent.cancel();
@@ -202,7 +202,7 @@ public class Utils {
         return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    private static PendingIntent getLessonReminderPendingIntent(Context context) {
+    private static PendingIntent getNotificationPendingIntent(Context context) {
         return PendingIntent.getBroadcast(
                 context,
                 REQUEST_CODE_LESSON_REMINDER,
