@@ -44,6 +44,9 @@ import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
 import timber.log.Timber;
 
+import static by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.Type.TODAY;
+import static by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.Type.TOMORROW;
+
 public class LessonListFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener, LessonAdapter.OnItemClickListener {
 
     public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
@@ -196,6 +199,9 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
     @Override
     public void onResume() {
         super.onResume();
+        if (mType == TODAY || mType == TOMORROW) {
+            mPresenter.onCreate();
+        }
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
                 mBroadcastReceiver,
