@@ -312,13 +312,13 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
 
     private void setFavoriteState(MenuItem item) {
         if (item.isChecked()) {
-            Utils.cancelAlarm(this);
+            Utils.cancelNotificationAlarm(this);
             item.setChecked(false).setIcon(R.drawable.ic_action_favorite_off);
             mFavoriteSyncIdPreference.set(mFavoriteSyncIdPreference.defaultValue());
             mFavoriteIsGroupSchedulePreference.set(mFavoriteIsGroupSchedulePreference.defaultValue());
             mFavoriteTitlePreference.set(mFavoriteTitlePreference.defaultValue());
         } else {
-            Utils.setAlarm(this, mLocalTimePreference.get());
+            Utils.setNotificationAlarm(this, mLocalTimePreference.get());
             item.setChecked(true).setIcon(R.drawable.ic_action_favorite_on);
             mFavoriteSyncIdPreference.set(mSyncIdPreference.get());
             mFavoriteIsGroupSchedulePreference.set(mIsGroupSchedulePreference.get());

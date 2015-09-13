@@ -45,7 +45,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                         mNotificationTimePreference.setSummary(localTime.toString());
                     }
                     if (mFavoriteSyncIdPrerefence.get() != null) {
-                        Utils.setAlarm(getActivity(), localTime);
+                        Utils.setNotificationAlarm(getActivity(), localTime);
                     }
                 });
     }

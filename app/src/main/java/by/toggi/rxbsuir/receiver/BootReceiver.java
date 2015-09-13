@@ -24,7 +24,7 @@ public class BootReceiver extends BroadcastReceiver {
         String favoriteSyncId = preferences.getString(PreferenceHelper.FAVORITE_SYNC_ID, null);
         if (favoriteSyncId != null) {
             String localTimeString = preferences.getString(PreferenceHelper.NOTIFICATION_TIME, "07:00");
-            Utils.setAlarm(context, LocalTime.parse(localTimeString));
+            Utils.setNotificationAlarm(context, LocalTime.parse(localTimeString));
         }
     }
 }
