@@ -104,13 +104,10 @@ public class LessonListPresenter extends Presenter<LessonListView> {
                         .weekDay(tomorrow.getDayOfWeek())
                         .build();
             case WEEK_ONE:
-                return builder.weekNumber(1).build();
             case WEEK_TWO:
-                return builder.weekNumber(2).build();
             case WEEK_THREE:
-                return builder.weekNumber(3).build();
             case WEEK_FOUR:
-                return builder.weekNumber(4).build();
+                return builder.weekNumber(mType.weekNumber()).build();
             default:
                 return null;
         }
@@ -147,7 +144,16 @@ public class LessonListPresenter extends Presenter<LessonListView> {
 
     public enum Type {
 
-        TODAY, TOMORROW, WEEK_ONE, WEEK_TWO, WEEK_THREE, WEEK_FOUR
+        TODAY(0), TOMORROW(0), WEEK_ONE(1), WEEK_TWO(2), WEEK_THREE(3), WEEK_FOUR(4);
 
+        private final int mWeekNumber;
+
+        Type(int weekNumber) {
+            mWeekNumber = weekNumber;
+        }
+
+        public int weekNumber() {
+            return mWeekNumber;
+        }
     }
 }
