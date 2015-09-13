@@ -83,7 +83,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
                     .withQuery(Query.builder()
                             .table(LessonEntry.TABLE_NAME)
                             .where(LessonEntry.Query.builder(mSyncIdItem.getSyncId(), mSyncIdItem.isGroupSchedule())
-                                    .weekNumber(Utils.getCurrentWeekNumber())
+                                    .weekNumber(Utils.getWeekNumber(date))
                                     .weekDay(date.getDayOfWeek())
                                     .subgroupFilter(mSubgroupFilter)
                                     .build().toString())
