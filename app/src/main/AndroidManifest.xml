@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    xmlns:tools="http://schemas.android.com/tools"
     package="by.toggi.rxbsuir"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
@@ -66,7 +66,9 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receiver.AppWidgetScheduleProvider">
+        <receiver
+            android:name=".receiver.AppWidgetScheduleProvider"
+            android:icon="@drawable/preview">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
