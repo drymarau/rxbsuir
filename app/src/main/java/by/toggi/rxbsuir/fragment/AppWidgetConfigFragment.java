@@ -128,7 +128,7 @@ public class AppWidgetConfigFragment extends PreferenceFragment implements AppWi
         switch (preference.getKey()) {
             case PreferenceHelper.WIDGET_SYNC_ID_ITEM:
                 new MaterialDialog.Builder(getActivity())
-                        .title("Select group or employee")
+                        .title(R.string.widget_sync_id_item)
                         .items(getItems())
                         .itemsCallbackSingleChoice(findItemIndex(), (materialDialog, view, i, charSequence) -> {
                             SyncIdItem item = mSyncIdItemList.get(i);
