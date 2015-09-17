@@ -20,8 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/lesson_type"
-        android:layout_toRightOf="@id/lesson_type"/>
-    <!--android:layout_toLeftOf="@id/lesson_time_start"-->
-    <!--android:layout_toStartOf="@id/lesson_time_start"/>-->
+        android:layout_toLeftOf="@id/lesson_time_start"
+        android:layout_toRightOf="@id/lesson_type"
+        android:layout_toStartOf="@id/lesson_time_start"/>
 
 </RelativeLayout>
