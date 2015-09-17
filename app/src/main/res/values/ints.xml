@@ -2,4 +2,5 @@
 <resources>
     <integer name="rad_max_count">30</integer>
     <integer name="rad_repeat_count">10</integer>
+    <integer name="rag_grace_period_days">1</integer>
 </resources>
