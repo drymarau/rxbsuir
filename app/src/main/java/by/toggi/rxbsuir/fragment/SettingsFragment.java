@@ -1,8 +1,5 @@
 package by.toggi.rxbsuir.fragment;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -10,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -95,14 +91,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     public boolean onPreferenceClick(Preference preference) {
         switch (preference.getKey()) {
             case "rate_app":
-                try {
-                    startActivity(new Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)
-                    ));
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(getActivity(), R.string.play_store_not_found, Toast.LENGTH_SHORT).show();
-                }
+                Utils.openPlayStorePage(getActivity());
                 return true;
             case "notification_time":
                 LocalTime localTime = mLocalTimePreference.get();
