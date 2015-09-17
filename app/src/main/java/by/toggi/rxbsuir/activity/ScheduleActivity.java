@@ -143,7 +143,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
 
         if (savedInstanceState == null) {
             mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
-            RateAppDialog.show(this);
+            RateAppDialog.newInstance(this).show();
         } else {
             showContent();
         }
