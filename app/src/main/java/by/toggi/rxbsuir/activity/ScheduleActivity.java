@@ -49,6 +49,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.RateAppDialog;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
@@ -142,6 +143,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
 
         if (savedInstanceState == null) {
             mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
+            RateAppDialog.show(this);
         } else {
             showContent();
         }

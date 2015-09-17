@@ -4,15 +4,18 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.IntentCompat;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
@@ -37,6 +40,22 @@ import timber.log.Timber;
 public class Utils {
 
     private Utils() {
+    }
+
+    /**
+     * Opens play store page or shows a toast if play services are missing.
+     *
+     * @param context the context
+     */
+    public static void openPlayStorePage(Context context) {
+        try {
+            context.startActivity(new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)
+            ));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, R.string.play_store_not_found, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

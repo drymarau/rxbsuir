@@ -99,4 +99,10 @@
     <string name="widget_config_activity_label">Настройки виджета</string>
     <string name="widget_action_done">Добавить</string>
 
+    <!-- RATE APP DIALOG -->
+    <string name="rad_neutral">Позже</string>
+    <string name="rad_positive">Оценить</string>
+    <string name="rad_negative">Нет, спасибо</string>
+    <string name="rad_content">Если вам нравится RxBSUIR, пожалуйста, оцените его в Google Play. Спасибо за Вашу поддержку!</string>
+
 </resources>

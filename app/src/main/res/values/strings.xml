@@ -128,4 +128,11 @@
     <string name="widget_config_activity_label">Widget configuration</string>
     <string name="widget_action_done">Add</string>
 
+    <!-- RATE APP DIALOG -->
+    <string name="rad_title" translatable="false">@string/title_pref_rate_app</string>
+    <string name="rad_neutral">Later</string>
+    <string name="rad_positive">Rate</string>
+    <string name="rad_negative">No, thanks</string>
+    <string name="rad_content">If you like RxBSUIR, please take a moment to rate it in Google Play Store. Thank you for your support!</string>
+
 </resources>
