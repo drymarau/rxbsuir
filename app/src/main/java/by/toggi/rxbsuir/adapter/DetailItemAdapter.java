@@ -22,7 +22,7 @@ public class DetailItemAdapter extends RecyclerView.Adapter<DetailItemAdapter.Vi
     private static final int VIEW_TYPE_DETAIL_SUMMARY = 1;
 
     private final Context mContext;
-    private List<DetailItem> mDetailItemList;
+    private final List<DetailItem> mDetailItemList;
 
     public DetailItemAdapter(Context context, List<DetailItem> detailItemList) {
         mContext = context;

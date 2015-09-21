@@ -28,7 +28,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     private final LessonListPresenter.Type mType;
     private final OnItemClickListener mListener;
     private final boolean mAreCirclesColored;
-    private List<Lesson> mLessonList;
+    private final List<Lesson> mLessonList;
 
     public LessonAdapter(OnItemClickListener listener, List<Lesson> lessonList, LessonListPresenter.Type type, boolean areCirclesColored) {
         mListener = listener;

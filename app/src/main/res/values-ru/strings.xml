@@ -25,10 +25,8 @@
     <!-- MENU -->
     <string name="action_today">Текущая неделя</string>
     <string name="action_refresh">Обновить</string>
-    <string name="action_subgroup_1">Подгруппа 1</string>
-    <string name="action_subgroup_2">Подгруппа 2</string>
     <string name="action_delete">Удалить</string>
-    <string name="action_filter">Подгруппы</string>
+    <string name="action_subgroup_filter">Подгруппы</string>
     <string name="action_filter_both">Первая и вторая</string>
     <string name="action_filter_first">Только первая</string>
     <string name="action_filter_second">Только вторая</string>
@@ -90,6 +88,21 @@
         <item quantity="few">Недели %1s</item>
         <item quantity="many">Недели %1s</item>
     </plurals>
+    <string name="action_edit_note">Редактировать заметку</string>
 
+    <!-- WIDGET -->
+    <string name="widget_today">Сегодня</string>
+    <string name="widget_tomorrow">Завтра</string>
+    <string name="widget_empty_synciditem">Пожалуйста, добавьте хотя бы одну группу или преподавателя из основного приложения!</string>
+    <string name="widget_schedule">Расписание</string>
+    <string name="widget_sync_id_item">Группа/преподаватель</string>
+    <string name="widget_config_activity_label">Настройки виджета</string>
+    <string name="widget_action_done">Добавить</string>
+
+    <!-- RATE APP DIALOG -->
+    <string name="rad_neutral">Позже</string>
+    <string name="rad_positive">Оценить</string>
+    <string name="rad_negative">Нет, спасибо</string>
+    <string name="rad_content">Если вам нравится RxBSUIR, пожалуйста, оцените его в Google Play. Спасибо за Вашу поддержку!</string>
 
 </resources>

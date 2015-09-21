@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -48,6 +49,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.RateAppDialog;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
@@ -61,6 +63,7 @@ import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
@@ -106,9 +109,9 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     @Inject @Named(PreferenceHelper.FAVORITE_TITLE) Preference<String> mFavoriteTitlePreference;
     @Inject Preference<LocalTime> mLocalTimePreference;
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(@NonNull Context context, @NonNull Intent intent) {
             ScheduleActivity.this.supportInvalidateOptionsMenu();
         }
     };
@@ -140,6 +143,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
 
         if (savedInstanceState == null) {
             mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
+            RateAppDialog.newInstance(this).show();
         } else {
             showContent();
         }
@@ -164,7 +168,11 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     protected void onPause() {
         super.onPause();
         Utils.unsubscribe(mSearchViewSubscription);
-        unregisterReceiver(mReceiver);
+        try {
+            unregisterReceiver(mReceiver);
+        } catch (IllegalArgumentException e) {
+            Timber.e(e, "unregisterReceiver error in ScheduleActivity");
+        }
     }
 
     @LayoutRes
@@ -306,13 +314,13 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
 
     private void setFavoriteState(MenuItem item) {
         if (item.isChecked()) {
-            Utils.cancelAlarm(this);
+            Utils.cancelNotificationAlarm(this);
             item.setChecked(false).setIcon(R.drawable.ic_action_favorite_off);
             mFavoriteSyncIdPreference.set(mFavoriteSyncIdPreference.defaultValue());
             mFavoriteIsGroupSchedulePreference.set(mFavoriteIsGroupSchedulePreference.defaultValue());
             mFavoriteTitlePreference.set(mFavoriteTitlePreference.defaultValue());
         } else {
-            Utils.setAlarm(this, mLocalTimePreference.get());
+            Utils.setNotificationAlarm(this, mLocalTimePreference.get());
             item.setChecked(true).setIcon(R.drawable.ic_action_favorite_on);
             mFavoriteSyncIdPreference.set(mSyncIdPreference.get());
             mFavoriteIsGroupSchedulePreference.set(mIsGroupSchedulePreference.get());

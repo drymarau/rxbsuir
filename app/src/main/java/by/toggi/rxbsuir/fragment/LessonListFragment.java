@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -41,6 +42,10 @@ import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
+import timber.log.Timber;
+
+import static by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.Type.TODAY;
+import static by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.Type.TOMORROW;
 
 public class LessonListFragment extends Fragment implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener, LessonAdapter.OnItemClickListener {
 
@@ -61,9 +66,9 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
     private LessonListPresenter.Type mType;
     private LinearLayoutManager mLayoutManager;
     private LessonAdapter mAdapter;
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(@NonNull Context context, @NonNull Intent intent) {
             mPresenter.setSearchQuery(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
         }
     };
@@ -194,6 +199,9 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
     @Override
     public void onResume() {
         super.onResume();
+        if (mType == TODAY || mType == TOMORROW) {
+            mPresenter.onCreate();
+        }
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
                 mBroadcastReceiver,
@@ -205,8 +213,12 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
     public void onPause() {
         super.onPause();
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(mBroadcastReceiver);
+        try {
+            LocalBroadcastManager.getInstance(getActivity())
+                    .unregisterReceiver(mBroadcastReceiver);
+        } catch (IllegalArgumentException e) {
+            Timber.e(e, "LocalBroadcastManager.unregisterReceiver error");
+        }
     }
 
     @Override

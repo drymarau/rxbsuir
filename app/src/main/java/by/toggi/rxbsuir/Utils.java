@@ -3,15 +3,19 @@ package by.toggi.rxbsuir;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.IntentCompat;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
@@ -24,19 +28,34 @@ import org.threeten.bp.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
-import by.toggi.rxbsuir.receiver.AlarmReceiver;
+import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import by.toggi.rxbsuir.receiver.BootReceiver;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Utils class with all RxBsuir goodies.
  */
 public class Utils {
 
-    public static final int REQUEST_CODE_LESSON_REMINDER = 15613;
-
     private Utils() {
+    }
+
+    /**
+     * Opens play store page or shows a toast if play services are missing.
+     *
+     * @param context the context
+     */
+    public static void openPlayStorePage(Context context) {
+        try {
+            context.startActivity(new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)
+            ));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, R.string.play_store_not_found, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -67,13 +86,13 @@ public class Utils {
     }
 
     /**
-     * Sets alarm.
+     * Sets notification alarm.
      *
      * @param context   the context
      * @param localTime the local time
      */
-    public static void setAlarm(Context context, LocalTime localTime) {
-        PendingIntent pendingIntent = getLessonReminderPendingIntent(context);
+    public static void setNotificationAlarm(Context context, LocalTime localTime) {
+        PendingIntent pendingIntent = IntentUtils.getNotificationPendingIntent(context);
 
         LocalDateTime dateTime;
         if (LocalTime.now().isAfter(localTime)) {
@@ -81,11 +100,9 @@ public class Utils {
         } else {
             dateTime = LocalDateTime.of(LocalDate.now(), localTime);
         }
-        long triggerMillis = dateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
-        AlarmManager manager = getAlarmManager(context);
-        manager.setInexactRepeating(
+        getAlarmManager(context).setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
-                triggerMillis,
+                convertLocalDateTimeToMillis(dateTime),
                 TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS),
                 pendingIntent
         );
@@ -93,17 +110,46 @@ public class Utils {
     }
 
     /**
-     * Cancels alarm.
+     * Cancels notification alarm.
      *
      * @param context the context
      */
-    public static void cancelAlarm(Context context) {
+    public static void cancelNotificationAlarm(Context context) {
         setBootReceiverEnabled(context, false);
-        PendingIntent intent = getLessonReminderPendingIntent(context);
-        AlarmManager manager = getAlarmManager(context);
-        manager.cancel(intent);
-        intent.cancel();
+        cancelAlarm(context, IntentUtils.getNotificationPendingIntent(context));
     }
+
+    /**
+     * Sets widget update alarm.
+     *
+     * @param context the context
+     */
+    public static void setWidgetUpdateAlarm(Context context) {
+        if (getAppWidgetCount(context) > 0) {
+            Timber.d("Setting WidgetUpdateAlarm...");
+            LocalDateTime dateTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.MIDNIGHT);
+
+            AlarmManager manager = getAlarmManager(context);
+            manager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    convertLocalDateTimeToMillis(dateTime),
+                    TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS),
+                    IntentUtils.getWidgetUpdatePendingIntent(context)
+            );
+            setBootReceiverEnabled(context, true);
+        }
+    }
+
+
+    /**
+     * Cancel widget update alarm.
+     *
+     * @param context the context
+     */
+    public static void cancelWidgetUpdateAlarm(Context context) {
+        cancelAlarm(context, IntentUtils.getWidgetUpdatePendingIntent(context));
+    }
+
 
     /**
      * Restarts app.
@@ -187,6 +233,17 @@ public class Utils {
         }
     }
 
+    /**
+     * Get app widget ids.
+     *
+     * @param context the context
+     * @return the int [ ]
+     */
+    public static int[] getAppWidgetIds(Context context) {
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        return manager.getAppWidgetIds(new ComponentName(context, AppWidgetScheduleProvider.class));
+    }
+
     private static LocalDate getStartYear() {
         LocalDate localDate = LocalDate.now();
         if (localDate.getMonth().compareTo(Month.SEPTEMBER) < 0) {
@@ -199,15 +256,6 @@ public class Utils {
         return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    private static PendingIntent getLessonReminderPendingIntent(Context context) {
-        return PendingIntent.getBroadcast(
-                context,
-                REQUEST_CODE_LESSON_REMINDER,
-                new Intent(context, AlarmReceiver.class),
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
-    }
-
     private static void setBootReceiverEnabled(Context context, boolean enabled) {
         ComponentName receiver = new ComponentName(context, BootReceiver.class);
         PackageManager manager = context.getPackageManager();
@@ -217,6 +265,19 @@ public class Utils {
                         : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP
         );
+    }
+
+    private static int getAppWidgetCount(Context context) {
+        return getAppWidgetIds(context).length;
+    }
+
+    private static long convertLocalDateTimeToMillis(LocalDateTime localDateTime) {
+        return localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
+    }
+
+    private static void cancelAlarm(Context context, PendingIntent pendingIntent) {
+        getAlarmManager(context).cancel(pendingIntent);
+        pendingIntent.cancel();
     }
 
 }
