@@ -32,7 +32,7 @@ def versionBuild = 2 // bump for dogfood builds, public betas, etc.
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "by.toggi.rxbsuir"
