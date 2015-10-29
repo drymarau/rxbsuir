@@ -17,18 +17,19 @@ public class StudentGroup {
     @Element(name = "name")
     public String name;
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_COURSE)
-    @Element(name = "course")
+    @Element(name = "course", required = false)
     public int course;
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_FACULTY_ID)
-    @Element(name = "facultyId")
+    @Element(name = "facultyId", required = false)
     public long facultyId;
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_SPECIALITY_DEPARTMENT_EDUCATION_FORM_ID)
-    @Element(name = "specialityDepartmentEducationFormId")
+    @Element(name = "specialityDepartmentEducationFormId", required = false)
     public long specialityDepartmentEducationFormId;
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_IS_CACHED)
     public boolean isCached;
 
-    StudentGroup() {}
+    StudentGroup() {
+    }
 
     @Override
     public String toString() {
