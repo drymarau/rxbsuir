@@ -88,6 +88,7 @@
         <item quantity="one">Неделя %1s</item>
         <item quantity="few">Недели %1s</item>
         <item quantity="many">Недели %1s</item>
+        <item quantity="other">Недели %1s</item>
     </plurals>
     <string name="action_edit_note">Редактировать заметку</string>
 
