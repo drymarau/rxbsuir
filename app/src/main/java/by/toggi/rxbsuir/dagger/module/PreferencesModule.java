@@ -35,6 +35,12 @@ public class PreferencesModule {
     }
 
     @Provides
+    @Named(PreferenceHelper.IS_FAM_ENABLED)
+    boolean provideIsFamEnabled(SharedPreferences preferences) {
+        return preferences.getBoolean(PreferenceHelper.IS_FAM_ENABLED, true);
+    }
+
+    @Provides
     @Singleton
     SubgroupFilter provideSubgroupFilter(Preference<SubgroupFilter> preference) {
         return preference.get();

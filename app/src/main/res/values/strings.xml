@@ -87,6 +87,7 @@
     <string name="title_notification_sound">Enable notification sound</string>
     <string name="title_is_today_enabled">Today and tomorrow tabs</string>
     <string name="title_are_circles_colored">Multicolored lesson type</string>
+    <string name="title_is_fam_enabled">\"Add\" button</string>
 
     <!-- Title format portrait (Awesome C.T.)-->
     <string name="title_format" translatable="false">%s %.1s.%.1s.</string>

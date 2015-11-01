@@ -99,6 +99,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
+    @Inject @Named(PreferenceHelper.IS_FAM_ENABLED) boolean mIsFamEnabled;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
     @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
@@ -130,6 +131,11 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
         setContentView(getLayoutRes());
 
         ButterKnife.bind(this);
+
+        if (!mIsFamEnabled) {
+            mFloatingActionMenu.setVisibility(View.GONE);
+        }
+
         mFloatingActionMenu.getBackground().setAlpha(0);
 
         addStorageFragment();
