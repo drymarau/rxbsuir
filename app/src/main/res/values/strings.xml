@@ -101,8 +101,9 @@
     <string name="weekly">Weekly</string>
     <plurals name="week">
         <item quantity="one">Week %1s</item>
-        <item quantity="other">Week %1s</item>
+        <item quantity="few">Weeks %1s</item>
         <item quantity="many">Weeks %1s</item>
+        <item quantity="other">Week %1s</item>
     </plurals>
     <string name="action_edit_note">Edit note</string>
 
