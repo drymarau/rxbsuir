@@ -87,6 +87,7 @@
     <string name="title_notification_sound">Enable notification sound</string>
     <string name="title_is_today_enabled">Today and tomorrow tabs</string>
     <string name="title_are_circles_colored">Multicolored lesson type</string>
+    <string name="title_is_fam_enabled">\"Add\" button</string>
 
     <!-- Title format portrait (Awesome C.T.)-->
     <string name="title_format" translatable="false">%s %.1s.%.1s.</string>
@@ -100,8 +101,9 @@
     <string name="weekly">Weekly</string>
     <plurals name="week">
         <item quantity="one">Week %1s</item>
-        <item quantity="other">Week %1s</item>
+        <item quantity="few">Weeks %1s</item>
         <item quantity="many">Weeks %1s</item>
+        <item quantity="other">Week %1s</item>
     </plurals>
     <string name="action_edit_note">Edit note</string>
 

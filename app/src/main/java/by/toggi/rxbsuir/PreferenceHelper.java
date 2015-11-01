@@ -28,6 +28,7 @@ public class PreferenceHelper {
     public static final String IS_TODAY_ENABLED = "is_today_enabled";
     public static final String IS_SURPRISE_API_FIX_APPLIED = "is_surprise_api_fix_applied";
     public static final String ARE_CIRCLES_COLORED = "are_circles_colored";
+    public static final String IS_FAM_ENABLED = "is_fam_enabled";
 
     // App widget preferences
     public static final String WIDGET_PREFERENCES = "by.toggi.rxbsuir.preferences.appwidget";

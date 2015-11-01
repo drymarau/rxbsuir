@@ -17,6 +17,11 @@
             android:defaultValue="false"
             android:key="are_circles_colored"
             android:title="@string/title_are_circles_colored"/>
+
+        <com.jenzz.materialpreference.CheckBoxPreference
+            android:defaultValue="true"
+            android:key="is_fam_enabled"
+            android:title="@string/title_is_fam_enabled"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="@string/title_notifications">

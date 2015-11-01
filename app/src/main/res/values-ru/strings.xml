@@ -75,6 +75,7 @@
     <string name="title_notification_sound">Звук уведомления</string>
     <string name="title_is_today_enabled">Вкладки \"Сегодня\" и \"Завтра\"</string>
     <string name="title_are_circles_colored">Разноцветный тип занятий</string>
+    <string name="title_is_fam_enabled">Кнопка \"Добавить\"</string>
 
     <!-- FRAGMENTS -->
     <string name="empty_state_today">Сегодня нет занятий.\nПриятного дня!</string>
@@ -87,6 +88,7 @@
         <item quantity="one">Неделя %1s</item>
         <item quantity="few">Недели %1s</item>
         <item quantity="many">Недели %1s</item>
+        <item quantity="other">Недели %1s</item>
     </plurals>
     <string name="action_edit_note">Редактировать заметку</string>
 
