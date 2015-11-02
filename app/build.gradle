@@ -27,7 +27,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 // Manifest version information!
 def versionMajor = 1
 def versionMinor = 4
-def versionPatch = 1
+def versionPatch = 2
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 android {
@@ -90,7 +90,10 @@ dependencies {
 
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.0'
 
-    compile('com.afollestad.material-dialogs:core:0.8.2.0@aar') {
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.0@aar') {
+        transitive = true
+    }
+    compile('com.github.afollestad.material-dialogs:commons:0.8.5.0@aar') {
         transitive = true
     }
 
