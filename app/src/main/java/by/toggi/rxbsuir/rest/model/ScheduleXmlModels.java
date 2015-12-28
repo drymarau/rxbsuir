@@ -5,7 +5,7 @@ import org.simpleframework.xml.Root;
 
 import java.util.List;
 
-@Root(name = "scheduleXmlModels")
+@Root(name = "scheduleXmlModels", strict = false)
 public class ScheduleXmlModels {
 
     @ElementList(entry = "scheduleModel", inline = true)
