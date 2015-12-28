@@ -5,7 +5,7 @@ import org.simpleframework.xml.Root;
 
 import java.util.List;
 
-@Root(name = "studentGroupXmlModels")
+@Root(name = "studentGroupXmlModels", strict = false)
 public class StudentGroupXmlModels {
 
     @ElementList(entry = "studentGroup", inline = true)

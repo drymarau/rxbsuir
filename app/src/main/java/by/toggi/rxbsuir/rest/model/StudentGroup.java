@@ -4,10 +4,12 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 
 @StorIOSQLiteType(table = StudentGroupEntry.TABLE_NAME)
+@Root(strict = false)
 public class StudentGroup {
 
     @StorIOSQLiteColumn(name = StudentGroupEntry.COL_ID, key = true)
