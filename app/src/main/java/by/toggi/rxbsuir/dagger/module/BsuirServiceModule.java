@@ -6,8 +6,6 @@ import by.toggi.rxbsuir.rest.BsuirService;
 import dagger.Module;
 import dagger.Provides;
 import retrofit.RestAdapter;
-import retrofit.converter.Converter;
-import retrofit.converter.SimpleXMLConverter;
 
 @Module
 public class BsuirServiceModule {
@@ -20,17 +18,8 @@ public class BsuirServiceModule {
 
     @Provides
     @Singleton
-    Converter provideConverter() {
-        return new SimpleXMLConverter();
-    }
-
-    @Provides
-    @Singleton
-    RestAdapter provideRestAdapter(Converter converter) {
-        return new RestAdapter.Builder()
-                .setConverter(converter)
-                .setEndpoint(mEndpoint)
-                .build();
+    RestAdapter provideRestAdapter() {
+        return new RestAdapter.Builder().setEndpoint(mEndpoint).build();
     }
 
     @Provides

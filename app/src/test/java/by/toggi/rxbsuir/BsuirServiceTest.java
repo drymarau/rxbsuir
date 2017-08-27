@@ -47,12 +47,12 @@ public class BsuirServiceTest {
         List<ScheduleModel> scheduleModelList = mService.getEmployeeSchedule("")
                 .toBlocking()
                 .first()
-                .scheduleModelList;
+                .schedules;
         assertThat(scheduleModelList).isNotNull();
         assertThat(scheduleModelList).hasSize(1);
         ScheduleModel scheduleModel = scheduleModelList.get(0);
         assertThat(scheduleModel.weekDay).isEqualTo("Вторник");
-        List<Schedule> scheduleList = scheduleModel.scheduleList;
+        List<Schedule> scheduleList = scheduleModel.schedule;
         assertThat(scheduleList).hasSize(4);
         assertThat(scheduleList).extracting("note", "subject", "lessonType", "numSubgroup").contains(
                 tuple(null, "БтСУ", "ЛР", 1),
@@ -68,12 +68,12 @@ public class BsuirServiceTest {
         List<ScheduleModel> scheduleModelList = mService.getGroupSchedule("111801")
                 .toBlocking()
                 .first()
-                .scheduleModelList;
+                .schedules;
         assertThat(scheduleModelList).isNotNull();
         assertThat(scheduleModelList).hasSize(2);
         ScheduleModel scheduleModel = scheduleModelList.get(0);
         assertThat(scheduleModel.weekDay).isEqualTo("Понедельник");
-        List<Schedule> scheduleList = scheduleModel.scheduleList;
+        List<Schedule> scheduleList = scheduleModel.schedule;
         assertThat(scheduleList).hasSize(2);
         assertThat(scheduleList).extracting("note", "subject").contains(
                 tuple(null, "ПИСЭД"),
@@ -86,8 +86,7 @@ public class BsuirServiceTest {
         mServer.enqueue(new MockResponse().setBody(RESPONSE_EMPLOYEE_LIST));
         List<Employee> employeeList = mService.getEmployees()
                 .toBlocking()
-                .first()
-                .employeeList;
+                .first();
         assertThat(employeeList).isNotNull();
         assertThat(employeeList).hasSize(3);
         assertThat(employeeList).extracting("id", "firstName", "lastName").contains(
@@ -102,8 +101,7 @@ public class BsuirServiceTest {
         mServer.enqueue(new MockResponse().setBody(RESPONSE_STUDENT_GROUP_LIST));
         List<StudentGroup> studentGroupList = mService.getStudentGroups()
                 .toBlocking()
-                .first()
-                .studentGroupList;
+                .first();
         assertThat(studentGroupList).isNotNull();
         assertThat(studentGroupList).hasSize(3);
         assertThat(studentGroupList).extracting("id", "name", "course").contains(

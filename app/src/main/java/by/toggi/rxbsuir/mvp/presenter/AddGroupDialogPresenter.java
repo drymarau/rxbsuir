@@ -85,9 +85,9 @@ public class AddGroupDialogPresenter extends Presenter<AddGroupDialogView> {
 
     private void getStudentGroupsFromNetwork() {
         mService.getStudentGroups()
+                .doOnEach(notification -> Timber.d(notification.toString()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(studentGroupXmlModels -> studentGroupXmlModels.studentGroupList)
                 .flatMap(this::getStudentGroupPutObservable)
                 .subscribe(studentGroupPutResults -> Timber.d("Insert count: %d", studentGroupPutResults.numberOfInserts()), this::onError);
     }

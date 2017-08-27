@@ -59,7 +59,7 @@ public class Lesson {
         this._id = null;
         this.syncId = syncId;
         this.auditoryList = schedule.auditory;
-        this.employeeList = schedule.employeeList;
+        this.employeeList = schedule.employee;
         String[] lessonTime = TextUtils.split(schedule.lessonTime, "-");
         try {
             this.lessonTimeStart = LocalTime.parse(lessonTime[0]);
@@ -70,9 +70,9 @@ public class Lesson {
         this.lessonType = schedule.lessonType;
         this.note = schedule.note;
         this.numSubgroup = schedule.numSubgroup;
-        this.studentGroupList = schedule.studentGroupList;
+        this.studentGroupList = schedule.studentGroup;
         this.subject = schedule.subject;
-        this.weekNumberList = schedule.weekNumberList;
+        this.weekNumberList = schedule.weekNumber;
         this.weekday = weekday;
         this.isGroupSchedule = isGroupSchedule;
     }

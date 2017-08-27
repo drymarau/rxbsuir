@@ -3,6 +3,7 @@ package by.toggi.rxbsuir.mvp.presenter;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import by.toggi.rxbsuir.rest.model.ScheduleJsonModels;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
@@ -19,7 +20,6 @@ import by.toggi.rxbsuir.rest.BsuirService;
 import by.toggi.rxbsuir.rest.model.Employee;
 import by.toggi.rxbsuir.rest.model.Schedule;
 import by.toggi.rxbsuir.rest.model.ScheduleModel;
-import by.toggi.rxbsuir.rest.model.ScheduleXmlModels;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -195,6 +195,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
     }
 
     private void onError(Throwable throwable) {
+        Timber.e(throwable, "Something went wrong.");
         if (isViewAttached()) {
             if (throwable.getMessage() != null && throwable.getMessage().contains("org.simpleframework.xml.core.ValueRequiredException")) {
                 getView().showError(Error.EMPTY_SCHEDULE);
@@ -205,19 +206,19 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
     }
 
     private List<Lesson> transformScheduleToLesson(ScheduleModel model, boolean isGroupSchedule) {
-        List<Lesson> lessonList = new ArrayList<>(model.scheduleList.size());
-        for (Schedule schedule : model.scheduleList) {
+        List<Lesson> lessonList = new ArrayList<>(model.schedule.size());
+        for (Schedule schedule : model.schedule) {
             lessonList.add(new Lesson(mSyncId, schedule, Utils.convertWeekdayToDayOfWeek(model.weekDay), isGroupSchedule));
         }
         return lessonList;
     }
 
     private Observable<List<Lesson>> getLessonListFromNetworkObservable(@NonNull String syncId, boolean isGroupSchedule) {
-        Observable<ScheduleXmlModels> scheduleXmlModelsObservable = isGroupSchedule
+        Observable<ScheduleJsonModels> scheduleXmlModelsObservable = isGroupSchedule
                 ? mService.getGroupSchedule(syncId.replace("М", "M"))
                 : mService.getEmployeeSchedule(syncId);
         return scheduleXmlModelsObservable.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-                .flatMap(scheduleXmlModels -> Observable.from(scheduleXmlModels.scheduleModelList))
+                .flatMap(scheduleJsonModels -> Observable.from(scheduleJsonModels.schedules))
                 .flatMap(scheduleModel -> Observable.from(transformScheduleToLesson(scheduleModel, isGroupSchedule)))
                 .toList()
                 .doOnNext(lessonList -> onNetworkSuccess(lessonList, isGroupSchedule));

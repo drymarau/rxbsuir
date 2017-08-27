@@ -85,7 +85,6 @@ public class AddEmployeeDialogPresenter extends Presenter<AddEmployeeDialogView>
         mService.getEmployees()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(employeeXmlModels -> employeeXmlModels.employeeList)
                 .flatMap(this::getEmployeePutObservable)
                 .subscribe(employeePutResults -> Timber.d("Insert count: %d", employeePutResults.numberOfInserts()), this::onError);
     }

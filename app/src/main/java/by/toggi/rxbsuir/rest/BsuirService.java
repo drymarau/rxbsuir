@@ -1,24 +1,25 @@
 package by.toggi.rxbsuir.rest;
 
-import by.toggi.rxbsuir.rest.model.EmployeeXmlModels;
-import by.toggi.rxbsuir.rest.model.ScheduleXmlModels;
-import by.toggi.rxbsuir.rest.model.StudentGroupXmlModels;
+import by.toggi.rxbsuir.rest.model.Employee;
+import by.toggi.rxbsuir.rest.model.ScheduleJsonModels;
+import by.toggi.rxbsuir.rest.model.StudentGroup;
+import java.util.List;
 import retrofit.http.GET;
-import retrofit.http.Path;
+import retrofit.http.Query;
 import rx.Observable;
 
 public interface BsuirService {
 
-    @GET("/schedule/{group}")
-    Observable<ScheduleXmlModels> getGroupSchedule(@Path("group") String group);
+    @GET("/studentGroup/schedule")
+    Observable<ScheduleJsonModels> getGroupSchedule(@Query("id") String group);
 
-    @GET("/employee/{employeeId}")
-    Observable<ScheduleXmlModels> getEmployeeSchedule(@Path("employeeId") String employeeId);
+    @GET("/employee/schedule")
+    Observable<ScheduleJsonModels> getEmployeeSchedule(@Query("employeeId") String employeeId);
 
-    @GET("/studentGroup")
-    Observable<StudentGroupXmlModels> getStudentGroups();
+    @GET("/groups")
+    Observable<List<StudentGroup>> getStudentGroups();
 
-    @GET("/employee")
-    Observable<EmployeeXmlModels> getEmployees();
+    @GET("/employees")
+    Observable<List<Employee>> getEmployees();
 
 }
