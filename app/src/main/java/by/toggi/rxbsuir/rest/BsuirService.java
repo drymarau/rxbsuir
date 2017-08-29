@@ -13,7 +13,7 @@ public interface BsuirService {
     @GET("/studentGroup/schedule")
     Observable<ScheduleJsonModels> getGroupSchedule(@Query("id") String group);
 
-    @GET("/employee/schedule")
+    @GET("/portal/employeeSchedule")
     Observable<ScheduleJsonModels> getEmployeeSchedule(@Query("employeeId") String employeeId);
 
     @GET("/groups")
