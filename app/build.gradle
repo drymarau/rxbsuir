@@ -5,7 +5,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.2.0'
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
@@ -21,8 +20,6 @@ repositories {
 
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.neenbedankt.android-apt'
 
 // Manifest version information!
 def versionMajor = 1
@@ -31,18 +28,17 @@ def versionPatch = 3
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 25
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         applicationId "by.toggi.rxbsuir"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 25
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         resConfigs "en", "ru"
-        resConfigs "nodpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
 
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
@@ -60,42 +56,34 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
 
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.jakewharton.timber:timber:3.1.0'
-    compile 'com.jakewharton.threetenabp:threetenabp:1.0.2'
-    compile 'com.jakewharton.rxbinding:rxbinding:0.2.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.2.0'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.jakewharton.timber:timber:4.5.1'
+    compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
+    compile 'com.jakewharton.rxbinding:rxbinding:1.0.1'
+    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:1.0.1'
 
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile('com.squareup.retrofit:converter-simplexml:1.9.0') {
-        exclude group: 'stax', module: 'stax'
-        exclude group: 'stax', module: 'stax-api'
-        exclude group: 'xpp3', module: 'xpp3'
-    }
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
-    compile 'io.reactivex:rxjava:1.0.14'
-    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'io.reactivex:rxjava:1.2.7'
+    compile 'io.reactivex:rxandroid:1.2.1'
 
-    compile 'com.trello:rxlifecycle:0.2.0'
-    compile 'com.trello:rxlifecycle-components:0.2.0'
+    compile 'com.trello:rxlifecycle:1.0'
+    compile 'com.trello:rxlifecycle-components:1.0'
 
-    compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.0'
+    compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.0@aar') {
-        transitive = true
-    }
-    compile('com.github.afollestad.material-dialogs:commons:0.8.5.0@aar') {
-        transitive = true
-    }
+    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
+    compile 'com.afollestad.material-dialogs:commons:0.9.4.4'
 
     compile 'com.jenzz:materialpreference:1.3'
 
@@ -103,17 +91,17 @@ dependencies {
 
     compile 'com.pushtorefresh.storio:sqlite:1.2.1'
     compile 'com.pushtorefresh.storio:sqlite-annotations:1.2.1'
-    apt 'com.pushtorefresh.storio:sqlite-annotations-processor:1.2.1'
+    annotationProcessor 'com.pushtorefresh.storio:sqlite-annotations-processor:1.2.1'
 
-    compile 'com.google.dagger:dagger:2.0.1'
-    apt 'com.google.dagger:dagger-compiler:2.0.1'
-    apt 'org.glassfish:javax.annotation:10.0-b28'
+    compile 'com.google.dagger:dagger:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
 
     compile 'org.parceler:parceler-api:1.0.3'
-    apt 'org.parceler:parceler:1.0.3'
+    annotationProcessor 'org.parceler:parceler:1.0.3'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.5.0@aar') {
-        transitive = true;
+        transitive = true
     }
 
     testCompile 'junit:junit:4.12'
@@ -124,13 +112,10 @@ dependencies {
 
     testCompile 'org.assertj:assertj-core:1.7.1'
 
+
     androidTestCompile('com.android.support.test:runner:0.3') {
         exclude module: 'support-annotations'
     }
 
     androidTestCompile 'org.assertj:assertj-core:1.7.1'
-}
-
-repositories {
-    maven { url "https://jitpack.io" }
 }

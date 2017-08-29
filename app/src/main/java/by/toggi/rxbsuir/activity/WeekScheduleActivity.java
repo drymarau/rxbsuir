@@ -5,12 +5,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import butterknife.BindView;
 import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.Bind;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
@@ -20,8 +20,8 @@ import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 
 public class WeekScheduleActivity extends ScheduleActivity {
 
-    @Bind(R.id.tab_layout) TabLayout mTabLayout;
-    @Bind(R.id.view_pager) ViewPager mViewPager;
+    @BindView(R.id.tab_layout) TabLayout mTabLayout;
+    @BindView(R.id.view_pager) ViewPager mViewPager;
 
     @Inject @Named(PreferenceHelper.IS_TODAY_ENABLED) Preference<Boolean> mIsTodayEnabledPreference;
 

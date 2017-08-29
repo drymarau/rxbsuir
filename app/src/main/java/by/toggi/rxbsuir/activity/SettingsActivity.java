@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import butterknife.BindView;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
@@ -16,7 +16,7 @@ import by.toggi.rxbsuir.fragment.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
 
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
 

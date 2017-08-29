@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import butterknife.BindView;
 import com.f2prateek.rx.preferences.Preference;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -42,7 +43,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -78,15 +78,15 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
     private static final long ANIMATION_DURATION = 250;
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.progress_bar) ProgressBar mProgressBar;
-    @Bind(R.id.coordinator_layout) CoordinatorLayout mCoordinatorLayout;
-    @Bind(R.id.fab_group) FloatingActionButton mFabGroup;
-    @Bind(R.id.fab_employee) FloatingActionButton mFabEmployee;
-    @Bind(R.id.fam) RelativeLayout mFloatingActionMenu;
-    @Bind(R.id.fab) FloatingActionButton mFloatingActionButton;
-    @Nullable @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-    @Bind(R.id.navigation_view) NavigationView mNavigationView;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
+    @BindView(R.id.coordinator_layout) CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.fab_group) FloatingActionButton mFabGroup;
+    @BindView(R.id.fab_employee) FloatingActionButton mFabEmployee;
+    @BindView(R.id.fam) RelativeLayout mFloatingActionMenu;
+    @BindView(R.id.fab) FloatingActionButton mFloatingActionButton;
+    @Nullable @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
+    @BindView(R.id.navigation_view) NavigationView mNavigationView;
 
     @BindDimen(R.dimen.view_pager_page_margin) int mPageMargin;
 

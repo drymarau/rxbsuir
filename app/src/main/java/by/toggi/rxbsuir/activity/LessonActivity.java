@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import butterknife.BindView;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.parceler.Parcels;
@@ -20,7 +21,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.DetailItemDecoration;
 import by.toggi.rxbsuir.PreferenceHelper;
@@ -36,8 +36,8 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
 
     private static final String EXTRA_LESSON = "by.toggi.rxbsuir.extra.lesson";
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
 
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
     @Inject LessonDetailPresenter mPresenter;

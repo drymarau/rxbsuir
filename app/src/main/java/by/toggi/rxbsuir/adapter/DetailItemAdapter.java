@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.activity.LessonActivity.DetailItem;
@@ -104,9 +104,9 @@ public class DetailItemAdapter extends RecyclerView.Adapter<DetailItemAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.lesson_detail_icon) ImageView mIcon;
-        @Bind(R.id.lesson_detail_text) TextView mText;
-        @Nullable @Bind(R.id.lesson_detail_summary) TextView mSummary;
+        @BindView(R.id.lesson_detail_icon) ImageView mIcon;
+        @BindView(R.id.lesson_detail_text) TextView mText;
+        @Nullable @BindView(R.id.lesson_detail_summary) TextView mSummary;
 
         private boolean isFirst;
         private boolean isLast;

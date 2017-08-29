@@ -10,10 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RemoteViews;
 
+import butterknife.BindView;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
@@ -25,7 +25,7 @@ import timber.log.Timber;
 public class AppWidgetConfigActivity extends AppCompatActivity {
 
     private final Intent mResultIntent = new Intent();
-    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
     @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private int mResult = RESULT_CANCELED;

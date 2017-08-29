@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.FormatStyle;
 
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.db.model.Lesson;
@@ -157,13 +157,13 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.lesson_type) TextView mLessonType;
-        @Bind(R.id.lesson_subject_subgroup) TextView mLessonSubjectSubgroup;
-        @Bind(R.id.lesson_time_start) TextView mLessonTimeStart;
-        @Bind(R.id.lesson_time_end) TextView mLessonTimeEnd;
+        @BindView(R.id.lesson_type) TextView mLessonType;
+        @BindView(R.id.lesson_subject_subgroup) TextView mLessonSubjectSubgroup;
+        @BindView(R.id.lesson_time_start) TextView mLessonTimeStart;
+        @BindView(R.id.lesson_time_end) TextView mLessonTimeEnd;
 
-        @Nullable @Bind(R.id.lesson_employee) TextView mLessonEmployee;
-        @Nullable @Bind(R.id.lesson_class) TextView mLessonClass;
+        @Nullable @BindView(R.id.lesson_employee) TextView mLessonEmployee;
+        @Nullable @BindView(R.id.lesson_class) TextView mLessonClass;
 
         private String mHeaderText;
         private boolean mIsLast;

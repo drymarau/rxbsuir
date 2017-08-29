@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.Unbinder;
 import com.f2prateek.rx.preferences.Preference;
 
 import java.util.ArrayList;
@@ -27,7 +29,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
@@ -52,8 +53,8 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
     public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
     private static final String ARGS_VIEW_TYPE = "week_number";
 
-    @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
-    @Bind(R.id.empty_state) TextView mEmptyState;
+    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.empty_state) TextView mEmptyState;
 
     @Inject LessonListPresenter mPresenter;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
@@ -62,6 +63,7 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
     @Inject SharedPreferences mSharedPreferences;
     @Inject @Named(PreferenceHelper.ARE_CIRCLES_COLORED) Preference<Boolean> mAreCirclesColoredPreference;
 
+    private Unbinder unbinder;
     private Parcelable mLayoutManagerState;
     private LessonListPresenter.Type mType;
     private LinearLayoutManager mLayoutManager;
@@ -105,7 +107,7 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lesson_list, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
@@ -173,7 +175,7 @@ public class LessonListFragment extends Fragment implements LessonListView, Shar
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override
