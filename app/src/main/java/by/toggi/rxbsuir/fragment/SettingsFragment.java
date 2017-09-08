@@ -3,13 +3,13 @@ package by.toggi.rxbsuir.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.Preference;
-import by.toggi.rxbsuir.BuildConfig;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+import hu.supercluster.paperwork.Paperwork;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.threeten.bp.LocalTime;
@@ -23,6 +23,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
   @Inject com.f2prateek.rx.preferences.Preference<LocalTime> mLocalTimePreference;
   @Inject @Named(PreferenceHelper.FAVORITE_SYNC_ID) com.f2prateek.rx.preferences.Preference<String>
       mFavoriteSyncIdPrerefence;
+  @Inject Paperwork paperwork;
 
   private Subscription mSubscription;
   private Preference mNotificationTimePreference;
@@ -34,7 +35,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
     setPreferencesFromResource(R.xml.preferences, rootKey);
 
     findPreference(PreferenceHelper.IS_DARK_THEME).setOnPreferenceChangeListener(this);
-    findPreference("build_version").setSummary(BuildConfig.VERSION_NAME);
+    findPreference("build_version").setSummary(paperwork.get("gitInfo"));
     findPreference("rate_app").setOnPreferenceClickListener(this);
     findPreference(PreferenceHelper.IS_TODAY_ENABLED).setOnPreferenceChangeListener(this);
     findPreference(PreferenceHelper.ARE_CIRCLES_COLORED).setOnPreferenceChangeListener(this);
