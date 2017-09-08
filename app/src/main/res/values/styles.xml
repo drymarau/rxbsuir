@@ -1,58 +1,74 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppThemeBase" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="toolbarStyle">@style/Toolbar.Light</item>
-        <item name="android:windowBackground">@color/window_background_light</item>
-        <item name="cardBackground">@drawable/card_background_light</item>
-        <item name="cardColor">@color/card_background_light</item>
-        <item name="drawerBackground">@color/navigation_view_background_light</item>
-        <item name="famProtection">@color/fam_protection_light</item>
-        <item name="iconTint">@color/icon_tint_light</item>
-    </style>
+  <!-- Base application theme. -->
+  <style name="AppThemeBase" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/primary</item>
+    <item name="colorPrimaryDark">@color/primary_dark</item>
+    <item name="colorAccent">@color/accent</item>
+    <item name="toolbarStyle">@style/Toolbar.Light</item>
+    <item name="android:windowBackground">@color/window_background_light</item>
+    <item name="cardBackground">@drawable/card_background_light</item>
+    <item name="cardColor">@color/card_background_light</item>
+    <item name="drawerBackground">@color/navigation_view_background_light</item>
+    <item name="famProtection">@color/fam_protection_light</item>
+    <item name="iconTint">@color/icon_tint_light</item>
+  </style>
 
-    <style name="AppThemeBaseDark" parent="@style/Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="toolbarStyle">@style/Toolbar.Dark</item>
-        <item name="android:windowBackground">@color/window_background_dark</item>
-        <item name="cardBackground">@drawable/card_background_dark</item>
-        <item name="cardColor">@color/card_background_dark</item>
-        <item name="drawerBackground">@color/navigation_view_background_dark</item>
-        <item name="famProtection">@color/fam_protection_dark</item>
-        <item name="iconTint">@color/icon_tint_dark</item>
-    </style>
+  <style name="AppThemeBaseDark" parent="@style/Theme.AppCompat.NoActionBar">
+    <item name="colorPrimary">@color/primary</item>
+    <item name="colorPrimaryDark">@color/primary_dark</item>
+    <item name="colorAccent">@color/accent</item>
+    <item name="toolbarStyle">@style/Toolbar.Dark</item>
+    <item name="android:windowBackground">@color/window_background_dark</item>
+    <item name="cardBackground">@drawable/card_background_dark</item>
+    <item name="cardColor">@color/card_background_dark</item>
+    <item name="drawerBackground">@color/navigation_view_background_dark</item>
+    <item name="famProtection">@color/fam_protection_dark</item>
+    <item name="iconTint">@color/icon_tint_dark</item>
+  </style>
 
-    <style name="AppTheme.Light" parent="AppThemeBase"/>
+  <style name="AppThemePreferenceBaseDark" parent="@style/PreferenceFixTheme.NoActionBar">
+    <item name="colorPrimary">@color/primary</item>
+    <item name="colorPrimaryDark">@color/primary_dark</item>
+    <item name="colorAccent">@color/accent</item>
+    <item name="toolbarStyle">@style/Toolbar.Dark</item>
+    <item name="android:windowBackground">@color/window_background_dark</item>
+  </style>
 
-    <style name="AppTheme.Dark" parent="AppThemeBaseDark"/>
+  <style name="AppThemePreferenceBase" parent="@style/PreferenceFixTheme.Light.NoActionBar">
+    <item name="colorPrimary">@color/primary</item>
+    <item name="colorPrimaryDark">@color/primary_dark</item>
+    <item name="colorAccent">@color/accent</item>
+    <item name="toolbarStyle">@style/Toolbar.Light</item>
+    <item name="android:windowBackground">@color/window_background_light</item>
+  </style>
 
-    <style name="AppTheme.Drawer.Light" parent="AppThemeBase"/>
+  <style name="AppTheme.Light" parent="AppThemeBase"/>
 
-    <style name="AppTheme.Drawer.Dark" parent="AppThemeBaseDark"/>
+  <style name="AppTheme.Dark" parent="AppThemeBaseDark"/>
 
-    <style name="Toolbar.Light" parent="Toolbar">
-        <item name="popupTheme">@style/Toolbar.PopUp.Light</item>
-    </style>
+  <style name="AppTheme.Drawer.Light" parent="AppThemeBase"/>
 
-    <style name="Toolbar.Dark" parent="Toolbar">
-        <item name="popupTheme">@style/Toolbar.PopUp.Dark</item>
-    </style>
+  <style name="AppTheme.Drawer.Dark" parent="AppThemeBaseDark"/>
 
-    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">@color/primary</item>
-    </style>
+  <style name="Toolbar.Light" parent="Toolbar">
+    <item name="popupTheme">@style/Toolbar.PopUp.Light</item>
+  </style>
 
-    <style name="Toolbar.PopUp.Light" parent="Theme.AppCompat.Light">
-        <item name="colorAccent">@color/accent</item>
-    </style>
+  <style name="Toolbar.Dark" parent="Toolbar">
+    <item name="popupTheme">@style/Toolbar.PopUp.Dark</item>
+  </style>
 
-    <style name="Toolbar.PopUp.Dark" parent="Theme.AppCompat">
-        <item name="colorAccent">@color/accent</item>
-    </style>
+  <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
+    <item name="android:background">@color/primary</item>
+  </style>
+
+  <style name="Toolbar.PopUp.Light" parent="Theme.AppCompat.Light">
+    <item name="colorAccent">@color/accent</item>
+  </style>
+
+  <style name="Toolbar.PopUp.Dark" parent="Theme.AppCompat">
+    <item name="colorAccent">@color/accent</item>
+  </style>
 
 </resources>

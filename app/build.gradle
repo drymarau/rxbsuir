@@ -73,7 +73,7 @@ dependencies {
   implementation libraries.materialdialogs.core
   implementation libraries.materialdialogs.commons
 
-  implementation libraries.materialpreference
+  implementation libraries.preferencesfix
 
   implementation libraries.materialdatetimepicker
 

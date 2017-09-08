@@ -1,53 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--suppress AndroidElementNotAllowed -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_appearance">
-        <com.jenzz.materialpreference.CheckBoxPreference
-            android:defaultValue="false"
-            android:key="@string/key_pref_dark_theme"
-            android:title="@string/title_pref_dark_theme"/>
+  <PreferenceCategory android:title="@string/category_appearance">
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/key_pref_dark_theme"
+        android:title="@string/title_pref_dark_theme"/>
 
-        <com.jenzz.materialpreference.CheckBoxPreference
-            android:defaultValue="true"
-            android:key="is_today_enabled"
-            android:title="@string/title_is_today_enabled"/>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="is_today_enabled"
+        android:title="@string/title_is_today_enabled"/>
 
-        <com.jenzz.materialpreference.CheckBoxPreference
-            android:defaultValue="false"
-            android:key="are_circles_colored"
-            android:title="@string/title_are_circles_colored"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="are_circles_colored"
+        android:title="@string/title_are_circles_colored"/>
 
-        <com.jenzz.materialpreference.CheckBoxPreference
-            android:defaultValue="true"
-            android:key="is_fam_enabled"
-            android:title="@string/title_is_fam_enabled"/>
-    </com.jenzz.materialpreference.PreferenceCategory>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="is_fam_enabled"
+        android:title="@string/title_is_fam_enabled"/>
+  </PreferenceCategory>
 
-    <com.jenzz.materialpreference.PreferenceCategory android:title="@string/title_notifications">
-        <com.jenzz.materialpreference.Preference
-            android:key="notification_time"
-            android:title="@string/title_notification_time"/>
+  <PreferenceCategory android:title="@string/title_notifications">
+    <Preference
+        android:key="notification_time"
+        android:title="@string/title_notification_time"/>
 
-        <com.jenzz.materialpreference.CheckBoxPreference
-            android:defaultValue="false"
-            android:dependency="notification_time"
-            android:key="notification_sound_enabled"
-            android:summaryOff="@string/summary_notification_sound_disabled"
-            android:summaryOn="@string/summary_notification_sound_enabled"
-            android:title="@string/title_notification_sound"/>
-    </com.jenzz.materialpreference.PreferenceCategory>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:dependency="notification_time"
+        android:key="notification_sound_enabled"
+        android:summaryOff="@string/summary_notification_sound_disabled"
+        android:summaryOn="@string/summary_notification_sound_enabled"
+        android:title="@string/title_notification_sound"/>
+  </PreferenceCategory>
 
-    <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_about">
-        <com.jenzz.materialpreference.Preference
-            android:key="rate_app"
-            android:selectable="true"
-            android:title="@string/title_pref_rate_app"/>
+  <PreferenceCategory android:title="@string/category_about">
+    <Preference
+        android:key="rate_app"
+        android:selectable="true"
+        android:title="@string/title_pref_rate_app"/>
 
-        <com.jenzz.materialpreference.Preference
-            android:key="@string/key_pref_build_version"
-            android:selectable="false"
-            android:title="@string/title_build_version"/>
-    </com.jenzz.materialpreference.PreferenceCategory>
+    <Preference
+        android:key="@string/key_pref_build_version"
+        android:selectable="false"
+        android:title="@string/title_build_version"/>
+  </PreferenceCategory>
 
 </PreferenceScreen>
