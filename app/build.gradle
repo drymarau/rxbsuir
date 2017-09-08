@@ -1,121 +1,123 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
-}
-
-repositories {
-    mavenCentral()
-    maven { url 'https://maven.fabric.io/public' }
-}
-
-repositories {
-    maven {url "https://clojars.org/repo/"}
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'com.getkeepsafe.dexcount'
 
-// Manifest version information!
+// Manifest version information
 def versionMajor = 1
 def versionMinor = 4
 def versionPatch = 4
-def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+def versionBuild = 0
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+  compileSdkVersion versions.compileSdk
+  buildToolsVersion versions.buildTools
 
-    defaultConfig {
-        applicationId "by.toggi.rxbsuir"
-        minSdkVersion 15
-        targetSdkVersion 25
-        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+  defaultConfig {
+    applicationId 'by.toggi.rxbsuir'
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.targetSdk
+    versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+    versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
-        resConfigs "en", "ru"
+    resConfigs "en", "ru"
 
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+  testOptions {
+    execution 'ANDROID_TEST_ORCHESTRATOR'
+  }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile 'com.jakewharton.timber:timber:4.5.1'
-    compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
-    compile 'com.jakewharton.rxbinding:rxbinding:1.0.1'
-    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:1.0.1'
+  implementation libraries.support.appcompat
+  implementation libraries.support.recyclerview
+  implementation libraries.support.design
+  implementation libraries.support.cardview
 
-    compile 'com.squareup.okhttp:okhttp:2.7.5'
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
+  implementation libraries.butterknife.butterknife
+  annotationProcessor libraries.butterknife.compiler
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+  implementation libraries.timber
+  implementation libraries.threetenabp
 
-    compile 'io.reactivex:rxjava:1.2.7'
-    compile 'io.reactivex:rxandroid:1.2.1'
+  implementation libraries.rxbinding.rxbinding
+  implementation libraries.rxbinding.appcompat
 
-    compile 'com.trello:rxlifecycle:1.0'
-    compile 'com.trello:rxlifecycle-components:1.0'
+  implementation libraries.okhttp.okhttp
 
-    compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
+  implementation libraries.retrofit
 
-    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
-    compile 'com.afollestad.material-dialogs:commons:0.9.4.4'
+  debugImplementation libraries.leakcanary.leakcanary
+  releaseImplementation libraries.leakcanary.noop
 
-    compile 'com.jenzz:materialpreference:1.3'
+  implementation libraries.rxjava
+  implementation libraries.rxandroid
 
-    compile 'com.wdullaer:materialdatetimepicker:1.5.2'
+  implementation libraries.rxlifecycle.rxlifecycle
+  implementation libraries.rxlifecycle.components
 
-    compile 'com.pushtorefresh.storio:sqlite:1.2.1'
-    compile 'com.pushtorefresh.storio:sqlite-annotations:1.2.1'
-    annotationProcessor 'com.pushtorefresh.storio:sqlite-annotations-processor:1.2.1'
+  implementation libraries.rxpreferences
 
-    compile 'com.google.dagger:dagger:2.11'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-    provided 'org.glassfish:javax.annotation:10.0-b28'
+  implementation libraries.materialdialogs.core
+  implementation libraries.materialdialogs.commons
 
-    compile 'org.parceler:parceler-api:1.0.3'
-    annotationProcessor 'org.parceler:parceler:1.0.3'
+  implementation libraries.materialpreference
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.0@aar') {
-        transitive = true
-    }
+  implementation libraries.materialdatetimepicker
 
-    testCompile 'junit:junit:4.12'
+  implementation libraries.storio.sqlite
+  implementation libraries.storio.sqliteannotations
+  annotationProcessor libraries.storio.sqliteannotationsprocessor
 
-    testCompile 'com.squareup.okhttp:mockwebserver:2.4.0'
+  implementation libraries.dagger.dagger
+  annotationProcessor libraries.dagger.compiler
+  compileOnly libraries.javax.inject
 
-    testCompile 'org.mockito:mockito-core:1.10.19'
+  implementation libraries.parceler.api
+  annotationProcessor libraries.parceler.parceler
 
-    testCompile 'org.assertj:assertj-core:1.7.1'
+  implementation(libraries.crashlytics) {
+    transitive = true
+  }
 
+  testImplementation libraries.junit
 
-    androidTestCompile('com.android.support.test:runner:0.3') {
-        exclude module: 'support-annotations'
-    }
+  testImplementation libraries.okhttp.mockwebserver
 
-    androidTestCompile 'org.assertj:assertj-core:1.7.1'
+  testImplementation libraries.mockito.core
+
+  testImplementation libraries.assertj.core
+
+  androidTestImplementation libraries.supporttest.runner
+  androidTestUtil libraries.supporttest.orchestrator
+
+  androidTestImplementation libraries.assertj.core
+}
+
+repositories {
+  maven { url 'https://maven.fabric.io/public' }
+}
+
+buildscript {
+  repositories {
+    jcenter()
+    maven { url 'https://maven.fabric.io/public' }
+  }
+
+  dependencies {
+    classpath gradlePlugins.fabric
+    classpath gradlePlugins.dexcount
+  }
 }
