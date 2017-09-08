@@ -1,14 +1,14 @@
-#built application files
+# Built application files
 *.apk
 *.ap_
 
-# files for the dex VM
+# Files for the dex VM
 *.dex
 
 # Java class files
 *.class
 
-# generated files
+# Generated files
 bin/
 gen/
 
@@ -22,8 +22,8 @@ fabric.properties
 # Manifest release report
 manifest-merger-release-report.txt
 
-# Windows thumbnail db
-Thumbs.db
+# Windows thumbnail cr
+Thumbs.cr
 
 # OSX files
 .DS_Store
@@ -39,3 +39,12 @@ Thumbs.db
 build/
 *.iml
 *.log
+
+# Paperwork
+paperwork.json
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# mainframer
+.mainframer/config
