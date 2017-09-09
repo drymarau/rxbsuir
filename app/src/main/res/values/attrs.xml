@@ -4,7 +4,7 @@
     <attr name="cardColor" format="reference"/>
     <attr name="drawerBackground" format="reference"/>
     <attr name="famProtection" format="reference"/>
-    <attr name="iconTint" format="reference"/>
+    <attr name="iconTintColor" format="reference"/>
 
     <item name="lesson_time_start" type="id"/>
     <item name="lesson_time_end" type="id"/>

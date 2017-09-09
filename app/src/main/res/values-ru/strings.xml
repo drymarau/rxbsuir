@@ -107,4 +107,6 @@
     <string name="rad_negative">Нет, спасибо</string>
     <string name="rad_content">Если вам нравится RxBSUIR, пожалуйста, оцените его в Google Play. Спасибо за Вашу поддержку!</string>
 
+    <string name="lesson_reminder_channel_name">Напоминание о занятиях</string>
+
 </resources>

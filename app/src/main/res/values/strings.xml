@@ -137,4 +137,7 @@
     <string name="rad_negative">No, thanks</string>
     <string name="rad_content">If you like RxBSUIR, please take a moment to rate it in Google Play Store. Thank you for your support!</string>
 
+    <!-- NOTIFICATION CHANNELS -->
+    <string name="lesson_reminder_channel_name">Lessons reminder</string>
+
 </resources>

@@ -100,7 +100,7 @@ dependencies {
   testImplementation libraries.okhttp.mockwebserver
 
   testImplementation libraries.mockito.core
-
+  
   testImplementation libraries.assertj.core
 
   androidTestImplementation libraries.supporttest.runner

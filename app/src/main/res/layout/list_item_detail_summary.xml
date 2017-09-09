@@ -12,7 +12,7 @@
         android:layout_marginLeft="@dimen/keyline_first"
         android:layout_marginStart="@dimen/keyline_first"
         android:src="@drawable/ic_action_favorite_on"
-        android:tint="?attr/iconTint"/>
+        android:tint="?attr/iconTintColor"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
