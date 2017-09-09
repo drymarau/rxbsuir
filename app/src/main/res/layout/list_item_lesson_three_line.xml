@@ -4,56 +4,56 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_three_line_avatar"
-    android:background="?attr/cardBackground"
+    android:background="@color/card_background"
     android:elevation="2dp"
     android:paddingTop="16dp"
     tools:ignore="UnusedAttribute">
 
-    <include
-        android:id="@+id/lesson_type"
-        layout="@layout/list_item_lesson_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="false"
-        android:layout_marginEnd="@dimen/list_lesson_type_margin_right"
-        android:layout_marginLeft="@dimen/list_lesson_type_margin_left"
-        android:layout_marginRight="@dimen/list_lesson_type_margin_right"
-        android:layout_marginStart="@dimen/list_lesson_type_margin_left"/>
+  <include
+      layout="@layout/list_item_lesson_type"
+      android:id="@+id/lesson_type"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="false"
+      android:layout_marginEnd="@dimen/list_lesson_type_margin_right"
+      android:layout_marginLeft="@dimen/list_lesson_type_margin_left"
+      android:layout_marginRight="@dimen/list_lesson_type_margin_right"
+      android:layout_marginStart="@dimen/list_lesson_type_margin_left"/>
 
-    <include
-        layout="@layout/list_item_lesson_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+  <include
+      layout="@layout/list_item_lesson_time"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
 
-    <include
-        layout="@layout/list_item_lesson_subject_subgroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/lesson_type"
-        android:layout_toLeftOf="@id/lesson_time_start"
-        android:layout_toRightOf="@id/lesson_type"
-        android:layout_toStartOf="@id/lesson_time_start"/>
+  <include
+      layout="@layout/list_item_lesson_subject_subgroup"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_toEndOf="@id/lesson_type"
+      android:layout_toLeftOf="@id/lesson_time_start"
+      android:layout_toRightOf="@id/lesson_type"
+      android:layout_toStartOf="@id/lesson_time_start"/>
 
-    <include
-        android:id="@+id/lesson_employee"
-        layout="@layout/list_item_lesson_class_employee"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lesson_subject_subgroup"
-        android:layout_toEndOf="@id/lesson_type"
-        android:layout_toLeftOf="@id/lesson_time_start"
-        android:layout_toRightOf="@id/lesson_type"
-        android:layout_toStartOf="@id/lesson_time_start"/>
+  <include
+      layout="@layout/list_item_lesson_class_employee"
+      android:id="@+id/lesson_employee"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/lesson_subject_subgroup"
+      android:layout_toEndOf="@id/lesson_type"
+      android:layout_toLeftOf="@id/lesson_time_start"
+      android:layout_toRightOf="@id/lesson_type"
+      android:layout_toStartOf="@id/lesson_time_start"/>
 
-    <include
-        android:id="@+id/lesson_class"
-        layout="@layout/list_item_lesson_class_employee"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lesson_employee"
-        android:layout_toEndOf="@id/lesson_type"
-        android:layout_toLeftOf="@id/lesson_time_start"
-        android:layout_toRightOf="@id/lesson_type"
-        android:layout_toStartOf="@id/lesson_time_start"/>
+  <include
+      layout="@layout/list_item_lesson_class_employee"
+      android:id="@+id/lesson_class"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/lesson_employee"
+      android:layout_toEndOf="@id/lesson_type"
+      android:layout_toLeftOf="@id/lesson_time_start"
+      android:layout_toRightOf="@id/lesson_type"
+      android:layout_toStartOf="@id/lesson_time_start"/>
 
 </RelativeLayout>

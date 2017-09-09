@@ -69,7 +69,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
             mStorIOSQLite = storIOSQLite;
             mSyncIdItem = PreferenceHelper.getSyncIdItemPreference(context, mAppWidgetId);
             mAreCirclesColored = PreferenceHelper.getAreCirclesColoredPreference(context, mAppWidgetId);
-            mIsDarkTheme = PreferenceHelper.getIsDarkThemePreference(context, mAppWidgetId);
+            mIsDarkTheme = PreferenceHelper.isNightModeEnabled(context, mAppWidgetId);
             mSubgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, mAppWidgetId);
             mIsCollapsed = PreferenceHelper.getIsWidgetCollapsedPreference(mContext, mAppWidgetId);
         }

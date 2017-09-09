@@ -13,6 +13,10 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import com.f2prateek.rx.preferences.Preference;
+import com.trello.rxlifecycle.RxLifecycle;
+import com.trello.rxlifecycle.android.RxLifecycleAndroid;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -32,15 +36,15 @@ import by.toggi.rxbsuir.mvp.presenter.LessonDetailPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonDetailView;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 
-public class LessonActivity extends AppCompatActivity implements LessonDetailView {
+public class LessonActivity extends RxAppCompatActivity implements LessonDetailView {
 
     private static final String EXTRA_LESSON = "by.toggi.rxbsuir.extra.lesson";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
 
-    @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
     @Inject LessonDetailPresenter mPresenter;
+    @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
 
     private DetailItemAdapter mAdapter;
 
@@ -59,10 +63,7 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ((RxBsuirApplication) getApplication()).getAppComponent().inject(this);
-
-        setTheme(mIsDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
-
+        RxBsuirApplication.getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson);
 
@@ -82,6 +83,11 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
 
         mPresenter.attachView(this);
         mPresenter.setLesson(lesson);
+
+        mNightModePreference.asObservable()
+            .skip(1)
+            .compose(RxLifecycleAndroid.bindActivity(lifecycle()))
+            .subscribe(mode -> recreate());
     }
 
     @Override

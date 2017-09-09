@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/famProtection"
+    android:background="@color/fam_protection"
     android:elevation="@dimen/fam_elevation"
     app:layout_behavior=".FAMScrollBehavior"
     tools:ignore="UnusedAttribute">

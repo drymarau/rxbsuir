@@ -1,22 +1,10 @@
 <resources>
 
-    <style name="AppTheme.Light" parent="AppThemeBase">
-        <item name="cardBackground">@drawable/card_background</item>
-    </style>
+  <style name="Base.V21.AppTheme.Drawer" parent="Base.V0.AppTheme.Drawer">
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:statusBarColor">@android:color/transparent</item>
+  </style>
 
-    <style name="AppTheme.Drawer.Light" parent="AppTheme.Light">
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
-    <style name="AppTheme.Dark" parent="AppThemeBaseDark">
-        <item name="cardBackground">@drawable/card_background</item>
-    </style>
-
-
-    <style name="AppTheme.Drawer.Dark" parent="AppTheme.Dark">
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
+  <style name="AppTheme.Drawer" parent="Base.V21.AppTheme.Drawer"/>
 
 </resources>

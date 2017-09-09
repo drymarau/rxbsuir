@@ -8,48 +8,46 @@ import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+import com.takisoft.fix.support.v7.preference.TimePickerPreference;
 import hu.supercluster.paperwork.Paperwork;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.threeten.bp.LocalTime;
 import rx.Subscription;
+import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragmentCompat
-    implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener,
-    TimePickerDialog.OnTimeSetListener {
+    implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
-  @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
   @Inject com.f2prateek.rx.preferences.Preference<LocalTime> mLocalTimePreference;
   @Inject @Named(PreferenceHelper.FAVORITE_SYNC_ID) com.f2prateek.rx.preferences.Preference<String>
       mFavoriteSyncIdPrerefence;
   @Inject Paperwork paperwork;
 
   private Subscription mSubscription;
-  private Preference mNotificationTimePreference;
+  private TimePickerPreference mNotificationTimePreference;
 
   @Override
   public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-    ((RxBsuirApplication) getActivity().getApplication()).getAppComponent().inject(this);
+    RxBsuirApplication.getAppComponent().inject(this);
 
     setPreferencesFromResource(R.xml.preferences, rootKey);
 
-    findPreference(PreferenceHelper.IS_DARK_THEME).setOnPreferenceChangeListener(this);
     findPreference("build_version").setSummary(paperwork.get("gitInfo"));
     findPreference("rate_app").setOnPreferenceClickListener(this);
     findPreference(PreferenceHelper.IS_TODAY_ENABLED).setOnPreferenceChangeListener(this);
     findPreference(PreferenceHelper.ARE_CIRCLES_COLORED).setOnPreferenceChangeListener(this);
     findPreference(PreferenceHelper.IS_FAM_ENABLED).setOnPreferenceChangeListener(this);
-    mNotificationTimePreference = findPreference("notification_time");
+    mNotificationTimePreference = (TimePickerPreference) findPreference("notification_time");
     mNotificationTimePreference.setEnabled(mFavoriteSyncIdPrerefence.get() != null);
-    mNotificationTimePreference.setOnPreferenceClickListener(this);
   }
 
   @Override public void onResume() {
     super.onResume();
     mSubscription = mLocalTimePreference.asObservable().subscribe(localTime -> {
+      Timber.w(localTime.toString());
       if (mNotificationTimePreference != null) {
-        mNotificationTimePreference.setSummary(localTime.toString());
+        mNotificationTimePreference.setTime(localTime.getHour(), localTime.getMinute());
       }
       if (mFavoriteSyncIdPrerefence.get() != null) {
         Utils.setNotificationAlarm(getActivity(), localTime);
@@ -64,7 +62,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
   @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
     switch (preference.getKey()) {
-      case PreferenceHelper.IS_DARK_THEME:
       case PreferenceHelper.IS_TODAY_ENABLED:
       case PreferenceHelper.ARE_CIRCLES_COLORED:
       case PreferenceHelper.IS_FAM_ENABLED:
@@ -79,18 +76,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
       case "rate_app":
         Utils.openPlayStorePage(getActivity());
         return true;
-      case "notification_time":
-        LocalTime localTime = mLocalTimePreference.get();
-        TimePickerDialog dialog =
-            TimePickerDialog.newInstance(this, localTime.getHour(), localTime.getMinute(), true);
-        dialog.setThemeDark(mIsDarkTheme);
-        dialog.show(getActivity().getFragmentManager(), "time_picker");
-        return true;
     }
     return false;
-  }
-
-  @Override public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-    mLocalTimePreference.set(LocalTime.of(hourOfDay, minute));
   }
 }

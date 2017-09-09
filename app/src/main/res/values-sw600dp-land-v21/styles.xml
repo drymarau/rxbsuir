@@ -1,7 +1,5 @@
 <resources>
 
-    <style name="AppTheme.Drawer.Light" parent="AppTheme.Light"/>
-
-    <style name="AppTheme.Drawer.Dark" parent="AppTheme.Dark"/>
+  <style name="AppTheme.Drawer" parent="Base.V0.AppTheme.Drawer"/>
 
 </resources>

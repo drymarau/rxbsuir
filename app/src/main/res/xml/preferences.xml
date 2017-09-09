@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
   <PreferenceCategory android:title="@string/category_appearance">
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="@string/key_pref_dark_theme"
-        android:title="@string/title_pref_dark_theme"/>
+    <ListPreference
+        android:defaultValue="@string/night_mode_default_value"
+        android:entries="@array/night_mode_entries"
+        android:entryValues="@array/night_mode_entry_values"
+        android:key="night_mode"
+        android:summary="%s"
+        android:title="@string/night_mode_title"/>
 
     <CheckBoxPreference
         android:defaultValue="true"
@@ -24,8 +28,10 @@
   </PreferenceCategory>
 
   <PreferenceCategory android:title="@string/title_notifications">
-    <Preference
+    <TimePickerPreference
+        android:defaultValue="07:00"
         android:key="notification_time"
+        android:summary="%s"
         android:title="@string/title_notification_time"/>
 
     <CheckBoxPreference

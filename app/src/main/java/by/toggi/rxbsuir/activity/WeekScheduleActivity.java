@@ -29,7 +29,7 @@ public class WeekScheduleActivity extends ScheduleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((RxBsuirApplication) getApplication()).getAppComponent().inject(this);
+        RxBsuirApplication.getAppComponent().inject(this);
 
         setupTabs();
 

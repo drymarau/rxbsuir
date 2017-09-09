@@ -18,6 +18,7 @@ import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.fragment.SettingsFragment;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
+import by.toggi.rxbsuir.night_mode.NightModePreferenceModule;
 import by.toggi.rxbsuir.service.AppWidgetScheduleService;
 import by.toggi.rxbsuir.service.LessonReminderService;
 import by.toggi.rxbsuir.service.ReplaceSyncIdService;
@@ -29,7 +30,7 @@ import javax.inject.Singleton;
 
 @Singleton @Component(modules = {
     AppModule.class, BsuirServiceModule.class, DbModule.class, PreferencesModule.class,
-    PaperworkModule.class
+    PaperworkModule.class, NightModePreferenceModule.class
 }) public interface AppComponent {
 
   RxBsuirApplication app();
@@ -47,6 +48,8 @@ import javax.inject.Singleton;
   Preference<SubgroupFilter> rxSubgroupFilter();
 
   SubgroupFilter subgroupFilter();
+
+  void inject(RxBsuirApplication application);
 
   void inject(AddGroupDialogFragment addGroupDialogFragment);
 

@@ -33,6 +33,8 @@ import android.widget.RelativeLayout;
 import butterknife.BindView;
 import com.f2prateek.rx.preferences.Preference;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+import com.trello.rxlifecycle.RxLifecycle;
+import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import org.threeten.bp.LocalTime;
@@ -98,7 +100,6 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     @Inject SchedulePresenter mSchedulePresenter;
     @Inject NavigationDrawerPresenter mDrawerPresenter;
     @Inject SharedPreferences mSharedPreferences;
-    @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
     @Inject @Named(PreferenceHelper.IS_FAM_ENABLED) boolean mIsFamEnabled;
     @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
     @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
@@ -109,6 +110,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     @Inject @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE) Preference<Boolean> mFavoriteIsGroupSchedulePreference;
     @Inject @Named(PreferenceHelper.FAVORITE_TITLE) Preference<String> mFavoriteTitlePreference;
     @Inject Preference<LocalTime> mLocalTimePreference;
+    @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -124,9 +126,6 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         initializeComponent();
-
-        setTheme(mIsDarkTheme ? R.style.AppTheme_Drawer_Dark : R.style.AppTheme_Drawer_Light);
-
         super.onCreate(savedInstanceState);
         setContentView(getLayoutRes());
 
@@ -156,6 +155,11 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         initializeAnimations();
+
+        mNightModePreference.asObservable()
+            .skip(1)
+            .compose(RxLifecycleAndroid.bindActivity(lifecycle()))
+            .subscribe(mode -> recreate());
     }
 
     @Override
@@ -192,7 +196,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity implements Sc
     }
 
     private void initializeComponent() {
-        ((RxBsuirApplication) getApplication()).getAppComponent().inject(this);
+        RxBsuirApplication.getAppComponent().inject(this);
     }
 
     @OnClick(R.id.fab)

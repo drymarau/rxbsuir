@@ -1,61 +1,59 @@
-ext.versions = [minSdk                : 16,
-                targetSdk             : 26,
-                compileSdk            : 26,
-                buildTools            : '26.0.1',
+ext.versions = [minSdk         : 16,
+                targetSdk      : 26,
+                compileSdk     : 26,
+                buildTools     : '26.0.1',
 
-                androidGradle         : '3.0.0-beta5',
+                androidGradle  : '3.0.0-beta5',
 
-                support               : '26.0.1',
+                support        : '26.0.2',
 
-                butterknife           : '8.8.1',
+                butterknife    : '8.8.1',
 
-                timber                : '4.5.1',
+                timber         : '4.5.1',
 
-                threetenabp           : '1.0.5',
+                threetenabp    : '1.0.5',
 
-                rxbinding             : '1.0.1',
+                rxbinding      : '1.0.1',
 
-                okhttp                : '2.7.5',
+                okhttp         : '2.7.5',
 
-                retrofit              : '1.9.0',
+                retrofit       : '1.9.0',
 
-                leakcanary            : '1.5',
+                leakcanary     : '1.5',
 
-                rxjava                : '1.2.7',
+                rxjava         : '1.2.7',
 
-                rxandroid             : '1.2.1',
+                rxandroid      : '1.2.1',
 
-                rxlifecycle           : '1.0',
+                rxlifecycle    : '1.0',
 
-                rxpreferences         : '1.0.2',
+                rxpreferences  : '1.0.2',
 
-                materialdialogs       : '0.9.4.7',
+                materialdialogs: '0.9.4.7',
 
-                materialdatetimepicker: '3.3.0',
+                storio         : '1.2.1',
 
-                storio                : '1.2.1',
+                dagger         : '2.11',
 
-                dagger                : '2.11',
+                parceler       : '1.0.3',
 
-                parceler              : '1.0.3',
+                preferencesfix : '26.0.2.0',
 
-                preferencesfix        : '26.0.1.0',
+                fabric         : '1.22.1',
 
-                fabric                : '1.22.1',
+                crashlytics    : '2.6.8',
 
-                crashlytics           : '2.6.8',
+                junit          : '4.12',
 
-                junit                 : '4.12',
+                mockito        : '2.8.9',
 
-                mockito               : '2.8.9',
+                assertj        : '2.6.0',
 
-                assertj               : '2.6.0',
+                supporttest    : '1.0.1',
 
-                supporttest           : '1.0.1',
+                dexcount       : '0.6.2',
 
-                dexcount              : '0.6.2',
-
-                paperwork             : '1.2.7',]
+                paperwork      : '1.2.7',]
 
 ext.gradlePlugins = [android  : "com.android.tools.build:gradle:$versions.androidGradle",
 
@@ -65,67 +63,67 @@ ext.gradlePlugins = [android  : "com.android.tools.build:gradle:$versions.androi
 
                      paperwork: "hu.supercluster:paperwork-plugin:$versions.paperwork",]
 
-ext.libraries = [support               : [appcompat   : "com.android.support:appcompat-v7:$versions.support",
-                                          cardview    : "com.android.support:cardview-v7:$versions.support",
-                                          design      : "com.android.support:design:$versions.support",
-                                          recyclerview: "com.android.support:recyclerview-v7:$versions.support",],
+ext.libraries = [support        : [appcompat   : "com.android.support:appcompat-v7:$versions.support",
+                                   cardview    : "com.android.support:cardview-v7:$versions.support",
+                                   design      : "com.android.support:design:$versions.support",
+                                   recyclerview: "com.android.support:recyclerview-v7:$versions.support",],
 
-                 butterknife           : [butterknife: "com.jakewharton:butterknife:$versions.butterknife",
-                                          compiler   : "com.jakewharton:butterknife-compiler:$versions.butterknife"],
+                 butterknife    : [butterknife: "com.jakewharton:butterknife:$versions.butterknife",
+                                   compiler   : "com.jakewharton:butterknife-compiler:$versions.butterknife"],
 
-                 timber                : "com.jakewharton.timber:timber:$versions.timber",
+                 timber         : "com.jakewharton.timber:timber:$versions.timber",
 
-                 threetenabp           : "com.jakewharton.threetenabp:threetenabp:$versions.threetenabp",
+                 threetenabp    : "com.jakewharton.threetenabp:threetenabp:$versions.threetenabp",
 
-                 rxbinding             : [rxbinding: "com.jakewharton.rxbinding:rxbinding:$versions.rxbinding",
-                                          appcompat: "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$versions.rxbinding"],
+                 rxbinding      : [rxbinding: "com.jakewharton.rxbinding:rxbinding:$versions.rxbinding",
+                                   appcompat: "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$versions.rxbinding"],
 
-                 okhttp                : [okhttp       : "com.squareup.okhttp:okhttp:$versions.okhttp",
-                                          mockwebserver: "com.squareup.okhttp:mockwebserver:$versions.okhttp"],
+                 okhttp         : [okhttp       : "com.squareup.okhttp:okhttp:$versions.okhttp",
+                                   mockwebserver: "com.squareup.okhttp:mockwebserver:$versions.okhttp"],
 
-                 retrofit              : "com.squareup.retrofit:retrofit:$versions.retrofit",
+                 retrofit       : "com.squareup.retrofit:retrofit:$versions.retrofit",
 
-                 leakcanary            : [leakcanary: "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary",
-                                          noop      : "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakcanary"],
+                 leakcanary     : [leakcanary: "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary",
+                                   noop      : "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakcanary"],
 
-                 rxjava                : "io.reactivex:rxjava:$versions.rxjava",
+                 rxjava         : "io.reactivex:rxjava:$versions.rxjava",
 
-                 rxandroid             : "io.reactivex:rxandroid:$versions.rxandroid",
+                 rxandroid      : "io.reactivex:rxandroid:$versions.rxandroid",
 
-                 rxlifecycle           : [rxlifecycle: "com.trello:rxlifecycle:$versions.rxlifecycle",
-                                          components : "com.trello:rxlifecycle-components:$versions.rxlifecycle"],
+                 rxlifecycle    : [rxlifecycle: "com.trello:rxlifecycle:$versions.rxlifecycle",
+                                   components : "com.trello:rxlifecycle-components:$versions.rxlifecycle"],
 
-                 rxpreferences         : "com.f2prateek.rx.preferences:rx-preferences:$versions.rxpreferences",
+                 rxpreferences  : "com.f2prateek.rx.preferences:rx-preferences:$versions.rxpreferences",
 
-                 materialdialogs       : [core   : "com.afollestad.material-dialogs:core:$versions.materialdialogs",
-                                          commons: "com.afollestad.material-dialogs:commons:$versions.materialdialogs"],
+                 materialdialogs: [core   : "com.afollestad.material-dialogs:core:$versions.materialdialogs",
+                                   commons: "com.afollestad.material-dialogs:commons:$versions.materialdialogs"],
 
-                 materialdatetimepicker: "com.wdullaer:materialdatetimepicker:$versions.materialdatetimepicker",
+                 storio         : [sqlite                    : "com.pushtorefresh.storio:sqlite:$versions.storio",
+                                   sqliteannotations         : "com.pushtorefresh.storio:sqlite-annotations:$versions.storio",
+                                   sqliteannotationsprocessor: "com.pushtorefresh.storio:sqlite-annotations-processor:$versions.storio"],
 
-                 storio                : [sqlite                    : "com.pushtorefresh.storio:sqlite:$versions.storio",
-                                          sqliteannotations         : "com.pushtorefresh.storio:sqlite-annotations:$versions.storio",
-                                          sqliteannotationsprocessor: "com.pushtorefresh.storio:sqlite-annotations-processor:$versions.storio"],
+                 dagger         : [dagger  : "com.google.dagger:dagger:$versions.dagger",
+                                   compiler: "com.google.dagger:dagger-compiler:$versions.dagger"],
 
-                 dagger                : [dagger  : "com.google.dagger:dagger:$versions.dagger",
-                                          compiler: "com.google.dagger:dagger-compiler:$versions.dagger"],
+                 javax          : [inject: 'javax.inject:javax.inject:1'],
 
-                 javax                 : [inject: 'javax.inject:javax.inject:1'],
+                 parceler       : [api     : "org.parceler:parceler-api:$versions.parceler",
+                                   parceler: "org.parceler:parceler:$versions.parceler"],
 
-                 parceler              : [api     : "org.parceler:parceler-api:$versions.parceler",
-                                          parceler: "org.parceler:parceler:$versions.parceler"],
+                 preferencesfix : [preferencesfix: "com.takisoft.fix:preference-v7:$versions.preferencesfix",
+                                   extras        : "com.takisoft.fix:preference-v7-extras:$versions.preferencesfix",
+                                   datetimepicker: "com.takisoft.fix:preference-v7-datetimepicker:$versions.preferencesfix"],
 
-                 preferencesfix        : "com.takisoft.fix:preference-v7:$versions.preferencesfix",
+                 crashlytics    : "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics@aar",
 
-                 crashlytics           : "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics@aar",
+                 junit          : "junit:junit:$versions.junit",
 
-                 junit                 : "junit:junit:$versions.junit",
+                 mockito        : [core: "org.mockito:mockito-core:$versions.mockito"],
 
-                 mockito               : [core: "org.mockito:mockito-core:$versions.mockito"],
+                 assertj        : [core: "org.assertj:assertj-core:$versions.assertj"],
 
-                 assertj               : [core: "org.assertj:assertj-core:$versions.assertj"],
+                 supporttest    : [runner      : "com.android.support.test:runner:$versions.supporttest",
+                                   orchestrator: "com.android.support.test:orchestrator:$versions.supporttest"],
 
-                 supporttest           : [runner      : "com.android.support.test:runner:$versions.supporttest",
-                                          orchestrator: "com.android.support.test:orchestrator:$versions.supporttest"],
-
-                 paperwork             : "hu.supercluster:paperwork:$versions.paperwork",]
+                 paperwork      : "hu.supercluster:paperwork:$versions.paperwork",]
 

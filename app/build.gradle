@@ -71,12 +71,15 @@ dependencies {
 
   implementation libraries.rxpreferences
 
-  implementation libraries.materialdialogs.core
-  implementation libraries.materialdialogs.commons
+  implementation(libraries.materialdialogs.core) {
+    exclude module: 'support-v13'
+  }
+  implementation(libraries.materialdialogs.commons) {
+    exclude module: 'support-v13'
+  }
 
-  implementation libraries.preferencesfix
-
-  implementation libraries.materialdatetimepicker
+  implementation libraries.preferencesfix.preferencesfix
+  implementation libraries.preferencesfix.datetimepicker
 
   implementation libraries.storio.sqlite
   implementation libraries.storio.sqliteannotations
@@ -100,7 +103,7 @@ dependencies {
   testImplementation libraries.okhttp.mockwebserver
 
   testImplementation libraries.mockito.core
-  
+
   testImplementation libraries.assertj.core
 
   androidTestImplementation libraries.supporttest.runner

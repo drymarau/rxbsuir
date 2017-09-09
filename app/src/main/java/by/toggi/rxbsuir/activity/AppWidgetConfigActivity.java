@@ -11,6 +11,9 @@ import android.view.MenuItem;
 import android.widget.RemoteViews;
 
 import butterknife.BindView;
+import com.f2prateek.rx.preferences.Preference;
+import com.trello.rxlifecycle.android.RxLifecycleAndroid;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -22,20 +25,17 @@ import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import timber.log.Timber;
 
-public class AppWidgetConfigActivity extends AppCompatActivity {
+public class AppWidgetConfigActivity extends RxAppCompatActivity {
 
     private final Intent mResultIntent = new Intent();
     @BindView(R.id.toolbar) Toolbar mToolbar;
-    @Inject @Named(PreferenceHelper.IS_DARK_THEME) boolean mIsDarkTheme;
+    @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private int mResult = RESULT_CANCELED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ((RxBsuirApplication) getApplication()).getAppComponent().inject(this);
-
-        setTheme(mIsDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
-
+        RxBsuirApplication.getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appwidget_config);
 
@@ -61,6 +61,11 @@ public class AppWidgetConfigActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .replace(R.id.container_fragment_settings, AppWidgetConfigFragment.newInstance(mAppWidgetId))
                 .commit();
+
+        mNightModePreference.asObservable()
+            .skip(1)
+            .compose(RxLifecycleAndroid.bindActivity(lifecycle()))
+            .subscribe(mode -> recreate());
     }
 
     @Override
