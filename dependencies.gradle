@@ -3,7 +3,7 @@ ext.versions = [minSdk                : 16,
                 compileSdk            : 25,
                 buildTools            : '25.0.3',
 
-                androidGradle         : '3.0.0-beta4',
+                androidGradle         : '3.0.0-beta5',
 
                 support               : '25.4.0',
 
