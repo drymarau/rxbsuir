@@ -57,7 +57,7 @@ data class EmployeeResponse(
     @Json(name = "academicDepartment") val departments: List<String>,
     val rank: String?,
     @Json(name = "photoLink") val photoUrl: String?,
-    @Json(name = "calendarId") val calendarUri: String
+    @Json(name = "calendarId") val calendarUri: String?
 )
 
 data class GroupScheduleResponse(
@@ -95,12 +95,12 @@ data class LessonResponse(
     @Json(name = "lessonType") val type: LessonType,
     @Json(name = "startLessonTime") val start: LocalTime,
     @Json(name = "endLessonTime") val end: LocalTime,
-    val weekNumber: List<Int>,
+    val weekNumbers: List<Int>,
     @Json(name = "numSubgroup") val subgroup: Int,
     @Json(name = "studentGroup") val groups: List<String>,
+    @Json(name = "employee") val employees: List<EmployeeResponse>,
     @Json(name = "auditory") val auditories: List<String>,
     val note: String,
-    val employee: List<EmployeeResponse>,
     @Json(name = "zaoch") val extramural: Boolean = false
 )
 
@@ -111,9 +111,9 @@ data class ExamResponse(
     @Json(name = "endLessonTime") val end: LocalTime,
     @Json(name = "numSubgroup") val subgroup: Int,
     @Json(name = "studentGroup") val groups: List<String>,
+    @Json(name = "employee") val employees: List<EmployeeResponse>,
     @Json(name = "auditory") val auditories: List<String>,
     val note: String,
-    val employee: List<EmployeeResponse>,
     @Json(name = "zaoch") val extramural: Boolean = false
 )
 
