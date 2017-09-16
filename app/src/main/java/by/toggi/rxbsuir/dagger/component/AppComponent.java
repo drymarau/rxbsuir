@@ -74,4 +74,13 @@ import javax.inject.Named;
   void inject(AppWidgetConfigFragment appWidgetConfigFragment);
 
   void inject(AppWidgetConfigActivity appWidgetConfigActivity);
+
+  @Component.Builder interface Builder {
+
+    Builder appModule(AppModule module);
+
+    Builder bsuirServiceModule(BsuirServiceModule module);
+
+    AppComponent build();
+  }
 }
