@@ -15,6 +15,7 @@ import by.toggi.rxbsuir.rest.model.StudentGroup;
 import by.toggi.rxbsuir.rest.model.StudentGroupStorIOSQLiteDeleteResolver;
 import by.toggi.rxbsuir.rest.model.StudentGroupStorIOSQLiteGetResolver;
 import by.toggi.rxbsuir.rest.model.StudentGroupStorIOSQLitePutResolver;
+import com.google.gson.Gson;
 import com.pushtorefresh.storio.sqlite.SQLiteTypeMapping;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
@@ -27,7 +28,7 @@ import dagger.Provides;
     return new RxBsuirOpenHelper(application);
   }
 
-  @Provides @PerApp StorIOSQLite provideStorIOSQLite(RxBsuirOpenHelper openHelper) {
+  @Provides @PerApp StorIOSQLite provideStorIOSQLite(RxBsuirOpenHelper openHelper, Gson gson) {
     return DefaultStorIOSQLite.builder()
         .sqliteOpenHelper(openHelper)
         .addTypeMapping(StudentGroup.class, SQLiteTypeMapping.<StudentGroup>builder().putResolver(
@@ -36,15 +37,15 @@ import dagger.Provides;
             .deleteResolver(new StudentGroupStorIOSQLiteDeleteResolver())
             .build())
         .addTypeMapping(Lesson.class,
-            SQLiteTypeMapping.<Lesson>builder().putResolver(new LessonStorIOSQLitePutResolver())
-                .getResolver(new LessonStorIOISQLiteGetResolver())
+            SQLiteTypeMapping.<Lesson>builder().putResolver(new LessonStorIOSQLitePutResolver(gson))
+                .getResolver(new LessonStorIOISQLiteGetResolver(gson))
                 .deleteResolver(new LessonStorIOSQLiteDeleteResolver())
                 .build())
-        .addTypeMapping(Employee.class,
-            SQLiteTypeMapping.<Employee>builder().putResolver(new EmployeeStorIOSQLitePutResolver())
-                .getResolver(new EmployeeStorIOISQLiteGetResolver())
-                .deleteResolver(new EmployeeStorIOSQLiteDeleteResolver())
-                .build())
+        .addTypeMapping(Employee.class, SQLiteTypeMapping.<Employee>builder().putResolver(
+            new EmployeeStorIOSQLitePutResolver(gson))
+            .getResolver(new EmployeeStorIOISQLiteGetResolver(gson))
+            .deleteResolver(new EmployeeStorIOSQLiteDeleteResolver())
+            .build())
         .build();
   }
 }

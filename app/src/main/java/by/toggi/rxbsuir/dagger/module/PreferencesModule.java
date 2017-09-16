@@ -4,12 +4,15 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.dagger.PerApp;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
+import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Named;
@@ -95,6 +98,10 @@ import org.threeten.bp.LocalTime;
     return preferences.getBoolean(PreferenceHelper.ARE_CIRCLES_COLORED, false);
   }
 
+  @Provides @PerApp Preference.Adapter<SyncIdItem> provideSyncIdItemAdapter(Gson gson) {
+    return new SyncIdItemAdapter(gson);
+  }
+
   private static final class LocalTimeAdapter implements Preference.Adapter<LocalTime> {
 
     static final LocalTimeAdapter INSTANCE = new LocalTimeAdapter();
@@ -106,6 +113,25 @@ import org.threeten.bp.LocalTime;
     @Override public void set(@NonNull String key, @NonNull LocalTime localTime,
         @NonNull SharedPreferences.Editor editor) {
       editor.putString(key, localTime.toString());
+    }
+  }
+
+  private static final class SyncIdItemAdapter implements Preference.Adapter<SyncIdItem> {
+
+    private final Gson mGson;
+
+    private SyncIdItemAdapter(Gson gson) {
+      mGson = gson;
+    }
+
+    @Override @Nullable
+    public SyncIdItem get(@NonNull String key, @NonNull SharedPreferences preferences) {
+      return mGson.fromJson(preferences.getString(key, null), SyncIdItem.class);
+    }
+
+    @Override public void set(@NonNull String key, @NonNull SyncIdItem syncIdItem,
+        @NonNull SharedPreferences.Editor editor) {
+      editor.putString(key, mGson.toJson(syncIdItem));
     }
   }
 }

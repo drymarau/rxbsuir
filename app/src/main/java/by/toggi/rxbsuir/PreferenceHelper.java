@@ -2,7 +2,6 @@ package by.toggi.rxbsuir;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDelegate;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
@@ -68,9 +67,9 @@ public class PreferenceHelper {
    * @param id the id
    * @return the sync id item rx preference
    */
-  public static Preference<SyncIdItem> getSyncIdItemRxPreference(Context context, int id) {
-    return getRxSharedPreferences(context, id).getObject(WIDGET_SYNC_ID_ITEM,
-        SyncIdItemAdapter.INSTANCE);
+  public static Preference<SyncIdItem> getSyncIdItemRxPreference(Context context, int id,
+      Preference.Adapter<SyncIdItem> adapter) {
+    return getRxSharedPreferences(context, id).getObject(WIDGET_SYNC_ID_ITEM, adapter);
   }
 
   /**
@@ -80,8 +79,9 @@ public class PreferenceHelper {
    * @param id the id
    * @return the sync id item preference
    */
-  @Nullable public static SyncIdItem getSyncIdItemPreference(Context context, int id) {
-    return getSyncIdItemRxPreference(context, id).get();
+  @Nullable public static SyncIdItem getSyncIdItemPreference(Context context, int id,
+      Preference.Adapter<SyncIdItem> adapter) {
+    return getSyncIdItemRxPreference(context, id, adapter).get();
   }
 
   /**
@@ -181,20 +181,5 @@ public class PreferenceHelper {
 
   private static SharedPreferences getWidgetPreferences(Context context, int id) {
     return context.getSharedPreferences(getWidgetPreferencesName(id), Context.MODE_PRIVATE);
-  }
-
-  private static final class SyncIdItemAdapter implements Preference.Adapter<SyncIdItem> {
-
-    static final SyncIdItemAdapter INSTANCE = new SyncIdItemAdapter();
-
-    @Override @Nullable
-    public SyncIdItem get(@NonNull String key, @NonNull SharedPreferences preferences) {
-      return SyncIdItem.fromJson(preferences.getString(key, null));
-    }
-
-    @Override public void set(@NonNull String key, @NonNull SyncIdItem syncIdItem,
-        @NonNull SharedPreferences.Editor editor) {
-      editor.putString(key, syncIdItem.toJson());
-    }
   }
 }

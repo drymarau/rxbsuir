@@ -22,8 +22,13 @@ import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
+import by.toggi.rxbsuir.dagger.PerBroadcastReceiver;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.service.AppWidgetScheduleService;
+import com.f2prateek.rx.preferences.Preference;
+import dagger.android.AndroidInjection;
+import dagger.android.ContributesAndroidInjector;
+import javax.inject.Inject;
 import org.parceler.Parcels;
 import timber.log.Timber;
 
@@ -36,6 +41,8 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
   private static final String ACTION_LESSON_ACTIVITY =
       "by.toggi.rxbsuir.action.ACTION_LESSON_ACTIVITY";
   private static final String ACTION_UPDATE_NOTE = "by.toggi.rxbsuir.action.ACTION_UPDATE_NOTE";
+
+  @Inject Preference.Adapter<SyncIdItem> mAdapter;
 
   /**
    * Updates note in all available widgets.
@@ -60,8 +67,9 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
    * @param id the id
    * @return the remote views
    */
-  @Nullable public static RemoteViews getRemoteViews(Context context, int id) {
-    SyncIdItem item = PreferenceHelper.getSyncIdItemPreference(context, id);
+  @Nullable public static RemoteViews getRemoteViews(Context context, int id,
+      Preference.Adapter<SyncIdItem> adapter) {
+    SyncIdItem item = PreferenceHelper.getSyncIdItemPreference(context, id, adapter);
     if (item == null) {
       return null;
     }
@@ -167,7 +175,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
       int appWidgetId, Bundle newOptions) {
     PreferenceHelper.setIsWidgetCollapsedPreference(context, appWidgetId,
         newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH) <= 220);
-    RemoteViews remoteViews = getRemoteViews(context, appWidgetId);
+    RemoteViews remoteViews = getRemoteViews(context, appWidgetId, mAdapter);
     if (remoteViews != null) {
       appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
       appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_view);
@@ -175,6 +183,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
   }
 
   @Override public void onReceive(@NonNull Context context, @NonNull Intent intent) {
+    AndroidInjection.inject(this, context);
     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
     int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
         AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -187,7 +196,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
       case ACTION_ARROW_CLICK:
         PreferenceHelper.setIsTodayPreference(context, id,
             !intent.getBooleanExtra(EXTRA_IS_TODAY, true));
-        RemoteViews remoteViews = getRemoteViews(context, id);
+        RemoteViews remoteViews = getRemoteViews(context, id, mAdapter);
         if (remoteViews != null) {
           appWidgetManager.updateAppWidget(id, remoteViews);
         }
@@ -203,7 +212,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
   @Override
   public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
     for (int id : appWidgetIds) {
-      RemoteViews remoteViews = getRemoteViews(context, id);
+      RemoteViews remoteViews = getRemoteViews(context, id, mAdapter);
       if (remoteViews != null) {
         appWidgetManager.updateAppWidget(id, remoteViews);
       }
@@ -226,5 +235,10 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
   @Override public void onDisabled(Context context) {
     super.onDisabled(context);
     Utils.cancelWidgetUpdateAlarm(context);
+  }
+
+  @dagger.Module public interface Module {
+
+    @PerBroadcastReceiver @ContributesAndroidInjector AppWidgetScheduleProvider contribute();
   }
 }

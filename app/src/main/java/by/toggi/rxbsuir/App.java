@@ -3,6 +3,7 @@ package by.toggi.rxbsuir;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.support.v7.app.AppCompatDelegate;
 import by.toggi.rxbsuir.activity.AppWidgetConfigActivity;
 import by.toggi.rxbsuir.activity.LessonActivity;
@@ -18,6 +19,7 @@ import by.toggi.rxbsuir.dagger.module.PaperworkModule;
 import by.toggi.rxbsuir.dagger.module.PreferencesModule;
 import by.toggi.rxbsuir.dagger.module.TimberTreeModule;
 import by.toggi.rxbsuir.night_mode.NightModePreferenceModule;
+import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import by.toggi.rxbsuir.service.AppWidgetScheduleService;
 import by.toggi.rxbsuir.service.LessonReminderService;
 import by.toggi.rxbsuir.service.ReplaceSyncIdService;
@@ -28,6 +30,7 @@ import dagger.BindsInstance;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import dagger.android.HasBroadcastReceiverInjector;
 import dagger.android.HasServiceInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 import io.fabric.sdk.android.Fabric;
@@ -35,10 +38,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import timber.log.Timber;
 
-public class App extends Application implements HasActivityInjector, HasServiceInjector {
+public class App extends Application
+    implements HasActivityInjector, HasServiceInjector, HasBroadcastReceiverInjector {
 
   @Inject DispatchingAndroidInjector<Activity> mDispatchingActivityInjector;
   @Inject DispatchingAndroidInjector<Service> mDispatchingServiceInjector;
+  @Inject DispatchingAndroidInjector<BroadcastReceiver> mDispatchingBroadcastReceiverInjector;
   @Inject Timber.Tree mTree;
   @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
 
@@ -64,8 +69,6 @@ public class App extends Application implements HasActivityInjector, HasServiceI
         .map(Integer::valueOf)
         .onErrorReturn(throwable -> AppCompatDelegate.MODE_NIGHT_NO)
         .subscribe(AppCompatDelegate::setDefaultNightMode);
-
-    LessonReminderService.enqueueWork(this);
   }
 
   @Override public AndroidInjector<Activity> activityInjector() {
@@ -76,6 +79,10 @@ public class App extends Application implements HasActivityInjector, HasServiceI
     return mDispatchingServiceInjector;
   }
 
+  @Override public AndroidInjector<BroadcastReceiver> broadcastReceiverInjector() {
+    return mDispatchingBroadcastReceiverInjector;
+  }
+
   @PerApp @dagger.Component(modules = {
       AndroidSupportInjectionModule.class, AppModule.class, TimberTreeModule.class,
       BsuirServiceModule.class, DbModule.class, PreferencesModule.class, PaperworkModule.class,
@@ -83,7 +90,7 @@ public class App extends Application implements HasActivityInjector, HasServiceI
       SettingsActivity.Module.class, LessonActivity.Module.class,
       AppWidgetConfigActivity.Module.class, LessonReminderService.Module.class,
       ReplaceSyncIdService.Module.class, AppWidgetScheduleService.Module.class,
-      WeekScheduleActivity.Module.class
+      WeekScheduleActivity.Module.class, AppWidgetScheduleProvider.Module.class
   }) public interface Component {
 
     void inject(App application);
