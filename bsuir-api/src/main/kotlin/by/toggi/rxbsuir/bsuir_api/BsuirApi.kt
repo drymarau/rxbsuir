@@ -5,37 +5,36 @@ import io.reactivex.Single
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface BsuirService {
 
   @GET("api/v1/groups")
-  fun groups(): Single<Response<List<GroupResponse>>>
+  fun groups(): Single<List<GroupResponse>>
 
   @GET("api/v1/employees")
-  fun employees(): Single<Response<List<EmployeeResponse>>>
+  fun employees(): Single<List<EmployeeResponse>>
 
   @GET("api/v1/studentGroup/schedule")
   fun groupSchedules(
       @Query("id") id: Long
-  ): Single<Response<GroupScheduleResponse>>
+  ): Single<GroupScheduleResponse>
 
   @GET("api/v1/portal/employeeSchedule")
   fun employeeSchedules(
       @Query("employeeId") id: Long
-  ): Single<Response<EmployeeScheduleResponse>>
+  ): Single<EmployeeScheduleResponse>
 
   @GET("api/v1/studentGroup/schedule")
   fun groupExamSchedules(
       @Query("id") id: Long
-  ): Single<Response<GroupExamScheduleResponse>>
+  ): Single<GroupExamScheduleResponse>
 
   @GET("api/v1/portal/employeeSchedule")
   fun employeeExamSchedules(
       @Query("employeeId") id: Long
-  ): Single<Response<EmployeeExamScheduleResponse>>
+  ): Single<EmployeeExamScheduleResponse>
 }
 
 data class GroupResponse(
@@ -58,7 +57,7 @@ data class EmployeeResponse(
     @Json(name = "academicDepartment") val departments: List<String>,
     val rank: String?,
     @Json(name = "photoLink") val photoUrl: String?,
-    @Json(name = "calendarId") val calendarUri: String
+    @Json(name = "calendarId") val calendarUri: String?
 )
 
 data class GroupScheduleResponse(
@@ -96,12 +95,12 @@ data class LessonResponse(
     @Json(name = "lessonType") val type: LessonType,
     @Json(name = "startLessonTime") val start: LocalTime,
     @Json(name = "endLessonTime") val end: LocalTime,
-    val weekNumber: List<Int>,
+    val weekNumbers: List<Int>,
     @Json(name = "numSubgroup") val subgroup: Int,
     @Json(name = "studentGroup") val groups: List<String>,
+    @Json(name = "employee") val employees: List<EmployeeResponse>,
     @Json(name = "auditory") val auditories: List<String>,
     val note: String,
-    val employee: List<EmployeeResponse>,
     @Json(name = "zaoch") val extramural: Boolean = false
 )
 
@@ -112,9 +111,9 @@ data class ExamResponse(
     @Json(name = "endLessonTime") val end: LocalTime,
     @Json(name = "numSubgroup") val subgroup: Int,
     @Json(name = "studentGroup") val groups: List<String>,
+    @Json(name = "employee") val employees: List<EmployeeResponse>,
     @Json(name = "auditory") val auditories: List<String>,
     val note: String,
-    val employee: List<EmployeeResponse>,
     @Json(name = "zaoch") val extramural: Boolean = false
 )
 
