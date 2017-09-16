@@ -5,37 +5,36 @@ import io.reactivex.Single
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface BsuirService {
 
   @GET("api/v1/groups")
-  fun groups(): Single<Response<List<GroupResponse>>>
+  fun groups(): Single<List<GroupResponse>>
 
   @GET("api/v1/employees")
-  fun employees(): Single<Response<List<EmployeeResponse>>>
+  fun employees(): Single<List<EmployeeResponse>>
 
   @GET("api/v1/studentGroup/schedule")
   fun groupSchedules(
       @Query("id") id: Long
-  ): Single<Response<GroupScheduleResponse>>
+  ): Single<GroupScheduleResponse>
 
   @GET("api/v1/portal/employeeSchedule")
   fun employeeSchedules(
       @Query("employeeId") id: Long
-  ): Single<Response<EmployeeScheduleResponse>>
+  ): Single<EmployeeScheduleResponse>
 
   @GET("api/v1/studentGroup/schedule")
   fun groupExamSchedules(
       @Query("id") id: Long
-  ): Single<Response<GroupExamScheduleResponse>>
+  ): Single<GroupExamScheduleResponse>
 
   @GET("api/v1/portal/employeeSchedule")
   fun employeeExamSchedules(
       @Query("employeeId") id: Long
-  ): Single<Response<EmployeeExamScheduleResponse>>
+  ): Single<EmployeeExamScheduleResponse>
 }
 
 data class GroupResponse(
