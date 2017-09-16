@@ -1,31 +1,24 @@
 package by.toggi.rxbsuir.dagger.module;
 
-import javax.inject.Singleton;
-
+import by.toggi.rxbsuir.dagger.PerApp;
 import by.toggi.rxbsuir.rest.BsuirService;
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Named;
 import retrofit.RestAdapter;
+import timber.log.Timber;
 
-@Module
-public class BsuirServiceModule {
+@Module public class BsuirServiceModule {
 
-    private final String mEndpoint;
+  @Provides @PerApp RestAdapter provideRestAdapter(@Named("bsuir") String url,
+      @Named("debug") boolean debug) {
+    return new RestAdapter.Builder().setEndpoint(url)
+        .setLog(message -> Timber.tag("Retrofit").d(message))
+        .setLogLevel(debug ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.BASIC)
+        .build();
+  }
 
-    public BsuirServiceModule(String endpoint) {
-        mEndpoint = endpoint;
-    }
-
-    @Provides
-    @Singleton
-    RestAdapter provideRestAdapter() {
-        return new RestAdapter.Builder().setEndpoint(mEndpoint).build();
-    }
-
-    @Provides
-    @Singleton
-    BsuirService provideBsuirService(RestAdapter restAdapter) {
-        return restAdapter.create(BsuirService.class);
-    }
-
+  @Provides @PerApp BsuirService provideBsuirService(RestAdapter restAdapter) {
+    return restAdapter.create(BsuirService.class);
+  }
 }

@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">RxBSUIR</string>
-    <!-- bsuir.by endpoint for retrofit -->
-    <string name="schedule_endpoint" translatable="false">http://students.bsuir.by/api/v1</string>
-
 
     <!-- SNACKBAR -->
     <!-- Error message when something went wrong with schedule -->
