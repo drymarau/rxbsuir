@@ -79,7 +79,7 @@ import javax.inject.Named;
 
     @BindsInstance Builder application(Application application);
 
-    Builder bsuirServiceModule(BsuirServiceModule module);
+    @BindsInstance Builder bsuirUrl(@Named("bsuir") String url);
 
     AppComponent build();
   }

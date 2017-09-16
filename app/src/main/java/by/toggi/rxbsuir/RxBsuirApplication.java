@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import by.toggi.rxbsuir.dagger.component.AppComponent;
 import by.toggi.rxbsuir.dagger.component.DaggerAppComponent;
-import by.toggi.rxbsuir.dagger.module.AppModule;
-import by.toggi.rxbsuir.dagger.module.BsuirServiceModule;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -39,7 +37,7 @@ public class RxBsuirApplication extends Application {
 
     mAppComponent = DaggerAppComponent.builder()
         .application(this)
-        .bsuirServiceModule(new BsuirServiceModule(getString(R.string.schedule_endpoint)))
+        .bsuirUrl("https://students.bsuir.by/api/v1")
         .build();
     mAppComponent.inject(this);
 
