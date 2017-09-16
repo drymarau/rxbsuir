@@ -14,14 +14,16 @@ import android.text.TextUtils;
 import by.toggi.rxbsuir.IntentUtils;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
+import by.toggi.rxbsuir.dagger.PerService;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import com.f2prateek.rx.preferences.Preference;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
+import dagger.android.AndroidInjection;
+import dagger.android.ContributesAndroidInjector;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -53,8 +55,8 @@ public class LessonReminderService extends JobIntentService {
   }
 
   @Override public void onCreate() {
+    AndroidInjection.inject(this);
     super.onCreate();
-    ((RxBsuirApplication) getApplication()).getAppComponent().inject(this);
     nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationChannel channel = new NotificationChannel(LESSON_REMINDER_CHANNEL_ID,
@@ -136,5 +138,10 @@ public class LessonReminderService extends JobIntentService {
             .setDefaults(defaults)
             .setContentIntent(resultPendingIntent);
     nm.notify(100, builder.build());
+  }
+
+  @dagger.Module public interface Module {
+
+    @PerService @ContributesAndroidInjector LessonReminderService contribute();
   }
 }

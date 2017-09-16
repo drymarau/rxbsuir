@@ -1,14 +1,17 @@
 package by.toggi.rxbsuir.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.Preference;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.Utils;
+import by.toggi.rxbsuir.dagger.PerFragment;
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
 import com.takisoft.fix.support.v7.preference.TimePickerPreference;
+import dagger.android.ContributesAndroidInjector;
+import dagger.android.support.AndroidSupportInjection;
 import hu.supercluster.paperwork.Paperwork;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,10 +30,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
   private Subscription mSubscription;
   private TimePickerPreference mNotificationTimePreference;
 
+  @Override public void onAttach(Context context) {
+    AndroidSupportInjection.inject(this);
+    super.onAttach(context);
+  }
+
   @Override
   public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-    RxBsuirApplication.getAppComponent().inject(this);
-
     setPreferencesFromResource(R.xml.preferences, rootKey);
 
     findPreference("build_version").setSummary(paperwork.get("gitInfo"));
@@ -78,5 +84,10 @@ public class SettingsFragment extends PreferenceFragmentCompat
         return true;
     }
     return false;
+  }
+
+  @dagger.Module public interface Module {
+
+    @PerFragment @ContributesAndroidInjector SettingsFragment contribute();
   }
 }
