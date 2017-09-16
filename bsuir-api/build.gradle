@@ -6,9 +6,9 @@ dependencies {
 
   api libraries.kotlin.stdlib
 
-  api libraries.retrofit2.retrofit
-  api libraries.retrofit2.adapters.rxjava2
-  api libraries.retrofit2.converters.moshi
+  api libraries.retrofit.retrofit
+  api libraries.retrofit.adapters.rxjava2
+  api libraries.retrofit.converters.moshi
 
   api libraries.threetenbp
 }

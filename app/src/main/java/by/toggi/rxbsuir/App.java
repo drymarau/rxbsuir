@@ -12,6 +12,8 @@ import by.toggi.rxbsuir.dagger.PerApp;
 import by.toggi.rxbsuir.dagger.module.AppModule;
 import by.toggi.rxbsuir.dagger.module.BsuirServiceModule;
 import by.toggi.rxbsuir.dagger.module.DbModule;
+import by.toggi.rxbsuir.dagger.module.GsonModule;
+import by.toggi.rxbsuir.dagger.module.OkHttpClientModule;
 import by.toggi.rxbsuir.dagger.module.PaperworkModule;
 import by.toggi.rxbsuir.dagger.module.PreferencesModule;
 import by.toggi.rxbsuir.dagger.module.TimberTreeModule;
@@ -48,7 +50,7 @@ public class App extends Application implements HasActivityInjector, HasServiceI
     DaggerApp_Component.builder()
         .application(this)
         .debug(BuildConfig.DEBUG)
-        .bsuirUrl("https://students.bsuir.by/api/v1")
+        .bsuirUrl("https://students.bsuir.by/api/v1/")
         .build()
         .inject(this);
 
@@ -77,7 +79,8 @@ public class App extends Application implements HasActivityInjector, HasServiceI
   @PerApp @dagger.Component(modules = {
       AndroidSupportInjectionModule.class, AppModule.class, TimberTreeModule.class,
       BsuirServiceModule.class, DbModule.class, PreferencesModule.class, PaperworkModule.class,
-      NightModePreferenceModule.class, SettingsActivity.Module.class, LessonActivity.Module.class,
+      NightModePreferenceModule.class, GsonModule.class, OkHttpClientModule.class,
+      SettingsActivity.Module.class, LessonActivity.Module.class,
       AppWidgetConfigActivity.Module.class, LessonReminderService.Module.class,
       ReplaceSyncIdService.Module.class, AppWidgetScheduleService.Module.class,
       WeekScheduleActivity.Module.class
