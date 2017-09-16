@@ -2,50 +2,45 @@ package by.toggi.rxbsuir.db.model;
 
 import android.content.ContentValues;
 import android.support.annotation.NonNull;
-
+import by.toggi.rxbsuir.rest.model.Employee;
 import com.google.gson.Gson;
 import com.pushtorefresh.storio.sqlite.operations.put.DefaultPutResolver;
 import com.pushtorefresh.storio.sqlite.queries.InsertQuery;
 import com.pushtorefresh.storio.sqlite.queries.UpdateQuery;
 
-import by.toggi.rxbsuir.rest.model.Employee;
-
 import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
 
 public class EmployeeStorIOSQLitePutResolver extends DefaultPutResolver<Employee> {
 
-    @NonNull
-    @Override
-    protected InsertQuery mapToInsertQuery(@NonNull Employee object) {
-        return InsertQuery.builder()
-                .table(EmployeeEntry.TABLE_NAME)
-                .build();
-    }
+  private final Gson mGson;
 
-    @NonNull
-    @Override
-    protected UpdateQuery mapToUpdateQuery(@NonNull Employee object) {
-        return UpdateQuery.builder()
-                .table(EmployeeEntry.TABLE_NAME)
-                .where(EmployeeEntry.COL_ID + " = ?")
-                .whereArgs(object.id)
-                .build();
-    }
+  public EmployeeStorIOSQLitePutResolver(Gson gson) {
+    mGson = gson;
+  }
 
-    @NonNull
-    @Override
-    protected ContentValues mapToContentValues(@NonNull Employee object) {
-        ContentValues contentValues = new ContentValues(5);
+  @NonNull @Override protected InsertQuery mapToInsertQuery(@NonNull Employee object) {
+    return InsertQuery.builder().table(EmployeeEntry.TABLE_NAME).build();
+  }
 
-        Gson gson = new Gson();
+  @NonNull @Override protected UpdateQuery mapToUpdateQuery(@NonNull Employee object) {
+    return UpdateQuery.builder()
+        .table(EmployeeEntry.TABLE_NAME)
+        .where(EmployeeEntry.COL_ID + " = ?")
+        .whereArgs(object.id)
+        .build();
+  }
 
-        contentValues.put(EmployeeEntry.COL_ID, object.id);
-        contentValues.put(EmployeeEntry.COL_ACADEMIC_DEPARTMENT_LIST, gson.toJson(object.academicDepartment));
-        contentValues.put(EmployeeEntry.COL_FIRST_NAME, object.firstName);
-        contentValues.put(EmployeeEntry.COL_MIDDLE_NAME, object.middleName);
-        contentValues.put(EmployeeEntry.COL_LAST_NAME, object.lastName);
-        contentValues.put(EmployeeEntry.COL_IS_CACHED, object.isCached);
+  @NonNull @Override protected ContentValues mapToContentValues(@NonNull Employee object) {
+    ContentValues contentValues = new ContentValues(5);
 
-        return contentValues;
-    }
+    contentValues.put(EmployeeEntry.COL_ID, object.id);
+    contentValues.put(EmployeeEntry.COL_ACADEMIC_DEPARTMENT_LIST,
+        mGson.toJson(object.academicDepartment));
+    contentValues.put(EmployeeEntry.COL_FIRST_NAME, object.firstName);
+    contentValues.put(EmployeeEntry.COL_MIDDLE_NAME, object.middleName);
+    contentValues.put(EmployeeEntry.COL_LAST_NAME, object.lastName);
+    contentValues.put(EmployeeEntry.COL_IS_CACHED, object.isCached);
+
+    return contentValues;
+  }
 }

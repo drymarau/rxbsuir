@@ -15,6 +15,7 @@ import by.toggi.rxbsuir.dagger.PerService;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
+import com.f2prateek.rx.preferences.Preference;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 import dagger.android.AndroidInjection;
@@ -32,6 +33,7 @@ import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 public class AppWidgetScheduleService extends RemoteViewsService {
 
   @Inject StorIOSQLite mStorIOSQLite;
+  @Inject Preference.Adapter<SyncIdItem> mAdapter;
 
   @Override public void onCreate() {
     AndroidInjection.inject(this);
@@ -39,7 +41,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
   }
 
   @Override public RemoteViewsFactory onGetViewFactory(Intent intent) {
-    return new AppWidgetScheduleFactory(this, intent, mStorIOSQLite);
+    return new AppWidgetScheduleFactory(this, intent, mStorIOSQLite, mAdapter);
   }
 
   public static class AppWidgetScheduleFactory implements RemoteViewsFactory {
@@ -56,13 +58,14 @@ public class AppWidgetScheduleService extends RemoteViewsService {
     private List<Lesson> mLessonList = new ArrayList<>();
     private boolean mIsCollapsed;
 
-    public AppWidgetScheduleFactory(Context context, Intent intent, StorIOSQLite storIOSQLite) {
+    public AppWidgetScheduleFactory(Context context, Intent intent, StorIOSQLite storIOSQLite,
+        Preference.Adapter<SyncIdItem> adapter) {
       mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
           AppWidgetManager.INVALID_APPWIDGET_ID);
       mContext = context;
       mIsToday = intent.getBooleanExtra(AppWidgetScheduleProvider.EXTRA_IS_TODAY, true);
       mStorIOSQLite = storIOSQLite;
-      mSyncIdItem = PreferenceHelper.getSyncIdItemPreference(context, mAppWidgetId);
+      mSyncIdItem = PreferenceHelper.getSyncIdItemPreference(context, mAppWidgetId, adapter);
       mAreCirclesColored = PreferenceHelper.getAreCirclesColoredPreference(context, mAppWidgetId);
       mIsDarkTheme = PreferenceHelper.isNightModeEnabled(context, mAppWidgetId);
       mSubgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, mAppWidgetId);

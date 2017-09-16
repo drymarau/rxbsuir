@@ -29,6 +29,7 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
     implements AppWidgetConfigView, Preference.OnPreferenceClickListener {
 
   @Inject AppWidgetConfigPresenter mPresenter;
+  @Inject com.f2prateek.rx.preferences.Preference.Adapter<SyncIdItem> mAdapter;
 
   private int mAppWidgetId;
   private final List<SyncIdItem> mSyncIdItemList = new ArrayList<>();
@@ -60,7 +61,8 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
     getPreferenceManager().setSharedPreferencesName(
         PreferenceHelper.getWidgetPreferencesName(mAppWidgetId));
 
-    mSyncIdItemPreference = PreferenceHelper.getSyncIdItemRxPreference(getActivity(), mAppWidgetId);
+    mSyncIdItemPreference =
+        PreferenceHelper.getSyncIdItemRxPreference(getActivity(), mAppWidgetId, mAdapter);
     mSubgroupFilterPreference =
         PreferenceHelper.getSubgroupFilterRxPreference(getActivity(), mAppWidgetId);
 

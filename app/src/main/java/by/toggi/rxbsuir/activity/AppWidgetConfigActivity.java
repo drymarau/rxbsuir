@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.dagger.PerActivity;
 import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
@@ -35,6 +36,7 @@ public class AppWidgetConfigActivity extends RxAppCompatActivity
   @BindView(R.id.toolbar) Toolbar mToolbar;
   @Inject DispatchingAndroidInjector<Fragment> mDispatchingFragmentInjector;
   @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
+  @Inject Preference.Adapter<SyncIdItem> mAdapter;
   private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
   private int mResult = RESULT_CANCELED;
 
@@ -80,7 +82,7 @@ public class AppWidgetConfigActivity extends RxAppCompatActivity
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_done:
-        RemoteViews remoteViews = AppWidgetScheduleProvider.getRemoteViews(this, mAppWidgetId);
+        RemoteViews remoteViews = AppWidgetScheduleProvider.getRemoteViews(this, mAppWidgetId, mAdapter);
         if (remoteViews != null) {
           AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
           appWidgetManager.updateAppWidget(mAppWidgetId, remoteViews);
