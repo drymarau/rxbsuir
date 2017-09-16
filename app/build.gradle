@@ -86,7 +86,10 @@ dependencies {
   annotationProcessor libraries.storio.sqliteannotationsprocessor
 
   implementation libraries.dagger.dagger
+  implementation libraries.dagger.android
+  implementation libraries.dagger.support
   annotationProcessor libraries.dagger.compiler
+  annotationProcessor libraries.dagger.processor
   compileOnly libraries.javax.inject
 
   implementation libraries.parceler.api

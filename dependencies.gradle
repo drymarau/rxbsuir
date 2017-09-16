@@ -116,8 +116,11 @@ ext.libraries = [support        : [appcompat   : "com.android.support:appcompat-
                                    sqliteannotations         : "com.pushtorefresh.storio:sqlite-annotations:$versions.storio",
                                    sqliteannotationsprocessor: "com.pushtorefresh.storio:sqlite-annotations-processor:$versions.storio"],
 
-                 dagger         : [dagger  : "com.google.dagger:dagger:$versions.dagger",
-                                   compiler: "com.google.dagger:dagger-compiler:$versions.dagger"],
+                 dagger         : [dagger   : "com.google.dagger:dagger:$versions.dagger",
+                                   android  : "com.google.dagger:dagger-android:$versions.dagger",
+                                   support  : "com.google.dagger:dagger-android-support:$versions.dagger",
+                                   processor: "com.google.dagger:dagger-android-processor:$versions.dagger",
+                                   compiler : "com.google.dagger:dagger-compiler:$versions.dagger"],
 
                  javax          : [inject: 'javax.inject:javax.inject:1'],
 

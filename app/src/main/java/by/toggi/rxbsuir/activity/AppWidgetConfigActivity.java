@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,26 +13,33 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.dagger.PerActivity;
 import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import com.f2prateek.rx.preferences.Preference;
 import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.ContributesAndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import javax.inject.Inject;
 import javax.inject.Named;
 import timber.log.Timber;
 
-public class AppWidgetConfigActivity extends RxAppCompatActivity {
+public class AppWidgetConfigActivity extends RxAppCompatActivity
+    implements HasSupportFragmentInjector {
 
   private final Intent mResultIntent = new Intent();
   @BindView(R.id.toolbar) Toolbar mToolbar;
+  @Inject DispatchingAndroidInjector<Fragment> mDispatchingFragmentInjector;
   @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
   private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
   private int mResult = RESULT_CANCELED;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
-    RxBsuirApplication.getAppComponent().inject(this);
+    AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_appwidget_config);
 
@@ -103,10 +111,19 @@ public class AppWidgetConfigActivity extends RxAppCompatActivity {
     finish();
   }
 
+  @Override public AndroidInjector<Fragment> supportFragmentInjector() {
+    return mDispatchingFragmentInjector;
+  }
+
   private void setupToolbar() {
     getDelegate().setSupportActionBar(mToolbar);
     getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     mToolbar.setNavigationIcon(R.drawable.ic_action_discard);
     mToolbar.setNavigationOnClickListener(view -> finish());
+  }
+
+  @dagger.Module(includes = AppWidgetConfigFragment.Module.class) public interface Module {
+
+    @PerActivity @ContributesAndroidInjector AppWidgetConfigActivity contribute();
   }
 }

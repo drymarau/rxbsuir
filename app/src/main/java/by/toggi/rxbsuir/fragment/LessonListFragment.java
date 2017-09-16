@@ -23,7 +23,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
 import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
@@ -33,6 +32,13 @@ import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
 import com.f2prateek.rx.preferences.Preference;
+import dagger.Binds;
+import dagger.BindsInstance;
+import dagger.Subcomponent;
+import dagger.android.AndroidInjector;
+import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.FragmentKey;
+import dagger.multibindings.IntoMap;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -87,17 +93,12 @@ public class LessonListFragment extends Fragment
   }
 
   @Override public void onAttach(Context context) {
+    AndroidSupportInjection.inject(this);
     super.onAttach(context);
     Bundle args = getArguments();
     if (args != null) {
       mType = (LessonListPresenter.Type) args.getSerializable(ARGS_VIEW_TYPE);
     }
-
-    RxBsuirApplication.getAppComponent()
-        .lessonListFragmentComponentBuilder()
-        .type(mType)
-        .build()
-        .inject(this);
   }
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -224,5 +225,24 @@ public class LessonListFragment extends Fragment
 
   @Override public void onItemClicked(Lesson lesson) {
     LessonActivity.start(getContext(), lesson);
+  }
+
+  @Subcomponent public interface Component extends AndroidInjector<LessonListFragment> {
+
+    @Subcomponent.Builder abstract class Builder
+        extends AndroidInjector.Builder<LessonListFragment> {
+
+      @BindsInstance public abstract Builder type(LessonListPresenter.Type type);
+
+      @Override public void seedInstance(LessonListFragment instance) {
+        type((LessonListPresenter.Type) instance.getArguments().getSerializable(ARGS_VIEW_TYPE));
+      }
+    }
+  }
+
+  @dagger.Module(subcomponents = Component.class) public abstract class Module {
+
+    @Binds @IntoMap @FragmentKey(LessonListFragment.class)
+    abstract AndroidInjector.Factory<? extends Fragment> bind(Component.Builder builder);
   }
 }

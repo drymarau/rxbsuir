@@ -1,20 +1,23 @@
 package by.toggi.rxbsuir.fragment;
 
 import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.Preference;
 import android.widget.Toast;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.Utils;
+import by.toggi.rxbsuir.dagger.PerFragment;
 import by.toggi.rxbsuir.mvp.presenter.AppWidgetConfigPresenter;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.AppWidgetConfigView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
+import dagger.android.ContributesAndroidInjector;
+import dagger.android.support.AndroidSupportInjection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -41,10 +44,13 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
     return fragment;
   }
 
+  @Override public void onAttach(Context context) {
+    AndroidSupportInjection.inject(this);
+    super.onAttach(context);
+  }
+
   @Override
   public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-    RxBsuirApplication.getAppComponent().inject(this);
-
     Bundle args = getArguments();
     if (args != null) {
       mAppWidgetId =
@@ -151,5 +157,10 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
         .map(mSyncIdItemList::indexOf)
         .toBlocking()
         .firstOrDefault(0);
+  }
+
+  @dagger.Module public interface Module {
+
+    @PerFragment @ContributesAndroidInjector AppWidgetConfigFragment contribute();
   }
 }
