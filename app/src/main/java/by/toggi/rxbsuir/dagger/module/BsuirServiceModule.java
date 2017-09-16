@@ -1,31 +1,24 @@
 package by.toggi.rxbsuir.dagger.module;
 
-import javax.inject.Singleton;
-
+import by.toggi.rxbsuir.dagger.PerApp;
 import by.toggi.rxbsuir.rest.BsuirService;
 import dagger.Module;
 import dagger.Provides;
 import retrofit.RestAdapter;
 
-@Module
-public class BsuirServiceModule {
+@Module public class BsuirServiceModule {
 
-    private final String mEndpoint;
+  private final String mEndpoint;
 
-    public BsuirServiceModule(String endpoint) {
-        mEndpoint = endpoint;
-    }
+  public BsuirServiceModule(String endpoint) {
+    mEndpoint = endpoint;
+  }
 
-    @Provides
-    @Singleton
-    RestAdapter provideRestAdapter() {
-        return new RestAdapter.Builder().setEndpoint(mEndpoint).build();
-    }
+  @Provides @PerApp RestAdapter provideRestAdapter() {
+    return new RestAdapter.Builder().setEndpoint(mEndpoint).build();
+  }
 
-    @Provides
-    @Singleton
-    BsuirService provideBsuirService(RestAdapter restAdapter) {
-        return restAdapter.create(BsuirService.class);
-    }
-
+  @Provides @PerApp BsuirService provideBsuirService(RestAdapter restAdapter) {
+    return restAdapter.create(BsuirService.class);
+  }
 }

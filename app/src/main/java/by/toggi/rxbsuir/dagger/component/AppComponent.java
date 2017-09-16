@@ -8,6 +8,7 @@ import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
+import by.toggi.rxbsuir.dagger.PerApp;
 import by.toggi.rxbsuir.dagger.module.AppModule;
 import by.toggi.rxbsuir.dagger.module.BsuirServiceModule;
 import by.toggi.rxbsuir.dagger.module.DbModule;
@@ -26,9 +27,8 @@ import com.f2prateek.rx.preferences.Preference;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import dagger.Component;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
-@Singleton @Component(modules = {
+@PerApp @Component(modules = {
     AppModule.class, BsuirServiceModule.class, DbModule.class, PreferencesModule.class,
     PaperworkModule.class, NightModePreferenceModule.class
 }) public interface AppComponent {

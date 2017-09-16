@@ -6,18 +6,18 @@ import android.support.annotation.NonNull;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RxBsuirApplication;
+import by.toggi.rxbsuir.dagger.PerApp;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Named;
-import javax.inject.Singleton;
 import org.threeten.bp.LocalTime;
 
 @Module public class PreferencesModule {
 
-  @Provides @Singleton SharedPreferences provideSharedPreferences(RxBsuirApplication application) {
+  @Provides @PerApp SharedPreferences provideSharedPreferences(RxBsuirApplication application) {
     return PreferenceManager.getDefaultSharedPreferences(application);
   }
 
@@ -26,72 +26,71 @@ import org.threeten.bp.LocalTime;
     return preferences.getBoolean(PreferenceHelper.IS_FAM_ENABLED, true);
   }
 
-  @Provides @Singleton SubgroupFilter provideSubgroupFilter(Preference<SubgroupFilter> preference) {
+  @Provides @PerApp SubgroupFilter provideSubgroupFilter(Preference<SubgroupFilter> preference) {
     return preference.get();
   }
 
-  @Provides @Singleton RxSharedPreferences provideRxSharedPreferences(
-      SharedPreferences preferences) {
+  @Provides @PerApp RxSharedPreferences provideRxSharedPreferences(SharedPreferences preferences) {
     return RxSharedPreferences.create(preferences);
   }
 
-  @Provides @Singleton @Named(PreferenceHelper.SYNC_ID) Preference<String> provideRxSyncId(
+  @Provides @PerApp @Named(PreferenceHelper.SYNC_ID) Preference<String> provideRxSyncId(
       RxSharedPreferences preferences) {
     return preferences.getString(PreferenceHelper.SYNC_ID, null);
   }
 
-  @Provides @Singleton @Named(PreferenceHelper.IS_GROUP_SCHEDULE)
+  @Provides @PerApp @Named(PreferenceHelper.IS_GROUP_SCHEDULE)
   Preference<Boolean> provideRxIsGroupSchedule(RxSharedPreferences preferences) {
     return preferences.getBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, true);
   }
 
-  @Provides @Singleton @Named(PreferenceHelper.TITLE) Preference<String> provideRxTitle(
+  @Provides @PerApp @Named(PreferenceHelper.TITLE) Preference<String> provideRxTitle(
       RxSharedPreferences preferences, RxBsuirApplication application) {
     return preferences.getString(PreferenceHelper.TITLE, application.getString(R.string.app_name));
   }
 
-  @Provides @Singleton Preference<Integer> provideRxItemId(RxSharedPreferences preferences) {
+  @Provides @PerApp Preference<Integer> provideRxItemId(RxSharedPreferences preferences) {
     return preferences.getInteger(PreferenceHelper.ITEM_ID, -1);
   }
 
-  @Provides @Singleton Preference<SubgroupFilter> provideRxSubgroupFilter(
+  @Provides @PerApp Preference<SubgroupFilter> provideRxSubgroupFilter(
       RxSharedPreferences preferences) {
     return preferences.getEnum(PreferenceHelper.SUBGROUP_FILTER, SubgroupFilter.BOTH,
         SubgroupFilter.class);
   }
 
-  @Provides @Singleton @Named(PreferenceHelper.FAVORITE_SYNC_ID)
+  @Provides @PerApp @Named(PreferenceHelper.FAVORITE_SYNC_ID)
   Preference<String> provideRxFavoriteSyncId(RxSharedPreferences preferences) {
     return preferences.getString(PreferenceHelper.FAVORITE_SYNC_ID, null);
   }
 
-  @Provides @Singleton @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE)
+  @Provides @PerApp @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE)
   Preference<Boolean> provideRxFavoriteIsGroupSchedule(RxSharedPreferences preferences) {
     return preferences.getBoolean(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE, true);
   }
 
-  @Provides @Singleton @Named(PreferenceHelper.FAVORITE_TITLE)
+  @Provides @PerApp @Named(PreferenceHelper.FAVORITE_TITLE)
   Preference<String> provideRxFavoriteTitle(RxSharedPreferences preferences) {
     return preferences.getString(PreferenceHelper.FAVORITE_TITLE, null);
   }
 
-  @Provides @Singleton Preference<LocalTime> provideRxNotificationTime(
+  @Provides @PerApp Preference<LocalTime> provideRxNotificationTime(
       RxSharedPreferences preferences) {
     return preferences.getObject(PreferenceHelper.NOTIFICATION_TIME, LocalTime.of(7, 0),
         LocalTimeAdapter.INSTANCE);
   }
 
-  @Provides @Singleton @Named(PreferenceHelper.NOTIFICATION_SOUND_ENABLED)
+  @Provides @PerApp @Named(PreferenceHelper.NOTIFICATION_SOUND_ENABLED)
   Preference<Boolean> provideRxNotificationSoundEnabled(RxSharedPreferences preferences) {
     return preferences.getBoolean(PreferenceHelper.NOTIFICATION_SOUND_ENABLED, false);
   }
 
-  @Provides @Singleton @Named(PreferenceHelper.IS_TODAY_ENABLED)
+  @Provides @PerApp @Named(PreferenceHelper.IS_TODAY_ENABLED)
   Preference<Boolean> provideRxIsTodayEnabled(RxSharedPreferences preferences) {
     return preferences.getBoolean(PreferenceHelper.IS_TODAY_ENABLED, true);
   }
 
-  @Provides @Singleton @Named(PreferenceHelper.ARE_CIRCLES_COLORED)
+  @Provides @PerApp @Named(PreferenceHelper.ARE_CIRCLES_COLORED)
   Preference<Boolean> provideRxAreCirclesColored(RxSharedPreferences preferences) {
     return preferences.getBoolean(PreferenceHelper.ARE_CIRCLES_COLORED, false);
   }
