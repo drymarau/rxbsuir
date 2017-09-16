@@ -18,11 +18,9 @@ ext.versions = [minSdk         : 16,
 
                 rxbinding      : '1.0.1',
 
-                okhttp         : '2.7.5',
-                okhttp3        : '3.9.0',
+                okhttp         : '3.9.0',
 
-                retrofit       : '1.9.0',
-                retrofit2      : '2.3.0',
+                retrofit       : '2.3.0',
 
                 leakcanary     : '1.5',
 
@@ -89,13 +87,15 @@ ext.libraries = [support        : [appcompat   : "com.android.support:appcompat-
                  rxbinding      : [rxbinding: "com.jakewharton.rxbinding:rxbinding:$versions.rxbinding",
                                    appcompat: "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$versions.rxbinding"],
 
-                 okhttp         : [okhttp       : "com.squareup.okhttp:okhttp:$versions.okhttp",
-                                   mockwebserver: "com.squareup.okhttp:mockwebserver:$versions.okhttp"],
+                 okhttp         : [okhttp       : "com.squareup.okhttp3:okhttp:$versions.okhttp",
+                                   logging      : "com.squareup.okhttp3:logging-interceptor:$versions.okhttp",
+                                   mockwebserver: "com.squareup.okhttp3:mockwebserver:$versions.okhttp"],
 
-                 retrofit       : "com.squareup.retrofit:retrofit:$versions.retrofit",
-                 retrofit2      : [retrofit  : "com.squareup.retrofit2:retrofit:$versions.retrofit2",
-                                   adapters  : [rxjava2: "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit2",],
-                                   converters: [moshi: "com.squareup.retrofit2:converter-moshi:$versions.retrofit2",],],
+                 retrofit       : [retrofit  : "com.squareup.retrofit2:retrofit:$versions.retrofit",
+                                   adapters  : [rxjava : "com.squareup.retrofit2:adapter-rxjava:$versions.retrofit",
+                                                rxjava2: "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit",],
+                                   converters: [moshi: "com.squareup.retrofit2:converter-moshi:$versions.retrofit",
+                                                gson : "com.squareup.retrofit2:converter-gson:$versions.retrofit",],],
 
                  leakcanary     : [leakcanary: "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary",
                                    noop      : "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakcanary"],

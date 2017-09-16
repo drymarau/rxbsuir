@@ -57,8 +57,11 @@ dependencies {
   implementation libraries.rxbinding.appcompat
 
   implementation libraries.okhttp.okhttp
+  implementation libraries.okhttp.logging
 
-  implementation libraries.retrofit
+  implementation libraries.retrofit.retrofit
+  implementation libraries.retrofit.adapters.rxjava
+  implementation libraries.retrofit.converters.gson
 
   debugImplementation libraries.leakcanary.leakcanary
   releaseImplementation libraries.leakcanary.noop
