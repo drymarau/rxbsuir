@@ -15,6 +15,7 @@ import by.toggi.rxbsuir.dagger.module.BsuirServiceModule;
 import by.toggi.rxbsuir.dagger.module.DbModule;
 import by.toggi.rxbsuir.dagger.module.PaperworkModule;
 import by.toggi.rxbsuir.dagger.module.PreferencesModule;
+import by.toggi.rxbsuir.dagger.module.TimberTreeModule;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
@@ -31,8 +32,8 @@ import dagger.Component;
 import javax.inject.Named;
 
 @PerApp @Component(modules = {
-    AppModule.class, BsuirServiceModule.class, DbModule.class, PreferencesModule.class,
-    PaperworkModule.class, NightModePreferenceModule.class
+    AppModule.class, TimberTreeModule.class, BsuirServiceModule.class, DbModule.class,
+    PreferencesModule.class, PaperworkModule.class, NightModePreferenceModule.class
 }) public interface AppComponent {
 
   StorIOSQLite storIOSQLite();
