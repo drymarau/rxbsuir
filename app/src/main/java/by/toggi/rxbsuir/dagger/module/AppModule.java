@@ -1,7 +1,7 @@
 package by.toggi.rxbsuir.dagger.module;
 
+import android.app.Application;
 import android.content.Context;
-import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.dagger.PerApp;
 import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
@@ -12,18 +12,8 @@ import dagger.Provides;
 
 @Module public class AppModule {
 
-  private final RxBsuirApplication mApplication;
-
-  public AppModule(RxBsuirApplication application) {
-    mApplication = application;
-  }
-
-  @Provides @PerApp RxBsuirApplication provideAppContext() {
-    return mApplication;
-  }
-
-  @Provides @PerApp Context provideContext() {
-    return mApplication;
+  @Provides @PerApp Context provideContext(Application application) {
+    return application;
   }
 
   @Provides @PerApp SchedulePresenter provideSchedulePresenter(BsuirService service,

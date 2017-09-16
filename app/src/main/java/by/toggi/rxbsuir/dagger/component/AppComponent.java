@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.dagger.component;
 
+import android.app.Application;
 import android.content.SharedPreferences;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.RxBsuirApplication;
@@ -25,6 +26,7 @@ import by.toggi.rxbsuir.service.LessonReminderService;
 import by.toggi.rxbsuir.service.ReplaceSyncIdService;
 import com.f2prateek.rx.preferences.Preference;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import dagger.BindsInstance;
 import dagger.Component;
 import javax.inject.Named;
 
@@ -32,8 +34,6 @@ import javax.inject.Named;
     AppModule.class, BsuirServiceModule.class, DbModule.class, PreferencesModule.class,
     PaperworkModule.class, NightModePreferenceModule.class
 }) public interface AppComponent {
-
-  RxBsuirApplication app();
 
   StorIOSQLite storIOSQLite();
 
@@ -77,7 +77,7 @@ import javax.inject.Named;
 
   @Component.Builder interface Builder {
 
-    Builder appModule(AppModule module);
+    @BindsInstance Builder application(Application application);
 
     Builder bsuirServiceModule(BsuirServiceModule module);
 

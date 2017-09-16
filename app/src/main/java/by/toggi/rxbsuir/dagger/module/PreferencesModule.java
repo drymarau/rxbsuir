@@ -1,11 +1,11 @@
 package by.toggi.rxbsuir.dagger.module;
 
+import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.RxBsuirApplication;
 import by.toggi.rxbsuir.dagger.PerApp;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import com.f2prateek.rx.preferences.Preference;
@@ -17,7 +17,7 @@ import org.threeten.bp.LocalTime;
 
 @Module public class PreferencesModule {
 
-  @Provides @PerApp SharedPreferences provideSharedPreferences(RxBsuirApplication application) {
+  @Provides @PerApp SharedPreferences provideSharedPreferences(Application application) {
     return PreferenceManager.getDefaultSharedPreferences(application);
   }
 
@@ -45,7 +45,7 @@ import org.threeten.bp.LocalTime;
   }
 
   @Provides @PerApp @Named(PreferenceHelper.TITLE) Preference<String> provideRxTitle(
-      RxSharedPreferences preferences, RxBsuirApplication application) {
+      RxSharedPreferences preferences, Application application) {
     return preferences.getString(PreferenceHelper.TITLE, application.getString(R.string.app_name));
   }
 

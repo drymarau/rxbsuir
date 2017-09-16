@@ -1,6 +1,6 @@
 package by.toggi.rxbsuir.dagger.module;
 
-import by.toggi.rxbsuir.RxBsuirApplication;
+import android.app.Application;
 import by.toggi.rxbsuir.dagger.PerApp;
 import by.toggi.rxbsuir.db.RxBsuirOpenHelper;
 import by.toggi.rxbsuir.db.model.EmployeeStorIOISQLiteGetResolver;
@@ -23,7 +23,7 @@ import dagger.Provides;
 
 @Module public class DbModule {
 
-  @Provides @PerApp RxBsuirOpenHelper provideOpenHelper(RxBsuirApplication application) {
+  @Provides @PerApp RxBsuirOpenHelper provideOpenHelper(Application application) {
     return new RxBsuirOpenHelper(application);
   }
 
