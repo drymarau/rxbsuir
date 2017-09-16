@@ -37,6 +37,7 @@ public class RxBsuirApplication extends Application {
 
     mAppComponent = DaggerAppComponent.builder()
         .application(this)
+        .debug(BuildConfig.DEBUG)
         .bsuirUrl("https://students.bsuir.by/api/v1")
         .build();
     mAppComponent.inject(this);

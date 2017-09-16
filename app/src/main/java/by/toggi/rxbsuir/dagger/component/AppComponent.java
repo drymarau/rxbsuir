@@ -79,6 +79,8 @@ import javax.inject.Named;
 
     @BindsInstance Builder application(Application application);
 
+    @BindsInstance Builder debug(@Named("debug") boolean debug);
+
     @BindsInstance Builder bsuirUrl(@Named("bsuir") String url);
 
     AppComponent build();
