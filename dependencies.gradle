@@ -5,7 +5,7 @@ ext.versions = [minSdk         : 16,
 
                 androidGradle  : '3.0.0-beta5',
 
-                kotlin         : '1.1.4-3',
+                kotlin         : '1.1.50',
 
                 support        : '26.0.2',
 
