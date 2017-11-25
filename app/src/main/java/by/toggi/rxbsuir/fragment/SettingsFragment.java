@@ -20,7 +20,7 @@ import rx.Subscription;
 import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragmentCompatDividers
-    implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
+    implements Preference.OnPreferenceClickListener {
 
   @Inject com.f2prateek.rx.preferences.Preference<LocalTime> mLocalTimePreference;
   @Inject @Named(PreferenceHelper.FAVORITE_SYNC_ID) com.f2prateek.rx.preferences.Preference<String>
@@ -41,9 +41,6 @@ public class SettingsFragment extends PreferenceFragmentCompatDividers
 
     findPreference("build_version").setSummary(paperwork.get("gitInfo"));
     findPreference("rate_app").setOnPreferenceClickListener(this);
-    findPreference(PreferenceHelper.IS_TODAY_ENABLED).setOnPreferenceChangeListener(this);
-    findPreference(PreferenceHelper.ARE_CIRCLES_COLORED).setOnPreferenceChangeListener(this);
-    findPreference(PreferenceHelper.IS_FAM_ENABLED).setOnPreferenceChangeListener(this);
     mNotificationTimePreference = (TimePickerPreference) findPreference("notification_time");
     mNotificationTimePreference.setEnabled(mFavoriteSyncIdPrerefence.get() != null);
   }
@@ -64,17 +61,6 @@ public class SettingsFragment extends PreferenceFragmentCompatDividers
   @Override public void onPause() {
     super.onPause();
     Utils.unsubscribe(mSubscription);
-  }
-
-  @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
-    switch (preference.getKey()) {
-      case PreferenceHelper.IS_TODAY_ENABLED:
-      case PreferenceHelper.ARE_CIRCLES_COLORED:
-      case PreferenceHelper.IS_FAM_ENABLED:
-        Utils.restartApp(getActivity());
-        break;
-    }
-    return true;
   }
 
   @Override public boolean onPreferenceClick(Preference preference) {

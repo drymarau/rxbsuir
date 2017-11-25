@@ -56,6 +56,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.threeten.bp.LocalTime;
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
@@ -95,7 +96,6 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
   @Inject SchedulePresenter mSchedulePresenter;
   @Inject NavigationDrawerPresenter mDrawerPresenter;
   @Inject SharedPreferences mSharedPreferences;
-  @Inject @Named(PreferenceHelper.IS_FAM_ENABLED) boolean mIsFamEnabled;
   @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
   @Inject @Named(PreferenceHelper.TITLE) Preference<String> mTitlePreference;
   @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
@@ -107,6 +107,10 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
   @Inject @Named(PreferenceHelper.FAVORITE_TITLE) Preference<String> mFavoriteTitlePreference;
   @Inject Preference<LocalTime> mLocalTimePreference;
   @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
+  @Inject @Named(PreferenceHelper.IS_TODAY_ENABLED) Preference<Boolean> mIsTodayEnabledPreference;
+  @Inject @Named(PreferenceHelper.IS_FAM_ENABLED) Preference<Boolean> mIsFamEnabledPreference;
+  @Inject @Named(PreferenceHelper.ARE_CIRCLES_COLORED) Preference<Boolean>
+      mAreCirclesColoredPreference;
 
   private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
     @Override public void onReceive(@NonNull Context context, @NonNull Intent intent) {
@@ -124,7 +128,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
 
     ButterKnife.bind(this);
 
-    if (!mIsFamEnabled) {
+    if (!mIsFamEnabledPreference.get()) {
       mFloatingActionMenu.setVisibility(View.GONE);
     }
 
@@ -149,10 +153,12 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
 
     initializeAnimations();
 
-    mNightModePreference.asObservable()
-        .skip(1)
+    Observable.merge(mNightModePreference.asObservable().skip(1),
+        mIsTodayEnabledPreference.asObservable().skip(1),
+        mIsFamEnabledPreference.asObservable().skip(1),
+        mAreCirclesColoredPreference.asObservable().skip(1))
         .compose(RxLifecycleAndroid.bindActivity(lifecycle()))
-        .subscribe(mode -> recreate());
+        .subscribe(changed -> recreate());
   }
 
   @Override protected void onResume() {

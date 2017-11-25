@@ -24,8 +24,8 @@ import org.threeten.bp.LocalTime;
     return PreferenceManager.getDefaultSharedPreferences(application);
   }
 
-  @Provides @Named(PreferenceHelper.IS_FAM_ENABLED) boolean provideIsFamEnabled(
-      SharedPreferences preferences) {
+  @Provides @PerApp @Named(PreferenceHelper.IS_FAM_ENABLED) Preference<Boolean> provideIsFamEnabled(
+      RxSharedPreferences preferences) {
     return preferences.getBoolean(PreferenceHelper.IS_FAM_ENABLED, true);
   }
 
