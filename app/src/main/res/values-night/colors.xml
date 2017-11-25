@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <color name="primary">#212121</color>
+  <color name="primary_dark">#000000</color>
+
   <color name="divider">#1EFFFFFF</color>
   <!-- DARK THEME -->
   <color name="window_background">#303030</color>

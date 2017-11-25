@@ -2,7 +2,7 @@
 <resources>
   <color name="primary">#3F51B5</color>
   <color name="primary_dark">#303F9F</color>
-  <color name="accent">#FF9100</color>
+  <color name="accent">#FF6D00</color>
 
   <color name="divider">#1E000000</color>
 
@@ -16,7 +16,7 @@
 
   <!-- COLORED CIRCLES -->
   <color name="type_lab">@color/accent</color>
-  <color name="type_lecture">@color/primary</color>
+  <color name="type_lecture">#3F51B5</color>
   <color name="type_practice">#009688</color>
 
 </resources>
