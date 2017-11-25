@@ -8,7 +8,7 @@ import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.dagger.PerFragment;
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
+import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompatDividers;
 import com.takisoft.fix.support.v7.preference.TimePickerPreference;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
@@ -19,7 +19,7 @@ import org.threeten.bp.LocalTime;
 import rx.Subscription;
 import timber.log.Timber;
 
-public class SettingsFragment extends PreferenceFragmentCompat
+public class SettingsFragment extends PreferenceFragmentCompatDividers
     implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
   @Inject com.f2prateek.rx.preferences.Preference<LocalTime> mLocalTimePreference;
