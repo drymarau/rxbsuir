@@ -4,6 +4,8 @@
   <color name="primary_dark">#303F9F</color>
   <color name="accent">#FF9100</color>
 
+  <color name="divider">#1E000000</color>
+
   <!-- LIGHT THEME -->
   <color name="window_background">#EBEBEB</color>
   <color name="card_background">@android:color/white</color>

@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import by.toggi.rxbsuir.DetailItemDecoration;
+import by.toggi.rxbsuir.DividerItemDecoration;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.adapter.DetailItemAdapter;
@@ -73,7 +73,7 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
     mAdapter = new DetailItemAdapter(this, new ArrayList<>());
     mRecyclerView.setAdapter(mAdapter);
     mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    mRecyclerView.addItemDecoration(new DetailItemDecoration(this));
+    mRecyclerView.addItemDecoration(DividerItemDecoration.vertical(this, R.drawable.padded_divider));
 
     mPresenter.attachView(this);
     mPresenter.setLesson(lesson);

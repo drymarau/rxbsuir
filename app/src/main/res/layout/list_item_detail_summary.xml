@@ -18,7 +18,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerVertical="true"
+      android:layout_marginEnd="@dimen/keyline_first"
       android:layout_marginLeft="@dimen/keyline_second"
+      android:layout_marginRight="@dimen/keyline_first"
       android:layout_marginStart="@dimen/keyline_second"
       android:orientation="vertical">
 
@@ -26,6 +28,8 @@
         android:id="@+id/lesson_detail_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         tools:text="This is some text"/>
 
