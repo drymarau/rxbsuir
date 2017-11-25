@@ -7,7 +7,7 @@ ext.versions = [minSdk         : 16,
 
                 kotlin         : '1.1.4-3',
 
-                support        : '26.0.2',
+                support        : '26.1.0',
 
                 butterknife    : '8.8.1',
 
@@ -41,7 +41,7 @@ ext.versions = [minSdk         : 16,
 
                 parceler       : '1.0.3',
 
-                preferencesfix : '26.0.2.0',
+                preferencesfix : '26.1.0.3',
 
                 fabric         : '1.22.1',
 
