@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'hu.supercluster.paperwork'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android'
 
 // Manifest version information
 def versionMajor = 1
@@ -37,10 +39,17 @@ android {
   testOptions {
     execution 'ANDROID_TEST_ORCHESTRATOR'
   }
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+    androidTest.java.srcDirs += 'src/androidTest/kotlin'
+  }
 }
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+  implementation libraries.kotlin.stdlib
 
   implementation libraries.support.appcompat
   implementation libraries.support.recyclerview
@@ -48,7 +57,7 @@ dependencies {
   implementation libraries.support.cardview
 
   implementation libraries.butterknife.butterknife
-  annotationProcessor libraries.butterknife.compiler
+  kapt libraries.butterknife.compiler
 
   implementation libraries.timber
   implementation libraries.threetenabp
@@ -86,17 +95,17 @@ dependencies {
 
   implementation libraries.storio.sqlite
   implementation libraries.storio.sqliteannotations
-  annotationProcessor libraries.storio.sqliteannotationsprocessor
+  kapt libraries.storio.sqliteannotationsprocessor
 
   implementation libraries.dagger.dagger
   implementation libraries.dagger.android
   implementation libraries.dagger.support
-  annotationProcessor libraries.dagger.compiler
-  annotationProcessor libraries.dagger.processor
+  kapt libraries.dagger.compiler
+  kapt libraries.dagger.processor
   compileOnly libraries.javax.inject
 
   implementation libraries.parceler.api
-  annotationProcessor libraries.parceler.parceler
+  kapt libraries.parceler.parceler
 
   implementation(libraries.crashlytics) {
     transitive = true
