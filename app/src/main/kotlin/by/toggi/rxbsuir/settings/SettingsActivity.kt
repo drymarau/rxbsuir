@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar
 import by.toggi.rxbsuir.PreferenceHelper
 import by.toggi.rxbsuir.R
 import by.toggi.rxbsuir.dagger.PerActivity
-import by.toggi.rxbsuir.fragment.SettingsFragment
 import by.toggi.rxbsuir.util.commit
 import com.f2prateek.rx.preferences.Preference
 import dagger.android.AndroidInjection

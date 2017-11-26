@@ -41,7 +41,7 @@ public class Utils {
    *
    * @param context the context
    */
-  public static void openPlayStorePage(Context context) {
+  public static void openPlayStorePage(@NonNull Context context) {
     try {
       context.startActivity(new Intent(Intent.ACTION_VIEW,
           Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)));
