@@ -3,6 +3,8 @@ package by.toggi.rxbsuir.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,9 +15,9 @@ import butterknife.ButterKnife;
 import by.toggi.rxbsuir.DividerItemDecoration;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.adapter.DetailItemAdapter;
 import by.toggi.rxbsuir.dagger.PerActivity;
 import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.lessondetail.LessonDetailItemAdapter;
 import by.toggi.rxbsuir.mvp.presenter.LessonDetailPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonDetailView;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
@@ -25,7 +27,6 @@ import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import dagger.android.AndroidInjection;
 import dagger.android.ContributesAndroidInjector;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -41,7 +42,7 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
   @Inject LessonDetailPresenter mPresenter;
   @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
 
-  private DetailItemAdapter mAdapter;
+  private LessonDetailItemAdapter mAdapter;
 
   public static void start(Context context, Lesson lesson) {
     Intent intent = new Intent(context, LessonActivity.class);
@@ -70,10 +71,11 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
     getDelegate().getSupportActionBar().setTitle(lesson.getSubjectWithSubgroup());
     getDelegate().getSupportActionBar().setSubtitle(lesson.getLessonType());
 
-    mAdapter = new DetailItemAdapter(this, new ArrayList<>());
+    mAdapter = new LessonDetailItemAdapter();
     mRecyclerView.setAdapter(mAdapter);
     mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    mRecyclerView.addItemDecoration(DividerItemDecoration.vertical(this, R.drawable.padded_divider));
+    mRecyclerView.addItemDecoration(
+        DividerItemDecoration.vertical(this, R.drawable.padded_divider));
 
     mPresenter.attachView(this);
     mPresenter.setLesson(lesson);
@@ -85,7 +87,7 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
   }
 
   @Override public void showLessonDetail(List<DetailItem> detailItemList) {
-    mAdapter.setDetailItemList(detailItemList);
+    mAdapter.setItems(detailItemList);
   }
 
   @Override protected void onDestroy() {
@@ -163,15 +165,15 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
       return detailItem;
     }
 
-    public Type getType() {
+    @NonNull public Type getType() {
       return mType;
     }
 
-    public String getText() {
+    @NonNull public String getText() {
       return mText;
     }
 
-    public String getSummary() {
+    @Nullable public String getSummary() {
       return mSummary;
     }
 
