@@ -47,6 +47,7 @@ import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
+import by.toggi.rxbsuir.settings.SettingsActivity;
 import com.f2prateek.rx.preferences.Preference;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 import com.trello.rxlifecycle.android.RxLifecycleAndroid;

@@ -3,6 +3,7 @@ package by.toggi.rxbsuir.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.preference.Preference;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
@@ -29,6 +30,10 @@ public class SettingsFragment extends PreferenceFragmentCompatDividers
 
   private Subscription mSubscription;
   private TimePickerPreference mNotificationTimePreference;
+
+  public static Fragment newInstance() {
+    return new SettingsFragment();
+  }
 
   @Override public void onAttach(Context context) {
     AndroidSupportInjection.inject(this);

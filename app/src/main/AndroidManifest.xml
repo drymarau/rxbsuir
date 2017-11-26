@@ -29,7 +29,7 @@
     </activity>
 
     <activity
-        android:name=".activity.SettingsActivity"
+        android:name=".settings.SettingsActivity"
         android:label="@string/label_settings">
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
