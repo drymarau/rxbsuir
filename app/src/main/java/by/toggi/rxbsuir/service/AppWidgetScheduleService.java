@@ -23,7 +23,6 @@ import dagger.android.ContributesAndroidInjector;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 import org.threeten.bp.LocalDate;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -132,7 +131,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
     private void setupOnLessonClick(Lesson lesson, RemoteViews remoteViews) {
       Intent lessonActivityIntent = new Intent();
       Bundle hackBundle = new Bundle();
-      hackBundle.putParcelable(AppWidgetScheduleProvider.EXTRA_LESSON, Parcels.wrap(lesson));
+      hackBundle.putParcelable(AppWidgetScheduleProvider.EXTRA_LESSON, lesson);
       lessonActivityIntent.putExtra(AppWidgetScheduleProvider.EXTRA_LESSON, hackBundle);
       remoteViews.setOnClickFillInIntent(R.id.item_lesson, lessonActivityIntent);
     }

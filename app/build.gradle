@@ -104,8 +104,8 @@ dependencies {
   kapt libraries.dagger.processor
   compileOnly libraries.javax.inject
 
-  implementation libraries.parceler.api
-  kapt libraries.parceler.parceler
+  implementation libraries.paperparcel.paperparcel
+  kapt libraries.paperparcel.compiler
 
   implementation(libraries.crashlytics) {
     transitive = true

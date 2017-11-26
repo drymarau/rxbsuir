@@ -30,7 +30,6 @@ import dagger.android.ContributesAndroidInjector;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.parceler.Parcels;
 
 public class LessonActivity extends RxAppCompatActivity implements LessonDetailView {
 
@@ -46,13 +45,13 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
 
   public static void start(Context context, Lesson lesson) {
     Intent intent = new Intent(context, LessonActivity.class);
-    intent.putExtra(EXTRA_LESSON, Parcels.wrap(lesson));
+    intent.putExtra(EXTRA_LESSON, lesson);
     context.startActivity(intent);
   }
 
   public static void startFromWidget(Context context, Lesson lesson) {
     Intent intent = new Intent(context, LessonActivity.class);
-    intent.putExtra(EXTRA_LESSON, Parcels.wrap(lesson));
+    intent.putExtra(EXTRA_LESSON, lesson);
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(intent);
   }
@@ -66,7 +65,7 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
 
     setupToolbar();
 
-    Lesson lesson = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_LESSON));
+    Lesson lesson = getIntent().getParcelableExtra(EXTRA_LESSON);
 
     getDelegate().getSupportActionBar().setTitle(lesson.getSubjectWithSubgroup());
     getDelegate().getSupportActionBar().setSubtitle(lesson.getLessonType());

@@ -29,7 +29,6 @@ import com.f2prateek.rx.preferences.Preference;
 import dagger.android.AndroidInjection;
 import dagger.android.ContributesAndroidInjector;
 import javax.inject.Inject;
-import org.parceler.Parcels;
 import timber.log.Timber;
 
 public class AppWidgetScheduleProvider extends AppWidgetProvider {
@@ -190,8 +189,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
     switch (intent.getAction()) {
       case ACTION_LESSON_ACTIVITY:
         Bundle hackBundle = intent.getBundleExtra(EXTRA_LESSON);
-        LessonActivity.startFromWidget(context,
-            Parcels.unwrap(hackBundle.getParcelable(EXTRA_LESSON)));
+        LessonActivity.startFromWidget(context, hackBundle.getParcelable(EXTRA_LESSON));
         break;
       case ACTION_ARROW_CLICK:
         PreferenceHelper.setIsTodayPreference(context, id,

@@ -36,9 +36,13 @@ import dagger.android.support.AndroidSupportInjectionModule;
 import io.fabric.sdk.android.Fabric;
 import javax.inject.Inject;
 import javax.inject.Named;
+import paperparcel.Adapter;
+import paperparcel.ProcessorConfig;
 import timber.log.Timber;
 
-public class App extends Application
+@ProcessorConfig(adapters = {
+    @Adapter(LocalTimeTypeAdapter.class), @Adapter(DayOfWeekTypeAdapter.class)
+}) public class App extends Application
     implements HasActivityInjector, HasServiceInjector, HasBroadcastReceiverInjector {
 
   @Inject DispatchingAndroidInjector<Activity> mDispatchingActivityInjector;
