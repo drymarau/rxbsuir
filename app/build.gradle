@@ -4,6 +4,7 @@ apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'hu.supercluster.paperwork'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.squareup.sqldelight'
 
 // Manifest version information
 def versionMajor = 1
@@ -145,6 +146,7 @@ buildscript {
   }
 
   dependencies {
+    classpath gradlePlugins.sqldelight
     classpath gradlePlugins.fabric
     classpath gradlePlugins.dexcount
     classpath gradlePlugins.paperwork

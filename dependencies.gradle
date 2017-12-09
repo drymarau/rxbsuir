@@ -9,6 +9,8 @@ ext.versions = [minSdk         : 16,
 
                 support        : '26.1.0',
 
+                sqldelight     : '0.6.1',
+
                 butterknife    : '8.8.1',
 
                 timber         : '4.5.1',
@@ -59,15 +61,17 @@ ext.versions = [minSdk         : 16,
 
                 paperwork      : '1.2.7',]
 
-ext.gradlePlugins = [android  : "com.android.tools.build:gradle:$versions.androidGradle",
+ext.gradlePlugins = [android   : "com.android.tools.build:gradle:$versions.androidGradle",
 
-                     kotlin   : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
+                     kotlin    : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
 
-                     fabric   : "io.fabric.tools:gradle:$versions.fabric",
+                     sqldelight: "com.squareup.sqldelight:gradle-plugin:$versions.sqldelight",
 
-                     dexcount : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexcount",
+                     fabric    : "io.fabric.tools:gradle:$versions.fabric",
 
-                     paperwork: "hu.supercluster:paperwork-plugin:$versions.paperwork",]
+                     dexcount  : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexcount",
+
+                     paperwork : "hu.supercluster:paperwork-plugin:$versions.paperwork",]
 
 ext.libraries = [support        : [appcompat   : "com.android.support:appcompat-v7:$versions.support",
                                    cardview    : "com.android.support:cardview-v7:$versions.support",
