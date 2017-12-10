@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import by.toggi.rxbsuir.LessonModel;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
@@ -77,7 +78,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
       mSubscription = mStorIOSQLite.get()
           .listOfObjects(Lesson.class)
           .withQuery(Query.builder()
-              .table(LessonEntry.TABLE_NAME)
+              .table(LessonModel.TABLE_NAME)
               .where(
                   LessonEntry.Query.builder(mSyncIdItem.getSyncId(), mSyncIdItem.isGroupSchedule())
                       .weekNumber(Utils.getWeekNumber(date))

@@ -1,0 +1,25 @@
+CREATE TABLE lessons (
+  _id INTEGER NOT NULL PRIMARY KEY ON CONFLICT REPLACE,
+  sync_id TEXT NOT NULL,
+  employee_list TEXT,
+  auditory_list TEXT,
+  lesson_time_start TEXT NOT NULL,
+  lesson_time_end TEXT NOT NULL,
+  lesson_type TEXT NOT NULL,
+  num_subgroup INTEGER NOT NULL,
+  student_group_list TEXT NOT NULL,
+  subject TEXT NOT NULL,
+  weekday INTEGER NOT NULL,
+  week_number_list TEXT NOT NULL,
+  is_group_schedule INTEGER NOT NULL,
+  note TEXT
+);
+
+insert_lesson:
+INSERT OR REPLACE INTO lessons VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+switch_sync_id:
+UPDATE lessons
+SET sync_id = ifnull((SELECT id FROM students_groups WHERE lessons.sync_id = students_groups.name), lessons.sync_id)
+WHERE is_group_schedule = 1;
+

@@ -1,0 +1,11 @@
+CREATE TABLE students_groups (
+  id TEXT NOT NULL PRIMARY KEY ON CONFLICT REPLACE,
+  name TEXT NOT NULL,
+  course INTEGER NOT NULL,
+  faculty_id TEXT NOT NULL,
+  speciality_department_education_form_id INTEGER NOT NULL,
+  is_cached INTEGER NOT NULL
+);
+
+insert_group:
+INSERT OR REPLACE INTO students_groups VALUES (?, ?, ?, ?, ?, ?);

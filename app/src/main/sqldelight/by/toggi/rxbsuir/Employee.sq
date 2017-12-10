@@ -1,0 +1,11 @@
+CREATE TABLE employees (
+  id INTEGER NOT NULL PRIMARY KEY ON CONFLICT REPLACE,
+  academic_department_list TEXT NOT NULL,
+  first_name TEXT NOT NULL,
+  middle_name TEXT,
+  last_name TEXT NOT NULL,
+  is_cached INTEGER NOT NULL
+);
+
+insert_empoyee:
+INSERT OR REPLACE INTO employees VALUES (?, ?, ?, ?, ?, ?);

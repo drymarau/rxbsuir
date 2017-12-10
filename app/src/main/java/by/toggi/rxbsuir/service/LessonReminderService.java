@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import by.toggi.rxbsuir.IntentUtils;
+import by.toggi.rxbsuir.LessonModel;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
@@ -73,7 +74,7 @@ public class LessonReminderService extends JobIntentService {
     if (mFavoriteSyncIdPreference.get() != null) {
       DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
       Query query = Query.builder()
-          .table(LessonEntry.TABLE_NAME)
+          .table(LessonModel.TABLE_NAME)
           .where(LessonEntry.Query.builder(mFavoriteSyncIdPreference.get(),
               mFavoriteIsGroupSchedule.get())
               .weekDay(dayOfWeek)

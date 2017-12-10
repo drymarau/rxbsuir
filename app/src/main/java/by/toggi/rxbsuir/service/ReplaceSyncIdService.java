@@ -3,6 +3,7 @@ package by.toggi.rxbsuir.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.preference.PreferenceManager;
+import by.toggi.rxbsuir.GroupModel;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.dagger.PerService;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
@@ -14,8 +15,6 @@ import dagger.android.ContributesAndroidInjector;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 
 /**
  * This IntentService runs by the system upon package update to switch values of sync id.
@@ -55,8 +54,8 @@ public class ReplaceSyncIdService extends IntentService {
       List<StudentGroup> groups = mStorIOSQLite.get()
           .listOfObjects(StudentGroup.class)
           .withQuery(Query.builder()
-              .table(StudentGroupEntry.TABLE_NAME)
-              .where(StudentGroupEntry.COL_NAME + " = ?")
+              .table(GroupModel.TABLE_NAME)
+              .where(GroupModel.NAME + " = ?")
               .whereArgs(syncIdPreference.get())
               .build())
           .prepare()
