@@ -11,7 +11,6 @@ def versionBuild = 0
 
 android {
   compileSdkVersion versions.compileSdk
-  buildToolsVersion versions.buildTools
 
   defaultConfig {
     applicationId 'by.toggi.rxbsuir'
