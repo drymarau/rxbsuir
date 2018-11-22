@@ -6,7 +6,7 @@ apply plugin: 'hu.supercluster.paperwork'
 // Manifest version information
 def versionMajor = 1
 def versionMinor = 4
-def versionPatch = 4
+def versionPatch = 5
 def versionBuild = 0
 
 android {
