@@ -10,13 +10,15 @@ import rx.Observable;
 
 public interface BsuirService {
 
-  @GET("studentGroup/schedule") Observable<ScheduleJsonModels> getGroupSchedule(
-      @Query("id") String group);
+  @GET("api/v1/studentGroup/schedule")
+  Observable<ScheduleJsonModels> getGroupSchedule(@Query("id") String group);
 
-  @GET("portal/employeeSchedule") Observable<ScheduleJsonModels> getEmployeeSchedule(
-      @Query("employeeId") String employeeId);
+  @GET("api/v1/portal/employeeSchedule")
+  Observable<ScheduleJsonModels> getEmployeeSchedule(@Query("employeeId") String employeeId);
 
-  @GET("groups") Observable<List<StudentGroup>> getStudentGroups();
+  @GET("api/v1/groups")
+  Observable<List<StudentGroup>> getStudentGroups();
 
-  @GET("employees") Observable<List<Employee>> getEmployees();
+  @GET("api/v1/employees")
+  Observable<List<Employee>> getEmployees();
 }

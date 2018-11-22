@@ -55,7 +55,7 @@ public class App extends Application
     DaggerApp_Component.builder()
         .application(this)
         .debug(BuildConfig.DEBUG)
-        .bsuirUrl("https://students.bsuir.by/api/v1/")
+        .bsuirUrl("https://journal.bsuir.by/")
         .build()
         .inject(this);
 
