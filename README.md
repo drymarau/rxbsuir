@@ -3,6 +3,8 @@ An attempt to implement all trendy Android stuff (think RxJava, MVP and Dagger 2
 
 [Download](https://play.google.com/store/apps/details?id=by.toggi.rxbsuir) latest release from Play Store (Belarus only)
 
+[Read](docs/privacy_policy.md) our privacy policy
+
 ## Libraries
 * Dagger 2 - https://github.com/google/dagger
 * RxJava - https://github.com/ReactiveX/RxJava
