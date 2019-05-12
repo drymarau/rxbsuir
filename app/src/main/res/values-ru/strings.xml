@@ -67,6 +67,7 @@
     <string name="category_about">О приложении</string>
     <string name="title_build_version">Версия</string>
     <string name="title_pref_rate_app">Оцените приложение!</string>
+    <string name="title_pref_privacy_policy">Политика конфиденциальности</string>
     <string name="play_store_not_found">Похоже, что Play Маркет не установлен</string>
     <string name="title_notifications">Уведомления</string>
     <string name="title_notification_time">Время уведомления о занятиях</string>

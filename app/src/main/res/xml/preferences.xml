@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+>
 
   <PreferenceCategory android:title="@string/category_appearance">
     <ListPreference
@@ -48,6 +48,11 @@
         android:key="rate_app"
         android:selectable="true"
         android:title="@string/title_pref_rate_app"/>
+
+    <Preference
+        android:key="privacy_policy"
+        android:selectable="true"
+        android:title="@string/title_pref_privacy_policy"/>
 
     <Preference
         android:key="@string/key_pref_build_version"

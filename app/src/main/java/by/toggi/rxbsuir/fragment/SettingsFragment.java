@@ -41,6 +41,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     findPreference("build_version").setSummary(paperwork.get("gitInfo"));
     findPreference("rate_app").setOnPreferenceClickListener(this);
+    findPreference("privacy_policy").setOnPreferenceClickListener(this);
     findPreference(PreferenceHelper.IS_TODAY_ENABLED).setOnPreferenceChangeListener(this);
     findPreference(PreferenceHelper.ARE_CIRCLES_COLORED).setOnPreferenceChangeListener(this);
     findPreference(PreferenceHelper.IS_FAM_ENABLED).setOnPreferenceChangeListener(this);
@@ -81,6 +82,9 @@ public class SettingsFragment extends PreferenceFragmentCompat
     switch (preference.getKey()) {
       case "rate_app":
         Utils.openPlayStorePage(getActivity());
+        return true;
+      case "privacy_policy":
+        Utils.openPrivacyPolicyPage(getActivity());
         return true;
     }
     return false;

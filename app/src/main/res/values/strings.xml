@@ -76,6 +76,7 @@
     <string name="title_build_version">Build version</string>
     <string name="key_pref_build_version" translatable="false">build_version</string>
     <string name="title_pref_rate_app">Rate app!</string>
+    <string name="title_pref_privacy_policy">Privacy policy</string>
     <string name="play_store_not_found">Play Store appears to be missing</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_notification_time">Lessons notification time</string>

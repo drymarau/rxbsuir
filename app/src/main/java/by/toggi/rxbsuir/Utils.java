@@ -58,6 +58,15 @@ public class Utils {
         }
     }
 
+    public static void openPrivacyPolicyPage(Context context) {
+        try {
+            Uri uri = Uri.parse("https://drymarev.github.io/rxbsuir/docs/privacy_policy.html");
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException ignored) {
+        }
+    }
+
     /**
      * Gets formatted title.
      *

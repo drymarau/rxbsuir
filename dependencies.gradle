@@ -42,9 +42,9 @@ ext.versions = [minSdk         : 16,
 
                 preferencesfix : '26.0.2.0',
 
-                fabric         : '1.22.1',
+                fabric         : '1.29.0',
 
-                crashlytics    : '2.6.8',
+                crashlytics    : '2.10.0',
 
                 junit          : '4.12',
 
