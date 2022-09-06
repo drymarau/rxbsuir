@@ -46,13 +46,9 @@ ext.versions = [minSdk         : 16,
 
                 assertj        : '2.6.0',
 
-                supporttest    : '1.0.1',
+                supporttest    : '1.0.1',]
 
-                paperwork      : '1.2.7',]
-
-ext.gradlePlugins = [android  : "com.android.tools.build:gradle:$versions.androidGradle",
-
-                     paperwork: "hu.supercluster:paperwork-plugin:$versions.paperwork",]
+ext.gradlePlugins = [android  : "com.android.tools.build:gradle:$versions.androidGradle",]
 
 ext.libraries = [support        : [appcompat   : "com.android.support:appcompat-v7:$versions.support",
                                    cardview    : "com.android.support:cardview-v7:$versions.support",
@@ -122,6 +118,4 @@ ext.libraries = [support        : [appcompat   : "com.android.support:appcompat-
                  assertj        : [core: "org.assertj:assertj-core:$versions.assertj"],
 
                  supporttest    : [runner      : "com.android.support.test:runner:$versions.supporttest",
-                                   orchestrator: "com.android.support.test:orchestrator:$versions.supporttest"],
-
-                 paperwork      : "hu.supercluster:paperwork:$versions.paperwork",]
+                                   orchestrator: "com.android.support.test:orchestrator:$versions.supporttest"],]

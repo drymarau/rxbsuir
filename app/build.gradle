@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'hu.supercluster.paperwork'
 
 // Manifest version information
 def versionMajor = 1
@@ -95,8 +94,6 @@ dependencies {
   implementation libraries.parceler.api
   annotationProcessor libraries.parceler.parceler
 
-  implementation libraries.paperwork
-
   testImplementation libraries.junit
 
   testImplementation libraries.okhttp.mockwebserver
@@ -109,21 +106,4 @@ dependencies {
   androidTestUtil libraries.supporttest.orchestrator
 
   androidTestImplementation libraries.assertj.core
-}
-
-paperwork {
-  set = [gitSha   : gitSha(),
-         gitTag   : gitTag(),
-         gitInfo  : gitInfo(),
-         buildTime: buildTime("yyyy-MM-dd'T'HH:mm:ss'Z'", 'UTC')]
-}
-
-buildscript {
-  repositories {
-    jcenter()
-  }
-
-  dependencies {
-    classpath gradlePlugins.paperwork
-  }
 }

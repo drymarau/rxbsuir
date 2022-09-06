@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.Preference;
+import by.toggi.rxbsuir.BuildConfig;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
@@ -12,7 +13,6 @@ import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
 import com.takisoft.fix.support.v7.preference.TimePickerPreference;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
-import hu.supercluster.paperwork.Paperwork;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.threeten.bp.LocalTime;
@@ -25,7 +25,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
   @Inject com.f2prateek.rx.preferences.Preference<LocalTime> mLocalTimePreference;
   @Inject @Named(PreferenceHelper.FAVORITE_SYNC_ID) com.f2prateek.rx.preferences.Preference<String>
       mFavoriteSyncIdPrerefence;
-  @Inject Paperwork paperwork;
 
   private Subscription mSubscription;
   private TimePickerPreference mNotificationTimePreference;
@@ -39,7 +38,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
   public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
     setPreferencesFromResource(R.xml.preferences, rootKey);
 
-    findPreference("build_version").setSummary(paperwork.get("gitInfo"));
+    findPreference("build_version").setSummary(BuildConfig.VERSION_NAME);
     findPreference("rate_app").setOnPreferenceClickListener(this);
     findPreference("privacy_policy").setOnPreferenceClickListener(this);
     findPreference(PreferenceHelper.IS_TODAY_ENABLED).setOnPreferenceChangeListener(this);

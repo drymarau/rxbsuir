@@ -15,7 +15,6 @@ import by.toggi.rxbsuir.dagger.module.BsuirServiceModule;
 import by.toggi.rxbsuir.dagger.module.DbModule;
 import by.toggi.rxbsuir.dagger.module.GsonModule;
 import by.toggi.rxbsuir.dagger.module.OkHttpClientModule;
-import by.toggi.rxbsuir.dagger.module.PaperworkModule;
 import by.toggi.rxbsuir.dagger.module.PreferencesModule;
 import by.toggi.rxbsuir.dagger.module.TimberTreeModule;
 import by.toggi.rxbsuir.night_mode.NightModePreferenceModule;
@@ -79,7 +78,7 @@ public class App extends Application
 
   @PerApp @dagger.Component(modules = {
       AndroidSupportInjectionModule.class, AppModule.class, TimberTreeModule.class,
-      BsuirServiceModule.class, DbModule.class, PreferencesModule.class, PaperworkModule.class,
+      BsuirServiceModule.class, DbModule.class, PreferencesModule.class,
       NightModePreferenceModule.class, GsonModule.class, OkHttpClientModule.class,
       SettingsActivity.Module.class, LessonActivity.Module.class,
       AppWidgetConfigActivity.Module.class, LessonReminderService.Module.class,
