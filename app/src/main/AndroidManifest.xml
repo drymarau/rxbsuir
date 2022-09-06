@@ -90,9 +90,6 @@
         android:name=".service.AppWidgetScheduleService"
         android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
-    <meta-data
-        android:name="io.fabric.ApiKey"
-        android:value="aedd177c4bd42ca01848f855c0e22dc3001068cc"/>
   </application>
 
 </manifest>

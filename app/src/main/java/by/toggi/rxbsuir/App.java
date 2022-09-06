@@ -23,7 +23,6 @@ import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import by.toggi.rxbsuir.service.AppWidgetScheduleService;
 import by.toggi.rxbsuir.service.LessonReminderService;
 import by.toggi.rxbsuir.service.ReplaceSyncIdService;
-import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import dagger.BindsInstance;
@@ -33,7 +32,6 @@ import dagger.android.HasActivityInjector;
 import dagger.android.HasBroadcastReceiverInjector;
 import dagger.android.HasServiceInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
-import io.fabric.sdk.android.Fabric;
 import javax.inject.Inject;
 import javax.inject.Named;
 import timber.log.Timber;
@@ -60,10 +58,6 @@ public class App extends Application
         .inject(this);
 
     Timber.plant(mTree);
-
-    if (!BuildConfig.DEBUG) {
-      Fabric.with(this, new Crashlytics());
-    }
 
     mNightModePreference.asObservable()
         .map(Integer::valueOf)

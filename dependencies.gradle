@@ -40,10 +40,6 @@ ext.versions = [minSdk         : 16,
 
                 preferencesfix : '26.0.2.0',
 
-                fabric         : '1.29.0',
-
-                crashlytics    : '2.10.0',
-
                 junit          : '4.12',
 
                 mockito        : '2.8.9',
@@ -57,8 +53,6 @@ ext.versions = [minSdk         : 16,
                 paperwork      : '1.2.7',]
 
 ext.gradlePlugins = [android  : "com.android.tools.build:gradle:$versions.androidGradle",
-
-                     fabric   : "io.fabric.tools:gradle:$versions.fabric",
 
                      dexcount : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexcount",
 
@@ -124,8 +118,6 @@ ext.libraries = [support        : [appcompat   : "com.android.support:appcompat-
                  preferencesfix : [preferencesfix: "com.takisoft.fix:preference-v7:$versions.preferencesfix",
                                    extras        : "com.takisoft.fix:preference-v7-extras:$versions.preferencesfix",
                                    datetimepicker: "com.takisoft.fix:preference-v7-datetimepicker:$versions.preferencesfix"],
-
-                 crashlytics    : "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics@aar",
 
                  junit          : "junit:junit:$versions.junit",
 

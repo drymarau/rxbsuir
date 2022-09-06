@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'hu.supercluster.paperwork'
 
@@ -97,10 +96,6 @@ dependencies {
   implementation libraries.parceler.api
   annotationProcessor libraries.parceler.parceler
 
-  implementation(libraries.crashlytics) {
-    transitive = true
-  }
-
   implementation libraries.paperwork
 
   testImplementation libraries.junit
@@ -124,18 +119,12 @@ paperwork {
          buildTime: buildTime("yyyy-MM-dd'T'HH:mm:ss'Z'", 'UTC')]
 }
 
-repositories {
-  maven { url 'https://maven.fabric.io/public' }
-}
-
 buildscript {
   repositories {
     jcenter()
-    maven { url 'https://maven.fabric.io/public' }
   }
 
   dependencies {
-    classpath gradlePlugins.fabric
     classpath gradlePlugins.dexcount
     classpath gradlePlugins.paperwork
   }
