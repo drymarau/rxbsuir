@@ -11,12 +11,12 @@ val versionPatch = 5
 val versionBuild = 0
 
 android {
-    compileSdk = 27
+    compileSdk = 28
 
     defaultConfig {
         applicationId = "by.toggi.rxbsuir"
         minSdk = 16
-        targetSdk = 27
+        targetSdk = 28
         versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
 

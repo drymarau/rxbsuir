@@ -81,8 +81,7 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
   @NonNull @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
     mTextInputLayout =
         (TextInputLayout) View.inflate(getActivity(), R.layout.dialog_add_group, null);
-    AutoCompleteTextView textView =
-        ButterKnife.findById(mTextInputLayout, R.id.group_number_text_view);
+    AutoCompleteTextView textView = mTextInputLayout.findViewById(R.id.group_number_text_view);
     mAdapter =
         new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<>());
     textView.setAdapter(mAdapter);
