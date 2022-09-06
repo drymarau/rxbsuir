@@ -1,1 +1,1 @@
-include ':app', ':bsuir-api', ':core-domain', ':core-presentation'
+include ':app'

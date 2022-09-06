@@ -4,8 +4,6 @@ ext.versions = [minSdk         : 16,
 
                 androidGradle  : '3.5.3',
 
-                kotlin         : '1.3.10',
-
                 support        : '26.0.2',
 
                 butterknife    : '8.8.1',
@@ -60,8 +58,6 @@ ext.versions = [minSdk         : 16,
 
 ext.gradlePlugins = [android  : "com.android.tools.build:gradle:$versions.androidGradle",
 
-                     kotlin   : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
-
                      fabric   : "io.fabric.tools:gradle:$versions.fabric",
 
                      dexcount : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexcount",
@@ -72,9 +68,6 @@ ext.libraries = [support        : [appcompat   : "com.android.support:appcompat-
                                    cardview    : "com.android.support:cardview-v7:$versions.support",
                                    design      : "com.android.support:design:$versions.support",
                                    recyclerview: "com.android.support:recyclerview-v7:$versions.support",],
-
-                 kotlin         : [stdlib   : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
-                                   testJunit: "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"],
 
                  butterknife    : [butterknife: "com.jakewharton:butterknife:$versions.butterknife",
                                    compiler   : "com.jakewharton:butterknife-compiler:$versions.butterknife"],
