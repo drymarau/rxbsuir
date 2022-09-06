@@ -1,7 +1,6 @@
 package by.toggi.rxbsuir.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,15 +15,15 @@ import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
+import dagger.android.HasAndroidInjector;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-public class SettingsActivity extends RxAppCompatActivity implements HasSupportFragmentInjector {
+public class SettingsActivity extends RxAppCompatActivity implements HasAndroidInjector {
 
   @BindView(R.id.toolbar) Toolbar mToolbar;
 
-  @Inject DispatchingAndroidInjector<Fragment> mDispatchingFragmentInjector;
+  @Inject DispatchingAndroidInjector<Object> mAndroidInjector;
   @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +46,8 @@ public class SettingsActivity extends RxAppCompatActivity implements HasSupportF
         .subscribe(mode -> recreate());
   }
 
-  @Override public AndroidInjector<Fragment> supportFragmentInjector() {
-    return mDispatchingFragmentInjector;
+  @Override public AndroidInjector<Object> androidInjector() {
+    return mAndroidInjector;
   }
 
   @dagger.Module(includes = SettingsFragment.Module.class) public interface Module {

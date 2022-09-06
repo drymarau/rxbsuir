@@ -32,7 +32,7 @@ ext.versions = [minSdk         : 16,
 
                 storio         : '1.2.1',
 
-                dagger         : '2.11',
+                dagger         : '2.43.2',
 
                 parceler       : '1.0.3',
 
@@ -92,8 +92,8 @@ ext.libraries = [support        : [appcompat   : "com.android.support:appcompat-
                                    sqliteannotationsprocessor: "com.pushtorefresh.storio:sqlite-annotations-processor:$versions.storio"],
 
                  dagger         : [dagger   : "com.google.dagger:dagger:$versions.dagger",
-                                   android  : "com.google.dagger:dagger-android:$versions.dagger",
-                                   support  : "com.google.dagger:dagger-android-support:$versions.dagger",
+                                   android  : "com.google.dagger:dagger-android-legacy:$versions.dagger",
+                                   support  : "com.google.dagger:dagger-android-support-legacy:$versions.dagger",
                                    processor: "com.google.dagger:dagger-android-processor:$versions.dagger",
                                    compiler : "com.google.dagger:dagger-compiler:$versions.dagger"],
 

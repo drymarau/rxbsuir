@@ -1,9 +1,6 @@
 package by.toggi.rxbsuir;
 
-import android.app.Activity;
 import android.app.Application;
-import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.support.v7.app.AppCompatDelegate;
 import by.toggi.rxbsuir.activity.AppWidgetConfigActivity;
 import by.toggi.rxbsuir.activity.LessonActivity;
@@ -27,20 +24,15 @@ import com.jakewharton.threetenabp.AndroidThreeTen;
 import dagger.BindsInstance;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
-import dagger.android.HasBroadcastReceiverInjector;
-import dagger.android.HasServiceInjector;
+import dagger.android.HasAndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 import javax.inject.Inject;
 import javax.inject.Named;
 import timber.log.Timber;
 
-public class App extends Application
-    implements HasActivityInjector, HasServiceInjector, HasBroadcastReceiverInjector {
+public class App extends Application implements HasAndroidInjector {
 
-  @Inject DispatchingAndroidInjector<Activity> mDispatchingActivityInjector;
-  @Inject DispatchingAndroidInjector<Service> mDispatchingServiceInjector;
-  @Inject DispatchingAndroidInjector<BroadcastReceiver> mDispatchingBroadcastReceiverInjector;
+  @Inject DispatchingAndroidInjector<Object> mAndroidInjector;
   @Inject Timber.Tree mTree;
   @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
 
@@ -64,16 +56,8 @@ public class App extends Application
         .subscribe(AppCompatDelegate::setDefaultNightMode);
   }
 
-  @Override public AndroidInjector<Activity> activityInjector() {
-    return mDispatchingActivityInjector;
-  }
-
-  @Override public AndroidInjector<Service> serviceInjector() {
-    return mDispatchingServiceInjector;
-  }
-
-  @Override public AndroidInjector<BroadcastReceiver> broadcastReceiverInjector() {
-    return mDispatchingBroadcastReceiverInjector;
+  @Override public AndroidInjector<Object> androidInjector() {
+    return mAndroidInjector;
   }
 
   @PerApp @dagger.Component(modules = {

@@ -2,7 +2,6 @@ package by.toggi.rxbsuir.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import butterknife.BindView;
@@ -20,16 +19,17 @@ import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
+import dagger.android.HasAndroidInjector;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
-public class WeekScheduleActivity extends ScheduleActivity implements HasSupportFragmentInjector {
+public class WeekScheduleActivity extends ScheduleActivity implements HasAndroidInjector {
 
   @BindView(R.id.tab_layout) TabLayout mTabLayout;
   @BindView(R.id.view_pager) ViewPager mViewPager;
 
-  @Inject DispatchingAndroidInjector<Fragment> mDispatchingFragmentInjector;
+  @Inject DispatchingAndroidInjector<Object> mAndroidInjector;
   @Inject @Named(PreferenceHelper.IS_TODAY_ENABLED) Preference<Boolean> mIsTodayEnabledPreference;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +76,8 @@ public class WeekScheduleActivity extends ScheduleActivity implements HasSupport
     mViewPager.setVisibility(View.VISIBLE);
   }
 
-  @Override public AndroidInjector<Fragment> supportFragmentInjector() {
-    return mDispatchingFragmentInjector;
+  @Override public AndroidInjector<Object> androidInjector() {
+    return mAndroidInjector;
   }
 
   @dagger.Module(includes = {

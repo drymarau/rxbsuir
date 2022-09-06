@@ -37,7 +37,7 @@ import dagger.BindsInstance;
 import dagger.Subcomponent;
 import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
-import dagger.android.support.FragmentKey;
+import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -242,7 +242,7 @@ public class LessonListFragment extends Fragment
 
   @dagger.Module(subcomponents = Component.class) public abstract class Module {
 
-    @Binds @IntoMap @FragmentKey(LessonListFragment.class)
-    abstract AndroidInjector.Factory<? extends Fragment> bind(Component.Builder builder);
+    @Binds @IntoMap @ClassKey(LessonListFragment.class)
+    abstract AndroidInjector.Factory<?> bind(Component.Builder builder);
   }
 }
