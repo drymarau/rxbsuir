@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'hu.supercluster.paperwork'
 
 // Manifest version information
@@ -125,7 +124,6 @@ buildscript {
   }
 
   dependencies {
-    classpath gradlePlugins.dexcount
     classpath gradlePlugins.paperwork
   }
 }

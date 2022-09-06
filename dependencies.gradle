@@ -48,13 +48,9 @@ ext.versions = [minSdk         : 16,
 
                 supporttest    : '1.0.1',
 
-                dexcount       : '0.6.2',
-
                 paperwork      : '1.2.7',]
 
 ext.gradlePlugins = [android  : "com.android.tools.build:gradle:$versions.androidGradle",
-
-                     dexcount : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexcount",
 
                      paperwork: "hu.supercluster:paperwork-plugin:$versions.paperwork",]
 
