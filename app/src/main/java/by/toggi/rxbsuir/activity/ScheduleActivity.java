@@ -1,5 +1,7 @@
 package by.toggi.rxbsuir.activity;
 
+import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
+
 import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -29,6 +31,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import com.f2prateek.rx.preferences.Preference;
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+import com.trello.rxlifecycle.android.RxLifecycleAndroid;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+
+import java.time.LocalTime;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import butterknife.BindDimen;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -47,20 +62,9 @@ import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
-import com.f2prateek.rx.preferences.Preference;
-import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
-import com.trello.rxlifecycle.android.RxLifecycleAndroid;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import javax.inject.Inject;
-import javax.inject.Named;
-import org.threeten.bp.LocalTime;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
-
-import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
 
 public abstract class ScheduleActivity extends RxAppCompatActivity
     implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener,

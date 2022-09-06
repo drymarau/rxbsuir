@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,13 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.FormatStyle;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.db.model.Lesson;
@@ -48,8 +48,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    @Override
-    public int getItemViewType(int position) {
+    @Override public int getItemViewType(int position) {
         Lesson lesson = mLessonList.get(position);
 
         if (lesson.getPrettyAuditoryList().isEmpty()) {
@@ -60,8 +59,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
                 : VIEW_TYPE_LESSON_THREE_LINE;
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    @Override @NonNull public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view;
         switch (viewType) {
             case VIEW_TYPE_LESSON_ONE_LINE:
@@ -82,8 +80,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         return new ViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    @Override public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Lesson lesson = mLessonList.get(position);
         viewHolder.itemView.setOnClickListener(view -> mListener.onItemClicked(lesson));
         viewHolder.mLessonType.setText(lesson.getLessonType());
@@ -144,8 +141,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         }
     }
 
-    @Override
-    public int getItemCount() {
+    @Override public int getItemCount() {
         return mLessonList.size();
     }
 

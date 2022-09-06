@@ -1,13 +1,13 @@
 [versions]
 android = "7.2.2"
+android-desugar = "1.1.8"
 android-support = "28.0.0"
-android-support-test = "1.0.2"
 assertj = "2.6.0"
 butterknife = "9.0.0"
 dagger = "2.43.2"
 junit = "4.12"
 materialdialogs = "0.9.6.0"
-mockito = "2.8.9"
+mockito = "3.12.4"
 okhttp = "3.9.0"
 parceler = "1.1.13"
 preference = "28.0.0.0"
@@ -18,16 +18,14 @@ rxjava = "1.2.7"
 rxlifecycle = "1.0"
 rxpreferences = "1.0.2"
 storio = "1.2.1"
-threetenabp = "1.0.5"
 timber = "4.5.1"
 
 [libraries]
+android-desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "android-desugar" }
 android-support-appcompat = { module = "com.android.support:appcompat-v7", version.ref = "android-support" }
 android-support-cardview = { module = "com.android.support:cardview-v7", version.ref = "android-support" }
 android-support-design = { module = "com.android.support:design", version.ref = "android-support" }
 android-support-recyclerview = { module = "com.android.support:recyclerview-v7", version.ref = "android-support" }
-android-support-test-runner = { module = "com.android.support.test:runner", version.ref = "android-support-test" }
-android-support-test-orchestrator = { module = "com.android.support.test:orchestrator", version.ref = "android-support-test" }
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 butterknife = { module = "com.jakewharton:butterknife", version.ref = "butterknife" }
 butterknife-compiler = { module = "com.jakewharton:butterknife-compiler", version.ref = "butterknife" }
@@ -60,7 +58,6 @@ rxpreferences = { module = "com.f2prateek.rx.preferences:rx-preferences", versio
 storio = { module = "com.pushtorefresh.storio:sqlite", version.ref = "storio" }
 storio-annotations = { module = "com.pushtorefresh.storio:sqlite-annotations", version.ref = "storio" }
 storio-annotations-processor = { module = "com.pushtorefresh.storio:sqlite-annotations-processor", version.ref = "storio" }
-threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]

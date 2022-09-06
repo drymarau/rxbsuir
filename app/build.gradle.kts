@@ -31,6 +31,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -40,6 +41,8 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.android.desugar)
+
     implementation(libs.android.support.appcompat)
     implementation(libs.android.support.cardview)
     implementation(libs.android.support.design)
@@ -48,7 +51,6 @@ dependencies {
     implementation(libs.butterknife)
     annotationProcessor(libs.butterknife.compiler)
 
-    implementation(libs.threetenabp)
     implementation(libs.timber)
 
     implementation(libs.rxbinding)
@@ -95,9 +97,4 @@ dependencies {
     testImplementation(libs.mockito)
 
     testImplementation(libs.assertj)
-
-    androidTestImplementation(libs.android.support.test.runner)
-    androidTestUtil(libs.android.support.test.orchestrator)
-
-    androidTestImplementation(libs.assertj)
 }

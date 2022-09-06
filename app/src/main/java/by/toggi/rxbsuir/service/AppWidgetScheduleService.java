@@ -1,5 +1,7 @@
 package by.toggi.rxbsuir.service;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
+
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +9,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
+import com.f2prateek.rx.preferences.Preference;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.queries.Query;
+
+import org.parceler.Parcels;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
@@ -15,20 +30,10 @@ import by.toggi.rxbsuir.dagger.PerService;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
-import com.f2prateek.rx.preferences.Preference;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
 import dagger.android.AndroidInjection;
 import dagger.android.ContributesAndroidInjector;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
-import org.parceler.Parcels;
-import org.threeten.bp.LocalDate;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-
-import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 public class AppWidgetScheduleService extends RemoteViewsService {
 

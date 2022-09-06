@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import org.threeten.bp.LocalDate;
+import java.time.LocalDate;
 
 /**
  * This class shows a new RateAppDialog based on first launch date,
@@ -78,21 +78,18 @@ public class RateAppDialog {
                 .negativeText(R.string.rad_negative)
                 .neutralText(R.string.rad_neutral)
                 .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
+                    @Override public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
                         Utils.openPlayStorePage(mContext);
                         disableDialog();
                     }
 
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
+                    @Override public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
                         disableDialog();
                     }
 
-                    @Override
-                    public void onNeutral(MaterialDialog dialog) {
+                    @Override public void onNeutral(MaterialDialog dialog) {
                         super.onNeutral(dialog);
                         putDate(LocalDate.now());
                     }

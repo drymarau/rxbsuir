@@ -16,14 +16,13 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.LocalTime;
-import org.threeten.bp.Month;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.temporal.ChronoUnit;
-
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
@@ -188,8 +187,8 @@ public class Utils {
      * @return the week number
      */
     public static int getWeekNumber(LocalDate localDate) {
-        Long weeks = ChronoUnit.WEEKS.between(getStartYear(), localDate);
-        return weeks.intValue() % 4 + 1;
+        long weeks = ChronoUnit.WEEKS.between(getStartYear(), localDate);
+        return (int) weeks % 4 + 1;
     }
 
     /**

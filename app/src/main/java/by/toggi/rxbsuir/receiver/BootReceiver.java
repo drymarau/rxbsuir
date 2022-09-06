@@ -7,15 +7,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
-import org.threeten.bp.LocalTime;
+import java.time.LocalTime;
 
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.Utils;
 
 public class BootReceiver extends BroadcastReceiver {
 
-    @Override
-    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
+    @Override public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         scheduleAlarms(context);
     }
 

@@ -1,16 +1,19 @@
 package by.toggi.rxbsuir.db.model;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
+
 import android.database.Cursor;
 import android.support.annotation.NonNull;
-import by.toggi.rxbsuir.rest.model.Employee;
+
 import com.google.gson.Gson;
 import com.pushtorefresh.storio.sqlite.operations.get.DefaultGetResolver;
+
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalTime;
 
-import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
+import by.toggi.rxbsuir.rest.model.Employee;
 
 public class LessonStorIOISQLiteGetResolver extends DefaultGetResolver<Lesson> {
 

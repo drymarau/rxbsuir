@@ -1,9 +1,10 @@
 package by.toggi.rxbsuir.db;
 
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.threeten.bp.DayOfWeek;
+import java.time.DayOfWeek;
 
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 
@@ -73,8 +74,7 @@ public class RxBsuirContract {
                 return new Builder(syncId, isGroupSchedule);
             }
 
-            @Override
-            public String toString() {
+            @NonNull @Override public String toString() {
                 String query = COL_SYNC_ID + " = '" + syncId + "' and " +
                         COL_IS_GROUP_SCHEDULE + " = '" + (isGroupSchedule ? 1 : 0) + "'";
                 if (search != null) {

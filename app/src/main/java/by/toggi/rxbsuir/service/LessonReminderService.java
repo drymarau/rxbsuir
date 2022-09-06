@@ -1,5 +1,7 @@
 package by.toggi.rxbsuir.service;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +13,20 @@ import android.support.v4.app.JobIntentService;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
+
+import com.f2prateek.rx.preferences.Preference;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.queries.Query;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import by.toggi.rxbsuir.IntentUtils;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
@@ -19,20 +35,8 @@ import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import by.toggi.rxbsuir.dagger.PerService;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
-import com.f2prateek.rx.preferences.Preference;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
 import dagger.android.AndroidInjection;
 import dagger.android.ContributesAndroidInjector;
-import java.util.List;
-import javax.inject.Inject;
-import javax.inject.Named;
-import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.FormatStyle;
-
-import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 public class LessonReminderService extends JobIntentService {
 

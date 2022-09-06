@@ -4,18 +4,22 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.Preference;
+
+import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
+import com.takisoft.fix.support.v7.preference.TimePickerPreference;
+
+import java.time.LocalTime;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import by.toggi.rxbsuir.BuildConfig;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.dagger.PerFragment;
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
-import com.takisoft.fix.support.v7.preference.TimePickerPreference;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
-import javax.inject.Inject;
-import javax.inject.Named;
-import org.threeten.bp.LocalTime;
 import rx.Subscription;
 import timber.log.Timber;
 
@@ -34,8 +38,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
     super.onAttach(context);
   }
 
-  @Override
-  public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
+  @Override public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
     setPreferencesFromResource(R.xml.preferences, rootKey);
 
     findPreference("build_version").setSummary(BuildConfig.VERSION_NAME);

@@ -5,18 +5,22 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences.RxSharedPreferences;
+import com.google.gson.Gson;
+
+import java.time.LocalTime;
+
+import javax.inject.Named;
+
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.dagger.PerApp;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
-import com.f2prateek.rx.preferences.Preference;
-import com.f2prateek.rx.preferences.RxSharedPreferences;
-import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Named;
-import org.threeten.bp.LocalTime;
 
 @Module public class PreferencesModule {
 

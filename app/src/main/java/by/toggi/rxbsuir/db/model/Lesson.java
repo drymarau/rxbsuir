@@ -5,10 +5,10 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.parceler.Parcel;
-import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalTime;
-import org.threeten.bp.format.TextStyle;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;

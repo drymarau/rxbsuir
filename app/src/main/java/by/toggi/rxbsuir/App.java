@@ -2,6 +2,12 @@ package by.toggi.rxbsuir;
 
 import android.app.Application;
 import android.support.v7.app.AppCompatDelegate;
+
+import com.f2prateek.rx.preferences.Preference;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import by.toggi.rxbsuir.activity.AppWidgetConfigActivity;
 import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.activity.SettingsActivity;
@@ -19,15 +25,11 @@ import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import by.toggi.rxbsuir.service.AppWidgetScheduleService;
 import by.toggi.rxbsuir.service.LessonReminderService;
 import by.toggi.rxbsuir.service.ReplaceSyncIdService;
-import com.f2prateek.rx.preferences.Preference;
-import com.jakewharton.threetenabp.AndroidThreeTen;
 import dagger.BindsInstance;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
-import javax.inject.Inject;
-import javax.inject.Named;
 import timber.log.Timber;
 
 public class App extends Application implements HasAndroidInjector {
@@ -38,9 +40,6 @@ public class App extends Application implements HasAndroidInjector {
 
   @Override public void onCreate() {
     super.onCreate();
-
-    AndroidThreeTen.init(this);
-
     DaggerApp_Component.builder()
         .application(this)
         .debug(BuildConfig.DEBUG)

@@ -1,12 +1,13 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
+
 import android.support.annotation.Nullable;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
-import org.threeten.bp.LocalDate;
-
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,8 +19,6 @@ import by.toggi.rxbsuir.mvp.view.LessonListView;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-
-import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 public class LessonListPresenter extends Presenter<LessonListView> {
 
