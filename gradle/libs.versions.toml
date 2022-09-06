@@ -1,0 +1,67 @@
+[versions]
+android = "7.2.2"
+android-support = "27.1.1"
+android-support-test = "1.0.1"
+assertj = "2.6.0"
+butterknife = "8.8.1"
+dagger = "2.43.2"
+junit = "4.12"
+materialdialogs = "0.9.6.0"
+mockito = "2.8.9"
+okhttp = "3.9.0"
+parceler = "1.0.3"
+preference = "27.1.1.1"
+retrofit = "2.3.0"
+rxandroid = "1.2.1"
+rxbinding = "1.0.1"
+rxjava = "1.2.7"
+rxlifecycle = "1.0"
+rxpreferences = "1.0.2"
+storio = "1.2.1"
+threetenabp = "1.0.5"
+timber = "4.5.1"
+
+[libraries]
+android-support-appcompat = { module = "com.android.support:appcompat-v7", version.ref = "android-support" }
+android-support-cardview = { module = "com.android.support:cardview-v7", version.ref = "android-support" }
+android-support-design = { module = "com.android.support:design", version.ref = "android-support" }
+android-support-recyclerview = { module = "com.android.support:recyclerview-v7", version.ref = "android-support" }
+android-support-test-runner = { module = "com.android.support.test:runner", version.ref = "android-support-test" }
+android-support-test-orchestrator = { module = "com.android.support.test:orchestrator", version.ref = "android-support-test" }
+assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+butterknife = { module = "com.jakewharton:butterknife", version.ref = "butterknife" }
+butterknife-compiler = { module = "com.jakewharton:butterknife-compiler", version.ref = "butterknife" }
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
+dagger-android-processor = { module = "com.google.dagger:dagger-android-processor", version.ref = "dagger" }
+dagger-android-legacy = { module = "com.google.dagger:dagger-android-legacy", version.ref = "dagger" }
+dagger-android-support-legacy = { module = "com.google.dagger:dagger-android-support-legacy", version.ref = "dagger" }
+junit = { module = "junit:junit", version.ref = "junit" }
+materialdialogs = { module = "com.afollestad.material-dialogs:core", version.ref = "materialdialogs" }
+materialdialogs-commons = { module = "com.afollestad.material-dialogs:commons", version.ref = "materialdialogs" }
+mockito = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-logginginterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp" }
+parceler = { module = "org.parceler:parceler", version.ref = "parceler" }
+parceler-api = { module = "org.parceler:parceler-api", version.ref = "parceler" }
+preference = { module = "com.takisoft.fix:preference-v7", version.ref = "preference" }
+preference-datetimepicker = { module = "com.takisoft.fix:preference-v7-datetimepicker", version.ref = "preference" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-adapter-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava", version.ref = "retrofit" }
+retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+rxandroid = { module = "io.reactivex:rxandroid", version.ref = "rxandroid" }
+rxbinding = { module = "com.jakewharton.rxbinding:rxbinding", version.ref = "rxbinding" }
+rxbinding-appcompat = { module = "com.jakewharton.rxbinding:rxbinding-appcompat-v7", version.ref = "rxbinding" }
+rxjava = { module = "io.reactivex:rxjava", version.ref = "rxjava" }
+rxlifecycle = { module = "com.trello:rxlifecycle", version.ref = "rxlifecycle" }
+rxlifecycle-components = { module = "com.trello:rxlifecycle-components", version.ref = "rxlifecycle" }
+rxpreferences = { module = "com.f2prateek.rx.preferences:rx-preferences", version.ref = "rxpreferences" }
+storio = { module = "com.pushtorefresh.storio:sqlite", version.ref = "storio" }
+storio-annotations = { module = "com.pushtorefresh.storio:sqlite-annotations", version.ref = "storio" }
+storio-annotations-processor = { module = "com.pushtorefresh.storio:sqlite-annotations-processor", version.ref = "storio" }
+threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android" }
