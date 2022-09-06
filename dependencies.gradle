@@ -2,9 +2,9 @@ ext.versions = [minSdk         : 16,
                 targetSdk      : 26,
                 compileSdk     : 26,
 
-                androidGradle  : '3.0.0',
+                androidGradle  : '3.2.1',
 
-                kotlin         : '1.1.4-3',
+                kotlin         : '1.2.51',
 
                 support        : '26.0.2',
 
