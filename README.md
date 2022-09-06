@@ -17,7 +17,6 @@ An attempt to implement all trendy Android stuff (think RxJava, MVP and Dagger 2
 * Butter Knife - https://github.com/JakeWharton/butterknife
 * Timber - https://github.com/JakeWharton/timber
 * ThreeTen Android Backport - https://github.com/JakeWharton/ThreeTenABP
-* LeakCanary - https://github.com/square/leakcanary
 * Material Dialogs - https://github.com/afollestad/material-dialogs
 * Material Preference - https://github.com/jenzz/Android-MaterialPreference
 * Material DateTime Picker - https://github.com/wdullaer/MaterialDateTimePicker

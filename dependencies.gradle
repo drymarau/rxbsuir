@@ -19,8 +19,6 @@ ext.versions = [minSdk         : 16,
 
                 retrofit       : '2.3.0',
 
-                leakcanary     : '1.5',
-
                 rxjava         : '1.2.7',
                 rxjava2        : '2.1.3',
 
@@ -75,9 +73,6 @@ ext.libraries = [support        : [appcompat   : "com.android.support:appcompat-
                                                 rxjava2: "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit",],
                                    converters: [moshi: "com.squareup.retrofit2:converter-moshi:$versions.retrofit",
                                                 gson : "com.squareup.retrofit2:converter-gson:$versions.retrofit",],],
-
-                 leakcanary     : [leakcanary: "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary",
-                                   noop      : "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakcanary"],
 
                  rxjava         : "io.reactivex:rxjava:$versions.rxjava",
                  rxjava2        : "io.reactivex.rxjava2:rxjava:$versions.rxjava2",

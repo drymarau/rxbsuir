@@ -59,9 +59,6 @@ dependencies {
   implementation libraries.retrofit.adapters.rxjava
   implementation libraries.retrofit.converters.gson
 
-  debugImplementation libraries.leakcanary.leakcanary
-  releaseImplementation libraries.leakcanary.noop
-
   implementation libraries.rxjava
   implementation libraries.rxandroid
 
