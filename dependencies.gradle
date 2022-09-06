@@ -1,10 +1,10 @@
 ext.versions = [minSdk         : 16,
-                targetSdk      : 26,
-                compileSdk     : 26,
+                targetSdk      : 27,
+                compileSdk     : 27,
 
                 androidGradle  : '3.5.3',
 
-                support        : '26.0.2',
+                support        : '27.1.1',
 
                 butterknife    : '8.8.1',
 
@@ -28,7 +28,7 @@ ext.versions = [minSdk         : 16,
 
                 rxpreferences  : '1.0.2',
 
-                materialdialogs: '0.9.4.7',
+                materialdialogs: '0.9.6.0',
 
                 storio         : '1.2.1',
 
@@ -36,7 +36,7 @@ ext.versions = [minSdk         : 16,
 
                 parceler       : '1.0.3',
 
-                preferencesfix : '26.0.2.0',
+                preferencesfix : '27.1.1.1',
 
                 junit          : '4.12',
 

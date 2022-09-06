@@ -13,7 +13,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.content.IntentCompat;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -168,7 +167,7 @@ public class Utils {
     public static void restartApp(Activity activity) {
         activity.finish();
         ComponentName componentName = new ComponentName(activity, WeekScheduleActivity.class);
-        final Intent intent = IntentCompat.makeMainActivity(componentName);
+        final Intent intent = Intent.makeMainActivity(componentName);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
     }
