@@ -6,11 +6,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import butterknife.ButterKnife;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.widget.RxTextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
@@ -19,14 +27,8 @@ import by.toggi.rxbsuir.mvp.presenter.AddGroupDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.jakewharton.rxbinding.widget.RxTextView;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
 import rx.Subscription;
 
 public class AddGroupDialogFragment extends DialogFragment implements AddGroupDialogView {
@@ -57,8 +59,8 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    FragmentManager manager = getFragmentManager();
-    StorageFragment fragment =
+    var manager = getFragmentManager();
+    var fragment =
         (StorageFragment) manager.findFragmentByTag(ScheduleActivity.TAG_STORAGE_FRAGMENT);
 
     if (fragment == null) {
@@ -86,7 +88,7 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
         new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<>());
     textView.setAdapter(mAdapter);
     textView.setOnItemClickListener((parent, view, position, id) -> mPosition = position);
-    MaterialDialog dialog =
+    var dialog =
         new MaterialDialog.Builder(getActivity()).customView(mTextInputLayout, true)
             .title(R.string.title_add_group)
             .positiveText(R.string.positive_add)
@@ -95,7 +97,7 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
             .callback(new MaterialDialog.ButtonCallback() {
               @Override public void onPositive(MaterialDialog dialog) {
                 if (mPosition != -1) {
-                  StudentGroup studentGroup = mAdapter.getItem(mPosition);
+                  var studentGroup = mAdapter.getItem(mPosition);
                   mListener.onPositiveButtonClicked(studentGroup.id, studentGroup.name, true);
                   mPosition = -1;
                   dismiss();
@@ -121,7 +123,7 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
   @Override public void updateStudentGroupList(List<StudentGroup> studentGroupList) {
     mTextInputLayout.setErrorEnabled(false);
     mAdapter.clear();
-    for (StudentGroup group : studentGroupList) {
+    for (var group : studentGroupList) {
       mAdapter.add(group);
     }
   }

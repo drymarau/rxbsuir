@@ -1,5 +1,8 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
+import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
+
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -19,9 +22,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
-import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
-
 public class AppWidgetConfigPresenter extends Presenter<AppWidgetConfigView> {
 
     private final StorIOSQLite mStorIOSQLite;
@@ -38,7 +38,7 @@ public class AppWidgetConfigPresenter extends Presenter<AppWidgetConfigView> {
                 getGroupObservable(),
                 getEmployeeObservable(),
                 (groupList, employeeList) -> {
-                    List<SyncIdItem> syncIdItemList = new ArrayList<>(groupList);
+                    var syncIdItemList = new ArrayList<>(groupList);
                     syncIdItemList.addAll(employeeList);
                     return syncIdItemList;
                 }

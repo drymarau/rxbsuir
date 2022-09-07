@@ -3,7 +3,6 @@ package by.toggi.rxbsuir.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
@@ -19,10 +18,10 @@ public class BootReceiver extends BroadcastReceiver {
     }
 
     private void scheduleAlarms(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String favoriteSyncId = preferences.getString(PreferenceHelper.FAVORITE_SYNC_ID, null);
+        var preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        var favoriteSyncId = preferences.getString(PreferenceHelper.FAVORITE_SYNC_ID, null);
         if (favoriteSyncId != null) {
-            String localTimeString = preferences.getString(PreferenceHelper.NOTIFICATION_TIME, "07:00");
+            var localTimeString = preferences.getString(PreferenceHelper.NOTIFICATION_TIME, "07:00");
             Utils.setNotificationAlarm(context, LocalTime.parse(localTimeString));
         }
     }

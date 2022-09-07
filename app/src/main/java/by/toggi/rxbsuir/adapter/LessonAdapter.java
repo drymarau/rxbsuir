@@ -49,7 +49,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     }
 
     @Override public int getItemViewType(int position) {
-        Lesson lesson = mLessonList.get(position);
+        var lesson = mLessonList.get(position);
 
         if (lesson.getPrettyAuditoryList().isEmpty()) {
             return VIEW_TYPE_LESSON_ONE_LINE;
@@ -124,11 +124,6 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
                 viewHolder.setHeaderText(lesson.getPrettyWeekday());
                 break;
         }
-        if (position < mLessonList.size() - 1) {
-            viewHolder.setIsLast(!lesson.getWeekday().equals(mLessonList.get(position + 1).getWeekday()));
-        } else if (position == mLessonList.size() - 1) {
-            viewHolder.setIsLast(true);
-        }
         if (position == 0) {
             viewHolder.setIsFirst(true);
         } else {
@@ -162,7 +157,6 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         @Nullable @BindView(R.id.lesson_class) TextView mLessonClass;
 
         private String mHeaderText;
-        private boolean mIsLast;
         private boolean mIsFirst;
 
         public ViewHolder(View itemView) {
@@ -176,14 +170,6 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
 
         public void setHeaderText(String headerText) {
             mHeaderText = headerText;
-        }
-
-        public boolean isLast() {
-            return mIsLast;
-        }
-
-        public void setIsLast(boolean isLast) {
-            mIsLast = isLast;
         }
 
         public boolean isFirst() {

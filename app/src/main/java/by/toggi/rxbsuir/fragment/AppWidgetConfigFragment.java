@@ -6,6 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.Preference;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
@@ -14,13 +23,8 @@ import by.toggi.rxbsuir.dagger.PerFragment;
 import by.toggi.rxbsuir.mvp.presenter.AppWidgetConfigPresenter;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.AppWidgetConfigView;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -38,8 +42,8 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
   private CompositeSubscription mSubscription;
 
   public static AppWidgetConfigFragment newInstance(int id) {
-    AppWidgetConfigFragment fragment = new AppWidgetConfigFragment();
-    Bundle args = new Bundle();
+    var fragment = new AppWidgetConfigFragment();
+    var args = new Bundle();
     args.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
     fragment.setArguments(args);
     return fragment;
@@ -52,7 +56,7 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
 
   @Override
   public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-    Bundle args = getArguments();
+    var args = getArguments();
     if (args != null) {
       mAppWidgetId =
           args.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -86,7 +90,7 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
         }), mSubgroupFilterPreference.asObservable()
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(subgroupFilter -> {
-          Preference preference = findPreference(PreferenceHelper.SUBGROUP_FILTER);
+          var preference = findPreference(PreferenceHelper.SUBGROUP_FILTER);
           switch (subgroupFilter) {
             case BOTH:
               preference.setSummary(R.string.action_filter_both);
@@ -120,7 +124,7 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
         new MaterialDialog.Builder(getActivity()).title(R.string.widget_sync_id_item)
             .items(getItems())
             .itemsCallbackSingleChoice(findItemIndex(), (materialDialog, view, i, charSequence) -> {
-              SyncIdItem item = mSyncIdItemList.get(i);
+              var item = mSyncIdItemList.get(i);
               mSyncIdItemPreference.set(item);
               return true;
             })
@@ -145,9 +149,9 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
   }
 
   private CharSequence[] getItems() {
-    int size = mSyncIdItemList.size();
-    CharSequence[] charSequences = new CharSequence[size];
-    for (int i = 0; i < size; i++) {
+    var size = mSyncIdItemList.size();
+    var charSequences = new CharSequence[size];
+    for (var i = 0; i < size; i++) {
       charSequences[i] = mSyncIdItemList.get(i).toString();
     }
     return charSequences;

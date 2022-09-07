@@ -1,13 +1,13 @@
 package by.toggi.rxbsuir.db;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
+import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
+import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
-
-import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
-import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
-import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 
 public class RxBsuirOpenHelper extends SQLiteOpenHelper {
 
@@ -70,7 +70,7 @@ public class RxBsuirOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(@NonNull SQLiteDatabase db, int oldVersion, int newVersion) {
-        int upgradeTo = oldVersion + 1;
+        var upgradeTo = oldVersion + 1;
         while (upgradeTo <= newVersion) {
             switch (upgradeTo) {
                 case 3:

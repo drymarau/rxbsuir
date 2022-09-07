@@ -4,6 +4,12 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+
+import com.f2prateek.rx.preferences.Preference;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import butterknife.BindView;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
@@ -14,15 +20,11 @@ import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.LessonListFragment;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
-import com.f2prateek.rx.preferences.Preference;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 public class WeekScheduleActivity extends ScheduleActivity implements HasAndroidInjector {
 
@@ -48,7 +50,7 @@ public class WeekScheduleActivity extends ScheduleActivity implements HasAndroid
   }
 
   @Override protected void showCurrentWeek() {
-    int weekNumber = Utils.getCurrentWeekNumber();
+    var weekNumber = Utils.getCurrentWeekNumber();
     mViewPager.setCurrentItem(mIsTodayEnabledPreference.get() ? weekNumber + 1 : weekNumber - 1);
   }
 

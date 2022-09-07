@@ -1,6 +1,5 @@
 package by.toggi.rxbsuir.receiver;
 
-import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -8,7 +7,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -16,6 +14,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.RemoteViews;
+
+import com.f2prateek.rx.preferences.Preference;
+
+import org.parceler.Parcels;
+
+import javax.inject.Inject;
+
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
@@ -25,11 +30,8 @@ import by.toggi.rxbsuir.activity.WeekScheduleActivity;
 import by.toggi.rxbsuir.dagger.PerBroadcastReceiver;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.service.AppWidgetScheduleService;
-import com.f2prateek.rx.preferences.Preference;
 import dagger.android.AndroidInjection;
 import dagger.android.ContributesAndroidInjector;
-import javax.inject.Inject;
-import org.parceler.Parcels;
 import timber.log.Timber;
 
 public class AppWidgetScheduleProvider extends AppWidgetProvider {
@@ -50,10 +52,10 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
    * @param context the context
    */
   public static void updateNote(Context context) {
-    AppWidgetManager manager = AppWidgetManager.getInstance(context);
+    var manager = AppWidgetManager.getInstance(context);
     int[] ids =
         manager.getAppWidgetIds(new ComponentName(context, AppWidgetScheduleProvider.class));
-    Intent intent = new Intent(context, AppWidgetScheduleProvider.class);
+    var intent = new Intent(context, AppWidgetScheduleProvider.class);
     intent.setAction(ACTION_UPDATE_NOTE);
     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
@@ -69,17 +71,17 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
    */
   @Nullable public static RemoteViews getRemoteViews(Context context, int id,
       Preference.Adapter<SyncIdItem> adapter) {
-    SyncIdItem item = PreferenceHelper.getSyncIdItemPreference(context, id, adapter);
+    var item = PreferenceHelper.getSyncIdItemPreference(context, id, adapter);
     if (item == null) {
       return null;
     }
 
-    boolean isNightModeEnabled = PreferenceHelper.isNightModeEnabled(context, id);
-    boolean isToday = PreferenceHelper.getIsTodayPreference(context, id);
-    boolean isCollapsed = PreferenceHelper.getIsWidgetCollapsedPreference(context, id);
-    SubgroupFilter subgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, id);
+    var isNightModeEnabled = PreferenceHelper.isNightModeEnabled(context, id);
+    var isToday = PreferenceHelper.getIsTodayPreference(context, id);
+    var isCollapsed = PreferenceHelper.getIsWidgetCollapsedPreference(context, id);
+    var subgroupFilter = PreferenceHelper.getSubgroupFilterPreference(context, id);
 
-    RemoteViews remoteViews =
+    var remoteViews =
         new RemoteViews(context.getPackageName(), R.layout.appwidget_schedule);
 
     remoteViews.setInt(R.id.icon, "setVisibility", isCollapsed ? View.GONE : View.VISIBLE);
@@ -99,7 +101,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
 
   private static void setupSubtitle(SyncIdItem item, SubgroupFilter subgroupFilter,
       RemoteViews remoteViews) {
-    String title = item.getTitle();
+    var title = item.getTitle();
     switch (subgroupFilter) {
       case BOTH:
         remoteViews.setTextViewText(R.id.subtitle, title);
@@ -118,7 +120,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
 
   private static void setupRemoteViews(Context context, int id, boolean isToday,
       boolean isDarkTheme, RemoteViews remoteViews) {
-    Intent intent = new Intent(context, AppWidgetScheduleService.class);
+    var intent = new Intent(context, AppWidgetScheduleService.class);
     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
     intent.putExtra(EXTRA_IS_TODAY, isToday);
     intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
@@ -136,18 +138,18 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
   }
 
   private static void setupOpenApp(Context context, RemoteViews remoteViews, @IdRes int viewId) {
-    Intent startActivity = new Intent(context, WeekScheduleActivity.class);
-    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, startActivity, 0);
+    var startActivity = new Intent(context, WeekScheduleActivity.class);
+    var pendingIntent = PendingIntent.getActivity(context, 0, startActivity, 0);
     remoteViews.setOnClickPendingIntent(viewId, pendingIntent);
   }
 
   private static void setupItemPendingIntentTemplate(Context context, int id,
       RemoteViews remoteViews) {
-    Intent lessonActivityIntent = new Intent(context, AppWidgetScheduleProvider.class);
+    var lessonActivityIntent = new Intent(context, AppWidgetScheduleProvider.class);
     lessonActivityIntent.setAction(ACTION_LESSON_ACTIVITY);
     lessonActivityIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
     lessonActivityIntent.setData(Uri.parse(lessonActivityIntent.toUri(Intent.URI_INTENT_SCHEME)));
-    PendingIntent lessonActivityPendingIntent =
+    var lessonActivityPendingIntent =
         PendingIntent.getBroadcast(context, 0, lessonActivityIntent,
             PendingIntent.FLAG_UPDATE_CURRENT);
     remoteViews.setPendingIntentTemplate(R.id.list_view, lessonActivityPendingIntent);
@@ -155,12 +157,12 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
 
   private static void setupArrow(Context context, int id, boolean isToday,
       RemoteViews remoteViews) {
-    Intent clickIntent = new Intent(context, AppWidgetScheduleProvider.class);
+    var clickIntent = new Intent(context, AppWidgetScheduleProvider.class);
     clickIntent.setAction(ACTION_ARROW_CLICK);
     clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
     clickIntent.putExtra(EXTRA_IS_TODAY, isToday);
     clickIntent.setData(Uri.parse(clickIntent.toUri(Intent.URI_INTENT_SCHEME)));
-    PendingIntent clickPendingIntent =
+    var clickPendingIntent =
         PendingIntent.getBroadcast(context, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     remoteViews.setOnClickPendingIntent(R.id.action_next, clickPendingIntent);
@@ -170,12 +172,12 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
         context.getString(isToday ? R.string.widget_today : R.string.widget_tomorrow));
   }
 
-  @Override @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+  @Override
   public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
       int appWidgetId, Bundle newOptions) {
     PreferenceHelper.setIsWidgetCollapsedPreference(context, appWidgetId,
         newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH) <= 220);
-    RemoteViews remoteViews = getRemoteViews(context, appWidgetId, mAdapter);
+    var remoteViews = getRemoteViews(context, appWidgetId, mAdapter);
     if (remoteViews != null) {
       appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
       appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_view);
@@ -184,19 +186,19 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
 
   @Override public void onReceive(@NonNull Context context, @NonNull Intent intent) {
     AndroidInjection.inject(this, context);
-    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-    int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+    var appWidgetManager = AppWidgetManager.getInstance(context);
+    var id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
         AppWidgetManager.INVALID_APPWIDGET_ID);
     switch (intent.getAction()) {
       case ACTION_LESSON_ACTIVITY:
-        Bundle hackBundle = intent.getBundleExtra(EXTRA_LESSON);
+        var hackBundle = intent.getBundleExtra(EXTRA_LESSON);
         LessonActivity.startFromWidget(context,
             Parcels.unwrap(hackBundle.getParcelable(EXTRA_LESSON)));
         break;
       case ACTION_ARROW_CLICK:
         PreferenceHelper.setIsTodayPreference(context, id,
             !intent.getBooleanExtra(EXTRA_IS_TODAY, true));
-        RemoteViews remoteViews = getRemoteViews(context, id, mAdapter);
+        var remoteViews = getRemoteViews(context, id, mAdapter);
         if (remoteViews != null) {
           appWidgetManager.updateAppWidget(id, remoteViews);
         }
@@ -212,7 +214,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
   @Override
   public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
     for (int id : appWidgetIds) {
-      RemoteViews remoteViews = getRemoteViews(context, id, mAdapter);
+      var remoteViews = getRemoteViews(context, id, mAdapter);
       if (remoteViews != null) {
         appWidgetManager.updateAppWidget(id, remoteViews);
       }
@@ -221,7 +223,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
 
   @Override public void onDeleted(Context context, int[] appWidgetIds) {
     super.onDeleted(context, appWidgetIds);
-    for (int id : appWidgetIds) {
+    for (var id : appWidgetIds) {
       Timber.d("%s deleted: %s", PreferenceHelper.getWidgetPreferencesName(id),
           PreferenceHelper.getWidgetPreferencesFile(context, id).delete());
     }

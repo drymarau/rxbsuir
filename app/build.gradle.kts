@@ -11,7 +11,7 @@ val versionPatch = 5
 val versionBuild = 0
 
 android {
-    compileSdk = 28
+    compileSdk = 30
 
     defaultConfig {
         applicationId = "by.toggi.rxbsuir"
@@ -32,8 +32,8 @@ android {
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     testOptions {
         execution = "ANDROID_TEST_ORCHESTRATOR"

@@ -204,7 +204,7 @@ public class Lesson {
      * @return the pretty weekday
      */
     public String getPrettyWeekday() {
-        String prettyWeekday = weekday.getDisplayName(TextStyle.FULL, Locale.getDefault());
+        var prettyWeekday = weekday.getDisplayName(TextStyle.FULL, Locale.getDefault());
         return prettyWeekday.substring(0, 1).toUpperCase() + prettyWeekday.substring(1);
     }
 

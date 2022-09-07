@@ -43,7 +43,7 @@ public class UtilsTest {
     }
 
     @Test public void unsubscribeTest() {
-        Subscription subscription = Mockito.mock(Subscription.class);
+        var subscription = Mockito.mock(Subscription.class);
         Utils.unsubscribe(subscription);
         verify(subscription, times(1)).unsubscribe();
         verify(subscription, times(1)).isUnsubscribed();

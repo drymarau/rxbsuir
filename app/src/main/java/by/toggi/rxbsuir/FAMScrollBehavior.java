@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 
-import java.util.List;
-
 @SuppressWarnings("unused")
 public class FAMScrollBehavior extends CoordinatorLayout.Behavior<ViewGroup> {
 
@@ -51,7 +49,7 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<ViewGroup> {
 
     private void updateFabTranslationForSnackbar(CoordinatorLayout parent, ViewGroup child) {
         if (child.getVisibility() == View.VISIBLE) {
-            float translationY = this.getFabTranslationYForSnackbar(parent, child);
+            var translationY = this.getFabTranslationYForSnackbar(parent, child);
             if (translationY != this.mTranslationY) {
                 ViewCompat.animate(child).cancel();
                 ViewCompat.setTranslationY(child, translationY);
@@ -62,12 +60,12 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<ViewGroup> {
     }
 
     private float getFabTranslationYForSnackbar(CoordinatorLayout parent, ViewGroup child) {
-        float minOffset = 0.0F;
-        List dependencies = parent.getDependencies(child);
-        int i = 0;
+        var minOffset = 0.0F;
+        var dependencies = parent.getDependencies(child);
+        var i = 0;
 
         for (int z = dependencies.size(); i < z; ++i) {
-            View view = (View) dependencies.get(i);
+            var view = (View) dependencies.get(i);
             if (view instanceof Snackbar.SnackbarLayout && parent.doViewsOverlap(child, view)) {
                 minOffset = Math.min(minOffset, ViewCompat.getTranslationY(view) - (float) view.getHeight());
             }
@@ -94,7 +92,7 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<ViewGroup> {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
 
         if (mButton == null) {
-            mButton = (FloatingActionButton) child.findViewWithTag(mTag);
+            mButton = child.findViewWithTag(mTag);
         }
 
         if (dyConsumed > 0 && mButton.getVisibility() == View.VISIBLE) {
@@ -105,5 +103,4 @@ public class FAMScrollBehavior extends CoordinatorLayout.Behavior<ViewGroup> {
             mButton.setClickable(true);
         }
     }
-
 }

@@ -1,21 +1,25 @@
 package by.toggi.rxbsuir.service;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
+
 import android.app.IntentService;
 import android.content.Intent;
 import android.preference.PreferenceManager;
-import by.toggi.rxbsuir.PreferenceHelper;
-import by.toggi.rxbsuir.dagger.PerService;
-import by.toggi.rxbsuir.rest.model.StudentGroup;
+
 import com.f2prateek.rx.preferences.Preference;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
-import dagger.android.AndroidInjection;
-import dagger.android.ContributesAndroidInjector;
+
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
+import by.toggi.rxbsuir.PreferenceHelper;
+import by.toggi.rxbsuir.dagger.PerService;
+import by.toggi.rxbsuir.rest.model.StudentGroup;
+import dagger.android.AndroidInjection;
+import dagger.android.ContributesAndroidInjector;
 
 /**
  * This IntentService runs by the system upon package update to switch values of sync id.
@@ -50,7 +54,7 @@ public class ReplaceSyncIdService extends IntentService {
 
   private void changeSyncId(Preference<String> syncIdPreference,
       Preference<Boolean> isGroupSchedulePreference) {
-    Boolean b = isGroupSchedulePreference.get();
+    var b = isGroupSchedulePreference.get();
     if (b != null && b) {
       List<StudentGroup> groups = mStorIOSQLite.get()
           .listOfObjects(StudentGroup.class)

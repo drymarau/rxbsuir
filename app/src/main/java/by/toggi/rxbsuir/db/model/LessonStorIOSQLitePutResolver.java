@@ -1,13 +1,14 @@
 package by.toggi.rxbsuir.db.model;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
+
 import android.content.ContentValues;
 import android.support.annotation.NonNull;
+
 import com.google.gson.Gson;
 import com.pushtorefresh.storio.sqlite.operations.put.DefaultPutResolver;
 import com.pushtorefresh.storio.sqlite.queries.InsertQuery;
 import com.pushtorefresh.storio.sqlite.queries.UpdateQuery;
-
-import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 public class LessonStorIOSQLitePutResolver extends DefaultPutResolver<Lesson> {
 
@@ -30,7 +31,7 @@ public class LessonStorIOSQLitePutResolver extends DefaultPutResolver<Lesson> {
   }
 
   @NonNull @Override protected ContentValues mapToContentValues(@NonNull Lesson object) {
-    ContentValues contentValues = new ContentValues(13);
+    var contentValues = new ContentValues(13);
 
     contentValues.put(LessonEntry._ID, object.getId());
     contentValues.put(LessonEntry.COL_SYNC_ID, object.getSyncId());

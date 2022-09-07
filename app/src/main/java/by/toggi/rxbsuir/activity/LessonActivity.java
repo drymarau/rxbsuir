@@ -8,6 +8,20 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.f2prateek.rx.preferences.Preference;
+import com.trello.rxlifecycle.android.RxLifecycleAndroid;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+
+import org.parceler.Parcels;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.DetailItemDecoration;
@@ -19,17 +33,8 @@ import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonDetailPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonDetailView;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.f2prateek.rx.preferences.Preference;
-import com.trello.rxlifecycle.android.RxLifecycleAndroid;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import dagger.android.AndroidInjection;
 import dagger.android.ContributesAndroidInjector;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
-import javax.inject.Named;
-import org.parceler.Parcels;
 
 public class LessonActivity extends RxAppCompatActivity implements LessonDetailView {
 
@@ -147,7 +152,7 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
 
     public static DetailItem newInstance(Type type, String text, String summary,
         boolean isIconVisible) {
-      DetailItem detailItem = new DetailItem();
+      var detailItem = new DetailItem();
       detailItem.mType = type;
       detailItem.mText = text;
       detailItem.mSummary = summary;
@@ -156,7 +161,7 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
     }
 
     public static DetailItem newInstance(Type type, String text, boolean isIconVisible) {
-      DetailItem detailItem = new DetailItem();
+      var detailItem = new DetailItem();
       detailItem.mType = type;
       detailItem.mText = text;
       detailItem.mIsIconVisible = isIconVisible;

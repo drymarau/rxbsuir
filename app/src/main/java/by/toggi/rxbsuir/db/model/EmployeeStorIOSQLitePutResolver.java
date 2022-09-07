@@ -1,14 +1,16 @@
 package by.toggi.rxbsuir.db.model;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
+
 import android.content.ContentValues;
 import android.support.annotation.NonNull;
-import by.toggi.rxbsuir.rest.model.Employee;
+
 import com.google.gson.Gson;
 import com.pushtorefresh.storio.sqlite.operations.put.DefaultPutResolver;
 import com.pushtorefresh.storio.sqlite.queries.InsertQuery;
 import com.pushtorefresh.storio.sqlite.queries.UpdateQuery;
 
-import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
+import by.toggi.rxbsuir.rest.model.Employee;
 
 public class EmployeeStorIOSQLitePutResolver extends DefaultPutResolver<Employee> {
 
@@ -31,7 +33,7 @@ public class EmployeeStorIOSQLitePutResolver extends DefaultPutResolver<Employee
   }
 
   @NonNull @Override protected ContentValues mapToContentValues(@NonNull Employee object) {
-    ContentValues contentValues = new ContentValues(5);
+    var contentValues = new ContentValues(5);
 
     contentValues.put(EmployeeEntry.COL_ID, object.id);
     contentValues.put(EmployeeEntry.COL_ACADEMIC_DEPARTMENT_LIST,

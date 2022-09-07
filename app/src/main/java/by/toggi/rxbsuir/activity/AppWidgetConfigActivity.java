@@ -7,7 +7,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RemoteViews;
+
+import com.f2prateek.rx.preferences.Preference;
+import com.trello.rxlifecycle.android.RxLifecycleAndroid;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
@@ -16,16 +23,11 @@ import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.dagger.PerActivity;
 import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
-import com.f2prateek.rx.preferences.Preference;
-import com.trello.rxlifecycle.android.RxLifecycleAndroid;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
-import javax.inject.Inject;
-import javax.inject.Named;
 import timber.log.Timber;
 
 public class AppWidgetConfigActivity extends RxAppCompatActivity
@@ -48,8 +50,8 @@ public class AppWidgetConfigActivity extends RxAppCompatActivity
 
     setupToolbar();
 
-    Intent intent = getIntent();
-    Bundle extras = intent.getExtras();
+    var intent = getIntent();
+    var extras = intent.getExtras();
     if (extras != null) {
       mAppWidgetId =
           extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -81,7 +83,7 @@ public class AppWidgetConfigActivity extends RxAppCompatActivity
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_done:
-        RemoteViews remoteViews = AppWidgetScheduleProvider.getRemoteViews(this, mAppWidgetId, mAdapter);
+        var remoteViews = AppWidgetScheduleProvider.getRemoteViews(this, mAppWidgetId, mAdapter);
         if (remoteViews != null) {
           AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
           appWidgetManager.updateAppWidget(mAppWidgetId, remoteViews);
@@ -99,7 +101,7 @@ public class AppWidgetConfigActivity extends RxAppCompatActivity
     if (mResult == RESULT_CANCELED) {
       try {
         // Phantom widget fix (kinda)
-        AppWidgetHost host = new AppWidgetHost(getApplicationContext(), Integer.MAX_VALUE);
+        var host = new AppWidgetHost(getApplicationContext(), Integer.MAX_VALUE);
         host.deleteAppWidgetId(mAppWidgetId);
       } catch (Exception e) {
         Timber.e(e, "Widget configuration canceled, id deletion went wrong");

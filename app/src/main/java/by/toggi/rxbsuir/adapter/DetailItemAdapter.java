@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.BindView;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.activity.LessonActivity.DetailItem;
@@ -61,7 +61,7 @@ public class DetailItemAdapter extends RecyclerView.Adapter<DetailItemAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        DetailItem detailItem = mDetailItemList.get(position);
+        var detailItem = mDetailItemList.get(position);
         holder.mIcon.setVisibility(detailItem.isIconVisible() ? View.VISIBLE : View.GONE);
         holder.setIsFirst(detailItem.isIconVisible());
         if (position < mDetailItemList.size() - 1) {

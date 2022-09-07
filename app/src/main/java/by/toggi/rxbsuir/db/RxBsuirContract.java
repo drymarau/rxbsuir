@@ -75,7 +75,7 @@ public class RxBsuirContract {
             }
 
             @NonNull @Override public String toString() {
-                String query = COL_SYNC_ID + " = '" + syncId + "' and " +
+                var query = COL_SYNC_ID + " = '" + syncId + "' and " +
                         COL_IS_GROUP_SCHEDULE + " = '" + (isGroupSchedule ? 1 : 0) + "'";
                 if (search != null) {
                     query += " and (" + COL_SUBJECT + " || " + COL_EMPLOYEE_LIST + " || " + COL_STUDENT_GROUP_LIST + ") like '%" + search + "%'";

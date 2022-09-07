@@ -18,7 +18,6 @@ import com.f2prateek.rx.preferences.Preference;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -63,7 +62,7 @@ public class LessonReminderService extends JobIntentService {
     super.onCreate();
     nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      NotificationChannel channel = new NotificationChannel(LESSON_REMINDER_CHANNEL_ID,
+      var channel = new NotificationChannel(LESSON_REMINDER_CHANNEL_ID,
           getString(R.string.lesson_reminder_channel_name), NotificationManager.IMPORTANCE_HIGH);
       channel.enableLights(true);
       channel.enableVibration(true);
@@ -75,8 +74,8 @@ public class LessonReminderService extends JobIntentService {
   @Override protected void onHandleWork(@NonNull Intent intent) {
     // Get lesson list for current day
     if (mFavoriteSyncIdPreference.get() != null) {
-      DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
-      Query query = Query.builder()
+      var dayOfWeek = LocalDate.now().getDayOfWeek();
+      var query = Query.builder()
           .table(LessonEntry.TABLE_NAME)
           .where(LessonEntry.Query.builder(mFavoriteSyncIdPreference.get(),
               mFavoriteIsGroupSchedule.get())
@@ -86,7 +85,7 @@ public class LessonReminderService extends JobIntentService {
               .build()
               .toString())
           .build();
-      List<Lesson> lessonList = mStorIOSQLite.get()
+      var lessonList = mStorIOSQLite.get()
           .listOfObjects(Lesson.class)
           .withQuery(query)
           .prepare()
@@ -98,24 +97,23 @@ public class LessonReminderService extends JobIntentService {
   }
 
   private void showNotification(List<Lesson> lessonList) {
-    Context context = getApplicationContext();
-    Intent resultIntent = new Intent(context, WeekScheduleActivity.class);
+    var context = getApplicationContext();
+    var resultIntent = new Intent(context, WeekScheduleActivity.class);
 
-    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+    var stackBuilder = TaskStackBuilder.create(context);
 
     stackBuilder.addParentStack(WeekScheduleActivity.class);
 
     stackBuilder.addNextIntent(resultIntent);
-    PendingIntent resultPendingIntent =
-        stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+    var resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-    String contentTitle = mFavoriteTitlePreference.asObservable()
+    var contentTitle = mFavoriteTitlePreference.asObservable()
         .map(s -> TextUtils.split(s, " "))
         .map(strings -> Utils.getFormattedTitle("%s %.1s.%.1s", strings))
         .toBlocking()
         .first();
 
-    NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+    var inboxStyle = new NotificationCompat.InboxStyle();
     inboxStyle.setBigContentTitle(contentTitle);
     inboxStyle.setSummaryText(
         LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
@@ -123,22 +121,20 @@ public class LessonReminderService extends JobIntentService {
       inboxStyle.addLine(lessonList.get(i).getPrettyLesson());
     }
 
-    PendingIntent sharePendingIntent = PendingIntent.getActivity(context, 0, Intent.createChooser(
+    var sharePendingIntent = PendingIntent.getActivity(context, 0, Intent.createChooser(
         IntentUtils.getDayScheduleShareIntent(lessonList, mFavoriteTitlePreference.get(),
             LocalDate.now()), getString(R.string.action_share_intent)),
         PendingIntent.FLAG_UPDATE_CURRENT);
 
-    int defaults = mNotificationSoundEnabledPreference.get() ? NotificationCompat.DEFAULT_SOUND
+    var defaults = mNotificationSoundEnabledPreference.get() ? NotificationCompat.DEFAULT_SOUND
         | NotificationCompat.DEFAULT_LIGHTS : NotificationCompat.DEFAULT_LIGHTS;
-    NotificationCompat.Builder builder =
-        new NotificationCompat.Builder(context, LESSON_REMINDER_CHANNEL_ID).setSmallIcon(
-            R.drawable.ic_notification)
+    var builder = new NotificationCompat.Builder(context, LESSON_REMINDER_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification)
             .setStyle(inboxStyle)
             .setAutoCancel(true)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(contentTitle)
-            .addAction(R.drawable.ic_action_share, getString(R.string.action_share),
-                sharePendingIntent)
+            .addAction(R.drawable.ic_action_share, getString(R.string.action_share), sharePendingIntent)
             .setDefaults(defaults)
             .setContentIntent(resultPendingIntent);
     nm.notify(100, builder.build());

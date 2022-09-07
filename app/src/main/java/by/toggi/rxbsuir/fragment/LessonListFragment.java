@@ -1,5 +1,8 @@
 package by.toggi.rxbsuir.fragment;
 
+import static by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.Type.TODAY;
+import static by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.Type.TOMORROW;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +13,6 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +20,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.f2prateek.rx.preferences.Preference;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -31,7 +42,6 @@ import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
-import com.f2prateek.rx.preferences.Preference;
 import dagger.Binds;
 import dagger.BindsInstance;
 import dagger.Subcomponent;
@@ -39,14 +49,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
 import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
-import javax.inject.Named;
 import timber.log.Timber;
-
-import static by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.Type.TODAY;
-import static by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.Type.TOMORROW;
 
 public class LessonListFragment extends Fragment
     implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener,
@@ -85,9 +88,9 @@ public class LessonListFragment extends Fragment
    * @return the week fragment
    */
   public static LessonListFragment newInstance(LessonListPresenter.Type type) {
-    Bundle args = new Bundle();
+    var args = new Bundle();
     args.putSerializable(ARGS_VIEW_TYPE, type);
-    LessonListFragment fragment = new LessonListFragment();
+    var fragment = new LessonListFragment();
     fragment.setArguments(args);
     return fragment;
   }
@@ -95,7 +98,7 @@ public class LessonListFragment extends Fragment
   @Override public void onAttach(Context context) {
     AndroidSupportInjection.inject(this);
     super.onAttach(context);
-    Bundle args = getArguments();
+    var args = getArguments();
     if (args != null) {
       mType = (LessonListPresenter.Type) args.getSerializable(ARGS_VIEW_TYPE);
     }
@@ -103,7 +106,7 @@ public class LessonListFragment extends Fragment
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_lesson_list, container, false);
+    var view = inflater.inflate(R.layout.fragment_lesson_list, container, false);
     unbinder = ButterKnife.bind(this, view);
     return view;
   }
@@ -111,8 +114,8 @@ public class LessonListFragment extends Fragment
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    FragmentManager manager = getFragmentManager();
-    StorageFragment fragment =
+    var manager = getFragmentManager();
+    var fragment =
         (StorageFragment) manager.findFragmentByTag(ScheduleActivity.TAG_STORAGE_FRAGMENT);
 
     if (fragment == null) {

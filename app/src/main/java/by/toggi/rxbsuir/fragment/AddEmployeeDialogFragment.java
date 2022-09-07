@@ -6,11 +6,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import butterknife.ButterKnife;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.widget.RxTextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
@@ -19,14 +27,8 @@ import by.toggi.rxbsuir.mvp.presenter.AddEmployeeDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddEmployeeDialogView;
 import by.toggi.rxbsuir.rest.model.Employee;
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.jakewharton.rxbinding.widget.RxTextView;
 import dagger.android.ContributesAndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
 import rx.Subscription;
 
 public class AddEmployeeDialogFragment extends DialogFragment implements AddEmployeeDialogView {
@@ -56,8 +58,8 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    FragmentManager manager = getFragmentManager();
-    StorageFragment fragment =
+    var manager = getFragmentManager();
+    var fragment =
         (StorageFragment) manager.findFragmentByTag(ScheduleActivity.TAG_STORAGE_FRAGMENT);
 
     if (fragment == null) {
@@ -85,7 +87,7 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
         new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<>());
     textView.setAdapter(mAdapter);
     textView.setOnItemClickListener((parent, view, position, id) -> mPosition = position);
-    MaterialDialog dialog =
+    var dialog =
         new MaterialDialog.Builder(getActivity()).customView(mTextInputLayout, true)
             .title(R.string.title_add_employee)
             .positiveText(R.string.positive_add)
@@ -94,7 +96,7 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
             .callback(new MaterialDialog.ButtonCallback() {
               @Override public void onPositive(MaterialDialog dialog) {
                 if (mPosition != -1) {
-                  Employee employee = mAdapter.getItem(mPosition);
+                  var employee = mAdapter.getItem(mPosition);
                   mListener.onPositiveButtonClicked(employee.id, employee.toString(), false);
                   mPosition = -1;
                   dismiss();
@@ -126,7 +128,7 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
   @Override public void updateEmployeeList(List<Employee> employeeList) {
     mTextInputLayout.setErrorEnabled(false);
     mAdapter.clear();
-    for (Employee employee : employeeList) {
+    for (var employee : employeeList) {
       mAdapter.add(employee);
     }
   }

@@ -1,5 +1,7 @@
 package by.toggi.rxbsuir.rest.model;
 
+import android.support.annotation.NonNull;
+
 import org.parceler.Parcel;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public class Employee {
     }
 
     public static Employee newInstance(int id, List<String> academicDepartmentList, String firstName, String middleName, String lastName, boolean isCached) {
-        Employee employee = new Employee();
+        var employee = new Employee();
         employee.id = id;
         employee.academicDepartment = academicDepartmentList;
         employee.firstName = firstName;
@@ -28,8 +30,7 @@ public class Employee {
         return employee;
     }
 
-    @Override
-    public String toString() {
+    @Override @NonNull public String toString() {
         if (middleName == null) {
             return String.format("%s %s", lastName, firstName);
         } else {

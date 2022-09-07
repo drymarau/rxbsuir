@@ -78,7 +78,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
     }
 
     @Override public void onCreate() {
-      LocalDate date = mIsToday ? LocalDate.now() : LocalDate.now().plusDays(1);
+      var date = mIsToday ? LocalDate.now() : LocalDate.now().plusDays(1);
       Utils.unsubscribe(mSubscription);
       mSubscription = mStorIOSQLite.get()
           .listOfObjects(Lesson.class)
@@ -114,8 +114,8 @@ public class AppWidgetScheduleService extends RemoteViewsService {
     }
 
     @Override public RemoteViews getViewAt(int position) {
-      Lesson lesson = mLessonList.get(position);
-      RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(),
+      var lesson = mLessonList.get(position);
+      var remoteViews = new RemoteViews(mContext.getPackageName(),
           mIsDarkTheme ? R.layout.appwidget_item_dark : R.layout.appwidget_item_light);
 
       setupLessonType(remoteViews, lesson);
@@ -135,8 +135,8 @@ public class AppWidgetScheduleService extends RemoteViewsService {
     }
 
     private void setupOnLessonClick(Lesson lesson, RemoteViews remoteViews) {
-      Intent lessonActivityIntent = new Intent();
-      Bundle hackBundle = new Bundle();
+      var lessonActivityIntent = new Intent();
+      var hackBundle = new Bundle();
       hackBundle.putParcelable(AppWidgetScheduleProvider.EXTRA_LESSON, Parcels.wrap(lesson));
       lessonActivityIntent.putExtra(AppWidgetScheduleProvider.EXTRA_LESSON, hackBundle);
       remoteViews.setOnClickFillInIntent(R.id.item_lesson, lessonActivityIntent);

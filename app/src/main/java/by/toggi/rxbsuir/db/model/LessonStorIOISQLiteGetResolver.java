@@ -24,22 +24,22 @@ public class LessonStorIOISQLiteGetResolver extends DefaultGetResolver<Lesson> {
   }
 
   @NonNull @Override public Lesson mapFromCursor(@NonNull Cursor cursor) {
-    String[] auditoryArray =
+    var auditoryArray =
         mGson.fromJson(cursor.getString(cursor.getColumnIndex(LessonEntry.COL_AUDITORY_LIST)),
             String[].class);
     if (auditoryArray == null) {
       auditoryArray = new String[] {};
     }
-    Employee[] employeeArray =
+    var employeeArray =
         mGson.fromJson(cursor.getString(cursor.getColumnIndex(LessonEntry.COL_EMPLOYEE_LIST)),
             Employee[].class);
     if (employeeArray == null) {
       employeeArray = new Employee[] {};
     }
-    String[] studentGroupArray =
+    var studentGroupArray =
         mGson.fromJson(cursor.getString(cursor.getColumnIndex(LessonEntry.COL_STUDENT_GROUP_LIST)),
             String[].class);
-    Integer[] weekNumberArray =
+    var weekNumberArray =
         mGson.fromJson(cursor.getString(cursor.getColumnIndex(LessonEntry.COL_WEEK_NUMBER_LIST)),
             Integer[].class);
 

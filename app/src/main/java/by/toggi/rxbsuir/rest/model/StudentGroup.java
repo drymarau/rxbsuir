@@ -1,9 +1,11 @@
 package by.toggi.rxbsuir.rest.model;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
+
+import android.support.annotation.NonNull;
+
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
-
-import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 
 @StorIOSQLiteType(table = StudentGroupEntry.TABLE_NAME)
 public class StudentGroup {
@@ -24,8 +26,7 @@ public class StudentGroup {
     StudentGroup() {
     }
 
-    @Override
-    public String toString() {
+    @Override @NonNull public String toString() {
         return name;
     }
 }

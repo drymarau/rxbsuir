@@ -1,14 +1,14 @@
 package by.toggi.rxbsuir;
 
+import static by.toggi.rxbsuir.adapter.DetailItemAdapter.ViewHolder;
+
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
-import static by.toggi.rxbsuir.adapter.DetailItemAdapter.ViewHolder;
 
 public class DetailItemDecoration extends RecyclerView.ItemDecoration {
 
@@ -19,14 +19,14 @@ public class DetailItemDecoration extends RecyclerView.ItemDecoration {
     public DetailItemDecoration(Context context) {
         mPadding = context.getResources().getDimensionPixelSize(R.dimen.divider_padding);
         mMarginStart = context.getResources().getDimensionPixelSize(R.dimen.keyline_second);
-        final TypedArray a = context.obtainStyledAttributes(new int[]{android.R.attr.listDivider});
+        final var a = context.obtainStyledAttributes(new int[]{android.R.attr.listDivider});
         mDivider = a.getDrawable(0);
         a.recycle();
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        ViewHolder holder = (ViewHolder) parent.getChildViewHolder(view);
+    public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, RecyclerView parent, @NonNull RecyclerView.State state) {
+        var holder = (ViewHolder) parent.getChildViewHolder(view);
         if (holder.isLast() && holder.isFirst()) {
             outRect.set(0, mPadding, 0, mPadding + mDivider.getIntrinsicHeight());
         } else if (holder.isFirst()) {
@@ -39,19 +39,19 @@ public class DetailItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        final int left = parent.getPaddingLeft() + mMarginStart;
-        final int right = parent.getWidth() - parent.getPaddingRight();
-        final int recyclerViewTop = parent.getPaddingTop();
-        final int recyclerViewBottom = parent.getHeight() - parent.getPaddingBottom();
+    public void onDrawOver(@NonNull Canvas c, RecyclerView parent, @NonNull RecyclerView.State state) {
+        final var left = parent.getPaddingLeft() + mMarginStart;
+        final var right = parent.getWidth() - parent.getPaddingRight();
+        final var recyclerViewTop = parent.getPaddingTop();
+        final var recyclerViewBottom = parent.getHeight() - parent.getPaddingBottom();
         for (int i = 0, childCount = parent.getChildCount(); i < childCount; i++) {
-            final View view = parent.getChildAt(i);
-            final int adapterPosition = parent.getChildAdapterPosition(view);
-            final ViewHolder holder = (ViewHolder) parent.getChildViewHolder(view);
+            final var view = parent.getChildAt(i);
+            final var adapterPosition = parent.getChildAdapterPosition(view);
+            final var holder = (ViewHolder) parent.getChildViewHolder(view);
             if (adapterPosition < parent.getAdapter().getItemCount() - 1 && holder.isLast()) {
-                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) view.getLayoutParams();
-                final int top = Math.max(recyclerViewTop, view.getBottom() + params.bottomMargin + mPadding);
-                final int bottom = Math.min(recyclerViewBottom, top + mDivider.getIntrinsicHeight());
+                final var params = (RecyclerView.LayoutParams) view.getLayoutParams();
+                final var top = Math.max(recyclerViewTop, view.getBottom() + params.bottomMargin + mPadding);
+                final var bottom = Math.min(recyclerViewBottom, top + mDivider.getIntrinsicHeight());
                 mDivider.setBounds(left, top, right, bottom);
                 mDivider.draw(c);
             }

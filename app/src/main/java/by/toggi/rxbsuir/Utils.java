@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -58,8 +57,8 @@ public class Utils {
 
     public static void openPrivacyPolicyPage(Context context) {
         try {
-            Uri uri = Uri.parse("https://drymarev.github.io/rxbsuir/docs/privacy_policy.html");
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            var uri = Uri.parse("https://drymarev.github.io/rxbsuir/docs/privacy_policy.html");
+            var intent = new Intent(Intent.ACTION_VIEW, uri);
             context.startActivity(intent);
         } catch (ActivityNotFoundException ignored) {
         }
@@ -87,8 +86,8 @@ public class Utils {
      * @return the boolean
      */
     public static boolean hasNetworkConnection(Context context) {
-        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = manager.getActiveNetworkInfo();
+        var manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        var activeNetworkInfo = manager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
@@ -99,7 +98,7 @@ public class Utils {
      * @param localTime the local time
      */
     public static void setNotificationAlarm(Context context, LocalTime localTime) {
-        PendingIntent pendingIntent = IntentUtils.getNotificationPendingIntent(context);
+        var pendingIntent = IntentUtils.getNotificationPendingIntent(context);
 
         LocalDateTime dateTime;
         if (LocalTime.now().isAfter(localTime)) {
@@ -134,9 +133,9 @@ public class Utils {
     public static void setWidgetUpdateAlarm(Context context) {
         if (getAppWidgetCount(context) > 0) {
             Timber.d("Setting WidgetUpdateAlarm...");
-            LocalDateTime dateTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.MIDNIGHT);
+            var dateTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.MIDNIGHT);
 
-            AlarmManager manager = getAlarmManager(context);
+            var manager = getAlarmManager(context);
             manager.setInexactRepeating(
                     AlarmManager.RTC_WAKEUP,
                     convertLocalDateTimeToMillis(dateTime),
@@ -165,8 +164,8 @@ public class Utils {
      */
     public static void restartApp(Activity activity) {
         activity.finish();
-        ComponentName componentName = new ComponentName(activity, WeekScheduleActivity.class);
-        final Intent intent = Intent.makeMainActivity(componentName);
+        var componentName = new ComponentName(activity, WeekScheduleActivity.class);
+        final var intent = Intent.makeMainActivity(componentName);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
     }
@@ -187,7 +186,7 @@ public class Utils {
      * @return the week number
      */
     public static int getWeekNumber(LocalDate localDate) {
-        long weeks = ChronoUnit.WEEKS.between(getStartYear(), localDate);
+        var weeks = ChronoUnit.WEEKS.between(getStartYear(), localDate);
         return (int) weeks % 4 + 1;
     }
 
@@ -247,12 +246,12 @@ public class Utils {
      * @return the int [ ]
      */
     public static int[] getAppWidgetIds(Context context) {
-        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        var manager = AppWidgetManager.getInstance(context);
         return manager.getAppWidgetIds(new ComponentName(context, AppWidgetScheduleProvider.class));
     }
 
     private static LocalDate getStartYear() {
-        LocalDate localDate = LocalDate.now();
+        var localDate = LocalDate.now();
         if (localDate.getMonth().compareTo(Month.SEPTEMBER) < 0) {
             return LocalDate.of(localDate.getYear() - 1, Month.SEPTEMBER, 1).with(DayOfWeek.MONDAY);
         }
@@ -264,8 +263,8 @@ public class Utils {
     }
 
     private static void setBootReceiverEnabled(Context context, boolean enabled) {
-        ComponentName receiver = new ComponentName(context, BootReceiver.class);
-        PackageManager manager = context.getPackageManager();
+        var receiver = new ComponentName(context, BootReceiver.class);
+        var manager = context.getPackageManager();
         manager.setComponentEnabledSetting(
                 receiver,
                 enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED

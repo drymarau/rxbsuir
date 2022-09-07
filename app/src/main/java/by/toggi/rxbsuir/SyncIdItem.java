@@ -66,7 +66,7 @@ public class SyncIdItem {
       return false;
     }
 
-    SyncIdItem syncIdItem = (SyncIdItem) o;
+    var syncIdItem = (SyncIdItem) o;
 
     return mId == syncIdItem.mId
         && mTitle.equals(syncIdItem.mTitle)
@@ -74,7 +74,7 @@ public class SyncIdItem {
   }
 
   @Override public int hashCode() {
-    int result = 17;
+    var result = 17;
     result = 31 * result + (mIsGroupSchedule ? 1 : 0);
     result = 31 * result + mId;
     result = 31 * result + mTitle.hashCode();

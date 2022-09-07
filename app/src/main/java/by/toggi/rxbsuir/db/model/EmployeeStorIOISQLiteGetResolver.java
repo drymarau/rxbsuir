@@ -1,14 +1,17 @@
 package by.toggi.rxbsuir.db.model;
 
+import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
+
 import android.database.Cursor;
 import android.support.annotation.NonNull;
-import by.toggi.rxbsuir.rest.model.Employee;
+
 import com.google.gson.Gson;
 import com.pushtorefresh.storio.sqlite.operations.get.DefaultGetResolver;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
+import by.toggi.rxbsuir.rest.model.Employee;
 
 public class EmployeeStorIOISQLiteGetResolver extends DefaultGetResolver<Employee> {
 
@@ -19,7 +22,7 @@ public class EmployeeStorIOISQLiteGetResolver extends DefaultGetResolver<Employe
   }
 
   @NonNull @Override public Employee mapFromCursor(@NonNull Cursor cursor) {
-    String[] academicDepartmentArray = mGson.fromJson(
+    var academicDepartmentArray = mGson.fromJson(
         cursor.getString(cursor.getColumnIndex(EmployeeEntry.COL_ACADEMIC_DEPARTMENT_LIST)),
         String[].class);
     if (academicDepartmentArray == null) {

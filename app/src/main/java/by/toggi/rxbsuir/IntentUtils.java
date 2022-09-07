@@ -35,7 +35,7 @@ public class IntentUtils {
      * @return the day schedule share intent
      */
     public static Intent getDayScheduleShareIntent(List<Lesson> lessonList, String title, LocalDate date) {
-        StringBuilder builder = new StringBuilder(title).append(" (")
+        var builder = new StringBuilder(title).append(" (")
                 .append(date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)))
                 .append(")");
         for (int i = 0, size = lessonList.size(); i < size; i++) {

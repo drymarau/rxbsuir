@@ -18,7 +18,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -197,12 +196,12 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
   }
 
   @OnClick(R.id.fab_employee) public void onFloatingActionButtonEmployeeClick() {
-    AddEmployeeDialogFragment dialog = AddEmployeeDialogFragment.newInstance();
+    var dialog = AddEmployeeDialogFragment.newInstance();
     dialog.show(getSupportFragmentManager(), TAG_ADD_EMPLOYEE_DIALOG);
   }
 
   @OnClick(R.id.fab_group) public void onFloatingActionButtonGroupClick() {
-    AddGroupDialogFragment dialog = AddGroupDialogFragment.newInstance();
+    var dialog = AddGroupDialogFragment.newInstance();
     dialog.show(getSupportFragmentManager(), TAG_ADD_GROUP_DIALOG);
   }
 
@@ -241,8 +240,8 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_schedule_activity, menu);
-    MenuItem item = menu.findItem(R.id.action_search);
-    SearchView searchView = (SearchView) item.getActionView();
+    var item = menu.findItem(R.id.action_search);
+    var searchView = (SearchView) item.getActionView();
     MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
       @Override public boolean onMenuItemActionExpand(MenuItem item) {
         mSearchViewSubscription = RxSearchView.queryTextChanges(searchView)
@@ -258,7 +257,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
 
       @Override public boolean onMenuItemActionCollapse(MenuItem item) {
         Utils.unsubscribe(mSearchViewSubscription);
-        Intent queryIntent = new Intent(ACTION_SEARCH_QUERY);
+        var queryIntent = new Intent(ACTION_SEARCH_QUERY);
         queryIntent.putExtra(EXTRA_SEARCH_QUERY, "");
         mLocalBroadcastManager.sendBroadcast(queryIntent);
         return true;
@@ -322,7 +321,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
   }
 
   private void resetSyncId() {
-    String favoriteSyncId = mFavoriteSyncIdPreference.get();
+    var favoriteSyncId = mFavoriteSyncIdPreference.get();
     if (favoriteSyncId != null && favoriteSyncId.equals(mSyncIdPreference.get())) {
       mFavoriteSyncIdPreference.set(mFavoriteSyncIdPreference.defaultValue());
       mFavoriteTitlePreference.set(mFavoriteTitlePreference.defaultValue());
@@ -337,7 +336,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
 
   @Override public boolean onPrepareOptionsMenu(Menu menu) {
     menu.setGroupVisible(R.id.group_items, mSyncIdPreference.get() != null);
-    MenuItem favoriteItem = menu.findItem(R.id.action_favorite);
+    var favoriteItem = menu.findItem(R.id.action_favorite);
     if (mSyncIdPreference.get() != null && mSyncIdPreference.get()
         .equals(mFavoriteSyncIdPreference.get())) {
       favoriteItem.setChecked(true).setIcon(R.drawable.ic_action_favorite_on);
@@ -377,15 +376,15 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
   }
 
   @Override public void updateGroupList(Map<Integer, String> groupMap) {
-    Menu menu = mNavigationView.getMenu();
-    MenuItem groupHeader = menu.findItem(R.id.navigation_view_groups_header);
+    var menu = mNavigationView.getMenu();
+    var groupHeader = menu.findItem(R.id.navigation_view_groups_header);
     if (groupMap.size() > 0) {
       groupHeader.setVisible(true);
       groupHeader.getSubMenu().clear();
-      for (int id : groupMap.keySet()) {
+      for (var id : groupMap.keySet()) {
         groupHeader.getSubMenu().add(R.id.navigation_view_groups, id, Menu.NONE, groupMap.get(id));
       }
-      MenuItem item = menu.getItem(0);
+      var item = menu.getItem(0);
       item.setTitle(item.getTitle());
     } else {
       groupHeader.setVisible(false);
@@ -393,8 +392,8 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
   }
 
   @Override public void updateEmployeeList(Map<Integer, String> employeeMap) {
-    Menu menu = mNavigationView.getMenu();
-    MenuItem employeeHeader = menu.findItem(R.id.navigation_view_employees_header);
+    var menu = mNavigationView.getMenu();
+    var employeeHeader = menu.findItem(R.id.navigation_view_employees_header);
     if (employeeMap.size() > 0) {
       employeeHeader.setVisible(true);
       employeeHeader.getSubMenu().clear();
@@ -402,7 +401,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
         employeeHeader.getSubMenu()
             .add(R.id.navigation_view_employees, id, Menu.NONE, employeeMap.get(id));
       }
-      MenuItem item = menu.getItem(0);
+      var item = menu.getItem(0);
       item.setTitle(item.getTitle());
     } else {
       employeeHeader.setVisible(false);
@@ -410,7 +409,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
   }
 
   @Override public boolean onNavigationItemSelected(MenuItem menuItem) {
-    int itemId = menuItem.getItemId();
+    var itemId = menuItem.getItemId();
     if (mItemIdPreference.get() != menuItem.getItemId()) {
       switch (menuItem.getGroupId()) {
         case R.id.navigation_view_groups:
@@ -424,7 +423,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
         startActivity(new Intent(this, SettingsActivity.class));
       }
       if (itemId == R.id.navigation_view_feedback) {
-        Intent feedbackIntent =
+        var feedbackIntent =
             new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", mFeedbackEmail, null));
         feedbackIntent.putExtra(Intent.EXTRA_SUBJECT, mFeedbackSubject);
         startActivity(Intent.createChooser(feedbackIntent, mSendFeedbackTitle));
@@ -457,8 +456,8 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
   }
 
   private void addStorageFragment() {
-    FragmentManager manager = getSupportFragmentManager();
-    StorageFragment fragment = (StorageFragment) manager.findFragmentByTag(TAG_STORAGE_FRAGMENT);
+    var manager = getSupportFragmentManager();
+    var fragment = (StorageFragment) manager.findFragmentByTag(TAG_STORAGE_FRAGMENT);
 
     if (fragment == null) {
       fragment = new StorageFragment();
