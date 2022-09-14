@@ -13,8 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
@@ -143,25 +141,29 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     public interface OnItemClickListener {
 
         void onItemClicked(Lesson lesson);
-
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.lesson_type) TextView mLessonType;
-        @BindView(R.id.lesson_subject_subgroup) TextView mLessonSubjectSubgroup;
-        @BindView(R.id.lesson_time_start) TextView mLessonTimeStart;
-        @BindView(R.id.lesson_time_end) TextView mLessonTimeEnd;
+        final TextView mLessonType;
+        final TextView mLessonSubjectSubgroup;
+        final TextView mLessonTimeStart;
+        final TextView mLessonTimeEnd;
 
-        @Nullable @BindView(R.id.lesson_employee) TextView mLessonEmployee;
-        @Nullable @BindView(R.id.lesson_class) TextView mLessonClass;
+        @Nullable final TextView mLessonEmployee;
+        @Nullable final TextView mLessonClass;
 
         private String mHeaderText;
         private boolean mIsFirst;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            mLessonType = itemView.findViewById(R.id.lesson_type);
+            mLessonSubjectSubgroup = itemView.findViewById(R.id.lesson_subject_subgroup);
+            mLessonTimeStart = itemView.findViewById(R.id.lesson_time_start);
+            mLessonTimeEnd = itemView.findViewById(R.id.lesson_time_end);
+            mLessonEmployee = itemView.findViewById(R.id.lesson_employee);
+            mLessonClass = itemView.findViewById(R.id.lesson_class);
         }
 
         public String getHeaderText() {
@@ -180,5 +182,4 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
             mIsFirst = isFirst;
         }
     }
-
 }

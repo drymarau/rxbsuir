@@ -1,6 +1,7 @@
 package by.toggi.rxbsuir.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +12,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.activity.LessonActivity.DetailItem;
 
@@ -44,7 +43,8 @@ public class DetailItemAdapter extends RecyclerView.Adapter<DetailItemAdapter.Vi
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
             case VIEW_TYPE_DETAIL:
@@ -104,16 +104,18 @@ public class DetailItemAdapter extends RecyclerView.Adapter<DetailItemAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.lesson_detail_icon) ImageView mIcon;
-        @BindView(R.id.lesson_detail_text) TextView mText;
-        @Nullable @BindView(R.id.lesson_detail_summary) TextView mSummary;
+        final ImageView mIcon;
+        final TextView mText;
+        @Nullable final TextView mSummary;
 
         private boolean isFirst;
         private boolean isLast;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            mIcon = itemView.findViewById(R.id.lesson_detail_icon);
+            mText = itemView.findViewById(R.id.lesson_detail_text);
+            mSummary = itemView.findViewById(R.id.lesson_detail_summary);
         }
 
         public boolean isLast() {
@@ -131,7 +133,5 @@ public class DetailItemAdapter extends RecyclerView.Adapter<DetailItemAdapter.Vi
         public void setIsFirst(boolean isFirst) {
             this.isFirst = isFirst;
         }
-
     }
-
 }

@@ -10,8 +10,6 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.dagger.PerActivity;
@@ -24,8 +22,6 @@ import dagger.android.HasAndroidInjector;
 
 public class SettingsActivity extends RxAppCompatActivity implements HasAndroidInjector {
 
-  @BindView(R.id.toolbar) Toolbar mToolbar;
-
   @Inject DispatchingAndroidInjector<Object> mAndroidInjector;
   @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
 
@@ -33,8 +29,8 @@ public class SettingsActivity extends RxAppCompatActivity implements HasAndroidI
     AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
+    Toolbar mToolbar = findViewById(R.id.toolbar);
 
-    ButterKnife.bind(this);
     setSupportActionBar(mToolbar);
     getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     mToolbar.setNavigationOnClickListener(v -> onBackPressed());

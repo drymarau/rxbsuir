@@ -22,8 +22,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import by.toggi.rxbsuir.DetailItemDecoration;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
@@ -40,12 +38,10 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
 
   private static final String EXTRA_LESSON = "by.toggi.rxbsuir.extra.lesson";
 
-  @BindView(R.id.toolbar) Toolbar mToolbar;
-  @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
-
   @Inject LessonDetailPresenter mPresenter;
   @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
 
+  private Toolbar mToolbar;
   private DetailItemAdapter mAdapter;
 
   public static void start(Context context, Lesson lesson) {
@@ -66,7 +62,8 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_lesson);
 
-    ButterKnife.bind(this);
+    mToolbar = findViewById(R.id.toolbar);
+    RecyclerView mRecyclerView = findViewById(R.id.recycler_view);
 
     setupToolbar();
 

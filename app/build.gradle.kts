@@ -48,9 +48,6 @@ dependencies {
     implementation(libs.android.support.design)
     implementation(libs.android.support.recyclerview)
 
-    implementation(libs.butterknife)
-    annotationProcessor(libs.butterknife.compiler)
-
     implementation(libs.timber)
 
     implementation(libs.rxbinding)

@@ -29,9 +29,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
@@ -58,9 +55,6 @@ public class LessonListFragment extends Fragment
   public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
   private static final String ARGS_VIEW_TYPE = "week_number";
 
-  @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
-  @BindView(R.id.empty_state) TextView mEmptyState;
-
   @Inject LessonListPresenter mPresenter;
   @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
   @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
@@ -69,7 +63,8 @@ public class LessonListFragment extends Fragment
   @Inject @Named(PreferenceHelper.ARE_CIRCLES_COLORED) Preference<Boolean>
       mAreCirclesColoredPreference;
 
-  private Unbinder unbinder;
+  private RecyclerView mRecyclerView;
+  private TextView mEmptyState;
   private Parcelable mLayoutManagerState;
   private LessonListPresenter.Type mType;
   private LinearLayoutManager mLayoutManager;
@@ -106,13 +101,13 @@ public class LessonListFragment extends Fragment
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    var view = inflater.inflate(R.layout.fragment_lesson_list, container, false);
-    unbinder = ButterKnife.bind(this, view);
-    return view;
+    return inflater.inflate(R.layout.fragment_lesson_list, container, false);
   }
 
-  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+  @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    mRecyclerView = view.findViewById(R.id.recycler_view);
+    mEmptyState = view.findViewById(R.id.empty_state);
 
     var manager = getFragmentManager();
     var fragment =
@@ -169,11 +164,6 @@ public class LessonListFragment extends Fragment
   @Override public void showEmptyState() {
     mRecyclerView.setVisibility(View.GONE);
     mEmptyState.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-    unbinder.unbind();
   }
 
   @Override public void onDestroy() {

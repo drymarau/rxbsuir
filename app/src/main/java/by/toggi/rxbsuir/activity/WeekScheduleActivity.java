@@ -10,7 +10,6 @@ import com.f2prateek.rx.preferences.Preference;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
@@ -28,15 +27,18 @@ import dagger.android.HasAndroidInjector;
 
 public class WeekScheduleActivity extends ScheduleActivity implements HasAndroidInjector {
 
-  @BindView(R.id.tab_layout) TabLayout mTabLayout;
-  @BindView(R.id.view_pager) ViewPager mViewPager;
-
   @Inject DispatchingAndroidInjector<Object> mAndroidInjector;
   @Inject @Named(PreferenceHelper.IS_TODAY_ENABLED) Preference<Boolean> mIsTodayEnabledPreference;
+
+  private TabLayout mTabLayout;
+  private ViewPager mViewPager;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
+
+    mTabLayout = findViewById(R.id.tab_layout);
+    mViewPager = findViewById(R.id.view_pager);
 
     setupTabs();
 

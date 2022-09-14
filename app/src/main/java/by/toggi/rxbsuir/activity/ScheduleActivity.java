@@ -43,11 +43,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindDimen;
-import butterknife.BindString;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RateAppDialog;
@@ -78,23 +73,6 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
   private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
   private static final long ANIMATION_DURATION = 250;
 
-  @BindView(R.id.toolbar) Toolbar mToolbar;
-  @BindView(R.id.progress_bar) ProgressBar mProgressBar;
-  @BindView(R.id.coordinator_layout) CoordinatorLayout mCoordinatorLayout;
-  @BindView(R.id.fab_group) FloatingActionButton mFabGroup;
-  @BindView(R.id.fab_employee) FloatingActionButton mFabEmployee;
-  @BindView(R.id.fam) RelativeLayout mFloatingActionMenu;
-  @BindView(R.id.fab) FloatingActionButton mFloatingActionButton;
-  @Nullable @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-  @BindView(R.id.navigation_view) NavigationView mNavigationView;
-
-  @BindDimen(R.dimen.view_pager_page_margin) int mPageMargin;
-
-  @BindString(R.string.intent_feedback) String mSendFeedbackTitle;
-  @BindString(R.string.email_feedback) String mFeedbackEmail;
-  @BindString(R.string.subject_feedback) String mFeedbackSubject;
-  @BindString(R.string.title_format) String mTitleFormat;
-
   @Inject SchedulePresenter mSchedulePresenter;
   @Inject NavigationDrawerPresenter mDrawerPresenter;
   @Inject SharedPreferences mSharedPreferences;
@@ -111,6 +89,23 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
   @Inject Preference<LocalTime> mLocalTimePreference;
   @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
 
+  private Toolbar mToolbar;
+  private ProgressBar mProgressBar;
+  private CoordinatorLayout mCoordinatorLayout;
+  private FloatingActionButton mFabGroup;
+  private FloatingActionButton mFabEmployee;
+  private RelativeLayout mFloatingActionMenu;
+  private FloatingActionButton mFloatingActionButton;
+  @Nullable private DrawerLayout mDrawerLayout;
+  private NavigationView mNavigationView;
+
+  protected int mPageMargin;
+
+  private String mSendFeedbackTitle;
+  private String mFeedbackEmail;
+  private String mFeedbackSubject;
+  private String mTitleFormat;
+
   private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
     @Override public void onReceive(@NonNull Context context, @NonNull Intent intent) {
       ScheduleActivity.this.supportInvalidateOptionsMenu();
@@ -125,7 +120,36 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
     super.onCreate(savedInstanceState);
     setContentView(getLayoutRes());
 
-    ButterKnife.bind(this);
+    mToolbar = findViewById(R.id.toolbar);
+    mProgressBar = findViewById(R.id.progress_bar);
+    mCoordinatorLayout = findViewById(R.id.coordinator_layout);
+    mFabGroup = findViewById(R.id.fab_group);
+    mFabEmployee = findViewById(R.id.fab_employee);
+    mFloatingActionMenu = findViewById(R.id.fam);
+    mFloatingActionButton = findViewById(R.id.fab);
+    mDrawerLayout = findViewById(R.id.drawer_layout);
+    mNavigationView = findViewById(R.id.navigation_view);
+    mPageMargin = getResources().getDimensionPixelSize(R.dimen.view_pager_page_margin);
+    mSendFeedbackTitle = getString(R.string.intent_feedback);
+    mFeedbackEmail = getString(R.string.email_feedback);
+    mFeedbackSubject = getString(R.string.subject_feedback);
+    mTitleFormat = getString(R.string.title_format);
+
+    mFabGroup.setOnClickListener(view -> {
+      var dialog = AddGroupDialogFragment.newInstance();
+      dialog.show(getSupportFragmentManager(), TAG_ADD_GROUP_DIALOG);
+    });
+    mFabEmployee.setOnClickListener(view -> {
+      var dialog = AddEmployeeDialogFragment.newInstance();
+      dialog.show(getSupportFragmentManager(), TAG_ADD_EMPLOYEE_DIALOG);
+    });
+    mFloatingActionButton.setOnClickListener(view -> {
+      if (Utils.hasNetworkConnection(view.getContext())) {
+        toggleFloatingActionMenu(mFabGroup.getVisibility() != View.VISIBLE);
+      } else {
+        Snackbar.make(mCoordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT).show();
+      }
+    });
 
     if (!mIsFamEnabled) {
       mFloatingActionMenu.setVisibility(View.GONE);
@@ -185,24 +209,6 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
     super.onDestroy();
     mSchedulePresenter.onDestroy();
     mDrawerPresenter.onDestroy();
-  }
-
-  @OnClick(R.id.fab) public void onFloatingActionButtonClick() {
-    if (Utils.hasNetworkConnection(this)) {
-      toggleFloatingActionMenu(mFabGroup.getVisibility() != View.VISIBLE);
-    } else {
-      Snackbar.make(mCoordinatorLayout, R.string.error_network, Snackbar.LENGTH_SHORT).show();
-    }
-  }
-
-  @OnClick(R.id.fab_employee) public void onFloatingActionButtonEmployeeClick() {
-    var dialog = AddEmployeeDialogFragment.newInstance();
-    dialog.show(getSupportFragmentManager(), TAG_ADD_EMPLOYEE_DIALOG);
-  }
-
-  @OnClick(R.id.fab_group) public void onFloatingActionButtonGroupClick() {
-    var dialog = AddGroupDialogFragment.newInstance();
-    dialog.show(getSupportFragmentManager(), TAG_ADD_GROUP_DIALOG);
   }
 
   @Override public void showError(Error error) {

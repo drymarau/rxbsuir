@@ -15,8 +15,6 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
@@ -34,19 +32,19 @@ public class AppWidgetConfigActivity extends RxAppCompatActivity
     implements HasAndroidInjector {
 
   private final Intent mResultIntent = new Intent();
-  @BindView(R.id.toolbar) Toolbar mToolbar;
   @Inject DispatchingAndroidInjector<Object> mAndroidInjector;
   @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
   @Inject Preference.Adapter<SyncIdItem> mAdapter;
+
   private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
   private int mResult = RESULT_CANCELED;
+  private Toolbar mToolbar;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_appwidget_config);
-
-    ButterKnife.bind(this);
+    mToolbar = findViewById(R.id.toolbar);
 
     setupToolbar();
 

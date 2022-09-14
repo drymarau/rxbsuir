@@ -3,7 +3,6 @@ android = "7.2.2"
 android-desugar = "1.1.8"
 android-support = "28.0.0"
 assertj = "2.6.0"
-butterknife = "9.0.0"
 dagger = "2.43.2"
 junit = "4.12"
 materialdialogs = "0.9.6.0"
@@ -27,8 +26,6 @@ android-support-cardview = { module = "com.android.support:cardview-v7", version
 android-support-design = { module = "com.android.support:design", version.ref = "android-support" }
 android-support-recyclerview = { module = "com.android.support:recyclerview-v7", version.ref = "android-support" }
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
-butterknife = { module = "com.jakewharton:butterknife", version.ref = "butterknife" }
-butterknife-compiler = { module = "com.jakewharton:butterknife-compiler", version.ref = "butterknife" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 dagger-android-processor = { module = "com.google.dagger:dagger-android-processor", version.ref = "dagger" }
