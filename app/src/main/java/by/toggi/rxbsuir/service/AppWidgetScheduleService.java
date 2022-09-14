@@ -1,7 +1,5 @@
 package by.toggi.rxbsuir.service;
 
-import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
-
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +9,6 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.f2prateek.rx.preferences.Preference;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import org.parceler.Parcels;
 
@@ -25,19 +21,15 @@ import javax.inject.Inject;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
-import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.dagger.PerService;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import dagger.android.AndroidInjection;
 import dagger.android.ContributesAndroidInjector;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 
 public class AppWidgetScheduleService extends RemoteViewsService {
 
-  @Inject StorIOSQLite mStorIOSQLite;
   @Inject Preference.Adapter<SyncIdItem> mAdapter;
 
   @Override public void onCreate() {
@@ -46,30 +38,26 @@ public class AppWidgetScheduleService extends RemoteViewsService {
   }
 
   @Override public RemoteViewsFactory onGetViewFactory(Intent intent) {
-    return new AppWidgetScheduleFactory(this, intent, mStorIOSQLite, mAdapter);
+    return new AppWidgetScheduleFactory(this, intent, mAdapter);
   }
 
   public static class AppWidgetScheduleFactory implements RemoteViewsFactory {
 
     private final Context mContext;
-    private final StorIOSQLite mStorIOSQLite;
     private final boolean mIsToday;
     private final SyncIdItem mSyncIdItem;
     private final boolean mAreCirclesColored;
     private final boolean mIsDarkTheme;
     private final SubgroupFilter mSubgroupFilter;
     private final int mAppWidgetId;
-    private Subscription mSubscription;
-    private List<Lesson> mLessonList = new ArrayList<>();
+    private final List<Lesson> mLessonList = new ArrayList<>();
     private boolean mIsCollapsed;
 
-    public AppWidgetScheduleFactory(Context context, Intent intent, StorIOSQLite storIOSQLite,
-        Preference.Adapter<SyncIdItem> adapter) {
+    public AppWidgetScheduleFactory(Context context, Intent intent, Preference.Adapter<SyncIdItem> adapter) {
       mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
           AppWidgetManager.INVALID_APPWIDGET_ID);
       mContext = context;
       mIsToday = intent.getBooleanExtra(AppWidgetScheduleProvider.EXTRA_IS_TODAY, true);
-      mStorIOSQLite = storIOSQLite;
       mSyncIdItem = PreferenceHelper.getSyncIdItemPreference(context, mAppWidgetId, adapter);
       mAreCirclesColored = PreferenceHelper.getAreCirclesColoredPreference(context, mAppWidgetId);
       mIsDarkTheme = PreferenceHelper.isNightModeEnabled(context, mAppWidgetId);
@@ -79,26 +67,6 @@ public class AppWidgetScheduleService extends RemoteViewsService {
 
     @Override public void onCreate() {
       var date = mIsToday ? LocalDate.now() : LocalDate.now().plusDays(1);
-      Utils.unsubscribe(mSubscription);
-      mSubscription = mStorIOSQLite.get()
-          .listOfObjects(Lesson.class)
-          .withQuery(Query.builder()
-              .table(LessonEntry.TABLE_NAME)
-              .where(
-                  LessonEntry.Query.builder(mSyncIdItem.getSyncId(), mSyncIdItem.isGroupSchedule())
-                      .weekNumber(Utils.getWeekNumber(date))
-                      .weekDay(date.getDayOfWeek())
-                      .subgroupFilter(mSubgroupFilter)
-                      .build()
-                      .toString())
-              .build())
-          .prepare()
-          .createObservable()
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(lessonList -> {
-            mLessonList = lessonList;
-            AppWidgetScheduleProvider.updateNote(mContext);
-          });
     }
 
     @Override public void onDataSetChanged() {
@@ -106,7 +74,6 @@ public class AppWidgetScheduleService extends RemoteViewsService {
     }
 
     @Override public void onDestroy() {
-      Utils.unsubscribe(mSubscription);
     }
 
     @Override public int getCount() {

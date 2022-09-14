@@ -1,8 +1,5 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
-
 import java.util.List;
 
 import by.toggi.rxbsuir.Utils;
@@ -15,18 +12,13 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-import static by.toggi.rxbsuir.db.RxBsuirContract.EmployeeEntry;
-import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
-
 public class NavigationDrawerPresenter extends Presenter<NavigationDrawerView> {
 
-    private final StorIOSQLite mStorIOSQLite;
     private final Observable<List<StudentGroup>> mStudentGroupObservable;
     private final Observable<List<Employee>> mEmployeeListObservable;
     private CompositeSubscription mCompositeSubscription;
 
-    public NavigationDrawerPresenter(StorIOSQLite storIOSQLite) {
-        mStorIOSQLite = storIOSQLite;
+    public NavigationDrawerPresenter() {
         mStudentGroupObservable = getGroupObservable();
         mEmployeeListObservable = getEmployeeObservable();
     }
@@ -70,26 +62,10 @@ public class NavigationDrawerPresenter extends Presenter<NavigationDrawerView> {
     }
 
     private Observable<List<StudentGroup>> getGroupObservable() {
-        return mStorIOSQLite.get()
-                .listOfObjects(StudentGroup.class)
-                .withQuery(Query.builder()
-                        .table(StudentGroupEntry.TABLE_NAME)
-                        .where(StudentGroupEntry.COL_IS_CACHED + " = ?")
-                        .whereArgs("1")
-                        .build())
-                .prepare()
-                .createObservable();
+        return Observable.never();
     }
 
     private Observable<List<Employee>> getEmployeeObservable() {
-        return mStorIOSQLite.get()
-                .listOfObjects(Employee.class)
-                .withQuery(Query.builder()
-                        .table(EmployeeEntry.TABLE_NAME)
-                        .where(EmployeeEntry.COL_IS_CACHED + " = ?")
-                        .whereArgs("1")
-                        .build())
-                .prepare()
-                .createObservable();
+        return Observable.never();
     }
 }

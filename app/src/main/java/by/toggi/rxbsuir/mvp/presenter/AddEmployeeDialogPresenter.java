@@ -1,15 +1,10 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResults;
-import com.pushtorefresh.storio.sqlite.queries.Query;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
 import by.toggi.rxbsuir.Utils;
-import by.toggi.rxbsuir.db.RxBsuirContract;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.AddEmployeeDialogView;
 import by.toggi.rxbsuir.rest.BsuirService;
@@ -18,28 +13,18 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class AddEmployeeDialogPresenter extends Presenter<AddEmployeeDialogView> {
 
     private final BsuirService mService;
-    private final StorIOSQLite mStorIOSQLite;
     private final Observable<List<Employee>> mEmployeeListObservable;
     private Subscription mSubscription;
     private List<String> mEmployeeStringList;
 
     @Inject
-    public AddEmployeeDialogPresenter(BsuirService service, StorIOSQLite storIOSQLite) {
+    public AddEmployeeDialogPresenter(BsuirService service) {
         mService = service;
-        mStorIOSQLite = storIOSQLite;
-        mEmployeeListObservable = mStorIOSQLite.get()
-                .listOfObjects(Employee.class)
-                .withQuery(Query.builder()
-                        .table(RxBsuirContract.EmployeeEntry.TABLE_NAME)
-                        .build())
-                .prepare()
-                .createObservable()
-                .observeOn(AndroidSchedulers.mainThread());
+        mEmployeeListObservable = Observable.never();
     }
 
     @Override
@@ -85,15 +70,7 @@ public class AddEmployeeDialogPresenter extends Presenter<AddEmployeeDialogView>
         mService.getEmployees()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(this::getEmployeePutObservable)
-                .subscribe(employeePutResults -> Timber.d("Insert count: %d", employeePutResults.numberOfInserts()), this::onError);
-    }
-
-    private Observable<PutResults<Employee>> getEmployeePutObservable(List<Employee> employeeList) {
-        return mStorIOSQLite.put()
-                .objects(employeeList)
-                .prepare()
-                .createObservable();
+                .subscribe(employeePutResults -> {}, this::onError);
     }
 
     private void onError(Throwable throwable) {

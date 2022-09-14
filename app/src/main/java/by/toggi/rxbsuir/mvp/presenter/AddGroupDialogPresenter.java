@@ -1,15 +1,10 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResults;
-import com.pushtorefresh.storio.sqlite.queries.Query;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
 import by.toggi.rxbsuir.Utils;
-import by.toggi.rxbsuir.db.RxBsuirContract;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
 import by.toggi.rxbsuir.rest.BsuirService;
@@ -24,22 +19,13 @@ public class AddGroupDialogPresenter extends Presenter<AddGroupDialogView> {
 
     private final Observable<List<StudentGroup>> mGroupListObservable;
     private final BsuirService mService;
-    private final StorIOSQLite mStorIOSQLite;
     private List<String> mStudentGroupStringList;
     private Subscription mSubscription;
 
     @Inject
-    public AddGroupDialogPresenter(BsuirService service, StorIOSQLite storIOSQLite) {
+    public AddGroupDialogPresenter(BsuirService service) {
         mService = service;
-        mStorIOSQLite = storIOSQLite;
-        mGroupListObservable = storIOSQLite.get()
-                .listOfObjects(StudentGroup.class)
-                .withQuery(Query.builder()
-                        .table(RxBsuirContract.StudentGroupEntry.TABLE_NAME)
-                        .build())
-                .prepare()
-                .createObservable()
-                .observeOn(AndroidSchedulers.mainThread());
+        mGroupListObservable = Observable.never();
     }
 
     @Override
@@ -88,15 +74,7 @@ public class AddGroupDialogPresenter extends Presenter<AddGroupDialogView> {
                 .doOnEach(notification -> Timber.d(notification.toString()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(this::getStudentGroupPutObservable)
-                .subscribe(studentGroupPutResults -> Timber.d("Insert count: %d", studentGroupPutResults.numberOfInserts()), this::onError);
-    }
-
-    private Observable<PutResults<StudentGroup>> getStudentGroupPutObservable(List<StudentGroup> studentGroupList) {
-        return mStorIOSQLite.put()
-                .objects(studentGroupList)
-                .prepare()
-                .createObservable();
+                .subscribe(studentGroupPutResults -> { }, this::onError);
     }
 
     private void onError(Throwable throwable) {

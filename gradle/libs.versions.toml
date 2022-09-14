@@ -16,7 +16,6 @@ rxbinding = "1.0.1"
 rxjava = "1.2.7"
 rxlifecycle = "1.0"
 rxpreferences = "1.0.2"
-storio = "1.2.1"
 timber = "4.5.1"
 
 [libraries]
@@ -52,9 +51,6 @@ rxjava = { module = "io.reactivex:rxjava", version.ref = "rxjava" }
 rxlifecycle = { module = "com.trello:rxlifecycle", version.ref = "rxlifecycle" }
 rxlifecycle-components = { module = "com.trello:rxlifecycle-components", version.ref = "rxlifecycle" }
 rxpreferences = { module = "com.f2prateek.rx.preferences:rx-preferences", version.ref = "rxpreferences" }
-storio = { module = "com.pushtorefresh.storio:sqlite", version.ref = "storio" }
-storio-annotations = { module = "com.pushtorefresh.storio:sqlite-annotations", version.ref = "storio" }
-storio-annotations-processor = { module = "com.pushtorefresh.storio:sqlite-annotations-processor", version.ref = "storio" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]

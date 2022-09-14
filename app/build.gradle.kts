@@ -74,10 +74,6 @@ dependencies {
     implementation(libs.preference)
     implementation(libs.preference.datetimepicker)
 
-    implementation(libs.storio)
-    implementation(libs.storio.annotations)
-    annotationProcessor(libs.storio.annotations.processor)
-
     implementation(libs.dagger)
     implementation(libs.dagger.android.legacy)
     implementation(libs.dagger.android.support.legacy)

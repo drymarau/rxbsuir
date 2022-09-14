@@ -1,23 +1,16 @@
 package by.toggi.rxbsuir.service;
 
-import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
-
 import android.app.IntentService;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 
 import com.f2prateek.rx.preferences.Preference;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.dagger.PerService;
-import by.toggi.rxbsuir.rest.model.StudentGroup;
 import dagger.android.AndroidInjection;
 import dagger.android.ContributesAndroidInjector;
 
@@ -32,7 +25,6 @@ public class ReplaceSyncIdService extends IntentService {
       mFavoriteIsGroupSchedulePreference;
   @Inject @Named(PreferenceHelper.SYNC_ID) Preference<String> mSyncIdPreference;
   @Inject @Named(PreferenceHelper.IS_GROUP_SCHEDULE) Preference<Boolean> mIsGroupSchedulePreference;
-  @Inject StorIOSQLite mStorIOSQLite;
 
   public ReplaceSyncIdService() {
     super(ReplaceSyncIdService.class.getSimpleName());
@@ -56,18 +48,6 @@ public class ReplaceSyncIdService extends IntentService {
       Preference<Boolean> isGroupSchedulePreference) {
     var b = isGroupSchedulePreference.get();
     if (b != null && b) {
-      List<StudentGroup> groups = mStorIOSQLite.get()
-          .listOfObjects(StudentGroup.class)
-          .withQuery(Query.builder()
-              .table(StudentGroupEntry.TABLE_NAME)
-              .where(StudentGroupEntry.COL_NAME + " = ?")
-              .whereArgs(syncIdPreference.get())
-              .build())
-          .prepare()
-          .executeAsBlocking();
-      if (groups.size() == 1) {
-        syncIdPreference.set(String.valueOf(groups.get(0).id));
-      }
     }
   }
 

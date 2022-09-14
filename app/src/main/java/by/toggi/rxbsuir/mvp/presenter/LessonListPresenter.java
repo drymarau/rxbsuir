@@ -4,9 +4,6 @@ import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
 import android.support.annotation.Nullable;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,11 +15,9 @@ import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
 import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 
 public class LessonListPresenter extends Presenter<LessonListView> {
 
-    private final StorIOSQLite mStorIOSQLite;
     private final Type mType;
     private SubgroupFilter mSubgroupFilter;
     private String mSyncId;
@@ -31,8 +26,7 @@ public class LessonListPresenter extends Presenter<LessonListView> {
     private Subscription mSubscription;
 
     @Inject
-    public LessonListPresenter(StorIOSQLite storIOSQLite, Type type, SubgroupFilter subgroupFilter) {
-        mStorIOSQLite = storIOSQLite;
+    public LessonListPresenter(Type type, SubgroupFilter subgroupFilter) {
         mType = type;
         mSubgroupFilter = subgroupFilter;
     }
@@ -113,15 +107,7 @@ public class LessonListPresenter extends Presenter<LessonListView> {
     }
 
     private Observable<List<Lesson>> getLessonListObservable(LessonEntry.Query query) {
-        return mSyncId == null ? Observable.empty() : mStorIOSQLite.get()
-                .listOfObjects(Lesson.class)
-                .withQuery(Query.builder()
-                        .table(LessonEntry.TABLE_NAME)
-                        .where(query.toString())
-                        .build())
-                .prepare()
-                .createObservable()
-                .observeOn(AndroidSchedulers.mainThread());
+        return Observable.never();
     }
 
     private void showLessonList(List<Lesson> lessonList) {

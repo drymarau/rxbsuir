@@ -1,7 +1,5 @@
 package by.toggi.rxbsuir.service;
 
-import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,8 +13,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 
 import com.f2prateek.rx.preferences.Preference;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +38,6 @@ public class LessonReminderService extends JobIntentService {
   private static final String LESSON_REMINDER_CHANNEL_ID = "lesson_reminder";
   private static final int LESSON_REMINDER_JOB_ID = 9230432;
 
-  @Inject StorIOSQLite mStorIOSQLite;
   @Inject @Named(PreferenceHelper.FAVORITE_SYNC_ID) Preference<String> mFavoriteSyncIdPreference;
   @Inject @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE) Preference<Boolean>
       mFavoriteIsGroupSchedule;
@@ -75,24 +70,6 @@ public class LessonReminderService extends JobIntentService {
     // Get lesson list for current day
     if (mFavoriteSyncIdPreference.get() != null) {
       var dayOfWeek = LocalDate.now().getDayOfWeek();
-      var query = Query.builder()
-          .table(LessonEntry.TABLE_NAME)
-          .where(LessonEntry.Query.builder(mFavoriteSyncIdPreference.get(),
-              mFavoriteIsGroupSchedule.get())
-              .weekDay(dayOfWeek)
-              .subgroupFilter(mSubgroupFilterPreference.get())
-              .weekNumber(Utils.getCurrentWeekNumber())
-              .build()
-              .toString())
-          .build();
-      var lessonList = mStorIOSQLite.get()
-          .listOfObjects(Lesson.class)
-          .withQuery(query)
-          .prepare()
-          .executeAsBlocking();
-      if (!lessonList.isEmpty()) {
-        showNotification(lessonList);
-      }
     }
   }
 
