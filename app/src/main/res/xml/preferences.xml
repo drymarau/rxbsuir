@@ -1,63 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <PreferenceCategory android:title="@string/category_appearance">
-    <ListPreference
-        android:defaultValue="@string/night_mode_default_value"
-        android:entries="@array/night_mode_entries"
-        android:entryValues="@array/night_mode_entry_values"
-        android:key="night_mode"
-        android:summary="%s"
-        android:title="@string/night_mode_title"/>
+    <PreferenceCategory android:title="@string/category_appearance">
+        <ListPreference
+            android:defaultValue="@string/night_mode_default_value"
+            android:entries="@array/night_mode_entries"
+            android:entryValues="@array/night_mode_entry_values"
+            android:key="night_mode"
+            android:summary="%s"
+            android:title="@string/night_mode_title" />
 
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="is_today_enabled"
-        android:title="@string/title_is_today_enabled"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="is_today_enabled"
+            android:title="@string/title_is_today_enabled" />
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="are_circles_colored"
-        android:title="@string/title_are_circles_colored"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="are_circles_colored"
+            android:title="@string/title_are_circles_colored" />
 
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="is_fam_enabled"
-        android:title="@string/title_is_fam_enabled"/>
-  </PreferenceCategory>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="is_fam_enabled"
+            android:title="@string/title_is_fam_enabled" />
+    </PreferenceCategory>
 
-  <PreferenceCategory android:title="@string/title_notifications">
-    <TimePickerPreference
-        android:defaultValue="07:00"
-        android:key="notification_time"
-        android:summary="%s"
-        android:title="@string/title_notification_time"/>
+    <PreferenceCategory android:title="@string/title_notifications">
+        <com.takisoft.preferencex.TimePickerPreference
+            android:defaultValue="07:00"
+            android:key="notification_time"
+            android:summary="%s"
+            android:title="@string/title_notification_time" />
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:dependency="notification_time"
-        android:key="notification_sound_enabled"
-        android:summaryOff="@string/summary_notification_sound_disabled"
-        android:summaryOn="@string/summary_notification_sound_enabled"
-        android:title="@string/title_notification_sound"/>
-  </PreferenceCategory>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="notification_time"
+            android:key="notification_sound_enabled"
+            android:summaryOff="@string/summary_notification_sound_disabled"
+            android:summaryOn="@string/summary_notification_sound_enabled"
+            android:title="@string/title_notification_sound" />
+    </PreferenceCategory>
 
-  <PreferenceCategory android:title="@string/category_about">
-    <Preference
-        android:key="rate_app"
-        android:selectable="true"
-        android:title="@string/title_pref_rate_app"/>
+    <PreferenceCategory android:title="@string/category_about">
+        <Preference
+            android:key="rate_app"
+            android:selectable="true"
+            android:title="@string/title_pref_rate_app" />
 
-    <Preference
-        android:key="privacy_policy"
-        android:selectable="true"
-        android:title="@string/title_pref_privacy_policy"/>
+        <Preference
+            android:key="privacy_policy"
+            android:selectable="true"
+            android:title="@string/title_pref_privacy_policy" />
 
-    <Preference
-        android:key="@string/key_pref_build_version"
-        android:selectable="false"
-        android:title="@string/title_build_version"/>
-  </PreferenceCategory>
+        <Preference
+            android:key="@string/key_pref_build_version"
+            android:selectable="false"
+            android:title="@string/title_build_version" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

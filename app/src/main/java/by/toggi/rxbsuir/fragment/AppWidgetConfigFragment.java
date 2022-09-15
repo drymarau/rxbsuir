@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
+import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,143 +31,154 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
 public class AppWidgetConfigFragment extends PreferenceFragmentCompat
-    implements AppWidgetConfigView, Preference.OnPreferenceClickListener {
+        implements AppWidgetConfigView, Preference.OnPreferenceClickListener {
 
-  @Inject AppWidgetConfigPresenter mPresenter;
-  @Inject com.f2prateek.rx.preferences.Preference.Adapter<SyncIdItem> mAdapter;
+    @Inject
+    AppWidgetConfigPresenter mPresenter;
+    @Inject
+    com.f2prateek.rx.preferences.Preference.Adapter<SyncIdItem> mAdapter;
 
-  private int mAppWidgetId;
-  private final List<SyncIdItem> mSyncIdItemList = new ArrayList<>();
-  private com.f2prateek.rx.preferences.Preference<SyncIdItem> mSyncIdItemPreference;
-  private com.f2prateek.rx.preferences.Preference<SubgroupFilter> mSubgroupFilterPreference;
-  private CompositeSubscription mSubscription;
+    private int mAppWidgetId;
+    private final List<SyncIdItem> mSyncIdItemList = new ArrayList<>();
+    private com.f2prateek.rx.preferences.Preference<SyncIdItem> mSyncIdItemPreference;
+    private com.f2prateek.rx.preferences.Preference<SubgroupFilter> mSubgroupFilterPreference;
+    private CompositeSubscription mSubscription;
 
-  public static AppWidgetConfigFragment newInstance(int id) {
-    var fragment = new AppWidgetConfigFragment();
-    var args = new Bundle();
-    args.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
-    fragment.setArguments(args);
-    return fragment;
-  }
-
-  @Override public void onAttach(Context context) {
-    AndroidSupportInjection.inject(this);
-    super.onAttach(context);
-  }
-
-  @Override
-  public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-    var args = getArguments();
-    if (args != null) {
-      mAppWidgetId =
-          args.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+    public static AppWidgetConfigFragment newInstance(int id) {
+        var fragment = new AppWidgetConfigFragment();
+        var args = new Bundle();
+        args.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    getPreferenceManager().setSharedPreferencesName(
-        PreferenceHelper.getWidgetPreferencesName(mAppWidgetId));
-
-    mSyncIdItemPreference =
-        PreferenceHelper.getSyncIdItemRxPreference(getActivity(), mAppWidgetId, mAdapter);
-    mSubgroupFilterPreference =
-        PreferenceHelper.getSubgroupFilterRxPreference(getActivity(), mAppWidgetId);
-
-    setPreferencesFromResource(R.xml.appwidget_preferences, rootKey);
-
-    findPreference(PreferenceHelper.WIDGET_SYNC_ID_ITEM).setOnPreferenceClickListener(this);
-    findPreference(PreferenceHelper.SUBGROUP_FILTER).setOnPreferenceClickListener(this);
-
-    mPresenter.attachView(this);
-    mPresenter.onCreate();
-  }
-
-  @Override public void onResume() {
-    super.onResume();
-    mSubscription = new CompositeSubscription(mSyncIdItemPreference.asObservable()
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(syncIdItem -> {
-          if (syncIdItem != null) {
-            findPreference(PreferenceHelper.WIDGET_SYNC_ID_ITEM).setSummary(syncIdItem.getTitle());
-          }
-        }), mSubgroupFilterPreference.asObservable()
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(subgroupFilter -> {
-          var preference = findPreference(PreferenceHelper.SUBGROUP_FILTER);
-          switch (subgroupFilter) {
-            case BOTH:
-              preference.setSummary(R.string.action_filter_both);
-              break;
-            case FIRST:
-              preference.setSummary(R.string.action_filter_first);
-              break;
-            case SECOND:
-              preference.setSummary(R.string.action_filter_second);
-              break;
-            case NONE:
-              preference.setSummary(R.string.action_filter_none);
-              break;
-          }
-        }));
-  }
-
-  @Override public void onPause() {
-    super.onPause();
-    Utils.unsubscribeComposite(mSubscription);
-  }
-
-  @Override public void onDestroy() {
-    super.onDestroy();
-    mPresenter.onDestroy();
-  }
-
-  @Override public boolean onPreferenceClick(Preference preference) {
-    switch (preference.getKey()) {
-      case PreferenceHelper.WIDGET_SYNC_ID_ITEM:
-        new MaterialDialog.Builder(getActivity()).title(R.string.widget_sync_id_item)
-            .items(getItems())
-            .itemsCallbackSingleChoice(findItemIndex(), (materialDialog, view, i, charSequence) -> {
-              var item = mSyncIdItemList.get(i);
-              mSyncIdItemPreference.set(item);
-              return true;
-            })
-            .build()
-            .show();
-        return true;
-      case PreferenceHelper.SUBGROUP_FILTER:
-        return true;
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
     }
-    return false;
-  }
 
-  @Override public void updateSyncIdList(List<SyncIdItem> syncIdItemList) {
-    mSyncIdItemList.clear();
-    mSyncIdItemList.addAll(syncIdItemList);
-    if (mSyncIdItemList.size() > 0) {
-      mSyncIdItemPreference.set(mSyncIdItemList.get(0));
-    } else {
-      Toast.makeText(getActivity(), R.string.widget_empty_synciditem, Toast.LENGTH_LONG).show();
-      getActivity().finish();
+    @Override
+    public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
+        var args = getArguments();
+        if (args != null) {
+            mAppWidgetId =
+                    args.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        }
+
+        getPreferenceManager().setSharedPreferencesName(
+                PreferenceHelper.getWidgetPreferencesName(mAppWidgetId));
+
+        mSyncIdItemPreference =
+                PreferenceHelper.getSyncIdItemRxPreference(getActivity(), mAppWidgetId, mAdapter);
+        mSubgroupFilterPreference =
+                PreferenceHelper.getSubgroupFilterRxPreference(getActivity(), mAppWidgetId);
+
+        setPreferencesFromResource(R.xml.appwidget_preferences, rootKey);
+
+        findPreference(PreferenceHelper.WIDGET_SYNC_ID_ITEM).setOnPreferenceClickListener(this);
+        findPreference(PreferenceHelper.SUBGROUP_FILTER).setOnPreferenceClickListener(this);
+
+        mPresenter.attachView(this);
+        mPresenter.onCreate();
     }
-  }
 
-  private CharSequence[] getItems() {
-    var size = mSyncIdItemList.size();
-    var charSequences = new CharSequence[size];
-    for (var i = 0; i < size; i++) {
-      charSequences[i] = mSyncIdItemList.get(i).toString();
+    @Override
+    public void onResume() {
+        super.onResume();
+        mSubscription = new CompositeSubscription(mSyncIdItemPreference.asObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(syncIdItem -> {
+                    if (syncIdItem != null) {
+                        findPreference(PreferenceHelper.WIDGET_SYNC_ID_ITEM).setSummary(syncIdItem.getTitle());
+                    }
+                }), mSubgroupFilterPreference.asObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subgroupFilter -> {
+                    var preference = findPreference(PreferenceHelper.SUBGROUP_FILTER);
+                    switch (subgroupFilter) {
+                        case BOTH:
+                            preference.setSummary(R.string.action_filter_both);
+                            break;
+                        case FIRST:
+                            preference.setSummary(R.string.action_filter_first);
+                            break;
+                        case SECOND:
+                            preference.setSummary(R.string.action_filter_second);
+                            break;
+                        case NONE:
+                            preference.setSummary(R.string.action_filter_none);
+                            break;
+                    }
+                }));
     }
-    return charSequences;
-  }
 
-  private int findItemIndex() {
-    return Observable.from(mSyncIdItemList)
-        .filter(syncIdItem -> syncIdItem.equals(mSyncIdItemPreference.get()))
-        .map(mSyncIdItemList::indexOf)
-        .toBlocking()
-        .firstOrDefault(0);
-  }
+    @Override
+    public void onPause() {
+        super.onPause();
+        Utils.unsubscribeComposite(mSubscription);
+    }
 
-  @dagger.Module public interface Module {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
+    }
 
-    @PerFragment @ContributesAndroidInjector AppWidgetConfigFragment contribute();
-  }
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        switch (preference.getKey()) {
+            case PreferenceHelper.WIDGET_SYNC_ID_ITEM:
+                new MaterialDialog.Builder(getActivity()).title(R.string.widget_sync_id_item)
+                        .items(getItems())
+                        .itemsCallbackSingleChoice(findItemIndex(), (materialDialog, view, i, charSequence) -> {
+                            var item = mSyncIdItemList.get(i);
+                            mSyncIdItemPreference.set(item);
+                            return true;
+                        })
+                        .build()
+                        .show();
+                return true;
+            case PreferenceHelper.SUBGROUP_FILTER:
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void updateSyncIdList(List<SyncIdItem> syncIdItemList) {
+        mSyncIdItemList.clear();
+        mSyncIdItemList.addAll(syncIdItemList);
+        if (mSyncIdItemList.size() > 0) {
+            mSyncIdItemPreference.set(mSyncIdItemList.get(0));
+        } else {
+            Toast.makeText(getActivity(), R.string.widget_empty_synciditem, Toast.LENGTH_LONG).show();
+            getActivity().finish();
+        }
+    }
+
+    private CharSequence[] getItems() {
+        var size = mSyncIdItemList.size();
+        var charSequences = new CharSequence[size];
+        for (var i = 0; i < size; i++) {
+            charSequences[i] = mSyncIdItemList.get(i).toString();
+        }
+        return charSequences;
+    }
+
+    private int findItemIndex() {
+        return Observable.from(mSyncIdItemList)
+                .filter(syncIdItem -> syncIdItem.equals(mSyncIdItemPreference.get()))
+                .map(mSyncIdItemList::indexOf)
+                .toBlocking()
+                .firstOrDefault(0);
+    }
+
+    @dagger.Module
+    public interface Module {
+
+        @PerFragment
+        @ContributesAndroidInjector
+        AppWidgetConfigFragment contribute();
+    }
 }

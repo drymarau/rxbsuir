@@ -3,11 +3,12 @@ package by.toggi.rxbsuir.fragment;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
-import com.takisoft.fix.support.v7.preference.TimePickerPreference;
+import com.takisoft.preferencex.TimePickerPreference;
 
 import java.time.LocalTime;
 
@@ -34,12 +35,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
   private Subscription mSubscription;
   private TimePickerPreference mNotificationTimePreference;
 
-  @Override public void onAttach(Context context) {
+  @Override public void onAttach(@NonNull Context context) {
     AndroidSupportInjection.inject(this);
     super.onAttach(context);
   }
 
-  @Override public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
+
+  @Override public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
     setPreferencesFromResource(R.xml.preferences, rootKey);
 
     findPreference("build_version").setSummary(BuildConfig.VERSION_NAME);
@@ -48,7 +50,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
     findPreference(PreferenceHelper.IS_TODAY_ENABLED).setOnPreferenceChangeListener(this);
     findPreference(PreferenceHelper.ARE_CIRCLES_COLORED).setOnPreferenceChangeListener(this);
     findPreference(PreferenceHelper.IS_FAM_ENABLED).setOnPreferenceChangeListener(this);
-    mNotificationTimePreference = (TimePickerPreference) findPreference("notification_time");
+    mNotificationTimePreference = findPreference("notification_time");
     mNotificationTimePreference.setEnabled(mFavoriteSyncIdPrerefence.get() != null);
   }
 

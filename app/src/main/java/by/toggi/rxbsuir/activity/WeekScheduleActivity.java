@@ -28,68 +28,84 @@ import dagger.android.HasAndroidInjector;
 
 public class WeekScheduleActivity extends ScheduleActivity implements HasAndroidInjector {
 
-  @Inject DispatchingAndroidInjector<Object> mAndroidInjector;
-  @Inject @Named(PreferenceHelper.IS_TODAY_ENABLED) Preference<Boolean> mIsTodayEnabledPreference;
+    @Inject
+    DispatchingAndroidInjector<Object> mAndroidInjector;
+    @Inject
+    @Named(PreferenceHelper.IS_TODAY_ENABLED)
+    Preference<Boolean> mIsTodayEnabledPreference;
 
-  private TabLayout mTabLayout;
-  private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    AndroidInjection.inject(this);
-    super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
+        super.onCreate(savedInstanceState);
 
-    mTabLayout = findViewById(R.id.tab_layout);
-    mViewPager = findViewById(R.id.view_pager);
+        setupTabs();
 
-    setupTabs();
-
-    if (savedInstanceState == null && !mIsTodayEnabledPreference.get()) {
-      showCurrentWeek();
+        if (savedInstanceState == null && !mIsTodayEnabledPreference.get()) {
+            showCurrentWeek();
+        }
     }
-  }
 
-  @Override protected int getLayoutRes() {
-    return R.layout.activity_week_schedule;
-  }
+    @Override
+    protected void findViews() {
+        mTabLayout = findViewById(R.id.tab_layout);
+        mViewPager = findViewById(R.id.view_pager);
+    }
 
-  @Override protected void showCurrentWeek() {
-    var weekNumber = Utils.getCurrentWeekNumber();
-    mViewPager.setCurrentItem(mIsTodayEnabledPreference.get() ? weekNumber + 1 : weekNumber - 1);
-  }
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_week_schedule;
+    }
 
-  private void setupTabs() {
-    mViewPager.setAdapter(new LessonListPagerAdapter(getSupportFragmentManager(),
-        getResources().getStringArray(
-            mIsTodayEnabledPreference.get() ? R.array.tabs_with_today : R.array.tabs)));
-    mViewPager.setOffscreenPageLimit(mViewPager.getAdapter().getCount());
-    mViewPager.setPageMargin(mPageMargin);
-    mTabLayout.setupWithViewPager(mViewPager);
-  }
+    @Override
+    protected void showCurrentWeek() {
+        var weekNumber = Utils.getCurrentWeekNumber();
+        mViewPager.setCurrentItem(mIsTodayEnabledPreference.get() ? weekNumber + 1 : weekNumber - 1);
+    }
 
-  @Override public void showError(SchedulePresenter.Error error) {
-    super.showError(error);
-    mViewPager.setVisibility(View.VISIBLE);
-  }
+    private void setupTabs() {
+        mViewPager.setAdapter(new LessonListPagerAdapter(getSupportFragmentManager(),
+                getResources().getStringArray(
+                        mIsTodayEnabledPreference.get() ? R.array.tabs_with_today : R.array.tabs)));
+        mViewPager.setOffscreenPageLimit(mViewPager.getAdapter().getCount());
+        mViewPager.setPageMargin(mPageMargin);
+        mTabLayout.setupWithViewPager(mViewPager);
+    }
 
-  @Override public void showLoading() {
-    super.showLoading();
-    mViewPager.setVisibility(View.GONE);
-  }
+    @Override
+    public void showError(SchedulePresenter.Error error) {
+        super.showError(error);
+        mViewPager.setVisibility(View.VISIBLE);
+    }
 
-  @Override public void showContent() {
-    super.showContent();
-    mViewPager.setVisibility(View.VISIBLE);
-  }
+    @Override
+    public void showLoading() {
+        super.showLoading();
+        mViewPager.setVisibility(View.GONE);
+    }
 
-  @Override public AndroidInjector<Object> androidInjector() {
-    return mAndroidInjector;
-  }
+    @Override
+    public void showContent() {
+        super.showContent();
+        mViewPager.setVisibility(View.VISIBLE);
+    }
 
-  @dagger.Module(includes = {
-      AddGroupDialogFragment.Module.class, AddEmployeeDialogFragment.Module.class,
-      LessonListFragment.Module.class
-  }) public interface Module {
+    @Override
+    public AndroidInjector<Object> androidInjector() {
+        return mAndroidInjector;
+    }
 
-    @PerActivity @ContributesAndroidInjector WeekScheduleActivity contribute();
-  }
+    @dagger.Module(includes = {
+            AddGroupDialogFragment.Module.class, AddEmployeeDialogFragment.Module.class,
+            LessonListFragment.Module.class
+    })
+    public interface Module {
+
+        @PerActivity
+        @ContributesAndroidInjector
+        WeekScheduleActivity contribute();
+    }
 }

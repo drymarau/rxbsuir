@@ -45,6 +45,7 @@ dependencies {
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.cardview)
+    implementation(libs.androidx.preference)
     implementation(libs.androidx.recyclerview)
 
     implementation(libs.material)
@@ -72,8 +73,8 @@ dependencies {
     implementation(libs.materialdialogs)
     implementation(libs.materialdialogs.commons)
 
-    implementation(libs.preference)
-    implementation(libs.preference.datetimepicker)
+    implementation(libs.preferencex)
+    implementation(libs.preferencex.datetimepicker)
 
     implementation(libs.dagger)
     implementation(libs.dagger.android)
