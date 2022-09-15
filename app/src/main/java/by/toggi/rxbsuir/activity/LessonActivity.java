@@ -15,8 +15,6 @@ import com.f2prateek.rx.preferences.Preference;
 import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
-import org.parceler.Parcels;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,13 +45,13 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
 
   public static void start(Context context, Lesson lesson) {
     Intent intent = new Intent(context, LessonActivity.class);
-    intent.putExtra(EXTRA_LESSON, Parcels.wrap(lesson));
+    intent.putExtra(EXTRA_LESSON, lesson);
     context.startActivity(intent);
   }
 
   public static void startFromWidget(Context context, Lesson lesson) {
     Intent intent = new Intent(context, LessonActivity.class);
-    intent.putExtra(EXTRA_LESSON, Parcels.wrap(lesson));
+    intent.putExtra(EXTRA_LESSON, lesson);
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(intent);
   }
@@ -68,7 +66,7 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
 
     setupToolbar();
 
-    Lesson lesson = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_LESSON));
+    Lesson lesson = getIntent().getParcelableExtra(EXTRA_LESSON);
 
     getDelegate().getSupportActionBar().setTitle(lesson.getSubjectWithSubgroup());
     getDelegate().getSupportActionBar().setSubtitle(lesson.getLessonType());

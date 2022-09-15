@@ -10,8 +10,6 @@ import android.widget.RemoteViewsService;
 
 import com.f2prateek.rx.preferences.Preference;
 
-import org.parceler.Parcels;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +102,7 @@ public class AppWidgetScheduleService extends RemoteViewsService {
     private void setupOnLessonClick(Lesson lesson, RemoteViews remoteViews) {
       var lessonActivityIntent = new Intent();
       var hackBundle = new Bundle();
-      hackBundle.putParcelable(AppWidgetScheduleProvider.EXTRA_LESSON, Parcels.wrap(lesson));
+      hackBundle.putParcelable(AppWidgetScheduleProvider.EXTRA_LESSON, lesson);
       lessonActivityIntent.putExtra(AppWidgetScheduleProvider.EXTRA_LESSON, hackBundle);
       remoteViews.setOnClickFillInIntent(R.id.item_lesson, lessonActivityIntent);
     }

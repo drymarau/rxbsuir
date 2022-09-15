@@ -81,9 +81,6 @@ dependencies {
     annotationProcessor(libs.dagger.compiler)
     annotationProcessor(libs.dagger.android.processor)
 
-    implementation(libs.parceler.api)
-    annotationProcessor(libs.parceler)
-
     testImplementation(libs.junit)
 
     testImplementation(libs.okhttp.mockwebserver)

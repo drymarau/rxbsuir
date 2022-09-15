@@ -18,8 +18,6 @@ import androidx.core.content.ContextCompat;
 
 import com.f2prateek.rx.preferences.Preference;
 
-import org.parceler.Parcels;
-
 import javax.inject.Inject;
 
 import by.toggi.rxbsuir.PreferenceHelper;
@@ -193,8 +191,7 @@ public class AppWidgetScheduleProvider extends AppWidgetProvider {
     switch (intent.getAction()) {
       case ACTION_LESSON_ACTIVITY:
         var hackBundle = intent.getBundleExtra(EXTRA_LESSON);
-        LessonActivity.startFromWidget(context,
-            Parcels.unwrap(hackBundle.getParcelable(EXTRA_LESSON)));
+        LessonActivity.startFromWidget(context, hackBundle.getParcelable(EXTRA_LESSON));
         break;
       case ACTION_ARROW_CLICK:
         PreferenceHelper.setIsTodayPreference(context, id,

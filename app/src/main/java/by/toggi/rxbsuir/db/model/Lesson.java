@@ -1,11 +1,10 @@
 package by.toggi.rxbsuir.db.model;
 
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import org.parceler.Parcel;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -18,8 +17,7 @@ import by.toggi.rxbsuir.rest.model.Employee;
 import by.toggi.rxbsuir.rest.model.Schedule;
 import timber.log.Timber;
 
-@Parcel
-public class Lesson {
+public class Lesson implements Parcelable {
 
     Long _id;
     String syncId;
@@ -247,4 +245,79 @@ public class Lesson {
     public void setNote(String note) {
         this.note = note;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel dest, int flags) {
+        dest.writeValue(this._id);
+        dest.writeString(this.syncId);
+        dest.writeStringList(this.auditoryList);
+        dest.writeList(this.employeeList);
+        dest.writeSerializable(this.lessonTimeStart);
+        dest.writeSerializable(this.lessonTimeEnd);
+        dest.writeString(this.lessonType);
+        dest.writeString(this.note);
+        dest.writeInt(this.numSubgroup);
+        dest.writeStringList(this.studentGroupList);
+        dest.writeString(this.subject);
+        dest.writeList(this.weekNumberList);
+        dest.writeInt(this.weekday == null ? -1 : this.weekday.ordinal());
+        dest.writeByte(this.isGroupSchedule ? (byte) 1 : (byte) 0);
+    }
+
+    public void readFromParcel(android.os.Parcel source) {
+        this._id = (Long) source.readValue(Long.class.getClassLoader());
+        this.syncId = source.readString();
+        this.auditoryList = source.createStringArrayList();
+        this.employeeList = new ArrayList<Employee>();
+        source.readList(this.employeeList, Employee.class.getClassLoader());
+        this.lessonTimeStart = (LocalTime) source.readSerializable();
+        this.lessonTimeEnd = (LocalTime) source.readSerializable();
+        this.lessonType = source.readString();
+        this.note = source.readString();
+        this.numSubgroup = source.readInt();
+        this.studentGroupList = source.createStringArrayList();
+        this.subject = source.readString();
+        this.weekNumberList = new ArrayList<Integer>();
+        source.readList(this.weekNumberList, Integer.class.getClassLoader());
+        int tmpWeekday = source.readInt();
+        this.weekday = tmpWeekday == -1 ? null : DayOfWeek.values()[tmpWeekday];
+        this.isGroupSchedule = source.readByte() != 0;
+    }
+
+    protected Lesson(android.os.Parcel in) {
+        this._id = (Long) in.readValue(Long.class.getClassLoader());
+        this.syncId = in.readString();
+        this.auditoryList = in.createStringArrayList();
+        this.employeeList = new ArrayList<>();
+        in.readList(this.employeeList, Employee.class.getClassLoader());
+        this.lessonTimeStart = (LocalTime) in.readSerializable();
+        this.lessonTimeEnd = (LocalTime) in.readSerializable();
+        this.lessonType = in.readString();
+        this.note = in.readString();
+        this.numSubgroup = in.readInt();
+        this.studentGroupList = in.createStringArrayList();
+        this.subject = in.readString();
+        this.weekNumberList = new ArrayList<>();
+        in.readList(this.weekNumberList, Integer.class.getClassLoader());
+        int tmpWeekday = in.readInt();
+        this.weekday = tmpWeekday == -1 ? null : DayOfWeek.values()[tmpWeekday];
+        this.isGroupSchedule = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<Lesson> CREATOR = new Parcelable.Creator<Lesson>() {
+        @Override
+        public Lesson createFromParcel(android.os.Parcel source) {
+            return new Lesson(source);
+        }
+
+        @Override
+        public Lesson[] newArray(int size) {
+            return new Lesson[size];
+        }
+    };
 }
