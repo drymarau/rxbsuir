@@ -6,6 +6,9 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.db.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
@@ -24,6 +27,7 @@ import timber.log.Timber;
 /**
  * The type Schedule presenter.
  */
+@Singleton
 public class SchedulePresenter extends Presenter<ScheduleView> {
 
     private final BsuirService mService;
@@ -35,6 +39,7 @@ public class SchedulePresenter extends Presenter<ScheduleView> {
      *
      * @param service the bsuirService
      */
+    @Inject
     public SchedulePresenter(BsuirService service) {
         mService = service;
     }

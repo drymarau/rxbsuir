@@ -2,6 +2,9 @@ package by.toggi.rxbsuir.mvp.presenter;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
@@ -12,12 +15,14 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
+@Singleton
 public class NavigationDrawerPresenter extends Presenter<NavigationDrawerView> {
 
     private final Observable<List<StudentGroup>> mStudentGroupObservable;
     private final Observable<List<Employee>> mEmployeeListObservable;
     private CompositeSubscription mCompositeSubscription;
 
+    @Inject
     public NavigationDrawerPresenter() {
         mStudentGroupObservable = getGroupObservable();
         mEmployeeListObservable = getEmployeeObservable();

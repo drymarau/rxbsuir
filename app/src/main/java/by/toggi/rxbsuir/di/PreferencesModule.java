@@ -56,8 +56,7 @@ public class PreferencesModule {
     @Provides
     @Singleton
     @Named(PreferenceHelper.SYNC_ID)
-    Preference<String> provideRxSyncId(
-            RxSharedPreferences preferences) {
+    Preference<String> provideRxSyncId(RxSharedPreferences preferences) {
         return preferences.getString(PreferenceHelper.SYNC_ID, null);
     }
 
@@ -85,8 +84,7 @@ public class PreferencesModule {
     @Provides
     @Singleton
     Preference<SubgroupFilter> provideRxSubgroupFilter(RxSharedPreferences preferences) {
-        return preferences.getEnum(PreferenceHelper.SUBGROUP_FILTER, SubgroupFilter.BOTH,
-                SubgroupFilter.class);
+        return preferences.getEnum(PreferenceHelper.SUBGROUP_FILTER, SubgroupFilter.BOTH, SubgroupFilter.class);
     }
 
     @Provides
@@ -113,8 +111,7 @@ public class PreferencesModule {
     @Provides
     @Singleton
     Preference<LocalTime> provideRxNotificationTime(RxSharedPreferences preferences) {
-        return preferences.getObject(PreferenceHelper.NOTIFICATION_TIME, LocalTime.of(7, 0),
-                LocalTimeAdapter.INSTANCE);
+        return preferences.getObject(PreferenceHelper.NOTIFICATION_TIME, LocalTime.of(7, 0), LocalTimeAdapter.INSTANCE);
     }
 
     @Provides

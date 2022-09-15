@@ -18,6 +18,9 @@ public class OkHttpClientModule {
     @Provides
     @Singleton
     OkHttpClient provide(@Named("logging") Interceptor interceptor, Cache cache) {
-        return new OkHttpClient.Builder().cache(cache).addInterceptor(interceptor).build();
+        return new OkHttpClient.Builder()
+                .cache(cache)
+                .addInterceptor(interceptor)
+                .build();
     }
 }
