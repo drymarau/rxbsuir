@@ -4,9 +4,10 @@ import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.trello.rxlifecycle.android.RxLifecycleAndroid;

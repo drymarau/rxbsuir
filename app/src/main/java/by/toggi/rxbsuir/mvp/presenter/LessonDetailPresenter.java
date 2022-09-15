@@ -1,6 +1,6 @@
 package by.toggi.rxbsuir.mvp.presenter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import javax.inject.Inject;
 

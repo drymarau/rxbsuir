@@ -2,12 +2,16 @@ package by.toggi.rxbsuir;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatDelegate;
-import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
+
 import java.io.File;
+
+import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 
 public class PreferenceHelper {
 

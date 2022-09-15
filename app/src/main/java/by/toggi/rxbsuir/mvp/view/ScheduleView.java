@@ -1,8 +1,8 @@
 package by.toggi.rxbsuir.mvp.view;
 
-import by.toggi.rxbsuir.mvp.View;
-
 import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
+
+import by.toggi.rxbsuir.mvp.View;
 
 public interface ScheduleView extends View {
 

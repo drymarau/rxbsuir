@@ -1,9 +1,10 @@
 package by.toggi.rxbsuir.rest;
 
+import java.util.List;
+
 import by.toggi.rxbsuir.rest.model.Employee;
 import by.toggi.rxbsuir.rest.model.ScheduleJsonModels;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
-import java.util.List;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;

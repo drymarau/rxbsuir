@@ -22,7 +22,7 @@ android {
 
         resourceConfigurations += setOf("en", "ru")
 
-        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -36,7 +36,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     testOptions {
-        execution = "ANDROID_TEST_ORCHESTRATOR"
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 }
 

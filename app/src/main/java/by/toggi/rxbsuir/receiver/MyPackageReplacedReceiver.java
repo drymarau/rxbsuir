@@ -4,8 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatDelegate;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.service.ReplaceSyncIdService;

@@ -1,7 +1,8 @@
 package by.toggi.rxbsuir.dagger.module;
 
-import by.toggi.rxbsuir.dagger.PerApp;
 import com.google.gson.Gson;
+
+import by.toggi.rxbsuir.dagger.PerApp;
 import dagger.Module;
 import dagger.Provides;
 

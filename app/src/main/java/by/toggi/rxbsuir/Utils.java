@@ -11,9 +11,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

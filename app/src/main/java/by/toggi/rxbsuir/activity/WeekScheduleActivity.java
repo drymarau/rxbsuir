@@ -1,11 +1,12 @@
 package by.toggi.rxbsuir.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import androidx.viewpager.widget.ViewPager;
+
 import com.f2prateek.rx.preferences.Preference;
+import com.google.android.material.tabs.TabLayout;
 
 import javax.inject.Inject;
 import javax.inject.Named;

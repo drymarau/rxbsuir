@@ -2,7 +2,7 @@ package by.toggi.rxbsuir.mvp.presenter;
 
 import static by.toggi.rxbsuir.db.RxBsuirContract.LessonEntry;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import java.time.LocalDate;
 import java.util.List;

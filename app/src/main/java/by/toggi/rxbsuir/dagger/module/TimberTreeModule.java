@@ -1,9 +1,10 @@
 package by.toggi.rxbsuir.dagger.module;
 
+import javax.inject.Named;
+
 import by.toggi.rxbsuir.dagger.PerApp;
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Named;
 import timber.log.Timber;
 
 @Module public class TimberTreeModule {

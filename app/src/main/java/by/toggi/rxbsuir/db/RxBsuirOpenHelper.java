@@ -7,7 +7,8 @@ import static by.toggi.rxbsuir.db.RxBsuirContract.StudentGroupEntry;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 public class RxBsuirOpenHelper extends SQLiteOpenHelper {
 

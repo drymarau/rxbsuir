@@ -1,7 +1,8 @@
 package by.toggi.rxbsuir;
 
 import android.app.Application;
-import android.support.v7.app.AppCompatDelegate;
+
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.f2prateek.rx.preferences.Preference;
 

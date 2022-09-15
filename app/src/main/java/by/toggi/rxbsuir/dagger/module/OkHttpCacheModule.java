@@ -1,10 +1,12 @@
 package by.toggi.rxbsuir.dagger.module;
 
 import android.app.Application;
+
+import java.io.File;
+
 import by.toggi.rxbsuir.dagger.PerApp;
 import dagger.Module;
 import dagger.Provides;
-import java.io.File;
 import okhttp3.Cache;
 
 @SuppressWarnings("ResultOfMethodCallIgnored") @Module public class OkHttpCacheModule {

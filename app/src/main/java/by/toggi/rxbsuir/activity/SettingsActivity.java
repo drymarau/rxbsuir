@@ -1,7 +1,8 @@
 package by.toggi.rxbsuir.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.trello.rxlifecycle.android.RxLifecycleAndroid;

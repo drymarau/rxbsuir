@@ -1,13 +1,16 @@
 package by.toggi.rxbsuir.night_mode;
 
-import android.support.v7.app.AppCompatDelegate;
-import by.toggi.rxbsuir.PreferenceHelper;
-import by.toggi.rxbsuir.dagger.PerApp;
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
+
+import javax.inject.Named;
+
+import by.toggi.rxbsuir.PreferenceHelper;
+import by.toggi.rxbsuir.dagger.PerApp;
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Named;
 
 @Module public class NightModePreferenceModule {
 
