@@ -2,6 +2,7 @@
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 // Manifest version information
@@ -40,6 +41,10 @@ android {
     }
 }
 
+hilt {
+    enableAggregatingTask = true
+}
+
 dependencies {
     coreLibraryDesugaring(libs.android.desugar)
 
@@ -76,11 +81,8 @@ dependencies {
     implementation(libs.preferencex)
     implementation(libs.preferencex.datetimepicker)
 
-    implementation(libs.dagger)
-    implementation(libs.dagger.android)
-    implementation(libs.dagger.android.support)
-    annotationProcessor(libs.dagger.compiler)
-    annotationProcessor(libs.dagger.android.processor)
+    implementation(libs.dagger.hilt.android.runtime)
+    annotationProcessor(libs.dagger.hilt.compiler)
 
     testImplementation(libs.junit)
 

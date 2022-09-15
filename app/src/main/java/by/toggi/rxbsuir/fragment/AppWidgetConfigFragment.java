@@ -1,7 +1,6 @@
 package by.toggi.rxbsuir.fragment;
 
 import android.appwidget.AppWidgetManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -20,16 +19,15 @@ import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
 import by.toggi.rxbsuir.Utils;
-import by.toggi.rxbsuir.dagger.PerFragment;
 import by.toggi.rxbsuir.mvp.presenter.AppWidgetConfigPresenter;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.AppWidgetConfigView;
-import dagger.android.ContributesAndroidInjector;
-import dagger.android.support.AndroidSupportInjection;
+import dagger.hilt.android.AndroidEntryPoint;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
+@AndroidEntryPoint
 public class AppWidgetConfigFragment extends PreferenceFragmentCompat
         implements AppWidgetConfigView, Preference.OnPreferenceClickListener {
 
@@ -50,12 +48,6 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
         args.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
-        super.onAttach(context);
     }
 
     @Override
@@ -172,13 +164,5 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
                 .map(mSyncIdItemList::indexOf)
                 .toBlocking()
                 .firstOrDefault(0);
-    }
-
-    @dagger.Module
-    public interface Module {
-
-        @PerFragment
-        @ContributesAndroidInjector
-        AppWidgetConfigFragment contribute();
     }
 }

@@ -15,21 +15,12 @@ import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.adapter.LessonListPagerAdapter;
-import by.toggi.rxbsuir.dagger.PerActivity;
-import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
-import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
-import by.toggi.rxbsuir.fragment.LessonListFragment;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.ContributesAndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasAndroidInjector;
+import dagger.hilt.android.AndroidEntryPoint;
 
-public class WeekScheduleActivity extends ScheduleActivity implements HasAndroidInjector {
+@AndroidEntryPoint
+public class WeekScheduleActivity extends ScheduleActivity {
 
-    @Inject
-    DispatchingAndroidInjector<Object> mAndroidInjector;
     @Inject
     @Named(PreferenceHelper.IS_TODAY_ENABLED)
     Preference<Boolean> mIsTodayEnabledPreference;
@@ -39,7 +30,6 @@ public class WeekScheduleActivity extends ScheduleActivity implements HasAndroid
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         setupTabs();
@@ -91,21 +81,5 @@ public class WeekScheduleActivity extends ScheduleActivity implements HasAndroid
     public void showContent() {
         super.showContent();
         mViewPager.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public AndroidInjector<Object> androidInjector() {
-        return mAndroidInjector;
-    }
-
-    @dagger.Module(includes = {
-            AddGroupDialogFragment.Module.class, AddEmployeeDialogFragment.Module.class,
-            LessonListFragment.Module.class
-    })
-    public interface Module {
-
-        @PerActivity
-        @ContributesAndroidInjector
-        WeekScheduleActivity contribute();
     }
 }

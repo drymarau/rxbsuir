@@ -13,45 +13,33 @@ import javax.inject.Named;
 
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.dagger.PerActivity;
 import by.toggi.rxbsuir.fragment.SettingsFragment;
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.ContributesAndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasAndroidInjector;
+import dagger.hilt.android.AndroidEntryPoint;
 
-public class SettingsActivity extends RxAppCompatActivity implements HasAndroidInjector {
+@AndroidEntryPoint
+public class SettingsActivity extends RxAppCompatActivity {
 
-  @Inject DispatchingAndroidInjector<Object> mAndroidInjector;
-  @Inject @Named(PreferenceHelper.NIGHT_MODE) Preference<String> mNightModePreference;
+    @Inject
+    @Named(PreferenceHelper.NIGHT_MODE)
+    Preference<String> mNightModePreference;
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    AndroidInjection.inject(this);
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_settings);
-    Toolbar mToolbar = findViewById(R.id.toolbar);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
-    setSupportActionBar(mToolbar);
-    getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    mToolbar.setNavigationOnClickListener(v -> onBackPressed());
+        setSupportActionBar(toolbar);
+        getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-    getSupportFragmentManager().beginTransaction()
-        .replace(R.id.container_fragment_settings, new SettingsFragment())
-        .commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_fragment_settings, new SettingsFragment())
+                .commit();
 
-    mNightModePreference.asObservable()
-        .skip(1)
-        .compose(RxLifecycleAndroid.bindActivity(lifecycle()))
-        .subscribe(mode -> recreate());
-  }
-
-  @Override public AndroidInjector<Object> androidInjector() {
-    return mAndroidInjector;
-  }
-
-  @dagger.Module(includes = SettingsFragment.Module.class) public interface Module {
-
-    @PerActivity @ContributesAndroidInjector SettingsActivity contribute();
-  }
+        mNightModePreference.asObservable()
+                .skip(1)
+                .compose(RxLifecycleAndroid.bindActivity(lifecycle()))
+                .subscribe(mode -> recreate());
+    }
 }
