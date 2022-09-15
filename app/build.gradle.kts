@@ -11,12 +11,12 @@ val versionPatch = 5
 val versionBuild = 0
 
 android {
-    compileSdk = 30
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "by.toggi.rxbsuir"
         minSdk = 21
-        targetSdk = 28
+        targetSdk = 33
         versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
 
@@ -43,10 +43,11 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.android.desugar)
 
-    implementation(libs.android.support.appcompat)
-    implementation(libs.android.support.cardview)
-    implementation(libs.android.support.design)
-    implementation(libs.android.support.recyclerview)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.recyclerview)
+
+    implementation(libs.material)
 
     implementation(libs.timber)
 
@@ -75,8 +76,8 @@ dependencies {
     implementation(libs.preference.datetimepicker)
 
     implementation(libs.dagger)
-    implementation(libs.dagger.android.legacy)
-    implementation(libs.dagger.android.support.legacy)
+    implementation(libs.dagger.android)
+    implementation(libs.dagger.android.support)
     annotationProcessor(libs.dagger.compiler)
     annotationProcessor(libs.dagger.android.processor)
 

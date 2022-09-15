@@ -1,10 +1,13 @@
 [versions]
 android = "7.2.2"
 android-desugar = "1.1.8"
-android-support = "28.0.0"
+androidx-appcompat = "1.5.1"
+androidx-cardview = "1.0.0"
+androidx-recyclerview = "1.2.1"
 assertj = "2.6.0"
 dagger = "2.43.2"
 junit = "4.12"
+material = "1.6.1"
 materialdialogs = "0.9.6.0"
 mockito = "3.12.4"
 okhttp = "3.9.0"
@@ -20,17 +23,19 @@ timber = "4.5.1"
 
 [libraries]
 android-desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "android-desugar" }
-android-support-appcompat = { module = "com.android.support:appcompat-v7", version.ref = "android-support" }
-android-support-cardview = { module = "com.android.support:cardview-v7", version.ref = "android-support" }
-android-support-design = { module = "com.android.support:design", version.ref = "android-support" }
-android-support-recyclerview = { module = "com.android.support:recyclerview-v7", version.ref = "android-support" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "androidx-cardview" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx-recyclerview" }
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 dagger-android-processor = { module = "com.google.dagger:dagger-android-processor", version.ref = "dagger" }
 dagger-android-legacy = { module = "com.google.dagger:dagger-android-legacy", version.ref = "dagger" }
 dagger-android-support-legacy = { module = "com.google.dagger:dagger-android-support-legacy", version.ref = "dagger" }
+dagger-android = { module = "com.google.dagger:dagger-android", version.ref = "dagger" }
+dagger-android-support = { module = "com.google.dagger:dagger-android-support", version.ref = "dagger" }
 junit = { module = "junit:junit", version.ref = "junit" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
 materialdialogs = { module = "com.afollestad.material-dialogs:core", version.ref = "materialdialogs" }
 materialdialogs-commons = { module = "com.afollestad.material-dialogs:commons", version.ref = "materialdialogs" }
 mockito = { module = "org.mockito:mockito-core", version.ref = "mockito" }
