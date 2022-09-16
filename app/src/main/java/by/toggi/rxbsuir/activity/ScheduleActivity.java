@@ -21,25 +21,20 @@ import android.widget.RelativeLayout;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.time.LocalTime;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -57,7 +52,6 @@ import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
@@ -136,8 +130,6 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
             ScheduleActivity.this.supportInvalidateOptionsMenu();
         }
     };
-    private Subscription mSearchViewSubscription;
-    private LocalBroadcastManager mLocalBroadcastManager;
     private ValueAnimator mFabValueAnimator;
     private ValueAnimator mFamBackgroundValueAnimator;
 
@@ -199,8 +191,6 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
         } else {
             showContent();
         }
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
-
         initializeAnimations();
 
         mNightModePreference.asObservable()
@@ -226,7 +216,6 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        Utils.unsubscribe(mSearchViewSubscription);
         try {
             unregisterReceiver(mReceiver);
         } catch (IllegalArgumentException e) {
@@ -284,31 +273,6 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule_activity, menu);
-        var item = menu.findItem(R.id.action_search);
-        var searchView = (SearchView) item.getActionView();
-        MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                mSearchViewSubscription = RxSearchView.queryTextChanges(searchView)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .debounce(500, TimeUnit.MILLISECONDS)
-                        .subscribe(charSequence -> {
-                            Intent queryIntent = new Intent(ACTION_SEARCH_QUERY);
-                            queryIntent.putExtra(EXTRA_SEARCH_QUERY, charSequence);
-                            mLocalBroadcastManager.sendBroadcast(queryIntent);
-                        });
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                Utils.unsubscribe(mSearchViewSubscription);
-                var queryIntent = new Intent(ACTION_SEARCH_QUERY);
-                queryIntent.putExtra(EXTRA_SEARCH_QUERY, "");
-                mLocalBroadcastManager.sendBroadcast(queryIntent);
-                return true;
-            }
-        });
         return true;
     }
 

@@ -11,7 +11,6 @@ okhttp = "3.9.0"
 preferencex = "1.1.0"
 retrofit = "2.3.0"
 rxandroid = "1.2.1"
-rxbinding = "1.0.1"
 rxjava = "1.2.7"
 rxlifecycle = "1.0"
 rxpreferences = "1.0.2"
@@ -34,8 +33,6 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit-adapter-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava", version.ref = "retrofit" }
 retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 rxandroid = { module = "io.reactivex:rxandroid", version.ref = "rxandroid" }
-rxbinding = { module = "com.jakewharton.rxbinding:rxbinding", version.ref = "rxbinding" }
-rxbinding-appcompat = { module = "com.jakewharton.rxbinding:rxbinding-appcompat-v7", version.ref = "rxbinding" }
 rxjava = { module = "io.reactivex:rxjava", version.ref = "rxjava" }
 rxlifecycle = { module = "com.trello:rxlifecycle", version.ref = "rxlifecycle" }
 rxlifecycle-components = { module = "com.trello:rxlifecycle-components", version.ref = "rxlifecycle" }

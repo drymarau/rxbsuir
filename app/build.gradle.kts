@@ -57,9 +57,6 @@ dependencies {
 
     implementation(libs.timber)
 
-    implementation(libs.rxbinding)
-    implementation(libs.rxbinding.appcompat)
-
     implementation(libs.okhttp)
     implementation(libs.okhttp.logginginterceptor)
 
