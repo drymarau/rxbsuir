@@ -8,9 +8,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
     }
 
     @Override
-    public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
+    public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         var args = getArguments();
         if (args != null) {
             mAppWidgetId =

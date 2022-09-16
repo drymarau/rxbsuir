@@ -69,9 +69,6 @@ dependencies {
 
     implementation(libs.rxpreferences)
 
-    implementation(libs.preferencex)
-    implementation(libs.preferencex.datetimepicker)
-
     implementation(libs.dagger.hilt.android.runtime)
     annotationProcessor(libs.dagger.hilt.compiler)
 }

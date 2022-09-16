@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.takisoft.preferencex.TimePickerPreference;
+import com.google.android.material.timepicker.MaterialTimePicker;
 
 import java.time.LocalTime;
 
@@ -19,7 +19,6 @@ import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
 import dagger.hilt.android.AndroidEntryPoint;
 import rx.Subscription;
-import timber.log.Timber;
 
 @AndroidEntryPoint
 public class SettingsFragment extends PreferenceFragmentCompat
@@ -32,7 +31,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
     com.f2prateek.rx.preferences.Preference<String> mFavoriteSyncIdPrerefence;
 
     private Subscription mSubscription;
-    private TimePickerPreference mNotificationTimePreference;
+    private Preference mNotificationTimePreference;
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
@@ -46,15 +45,24 @@ public class SettingsFragment extends PreferenceFragmentCompat
         findPreference(PreferenceHelper.IS_FAM_ENABLED).setOnPreferenceChangeListener(this);
         mNotificationTimePreference = findPreference("notification_time");
         mNotificationTimePreference.setEnabled(mFavoriteSyncIdPrerefence.get() != null);
+        mNotificationTimePreference.setOnPreferenceClickListener(preference -> {
+            var localTime = mLocalTimePreference.get();
+            var picker = new MaterialTimePicker.Builder()
+                    .setHour(localTime.getHour())
+                    .setMinute(localTime.getMinute())
+                    .build();
+            picker.addOnPositiveButtonClickListener(v -> mLocalTimePreference.set(LocalTime.of(picker.getHour(), picker.getMinute())));
+            picker.show(getChildFragmentManager(), null);
+            return true;
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mSubscription = mLocalTimePreference.asObservable().subscribe(localTime -> {
-            Timber.w(localTime.toString());
             if (mNotificationTimePreference != null) {
-                mNotificationTimePreference.setTime(localTime.getHour(), localTime.getMinute());
+                mNotificationTimePreference.setSummary(localTime.toString());
             }
             if (mFavoriteSyncIdPrerefence.get() != null) {
                 Utils.setNotificationAlarm(getActivity(), localTime);

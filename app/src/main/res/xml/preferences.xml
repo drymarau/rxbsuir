@@ -27,7 +27,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/title_notifications">
-        <com.takisoft.preferencex.TimePickerPreference
+        <Preference
             android:defaultValue="07:00"
             android:key="notification_time"
             android:summary="%s"
