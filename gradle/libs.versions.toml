@@ -5,12 +5,9 @@ androidx-appcompat = "1.5.1"
 androidx-cardview = "1.0.0"
 androidx-preference = "1.1.1"
 androidx-recyclerview = "1.2.1"
-assertj = "2.6.0"
 dagger = "2.43.2"
-junit = "4.12"
 material = "1.6.1"
 materialdialogs = "0.9.6.0"
-mockito = "3.12.4"
 okhttp = "3.9.0"
 preferencex = "1.1.0"
 retrofit = "2.3.0"
@@ -27,17 +24,13 @@ androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "a
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "androidx-cardview" }
 androidx-preference = { module = "androidx.preference:preference", version.ref = "androidx-preference" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx-recyclerview" }
-assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 dagger-hilt-android-runtime = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
-junit = { module = "junit:junit", version.ref = "junit" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 materialdialogs = { module = "com.afollestad.material-dialogs:core", version.ref = "materialdialogs" }
 materialdialogs-commons = { module = "com.afollestad.material-dialogs:commons", version.ref = "materialdialogs" }
-mockito = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-logginginterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
-okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp" }
 preferencex = { module = "com.takisoft.preferencex:preferencex", version.ref = "preferencex" }
 preferencex-datetimepicker = { module = "com.takisoft.preferencex:preferencex-datetimepicker", version.ref = "preferencex" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

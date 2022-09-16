@@ -83,12 +83,4 @@ dependencies {
 
     implementation(libs.dagger.hilt.android.runtime)
     annotationProcessor(libs.dagger.hilt.compiler)
-
-    testImplementation(libs.junit)
-
-    testImplementation(libs.okhttp.mockwebserver)
-
-    testImplementation(libs.mockito)
-
-    testImplementation(libs.assertj)
 }
