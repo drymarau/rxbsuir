@@ -75,9 +75,6 @@ dependencies {
 
     implementation(libs.rxpreferences)
 
-    implementation(libs.materialdialogs)
-    implementation(libs.materialdialogs.commons)
-
     implementation(libs.preferencex)
     implementation(libs.preferencex.datetimepicker)
 

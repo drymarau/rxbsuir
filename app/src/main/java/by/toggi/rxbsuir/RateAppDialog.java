@@ -3,7 +3,9 @@ package by.toggi.rxbsuir;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.time.LocalDate;
 
@@ -70,30 +72,18 @@ public class RateAppDialog {
         }
     }
 
-    private MaterialDialog getDialog() {
-        return new MaterialDialog.Builder(mContext)
-                .title(R.string.rad_title)
-                .content(R.string.rad_content)
-                .positiveText(R.string.rad_positive)
-                .negativeText(R.string.rad_negative)
-                .neutralText(R.string.rad_neutral)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        Utils.openPlayStorePage(mContext);
-                        disableDialog();
-                    }
-
-                    @Override public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        disableDialog();
-                    }
-
-                    @Override public void onNeutral(MaterialDialog dialog) {
-                        super.onNeutral(dialog);
-                        putDate(LocalDate.now());
-                    }
-                }).dismissListener(dialog -> putDate(LocalDate.now())).build();
+    private AlertDialog getDialog() {
+        return new MaterialAlertDialogBuilder(mContext)
+                .setTitle(R.string.rad_title)
+                .setMessage(R.string.rad_content)
+                .setPositiveButton(R.string.rad_positive, (dialog, which) -> {
+                    Utils.openPlayStorePage(mContext);
+                    disableDialog();
+                })
+                .setNegativeButton(R.string.rad_negative, (dialog, which) -> disableDialog())
+                .setNeutralButton(R.string.rad_neutral, (dialog, which) -> putDate(LocalDate.now()))
+                .setOnDismissListener(dialog -> putDate(LocalDate.now()))
+                .create();
     }
 
     private void disableDialog() {

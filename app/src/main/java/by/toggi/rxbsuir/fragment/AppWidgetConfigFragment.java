@@ -2,12 +2,14 @@ package by.toggi.rxbsuir.fragment;
 
 import android.appwidget.AppWidgetManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import java.util.ArrayList;
@@ -121,14 +123,20 @@ public class AppWidgetConfigFragment extends PreferenceFragmentCompat
     public boolean onPreferenceClick(Preference preference) {
         switch (preference.getKey()) {
             case PreferenceHelper.WIDGET_SYNC_ID_ITEM:
-                new MaterialDialog.Builder(getActivity()).title(R.string.widget_sync_id_item)
-                        .items(getItems())
-                        .itemsCallbackSingleChoice(findItemIndex(), (materialDialog, view, i, charSequence) -> {
-                            var item = mSyncIdItemList.get(i);
-                            mSyncIdItemPreference.set(item);
-                            return true;
+                new MaterialAlertDialogBuilder(getContext())
+                        .setTitle(R.string.widget_sync_id_item)
+                        .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                var item = mSyncIdItemList.get(position);
+                                mSyncIdItemPreference.set(item);
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                            }
                         })
-                        .build()
+                        .setSingleChoiceItems(getItems(), findItemIndex(), null)
                         .show();
                 return true;
             case PreferenceHelper.SUBGROUP_FILTER:

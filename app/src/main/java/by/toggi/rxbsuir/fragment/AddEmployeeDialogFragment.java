@@ -10,10 +10,8 @@ import android.widget.AutoCompleteTextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
-import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +19,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.mvp.presenter.AddEmployeeDialogPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.AddEmployeeDialogView;
 import by.toggi.rxbsuir.rest.model.Employee;
 import dagger.hilt.android.AndroidEntryPoint;
-import rx.Subscription;
 
 @AndroidEntryPoint
 public class AddEmployeeDialogFragment extends DialogFragment implements AddEmployeeDialogView {
@@ -40,7 +36,6 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
     private OnButtonClickListener mListener;
     private int mPosition = -1;
     private TextInputLayout mTextInputLayout;
-    private Subscription mSubscription;
 
     public static AddEmployeeDialogFragment newInstance() {
         return new AddEmployeeDialogFragment();
@@ -91,36 +86,21 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
         textView.setAdapter(mAdapter);
         textView.setOnItemClickListener((parent, view, position, id) -> mPosition = position);
         var dialog =
-                new MaterialDialog.Builder(getActivity()).customView(mTextInputLayout, true)
-                        .title(R.string.title_add_employee)
-                        .positiveText(R.string.positive_add)
-                        .negativeText(android.R.string.cancel)
-                        .autoDismiss(false)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                if (mPosition != -1) {
-                                    var employee = mAdapter.getItem(mPosition);
-                                    mListener.onPositiveButtonClicked(employee.id, employee.toString(), false);
-                                    mPosition = -1;
-                                    dismiss();
-                                } else {
-                                    mTextInputLayout.setError(getString(R.string.error_list_employee));
-                                }
-                            }
-
-                            @Override
-                            public void onNegative(MaterialDialog dialog) {
+                new MaterialAlertDialogBuilder(getActivity())
+                        .setTitle(R.string.title_add_employee)
+                        .setView(mTextInputLayout)
+                        .setPositiveButton(R.string.positive_add, (d, which) -> {
+                            if (mPosition != -1) {
+                                var employee = mAdapter.getItem(mPosition);
+                                mListener.onPositiveButtonClicked(employee.id, employee.toString(), false);
+                                mPosition = -1;
                                 dismiss();
+                            } else {
+                                mTextInputLayout.setError(getString(R.string.error_list_employee));
                             }
                         })
-                        .build();
-        // Input validation
-        mSubscription = RxTextView.textChanges(textView)
-                .map(charSequence -> mPresenter.isValidEmployee(charSequence.toString()))
-                .startWith(false)
-                .distinctUntilChanged()
-                .subscribe(aBoolean -> dialog.getActionButton(DialogAction.POSITIVE).setEnabled(aBoolean));
+                        .setNegativeButton(android.R.string.cancel, (d, which) -> d.dismiss())
+                        .create();
         return dialog;
     }
 
@@ -128,7 +108,6 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
-        Utils.unsubscribe(mSubscription);
     }
 
     @Override

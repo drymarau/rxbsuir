@@ -7,7 +7,6 @@ androidx-preference = "1.1.1"
 androidx-recyclerview = "1.2.1"
 dagger = "2.43.2"
 material = "1.6.1"
-materialdialogs = "0.9.6.0"
 okhttp = "3.9.0"
 preferencex = "1.1.0"
 retrofit = "2.3.0"
@@ -27,8 +26,6 @@ androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 dagger-hilt-android-runtime = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
-materialdialogs = { module = "com.afollestad.material-dialogs:core", version.ref = "materialdialogs" }
-materialdialogs-commons = { module = "com.afollestad.material-dialogs:commons", version.ref = "materialdialogs" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-logginginterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 preferencex = { module = "com.takisoft.preferencex:preferencex", version.ref = "preferencex" }

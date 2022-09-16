@@ -1,5 +1,4 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,12 +6,12 @@
     android:orientation="horizontal"
     tools:context="by.toggi.rxbsuir.activity.ScheduleActivity">
 
-    <include layout="@layout/widget_navigation_view"/>
+    <include layout="@layout/widget_navigation_view" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="?android:attr/listDivider"/>
+        android:background="?android:attr/listDivider" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
@@ -22,25 +21,24 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:contentInsetStart="@dimen/keyline_first"/>
+                app:contentInsetStart="@dimen/keyline_first" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabContentStart="@dimen/keyline_first"
-                app:tabMode="scrollable"/>
+                app:tabMode="scrollable" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <include layout="@layout/widget_view_pager"/>
+        <include layout="@layout/widget_view_pager" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -49,9 +47,9 @@
             android:layout_gravity="center"
             android:indeterminate="true"
             android:paddingTop="@dimen/progress_bar_padding_top"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
-        <include layout="@layout/floating_action_menu"/>
+        <include layout="@layout/floating_action_menu" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

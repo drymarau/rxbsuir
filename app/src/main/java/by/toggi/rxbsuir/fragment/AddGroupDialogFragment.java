@@ -10,10 +10,8 @@ import android.widget.AutoCompleteTextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
-import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,36 +90,21 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
         textView.setAdapter(mAdapter);
         textView.setOnItemClickListener((parent, view, position, id) -> mPosition = position);
         var dialog =
-                new MaterialDialog.Builder(getActivity()).customView(mTextInputLayout, true)
-                        .title(R.string.title_add_group)
-                        .positiveText(R.string.positive_add)
-                        .negativeText(android.R.string.cancel)
-                        .autoDismiss(false)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                if (mPosition != -1) {
-                                    var studentGroup = mAdapter.getItem(mPosition);
-                                    mListener.onPositiveButtonClicked(studentGroup.id, studentGroup.name, true);
-                                    mPosition = -1;
-                                    dismiss();
-                                } else {
-                                    mTextInputLayout.setError(getString(R.string.error_list_group));
-                                }
-                            }
-
-                            @Override
-                            public void onNegative(MaterialDialog dialog) {
+                new MaterialAlertDialogBuilder(getActivity())
+                        .setTitle(R.string.title_add_group)
+                        .setView(mTextInputLayout)
+                        .setPositiveButton(R.string.positive_add, (d, which) -> {
+                            if (mPosition != -1) {
+                                var studentGroup = mAdapter.getItem(mPosition);
+                                mListener.onPositiveButtonClicked(studentGroup.id, studentGroup.name, true);
+                                mPosition = -1;
                                 dismiss();
+                            } else {
+                                mTextInputLayout.setError(getString(R.string.error_list_group));
                             }
                         })
-                        .build();
-        // Input validation
-        mSubscription = RxTextView.textChanges(textView)
-                .map(charSequence -> mPresenter.isValidGroupNumber(charSequence.toString()))
-                .startWith(false)
-                .distinctUntilChanged()
-                .subscribe(aBoolean -> dialog.getActionButton(DialogAction.POSITIVE).setEnabled(aBoolean));
+                        .setNegativeButton(android.R.string.cancel, (d, which) -> d.dismiss())
+                        .create();
         return dialog;
     }
 

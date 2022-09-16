@@ -10,7 +10,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.f2prateek.rx.preferences.Preference;
 import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -28,7 +27,6 @@ import by.toggi.rxbsuir.adapter.DetailItemAdapter;
 import by.toggi.rxbsuir.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonDetailPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonDetailView;
-import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -112,35 +110,7 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_edit:
-                showEditDialog();
-                break;
-        }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void showEditDialog() {
-        new MaterialDialog.Builder(this).title(R.string.title_add_note)
-                .input(getString(R.string.hint_note), mPresenter.getLessonNote(), true,
-                        (materialDialog, charSequence) -> {
-                            mPresenter.setLessonNote(charSequence.toString());
-                            AppWidgetScheduleProvider.updateNote(this);
-                        })
-                .neutralText(R.string.neutral_clear)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onNeutral(MaterialDialog dialog) {
-                        super.onNeutral(dialog);
-                        mPresenter.setLessonNote(null);
-                        AppWidgetScheduleProvider.updateNote(LessonActivity.this);
-                        dialog.dismiss();
-                    }
-                })
-                .positiveText(R.string.positive_add)
-                .negativeText(android.R.string.cancel)
-                .autoDismiss(true)
-                .show();
     }
 
     public static class DetailItem {
