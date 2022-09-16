@@ -67,9 +67,6 @@ dependencies {
     implementation(libs.rxjava)
     implementation(libs.rxandroid)
 
-    implementation(libs.rxlifecycle)
-    implementation(libs.rxlifecycle.components)
-
     implementation(libs.rxpreferences)
 
     implementation(libs.preferencex)

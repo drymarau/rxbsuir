@@ -6,13 +6,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.f2prateek.rx.preferences.Preference;
-import com.trello.rxlifecycle.android.RxLifecycleAndroid;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +22,16 @@ import javax.inject.Named;
 import by.toggi.rxbsuir.DetailItemDecoration;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.adapter.DetailItemAdapter;
 import by.toggi.rxbsuir.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonDetailPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonDetailView;
 import dagger.hilt.android.AndroidEntryPoint;
+import rx.Subscription;
 
 @AndroidEntryPoint
-public class LessonActivity extends RxAppCompatActivity implements LessonDetailView {
+public class LessonActivity extends AppCompatActivity implements LessonDetailView {
 
     private static final String EXTRA_LESSON = "by.toggi.rxbsuir.extra.lesson";
 
@@ -42,6 +43,7 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
 
     private Toolbar mToolbar;
     private DetailItemAdapter mAdapter;
+    private Subscription mSubscription;
 
     public static void start(Context context, Lesson lesson) {
         Intent intent = new Intent(context, LessonActivity.class);
@@ -79,9 +81,8 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
         mPresenter.attachView(this);
         mPresenter.setLesson(lesson);
 
-        mNightModePreference.asObservable()
+        mSubscription = mNightModePreference.asObservable()
                 .skip(1)
-                .compose(RxLifecycleAndroid.bindActivity(lifecycle()))
                 .subscribe(mode -> recreate());
     }
 
@@ -93,6 +94,7 @@ public class LessonActivity extends RxAppCompatActivity implements LessonDetailV
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Utils.unsubscribe(mSubscription);
         mPresenter.onDestroy();
     }
 

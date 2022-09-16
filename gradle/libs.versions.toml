@@ -12,7 +12,6 @@ preferencex = "1.1.0"
 retrofit = "2.3.0"
 rxandroid = "1.2.1"
 rxjava = "1.2.7"
-rxlifecycle = "1.0"
 rxpreferences = "1.0.2"
 timber = "4.5.1"
 
@@ -34,8 +33,6 @@ retrofit-adapter-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava", ve
 retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 rxandroid = { module = "io.reactivex:rxandroid", version.ref = "rxandroid" }
 rxjava = { module = "io.reactivex:rxjava", version.ref = "rxjava" }
-rxlifecycle = { module = "com.trello:rxlifecycle", version.ref = "rxlifecycle" }
-rxlifecycle-components = { module = "com.trello:rxlifecycle-components", version.ref = "rxlifecycle" }
 rxpreferences = { module = "com.f2prateek.rx.preferences:rx-preferences", version.ref = "rxpreferences" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 

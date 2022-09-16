@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
@@ -30,8 +31,6 @@ import com.f2prateek.rx.preferences.Preference;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.trello.rxlifecycle.android.RxLifecycleAndroid;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.time.LocalTime;
 import java.util.Map;
@@ -52,10 +51,11 @@ import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
-public abstract class ScheduleActivity extends RxAppCompatActivity
+public abstract class ScheduleActivity extends AppCompatActivity
         implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener,
         OnButtonClickListener {
 
@@ -132,6 +132,8 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
     };
     private ValueAnimator mFabValueAnimator;
     private ValueAnimator mFamBackgroundValueAnimator;
+    private Subscription mNightModeSubscription;
+    private Subscription mTitlePreferenceSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,9 +195,8 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
         }
         initializeAnimations();
 
-        mNightModePreference.asObservable()
+        mNightModeSubscription = mNightModePreference.asObservable()
                 .skip(1)
-                .compose(RxLifecycleAndroid.bindActivity(lifecycle()))
                 .subscribe(mode -> recreate());
     }
 
@@ -204,11 +205,10 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        mTitlePreference.asObservable()
+        mTitlePreferenceSubscription = mTitlePreference.asObservable()
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(s -> TextUtils.split(s, " "))
                 .map(strings -> Utils.getFormattedTitle(mTitleFormat, strings))
-                .compose(bindToLifecycle())
                 .subscribe(this::setTitle);
         registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
@@ -216,6 +216,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+        Utils.unsubscribe(mTitlePreferenceSubscription);
         try {
             unregisterReceiver(mReceiver);
         } catch (IllegalArgumentException e) {
@@ -229,6 +230,7 @@ public abstract class ScheduleActivity extends RxAppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Utils.unsubscribe(mNightModeSubscription);
         mSchedulePresenter.onDestroy();
         mDrawerPresenter.onDestroy();
     }

@@ -7,11 +7,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.f2prateek.rx.preferences.Preference;
-import com.trello.rxlifecycle.android.RxLifecycleAndroid;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -19,13 +18,15 @@ import javax.inject.Named;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
+import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.fragment.AppWidgetConfigFragment;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import dagger.hilt.android.AndroidEntryPoint;
+import rx.Subscription;
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class AppWidgetConfigActivity extends RxAppCompatActivity {
+public class AppWidgetConfigActivity extends AppCompatActivity {
 
     private final Intent mResultIntent = new Intent();
     @Inject
@@ -37,6 +38,7 @@ public class AppWidgetConfigActivity extends RxAppCompatActivity {
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private int mResult = RESULT_CANCELED;
     private Toolbar mToolbar;
+    private Subscription mSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +67,8 @@ public class AppWidgetConfigActivity extends RxAppCompatActivity {
                         AppWidgetConfigFragment.newInstance(mAppWidgetId))
                 .commit();
 
-        mNightModePreference.asObservable()
+        mSubscription = mNightModePreference.asObservable()
                 .skip(1)
-                .compose(RxLifecycleAndroid.bindActivity(lifecycle()))
                 .subscribe(mode -> recreate());
     }
 
@@ -97,6 +98,7 @@ public class AppWidgetConfigActivity extends RxAppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Utils.unsubscribe(mSubscription);
         if (mResult == RESULT_CANCELED) {
             try {
                 // Phantom widget fix (kinda)
