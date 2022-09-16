@@ -17,6 +17,7 @@ import java.util.List;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
+import kotlin.collections.ArrayDeque;
 
 public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> {
 
@@ -26,13 +27,11 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
 
     private final LessonListPresenter.Type mType;
     private final OnItemClickListener mListener;
-    private final boolean mAreCirclesColored;
     private final List<Lesson> mLessonList;
 
-    public LessonAdapter(OnItemClickListener listener, List<Lesson> lessonList, LessonListPresenter.Type type, boolean areCirclesColored) {
+    public LessonAdapter(OnItemClickListener listener, LessonListPresenter.Type type) {
         mListener = listener;
-        mLessonList = lessonList;
-        mAreCirclesColored = areCirclesColored;
+        mLessonList = new ArrayDeque<>();
         mType = type;
     }
 
@@ -47,7 +46,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    @Override public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
         var lesson = mLessonList.get(position);
 
         if (lesson.getPrettyAuditoryList().isEmpty()) {
@@ -58,7 +58,9 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
                 : VIEW_TYPE_LESSON_THREE_LINE;
     }
 
-    @Override @NonNull public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+    @Override
+    @NonNull
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view;
         switch (viewType) {
             case VIEW_TYPE_LESSON_ONE_LINE:
@@ -79,23 +81,11 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         return new ViewHolder(view);
     }
 
-    @Override public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Lesson lesson = mLessonList.get(position);
         viewHolder.itemView.setOnClickListener(view -> mListener.onItemClicked(lesson));
         viewHolder.mLessonType.setText(lesson.getLessonType());
-        if (mAreCirclesColored) {
-            switch (lesson.getLessonType().toLowerCase()) {
-                case "лр":
-                    viewHolder.mLessonType.setBackgroundResource(R.drawable.circle_lab);
-                    break;
-                case "лк":
-                    viewHolder.mLessonType.setBackgroundResource(R.drawable.circle_lecture);
-                    break;
-                case "пз":
-                    viewHolder.mLessonType.setBackgroundResource(R.drawable.circle_practice);
-                    break;
-            }
-        }
         viewHolder.mLessonSubjectSubgroup.setText(lesson.getSubjectWithSubgroup());
         viewHolder.mLessonTimeStart.setText(lesson.getPrettyLessonTimeStart());
         viewHolder.mLessonTimeEnd.setText(lesson.getPrettyLessonTimeEnd());
@@ -135,7 +125,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         }
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
         return mLessonList.size();
     }
 
@@ -151,8 +142,10 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         final TextView mLessonTimeStart;
         final TextView mLessonTimeEnd;
 
-        @Nullable final TextView mLessonEmployee;
-        @Nullable final TextView mLessonClass;
+        @Nullable
+        final TextView mLessonEmployee;
+        @Nullable
+        final TextView mLessonClass;
 
         private String mHeaderText;
         private boolean mIsFirst;

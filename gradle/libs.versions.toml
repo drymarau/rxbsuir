@@ -30,7 +30,6 @@ retrofit-adapter-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava", ve
 retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 rxandroid = { module = "io.reactivex:rxandroid", version.ref = "rxandroid" }
 rxjava = { module = "io.reactivex:rxjava", version.ref = "rxjava" }
-rxpreferences = { module = "com.f2prateek.rx.preferences:rx-preferences", version.ref = "rxpreferences" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]

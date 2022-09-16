@@ -22,15 +22,10 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.f2prateek.rx.preferences.Preference;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
 import by.toggi.rxbsuir.activity.LessonActivity;
@@ -38,7 +33,6 @@ import by.toggi.rxbsuir.activity.ScheduleActivity;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
-import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.mvp.view.LessonListView;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
@@ -47,9 +41,7 @@ import dagger.hilt.android.components.FragmentComponent;
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class LessonListFragment extends Fragment
-        implements LessonListView, SharedPreferences.OnSharedPreferenceChangeListener,
-        LessonAdapter.OnItemClickListener {
+public class LessonListFragment extends Fragment implements LessonListView, LessonAdapter.OnItemClickListener {
 
     public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
     private static final String ARGS_VIEW_TYPE = "week_number";
@@ -57,19 +49,7 @@ public class LessonListFragment extends Fragment
     @Inject
     LessonListPresenter mPresenter;
     @Inject
-    @Named(PreferenceHelper.SYNC_ID)
-    Preference<String> mSyncIdPreference;
-    @Inject
-    @Named(PreferenceHelper.IS_GROUP_SCHEDULE)
-    Preference<Boolean> mIsGroupSchedulePreference;
-    @Inject
-    Preference<SubgroupFilter> mSubgroupFilterPreference;
-    @Inject
     SharedPreferences mSharedPreferences;
-    @Inject
-    @Named(PreferenceHelper.ARE_CIRCLES_COLORED)
-    Preference<Boolean>
-            mAreCirclesColoredPreference;
 
     private RecyclerView mRecyclerView;
     private TextView mEmptyState;
@@ -80,8 +60,7 @@ public class LessonListFragment extends Fragment
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(@NonNull Context context, @NonNull Intent intent) {
-            mPresenter.setSearchQuery(
-                    intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
+            mPresenter.setSearchQuery(intent.getCharSequenceExtra(ScheduleActivity.EXTRA_SEARCH_QUERY).toString());
         }
     };
 
@@ -110,8 +89,7 @@ public class LessonListFragment extends Fragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_lesson_list, container, false);
     }
 
@@ -122,8 +100,7 @@ public class LessonListFragment extends Fragment
         mEmptyState = view.findViewById(R.id.empty_state);
 
         var manager = getFragmentManager();
-        var fragment =
-                (StorageFragment) manager.findFragmentByTag(ScheduleActivity.TAG_STORAGE_FRAGMENT);
+        var fragment = (StorageFragment) manager.findFragmentByTag(ScheduleActivity.TAG_STORAGE_FRAGMENT);
 
         if (fragment == null) {
             throw new IllegalStateException("Storage fragment should already be added");
@@ -151,11 +128,9 @@ public class LessonListFragment extends Fragment
         }
 
         mPresenter.attachView(this);
-        mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
 
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter =
-                new LessonAdapter(this, new ArrayList<>(), mType, mAreCirclesColoredPreference.get());
+        mAdapter = new LessonAdapter(this, mType);
 
         mRecyclerView.setVisibility(View.GONE);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -206,7 +181,6 @@ public class LessonListFragment extends Fragment
         if (mType == TODAY || mType == TOMORROW) {
             mPresenter.onCreate();
         }
-        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mBroadcastReceiver,
                         new IntentFilter(ScheduleActivity.ACTION_SEARCH_QUERY));
@@ -215,24 +189,10 @@ public class LessonListFragment extends Fragment
     @Override
     public void onPause() {
         super.onPause();
-        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         try {
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         } catch (IllegalArgumentException e) {
             Timber.e(e, "LocalBroadcastManager.unregisterReceiver error");
-        }
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        switch (key) {
-            case PreferenceHelper.SYNC_ID:
-                mRecyclerView.setVisibility(View.GONE);
-                mPresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
-                break;
-            case PreferenceHelper.SUBGROUP_FILTER:
-                mPresenter.setSubgroupFilter(mSubgroupFilterPreference.get());
-                break;
         }
     }
 

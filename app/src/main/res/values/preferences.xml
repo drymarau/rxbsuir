@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!-- NIGHT MODE -->
-  <string name="night_mode_title">Night mode</string>
-  <string-array name="night_mode_entries">
-    <item>Day</item>
-    <item>Night</item>
-    <item>Auto</item>
-    <item>Follow system</item>
-  </string-array>
-  <string-array name="night_mode_entry_values" translatable="false">
-    <item>1</item>
-    <item>2</item>
-    <item>0</item>
-    <item>-1</item>
-  </string-array>
-  <string name="night_mode_default_value" translatable="false">1</string>
+    <!-- NIGHT MODE -->
+    <string name="night_mode_title">Night mode</string>
+    <string-array name="night_mode_entries">
+        <item>Day</item>
+        <item>Night</item>
+        <item>Auto</item>
+        <item>Follow system</item>
+    </string-array>
+    <string-array name="night_mode_entry_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+    <string name="night_mode_key" translatable="false">night_mode</string>
+    <string name="night_mode_default_value" translatable="false">1</string>
 </resources>

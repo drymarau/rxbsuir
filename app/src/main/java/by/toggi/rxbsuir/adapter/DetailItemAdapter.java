@@ -107,7 +107,8 @@ public class DetailItemAdapter extends RecyclerView.Adapter<DetailItemAdapter.Vi
 
         final ImageView mIcon;
         final TextView mText;
-        @Nullable final TextView mSummary;
+        @Nullable
+        final TextView mSummary;
 
         private boolean isFirst;
         private boolean isLast;

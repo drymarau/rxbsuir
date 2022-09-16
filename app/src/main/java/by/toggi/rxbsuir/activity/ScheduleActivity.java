@@ -9,9 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,18 +25,14 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.f2prateek.rx.preferences.Preference;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.time.LocalTime;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RateAppDialog;
 import by.toggi.rxbsuir.Utils;
@@ -51,8 +45,6 @@ import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
 import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
 import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
 import by.toggi.rxbsuir.mvp.view.ScheduleView;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public abstract class ScheduleActivity extends AppCompatActivity
@@ -74,37 +66,6 @@ public abstract class ScheduleActivity extends AppCompatActivity
     NavigationDrawerPresenter mDrawerPresenter;
     @Inject
     SharedPreferences mSharedPreferences;
-    @Inject
-    @Named(PreferenceHelper.IS_FAM_ENABLED)
-    boolean mIsFamEnabled;
-    @Inject
-    @Named(PreferenceHelper.SYNC_ID)
-    Preference<String> mSyncIdPreference;
-    @Inject
-    @Named(PreferenceHelper.TITLE)
-    Preference<String> mTitlePreference;
-    @Inject
-    @Named(PreferenceHelper.IS_GROUP_SCHEDULE)
-    Preference<Boolean> mIsGroupSchedulePreference;
-    @Inject
-    Preference<Integer> mItemIdPreference;
-    @Inject
-    Preference<SubgroupFilter> mSubgroupFilterPreference;
-    @Inject
-    @Named(PreferenceHelper.FAVORITE_SYNC_ID)
-    Preference<String> mFavoriteSyncIdPreference;
-    @Inject
-    @Named(PreferenceHelper.FAVORITE_IS_GROUP_SCHEDULE)
-    Preference<Boolean>
-            mFavoriteIsGroupSchedulePreference;
-    @Inject
-    @Named(PreferenceHelper.FAVORITE_TITLE)
-    Preference<String> mFavoriteTitlePreference;
-    @Inject
-    Preference<LocalTime> mLocalTimePreference;
-    @Inject
-    @Named(PreferenceHelper.NIGHT_MODE)
-    Preference<String> mNightModePreference;
 
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
@@ -119,11 +80,6 @@ public abstract class ScheduleActivity extends AppCompatActivity
 
     protected int mPageMargin;
 
-    private String mSendFeedbackTitle;
-    private String mFeedbackEmail;
-    private String mFeedbackSubject;
-    private String mTitleFormat;
-
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(@NonNull Context context, @NonNull Intent intent) {
@@ -132,8 +88,6 @@ public abstract class ScheduleActivity extends AppCompatActivity
     };
     private ValueAnimator mFabValueAnimator;
     private ValueAnimator mFamBackgroundValueAnimator;
-    private Subscription mNightModeSubscription;
-    private Subscription mTitlePreferenceSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,10 +104,6 @@ public abstract class ScheduleActivity extends AppCompatActivity
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.navigation_view);
         mPageMargin = getResources().getDimensionPixelSize(R.dimen.view_pager_page_margin);
-        mSendFeedbackTitle = getString(R.string.intent_feedback);
-        mFeedbackEmail = getString(R.string.email_feedback);
-        mFeedbackSubject = getString(R.string.subject_feedback);
-        mTitleFormat = getString(R.string.title_format);
         findViews();
 
         mFabGroup.setOnClickListener(view -> {
@@ -172,10 +122,6 @@ public abstract class ScheduleActivity extends AppCompatActivity
             }
         });
 
-        if (!mIsFamEnabled) {
-            mFloatingActionMenu.setVisibility(View.GONE);
-        }
-
         mFloatingActionMenu.getBackground().setAlpha(0);
 
         addStorageFragment();
@@ -188,16 +134,11 @@ public abstract class ScheduleActivity extends AppCompatActivity
         mSchedulePresenter.attachView(this);
 
         if (savedInstanceState == null) {
-            mSchedulePresenter.setSyncId(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
             RateAppDialog.newInstance(this).show();
         } else {
             showContent();
         }
         initializeAnimations();
-
-        mNightModeSubscription = mNightModePreference.asObservable()
-                .skip(1)
-                .subscribe(mode -> recreate());
     }
 
     protected abstract void findViews();
@@ -205,18 +146,12 @@ public abstract class ScheduleActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        mTitlePreferenceSubscription = mTitlePreference.asObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(s -> TextUtils.split(s, " "))
-                .map(strings -> Utils.getFormattedTitle(mTitleFormat, strings))
-                .subscribe(this::setTitle);
         registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Utils.unsubscribe(mTitlePreferenceSubscription);
         try {
             unregisterReceiver(mReceiver);
         } catch (IllegalArgumentException e) {
@@ -230,7 +165,6 @@ public abstract class ScheduleActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Utils.unsubscribe(mNightModeSubscription);
         mSchedulePresenter.onDestroy();
         mDrawerPresenter.onDestroy();
     }
@@ -269,7 +203,7 @@ public abstract class ScheduleActivity extends AppCompatActivity
     @Override
     public void onPositiveButtonClicked(int id, String name, boolean isGroupSchedule) {
         toggleFloatingActionMenu(false);
-        selectGroupOrEmployee(id, name, isGroupSchedule);
+        selectGroupOrEmployee(id, isGroupSchedule);
     }
 
     @Override
@@ -287,10 +221,6 @@ public abstract class ScheduleActivity extends AppCompatActivity
             case R.id.action_current_week:
                 showCurrentWeek();
                 return true;
-            case R.id.action_delete:
-                mSchedulePresenter.remove(mSyncIdPreference.get(), mIsGroupSchedulePreference.get());
-                resetSyncId();
-                return true;
             case R.id.action_filter_both:
                 setFilter(item, SubgroupFilter.BOTH);
                 return true;
@@ -303,45 +233,16 @@ public abstract class ScheduleActivity extends AppCompatActivity
             case R.id.action_filter_none:
                 setFilter(item, SubgroupFilter.NONE);
                 return true;
-            case R.id.action_favorite:
-                mDrawerPresenter.onCreate();
-                setFavoriteState(item);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void setFavoriteState(MenuItem item) {
-        if (item.isChecked()) {
-            Utils.cancelNotificationAlarm(this);
-            item.setChecked(false).setIcon(R.drawable.ic_action_favorite_off);
-            mFavoriteSyncIdPreference.set(mFavoriteSyncIdPreference.defaultValue());
-            mFavoriteIsGroupSchedulePreference.set(mFavoriteIsGroupSchedulePreference.defaultValue());
-            mFavoriteTitlePreference.set(mFavoriteTitlePreference.defaultValue());
-        } else {
-            Utils.setNotificationAlarm(this, mLocalTimePreference.get());
-            item.setChecked(true).setIcon(R.drawable.ic_action_favorite_on);
-            mFavoriteSyncIdPreference.set(mSyncIdPreference.get());
-            mFavoriteIsGroupSchedulePreference.set(mIsGroupSchedulePreference.get());
-            mFavoriteTitlePreference.set(mTitlePreference.get());
-        }
-    }
-
     private void setFilter(MenuItem item, SubgroupFilter filter) {
         item.setChecked(true);
-        mSubgroupFilterPreference.set(filter);
     }
 
     private void resetSyncId() {
-        var favoriteSyncId = mFavoriteSyncIdPreference.get();
-        if (favoriteSyncId != null && favoriteSyncId.equals(mSyncIdPreference.get())) {
-            mFavoriteSyncIdPreference.set(mFavoriteSyncIdPreference.defaultValue());
-            mFavoriteTitlePreference.set(mFavoriteTitlePreference.defaultValue());
-        }
-        mSyncIdPreference.set(mSyncIdPreference.defaultValue());
-        mTitlePreference.set(mTitlePreference.defaultValue());
-        mItemIdPreference.set(mItemIdPreference.defaultValue());
         supportInvalidateOptionsMenu();
     }
 
@@ -349,28 +250,6 @@ public abstract class ScheduleActivity extends AppCompatActivity
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.setGroupVisible(R.id.group_items, mSyncIdPreference.get() != null);
-        var favoriteItem = menu.findItem(R.id.action_favorite);
-        if (mSyncIdPreference.get() != null && mSyncIdPreference.get()
-                .equals(mFavoriteSyncIdPreference.get())) {
-            favoriteItem.setChecked(true).setIcon(R.drawable.ic_action_favorite_on);
-        } else {
-            favoriteItem.setChecked(false).setIcon(R.drawable.ic_action_favorite_off);
-        }
-        switch (mSubgroupFilterPreference.get()) {
-            case BOTH:
-                menu.findItem(R.id.action_filter_both).setChecked(true);
-                break;
-            case FIRST:
-                menu.findItem(R.id.action_filter_first).setChecked(true);
-                break;
-            case SECOND:
-                menu.findItem(R.id.action_filter_second).setChecked(true);
-                break;
-            case NONE:
-                menu.findItem(R.id.action_filter_none).setChecked(true);
-                break;
-        }
         switch (Utils.getCurrentWeekNumber()) {
             case 1:
                 menu.findItem(R.id.action_current_week).setIcon(R.drawable.ic_action_week_one);
@@ -426,39 +305,12 @@ public abstract class ScheduleActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
-        var itemId = menuItem.getItemId();
-        if (mItemIdPreference.get() != menuItem.getItemId()) {
-            switch (menuItem.getGroupId()) {
-                case R.id.navigation_view_groups:
-                    selectGroupOrEmployee(itemId, menuItem.getTitle().toString(), true);
-                    break;
-                case R.id.navigation_view_employees:
-                    selectGroupOrEmployee(itemId, menuItem.getTitle().toString(), false);
-                    break;
-            }
-            if (itemId == R.id.navigation_view_settings) {
-                startActivity(new Intent(this, SettingsActivity.class));
-            }
-            if (itemId == R.id.navigation_view_feedback) {
-                var feedbackIntent =
-                        new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", mFeedbackEmail, null));
-                feedbackIntent.putExtra(Intent.EXTRA_SUBJECT, mFeedbackSubject);
-                startActivity(Intent.createChooser(feedbackIntent, mSendFeedbackTitle));
-                return true;
-            }
-        }
         if (mDrawerLayout != null) mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void selectGroupOrEmployee(int id, String title, boolean isGroupSchedule) {
-        mItemIdPreference.set(id);
-        mSharedPreferences.edit()
-                .putString(PreferenceHelper.SYNC_ID, String.valueOf(id))
-                .putBoolean(PreferenceHelper.IS_GROUP_SCHEDULE, isGroupSchedule)
-                .apply();
+    private void selectGroupOrEmployee(int id, boolean isGroupSchedule) {
         mSchedulePresenter.setSyncId(String.valueOf(id), isGroupSchedule);
-        mTitlePreference.set(title);
         supportInvalidateOptionsMenu();
     }
 

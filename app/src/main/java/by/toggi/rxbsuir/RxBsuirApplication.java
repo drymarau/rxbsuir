@@ -1,35 +1,36 @@
 package by.toggi.rxbsuir;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.f2prateek.rx.preferences.Preference;
-
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import dagger.hilt.android.HiltAndroidApp;
 import timber.log.Timber;
 
 @HiltAndroidApp
-public class RxBsuirApplication extends Application {
+public class RxBsuirApplication extends Application implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Inject
     Timber.Tree mTree;
     @Inject
-    @Named(PreferenceHelper.NIGHT_MODE)
-    Preference<String> mNightModePreference;
+    SharedPreferences mSharedPreferences;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
         Timber.plant(mTree);
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
 
-        mNightModePreference.asObservable()
-                .map(Integer::valueOf)
-                .onErrorReturn(throwable -> AppCompatDelegate.MODE_NIGHT_NO)
-                .subscribe(AppCompatDelegate::setDefaultNightMode);
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (getString(R.string.night_mode_key).equals(key)) {
+            var nightModeString = sharedPreferences.getString(key, getString(R.string.night_mode_default_value));
+            var nightMode = Integer.parseInt(nightModeString);
+            AppCompatDelegate.setDefaultNightMode(nightMode);
+        }
     }
 }

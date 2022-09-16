@@ -5,13 +5,8 @@ import android.view.View;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.f2prateek.rx.preferences.Preference;
 import com.google.android.material.tabs.TabLayout;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.adapter.LessonListPagerAdapter;
@@ -21,10 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class WeekScheduleActivity extends ScheduleActivity {
 
-    @Inject
-    @Named(PreferenceHelper.IS_TODAY_ENABLED)
-    Preference<Boolean> mIsTodayEnabledPreference;
-
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
 
@@ -33,10 +24,6 @@ public class WeekScheduleActivity extends ScheduleActivity {
         super.onCreate(savedInstanceState);
 
         setupTabs();
-
-        if (savedInstanceState == null && !mIsTodayEnabledPreference.get()) {
-            showCurrentWeek();
-        }
     }
 
     @Override
@@ -52,14 +39,11 @@ public class WeekScheduleActivity extends ScheduleActivity {
 
     @Override
     protected void showCurrentWeek() {
-        var weekNumber = Utils.getCurrentWeekNumber();
-        mViewPager.setCurrentItem(mIsTodayEnabledPreference.get() ? weekNumber + 1 : weekNumber - 1);
+        mViewPager.setCurrentItem(Utils.getCurrentWeekNumber() + 1);
     }
 
     private void setupTabs() {
-        mViewPager.setAdapter(new LessonListPagerAdapter(getSupportFragmentManager(),
-                getResources().getStringArray(
-                        mIsTodayEnabledPreference.get() ? R.array.tabs_with_today : R.array.tabs)));
+        mViewPager.setAdapter(new LessonListPagerAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.tabs_with_today)));
         mViewPager.setOffscreenPageLimit(mViewPager.getAdapter().getCount());
         mViewPager.setPageMargin(mPageMargin);
         mTabLayout.setupWithViewPager(mViewPager);

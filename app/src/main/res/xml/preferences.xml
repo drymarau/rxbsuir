@@ -6,40 +6,10 @@
             android:defaultValue="@string/night_mode_default_value"
             android:entries="@array/night_mode_entries"
             android:entryValues="@array/night_mode_entry_values"
-            android:key="night_mode"
+            android:key="@string/night_mode_key"
             android:summary="%s"
             android:title="@string/night_mode_title" />
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="is_today_enabled"
-            android:title="@string/title_is_today_enabled" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="are_circles_colored"
-            android:title="@string/title_are_circles_colored" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="is_fam_enabled"
-            android:title="@string/title_is_fam_enabled" />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/title_notifications">
-        <Preference
-            android:defaultValue="07:00"
-            android:key="notification_time"
-            android:summary="%s"
-            android:title="@string/title_notification_time" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:dependency="notification_time"
-            android:key="notification_sound_enabled"
-            android:summaryOff="@string/summary_notification_sound_disabled"
-            android:summaryOn="@string/summary_notification_sound_enabled"
-            android:title="@string/title_notification_sound" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/category_about">

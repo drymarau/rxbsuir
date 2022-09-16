@@ -11,24 +11,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.f2prateek.rx.preferences.Preference;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import by.toggi.rxbsuir.DetailItemDecoration;
-import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.adapter.DetailItemAdapter;
 import by.toggi.rxbsuir.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonDetailPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonDetailView;
 import dagger.hilt.android.AndroidEntryPoint;
-import rx.Subscription;
 
 @AndroidEntryPoint
 public class LessonActivity extends AppCompatActivity implements LessonDetailView {
@@ -37,24 +31,13 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
 
     @Inject
     LessonDetailPresenter mPresenter;
-    @Inject
-    @Named(PreferenceHelper.NIGHT_MODE)
-    Preference<String> mNightModePreference;
 
     private Toolbar mToolbar;
     private DetailItemAdapter mAdapter;
-    private Subscription mSubscription;
 
     public static void start(Context context, Lesson lesson) {
         Intent intent = new Intent(context, LessonActivity.class);
         intent.putExtra(EXTRA_LESSON, lesson);
-        context.startActivity(intent);
-    }
-
-    public static void startFromWidget(Context context, Lesson lesson) {
-        Intent intent = new Intent(context, LessonActivity.class);
-        intent.putExtra(EXTRA_LESSON, lesson);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -80,10 +63,6 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
 
         mPresenter.attachView(this);
         mPresenter.setLesson(lesson);
-
-        mSubscription = mNightModePreference.asObservable()
-                .skip(1)
-                .subscribe(mode -> recreate());
     }
 
     @Override
@@ -94,7 +73,6 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Utils.unsubscribe(mSubscription);
         mPresenter.onDestroy();
     }
 
