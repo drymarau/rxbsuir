@@ -19,7 +19,7 @@ import javax.inject.Inject;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SyncIdItem;
-import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 import dagger.hilt.android.AndroidEntryPoint;

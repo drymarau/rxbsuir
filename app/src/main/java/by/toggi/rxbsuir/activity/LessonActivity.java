@@ -25,7 +25,7 @@ import by.toggi.rxbsuir.DetailItemDecoration;
 import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.adapter.DetailItemAdapter;
-import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonDetailPresenter;
 import by.toggi.rxbsuir.mvp.view.LessonDetailView;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;

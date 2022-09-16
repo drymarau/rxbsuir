@@ -28,7 +28,7 @@ import by.toggi.rxbsuir.PreferenceHelper;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.activity.WeekScheduleActivity;
-import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
 import dagger.hilt.android.AndroidEntryPoint;
 

@@ -1,4 +1,4 @@
-package by.toggi.rxbsuir.db.model;
+package by.toggi.rxbsuir.model;
 
 import android.os.Parcelable;
 import android.text.TextUtils;

@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 
-import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.model.Lesson;
 import by.toggi.rxbsuir.receiver.AlarmReceiver;
 import by.toggi.rxbsuir.receiver.AppWidgetScheduleProvider;
 

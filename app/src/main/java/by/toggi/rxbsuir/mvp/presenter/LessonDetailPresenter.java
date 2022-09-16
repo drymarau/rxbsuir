@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 
 import javax.inject.Inject;
 
-import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.model.Lesson;
 import by.toggi.rxbsuir.mvp.Presenter;
 import by.toggi.rxbsuir.mvp.view.LessonDetailView;
 

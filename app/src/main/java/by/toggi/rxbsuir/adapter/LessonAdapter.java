@@ -15,7 +15,7 @@ import java.time.format.FormatStyle;
 import java.util.List;
 
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.db.model.Lesson;
+import by.toggi.rxbsuir.model.Lesson;
 import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
 
 public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> {
