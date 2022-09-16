@@ -12,8 +12,8 @@ val versionPatch = 5
 val versionBuild = 0
 
 android {
+    namespace = "by.toggi.rxbsuir"
     compileSdk = 33
-
     defaultConfig {
         applicationId = "by.toggi.rxbsuir"
         minSdk = 21

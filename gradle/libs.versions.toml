@@ -1,5 +1,5 @@
 [versions]
-android = "7.2.2"
+android = "7.3.0"
 android-desugar = "1.1.8"
 androidx-appcompat = "1.5.1"
 androidx-cardview = "1.0.0"
