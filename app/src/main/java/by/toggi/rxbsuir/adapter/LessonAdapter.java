@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.List;
 
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.model.Lesson;
-import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter;
-import kotlin.collections.ArrayDeque;
+import by.toggi.rxbsuir.model.LessonListType;
 
 public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> {
 
@@ -25,25 +25,14 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     private static final int VIEW_TYPE_LESSON_TWO_LINE = 1;
     private static final int VIEW_TYPE_LESSON_THREE_LINE = 2;
 
-    private final LessonListPresenter.Type mType;
+    private final LessonListType mType;
     private final OnItemClickListener mListener;
     private final List<Lesson> mLessonList;
 
-    public LessonAdapter(OnItemClickListener listener, LessonListPresenter.Type type) {
+    public LessonAdapter(OnItemClickListener listener, LessonListType type) {
         mListener = listener;
-        mLessonList = new ArrayDeque<>();
+        mLessonList = new ArrayList<>();
         mType = type;
-    }
-
-    /**
-     * Sets lesson list and updates the {@link RecyclerView}.
-     *
-     * @param lessonList the lesson list
-     */
-    public void setLessonList(List<Lesson> lessonList) {
-        mLessonList.clear();
-        mLessonList.addAll(lessonList);
-        notifyDataSetChanged();
     }
 
     @Override

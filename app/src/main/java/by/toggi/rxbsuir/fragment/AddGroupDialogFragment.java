@@ -14,31 +14,18 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
 
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.Utils;
-import by.toggi.rxbsuir.activity.ScheduleActivity;
-import by.toggi.rxbsuir.mvp.presenter.AddGroupDialogPresenter;
-import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
-import by.toggi.rxbsuir.mvp.view.AddGroupDialogView;
 import by.toggi.rxbsuir.rest.model.StudentGroup;
 import dagger.hilt.android.AndroidEntryPoint;
-import rx.Subscription;
 
 @AndroidEntryPoint
-public class AddGroupDialogFragment extends DialogFragment implements AddGroupDialogView {
-
-    @Inject
-    AddGroupDialogPresenter mPresenter;
+public class AddGroupDialogFragment extends DialogFragment {
 
     private ArrayAdapter<StudentGroup> mAdapter;
     private OnButtonClickListener mListener;
     private int mPosition = -1;
     private TextInputLayout mTextInputLayout;
-    private Subscription mSubscription;
 
     public static AddGroupDialogFragment newInstance() {
         return new AddGroupDialogFragment();
@@ -52,31 +39,6 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
         } catch (ClassCastException e) {
             throw new ClassCastException(context + " must implement OnButtonClickListener");
         }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        var manager = getFragmentManager();
-        var fragment =
-                (StorageFragment) manager.findFragmentByTag(ScheduleActivity.TAG_STORAGE_FRAGMENT);
-
-        if (fragment == null) {
-            throw new IllegalStateException("Storage fragment should already be added");
-        }
-        if (fragment.getPresenter(mPresenter.getTag()) == null) {
-            fragment.setPresenter(mPresenter.getTag(), mPresenter);
-        } else {
-            try {
-                mPresenter = (AddGroupDialogPresenter) fragment.getPresenter(mPresenter.getTag());
-            } catch (ClassCastException e) {
-                throw new ClassCastException("Presenter must be of class AddDialogPresenter");
-            }
-        }
-
-        mPresenter.attachView(this);
-        mPresenter.onCreate();
     }
 
     @NonNull
@@ -106,33 +68,5 @@ public class AddGroupDialogFragment extends DialogFragment implements AddGroupDi
                         .setNegativeButton(android.R.string.cancel, (d, which) -> d.dismiss())
                         .create();
         return dialog;
-    }
-
-    @Override
-    public void updateStudentGroupList(List<StudentGroup> studentGroupList) {
-        mTextInputLayout.setErrorEnabled(false);
-        mAdapter.clear();
-        for (var group : studentGroupList) {
-            mAdapter.add(group);
-        }
-    }
-
-    @Override
-    public void showError(SchedulePresenter.Error error) {
-        if (mTextInputLayout != null) {
-            mTextInputLayout.setErrorEnabled(true);
-            switch (error) {
-                case NETWORK:
-                    mTextInputLayout.setError(getString(R.string.error_network));
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mPresenter.onDestroy();
-        Utils.unsubscribe(mSubscription);
     }
 }

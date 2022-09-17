@@ -1,7 +1,5 @@
 package by.toggi.rxbsuir.activity;
 
-import static by.toggi.rxbsuir.mvp.presenter.SchedulePresenter.Error;
-
 import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +11,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.LayoutRes;
@@ -29,8 +26,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Map;
-
 import javax.inject.Inject;
 
 import by.toggi.rxbsuir.R;
@@ -39,36 +34,18 @@ import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
-import by.toggi.rxbsuir.fragment.StorageFragment;
-import by.toggi.rxbsuir.mvp.presenter.LessonListPresenter.SubgroupFilter;
-import by.toggi.rxbsuir.mvp.presenter.NavigationDrawerPresenter;
-import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
-import by.toggi.rxbsuir.mvp.view.NavigationDrawerView;
-import by.toggi.rxbsuir.mvp.view.ScheduleView;
 import timber.log.Timber;
 
-public abstract class ScheduleActivity extends AppCompatActivity
-        implements ScheduleView, NavigationDrawerView, NavigationView.OnNavigationItemSelectedListener,
-        OnButtonClickListener {
-
-    public static final String ACTION_SEARCH_QUERY = "by.toggi.rxbsuir.action.search_query";
-    public static final String EXTRA_SEARCH_QUERY = "by.toggi.rxbsuir.extra.search_query";
-
-    public static final String TAG_STORAGE_FRAGMENT = "storage_fragment";
+public abstract class ScheduleActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 
     private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
     private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
     private static final long ANIMATION_DURATION = 250;
 
     @Inject
-    SchedulePresenter mSchedulePresenter;
-    @Inject
-    NavigationDrawerPresenter mDrawerPresenter;
-    @Inject
     SharedPreferences mSharedPreferences;
 
     private Toolbar mToolbar;
-    private ProgressBar mProgressBar;
     private CoordinatorLayout mCoordinatorLayout;
     private FloatingActionButton mFabGroup;
     private FloatingActionButton mFabEmployee;
@@ -95,7 +72,6 @@ public abstract class ScheduleActivity extends AppCompatActivity
         setContentView(getLayoutRes());
 
         mToolbar = findViewById(R.id.toolbar);
-        mProgressBar = findViewById(R.id.progress_bar);
         mCoordinatorLayout = findViewById(R.id.coordinator_layout);
         mFabGroup = findViewById(R.id.fab_group);
         mFabEmployee = findViewById(R.id.fab_employee);
@@ -124,19 +100,10 @@ public abstract class ScheduleActivity extends AppCompatActivity
 
         mFloatingActionMenu.getBackground().setAlpha(0);
 
-        addStorageFragment();
-
         setupNavigationView();
-
-        mDrawerPresenter.attachView(this);
-        mDrawerPresenter.onCreate();
-
-        mSchedulePresenter.attachView(this);
 
         if (savedInstanceState == null) {
             RateAppDialog.newInstance(this).show();
-        } else {
-            showContent();
         }
         initializeAnimations();
     }
@@ -163,47 +130,8 @@ public abstract class ScheduleActivity extends AppCompatActivity
     protected abstract int getLayoutRes();
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mSchedulePresenter.onDestroy();
-        mDrawerPresenter.onDestroy();
-    }
-
-    @Override
-    public void showError(Error error) {
-        mProgressBar.setVisibility(View.GONE);
-        switch (error) {
-            case NETWORK:
-                Snackbar.make(mCoordinatorLayout, getString(R.string.error_network), Snackbar.LENGTH_LONG)
-                        .setAction(R.string.action_retry, v -> mSchedulePresenter.retry())
-                        .show();
-                break;
-            case EMPTY_SCHEDULE:
-                resetSyncId();
-                Snackbar.make(mCoordinatorLayout, getString(R.string.error_empty_schedule),
-                        Snackbar.LENGTH_LONG).show();
-                break;
-            default:
-                Snackbar.make(mCoordinatorLayout, getString(R.string.error_default), Snackbar.LENGTH_LONG)
-                        .show();
-                break;
-        }
-    }
-
-    @Override
-    public void showLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void showContent() {
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
     public void onPositiveButtonClicked(int id, String name, boolean isGroupSchedule) {
         toggleFloatingActionMenu(false);
-        selectGroupOrEmployee(id, isGroupSchedule);
     }
 
     @Override
@@ -216,34 +144,13 @@ public abstract class ScheduleActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                mSchedulePresenter.retry();
                 return true;
             case R.id.action_current_week:
                 showCurrentWeek();
                 return true;
-            case R.id.action_filter_both:
-                setFilter(item, SubgroupFilter.BOTH);
-                return true;
-            case R.id.action_filter_first:
-                setFilter(item, SubgroupFilter.FIRST);
-                return true;
-            case R.id.action_filter_second:
-                setFilter(item, SubgroupFilter.SECOND);
-                return true;
-            case R.id.action_filter_none:
-                setFilter(item, SubgroupFilter.NONE);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void setFilter(MenuItem item, SubgroupFilter filter) {
-        item.setChecked(true);
-    }
-
-    private void resetSyncId() {
-        supportInvalidateOptionsMenu();
     }
 
     protected abstract void showCurrentWeek();
@@ -269,49 +176,9 @@ public abstract class ScheduleActivity extends AppCompatActivity
     }
 
     @Override
-    public void updateGroupList(Map<Integer, String> groupMap) {
-        var menu = mNavigationView.getMenu();
-        var groupHeader = menu.findItem(R.id.navigation_view_groups_header);
-        if (groupMap.size() > 0) {
-            groupHeader.setVisible(true);
-            groupHeader.getSubMenu().clear();
-            for (var id : groupMap.keySet()) {
-                groupHeader.getSubMenu().add(R.id.navigation_view_groups, id, Menu.NONE, groupMap.get(id));
-            }
-            var item = menu.getItem(0);
-            item.setTitle(item.getTitle());
-        } else {
-            groupHeader.setVisible(false);
-        }
-    }
-
-    @Override
-    public void updateEmployeeList(Map<Integer, String> employeeMap) {
-        var menu = mNavigationView.getMenu();
-        var employeeHeader = menu.findItem(R.id.navigation_view_employees_header);
-        if (employeeMap.size() > 0) {
-            employeeHeader.setVisible(true);
-            employeeHeader.getSubMenu().clear();
-            for (int id : employeeMap.keySet()) {
-                employeeHeader.getSubMenu()
-                        .add(R.id.navigation_view_employees, id, Menu.NONE, employeeMap.get(id));
-            }
-            var item = menu.getItem(0);
-            item.setTitle(item.getTitle());
-        } else {
-            employeeHeader.setVisible(false);
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(MenuItem menuItem) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         if (mDrawerLayout != null) mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void selectGroupOrEmployee(int id, boolean isGroupSchedule) {
-        mSchedulePresenter.setSyncId(String.valueOf(id), isGroupSchedule);
-        supportInvalidateOptionsMenu();
     }
 
     private void setupNavigationView() {
@@ -322,16 +189,6 @@ public abstract class ScheduleActivity extends AppCompatActivity
             mToolbar.setNavigationIcon(R.drawable.ic_action_navigation_menu);
         }
         mNavigationView.setNavigationItemSelectedListener(this);
-    }
-
-    private void addStorageFragment() {
-        var manager = getSupportFragmentManager();
-        var fragment = (StorageFragment) manager.findFragmentByTag(TAG_STORAGE_FRAGMENT);
-
-        if (fragment == null) {
-            fragment = new StorageFragment();
-            manager.beginTransaction().add(fragment, TAG_STORAGE_FRAGMENT).commit();
-        }
     }
 
     private void toggleFloatingActionMenu(boolean enabled) {

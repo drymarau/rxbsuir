@@ -14,23 +14,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
 
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.activity.ScheduleActivity;
-import by.toggi.rxbsuir.mvp.presenter.AddEmployeeDialogPresenter;
-import by.toggi.rxbsuir.mvp.presenter.SchedulePresenter;
-import by.toggi.rxbsuir.mvp.view.AddEmployeeDialogView;
 import by.toggi.rxbsuir.rest.model.Employee;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class AddEmployeeDialogFragment extends DialogFragment implements AddEmployeeDialogView {
-
-    @Inject
-    AddEmployeeDialogPresenter mPresenter;
+public class AddEmployeeDialogFragment extends DialogFragment {
 
     private ArrayAdapter<Employee> mAdapter;
     private OnButtonClickListener mListener;
@@ -49,30 +39,6 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
         } catch (ClassCastException e) {
             throw new ClassCastException(context + " must implement OnButtonClickListener");
         }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        var manager = getFragmentManager();
-        var fragment =
-                (StorageFragment) manager.findFragmentByTag(ScheduleActivity.TAG_STORAGE_FRAGMENT);
-
-        if (fragment == null) {
-            throw new IllegalStateException("Storage fragment should already be added");
-        }
-        if (fragment.getPresenter(mPresenter.getTag()) == null) {
-            fragment.setPresenter(mPresenter.getTag(), mPresenter);
-        } else {
-            try {
-                mPresenter = (AddEmployeeDialogPresenter) fragment.getPresenter(mPresenter.getTag());
-            } catch (ClassCastException e) {
-                throw new ClassCastException("Presenter must be of class AddEmployeeDialogPresenter");
-            }
-        }
-
-        mPresenter.attachView(this);
-        mPresenter.onCreate();
     }
 
     @NonNull
@@ -102,32 +68,5 @@ public class AddEmployeeDialogFragment extends DialogFragment implements AddEmpl
                         .setNegativeButton(android.R.string.cancel, (d, which) -> d.dismiss())
                         .create();
         return dialog;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mPresenter.onDestroy();
-    }
-
-    @Override
-    public void updateEmployeeList(List<Employee> employeeList) {
-        mTextInputLayout.setErrorEnabled(false);
-        mAdapter.clear();
-        for (var employee : employeeList) {
-            mAdapter.add(employee);
-        }
-    }
-
-    @Override
-    public void showError(SchedulePresenter.Error error) {
-        if (mTextInputLayout != null) {
-            mTextInputLayout.setErrorEnabled(true);
-            switch (error) {
-                case NETWORK:
-                    mTextInputLayout.setError(getString(R.string.error_network));
-                    break;
-            }
-        }
     }
 }

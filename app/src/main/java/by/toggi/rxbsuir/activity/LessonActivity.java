@@ -12,25 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
 
 import by.toggi.rxbsuir.DetailItemDecoration;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.adapter.DetailItemAdapter;
 import by.toggi.rxbsuir.model.Lesson;
-import by.toggi.rxbsuir.mvp.presenter.LessonDetailPresenter;
-import by.toggi.rxbsuir.mvp.view.LessonDetailView;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class LessonActivity extends AppCompatActivity implements LessonDetailView {
+public class LessonActivity extends AppCompatActivity {
 
     private static final String EXTRA_LESSON = "by.toggi.rxbsuir.extra.lesson";
-
-    @Inject
-    LessonDetailPresenter mPresenter;
 
     private Toolbar mToolbar;
     private DetailItemAdapter mAdapter;
@@ -60,20 +52,6 @@ public class LessonActivity extends AppCompatActivity implements LessonDetailVie
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DetailItemDecoration(this));
-
-        mPresenter.attachView(this);
-        mPresenter.setLesson(lesson);
-    }
-
-    @Override
-    public void showLessonDetail(List<DetailItem> detailItemList) {
-        mAdapter.setDetailItemList(detailItemList);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mPresenter.onDestroy();
     }
 
     private void setupToolbar() {
