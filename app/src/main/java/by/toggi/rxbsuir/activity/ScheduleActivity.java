@@ -27,7 +27,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.RateAppDialog;
 import by.toggi.rxbsuir.Utils;
 
 public abstract class ScheduleActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -87,9 +86,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Navi
 
         setupNavigationView();
 
-        if (savedInstanceState == null) {
-            RateAppDialog.newInstance(this).show();
-        }
         initializeAnimations();
     }
 
