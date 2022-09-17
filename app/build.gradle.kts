@@ -55,8 +55,6 @@ dependencies {
 
     implementation(libs.material)
 
-    implementation(libs.timber)
-
     implementation(libs.dagger.hilt.android.runtime)
     annotationProcessor(libs.dagger.hilt.compiler)
 }

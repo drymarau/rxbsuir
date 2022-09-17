@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +35,6 @@ import by.toggi.rxbsuir.Utils;
 import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
 import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
-import timber.log.Timber;
 
 public abstract class ScheduleActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 
@@ -122,7 +122,7 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Navi
         try {
             unregisterReceiver(mReceiver);
         } catch (IllegalArgumentException e) {
-            Timber.e(e, "unregisterReceiver error in ScheduleActivity");
+            Log.e("ScheduleActivity", "unregisterReceiver error in ScheduleActivity", e);
         }
     }
 

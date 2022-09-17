@@ -7,7 +7,6 @@ androidx-preference = "1.1.1"
 androidx-recyclerview = "1.2.1"
 dagger = "2.43.2"
 material = "1.6.1"
-timber = "4.5.1"
 
 [libraries]
 android-desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "android-desugar" }
@@ -18,7 +17,6 @@ androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 dagger-hilt-android-runtime = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
-timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }

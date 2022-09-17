@@ -8,20 +8,16 @@ import androidx.appcompat.app.AppCompatDelegate;
 import javax.inject.Inject;
 
 import dagger.hilt.android.HiltAndroidApp;
-import timber.log.Timber;
 
 @HiltAndroidApp
 public class RxBsuirApplication extends Application implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    @Inject
-    Timber.Tree mTree;
     @Inject
     SharedPreferences mSharedPreferences;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Timber.plant(mTree);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
