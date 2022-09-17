@@ -1,15 +1,16 @@
 [versions]
 android = "7.3.0"
-android-desugar = "1.1.8"
 androidx-appcompat = "1.5.1"
 dagger = "2.43.2"
+kotlin = "1.7.10"
 
 [libraries]
-android-desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "android-desugar" }
+android = { module = "com.android.tools.build:gradle", version.ref = "android" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 dagger-hilt-android-runtime = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
+kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "android" }
 dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

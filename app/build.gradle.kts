@@ -1,8 +1,9 @@
 @file:Suppress("DSL_SCOPE_VIOLATION")
 
 plugins {
-    alias(libs.plugins.android.application)
+    id("by.toggi.rxbsuir.kotlin.android.application")
     alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 // Manifest version information
@@ -13,31 +14,10 @@ val versionBuild = 0
 
 android {
     namespace = "by.toggi.rxbsuir"
-    compileSdk = 33
     defaultConfig {
         applicationId = "by.toggi.rxbsuir"
-        minSdk = 21
-        targetSdk = 33
         versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
-
-        resourceConfigurations += setOf("en", "ru")
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-        }
-    }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    testOptions {
-        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 }
 
@@ -46,10 +26,8 @@ hilt {
 }
 
 dependencies {
-    coreLibraryDesugaring(libs.android.desugar)
-
     implementation(libs.androidx.appcompat)
 
     implementation(libs.dagger.hilt.android.runtime)
-    annotationProcessor(libs.dagger.hilt.compiler)
+    kapt(libs.dagger.hilt.compiler)
 }
