@@ -1,7 +1,6 @@
 package by.toggi.rxbsuir.fragment;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import javax.inject.Inject;
 
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
@@ -30,9 +27,6 @@ public class LessonListFragment extends Fragment implements LessonAdapter.OnItem
 
     public static final String KEY_LAYOUT_MANAGER_STATE = "layout_manager_state";
     private static final String ARGS_VIEW_TYPE = "week_number";
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     private Type mType;
     private LinearLayoutManager mLayoutManager;

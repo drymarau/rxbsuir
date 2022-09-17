@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,8 +26,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import javax.inject.Inject;
-
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RateAppDialog;
 import by.toggi.rxbsuir.Utils;
@@ -37,9 +34,6 @@ import by.toggi.rxbsuir.fragment.OnButtonClickListener;
 public abstract class ScheduleActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 
     private static final long ANIMATION_DURATION = 250;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     private Toolbar mToolbar;
     private CoordinatorLayout mCoordinatorLayout;
