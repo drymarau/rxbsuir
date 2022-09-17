@@ -7,15 +7,10 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
-
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Utils class with all RxBsuir goodies.
@@ -81,55 +76,6 @@ public class Utils {
     public static int getWeekNumber(LocalDate localDate) {
         var weeks = ChronoUnit.WEEKS.between(getStartYear(), localDate);
         return (int) weeks % 4 + 1;
-    }
-
-    /**
-     * Convert weekday to {@link DayOfWeek}.
-     *
-     * @param weekday the weekday
-     * @return the day of week
-     */
-    public static DayOfWeek convertWeekdayToDayOfWeek(@NonNull String weekday) {
-        switch (weekday.toLowerCase()) {
-            case "понедельник":
-                return DayOfWeek.MONDAY;
-            case "вторник":
-                return DayOfWeek.TUESDAY;
-            case "среда":
-                return DayOfWeek.WEDNESDAY;
-            case "четверг":
-                return DayOfWeek.THURSDAY;
-            case "пятница":
-                return DayOfWeek.FRIDAY;
-            case "суббота":
-                return DayOfWeek.SATURDAY;
-            case "воскресенье":
-                return DayOfWeek.SUNDAY;
-            default:
-                throw new IllegalArgumentException("Unknown weekday: " + weekday);
-        }
-    }
-
-    /**
-     * RxJava unsubscribe helper.
-     *
-     * @param subscription the subscription
-     */
-    public static void unsubscribe(Subscription subscription) {
-        if (subscription != null && !subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
-        }
-    }
-
-    /**
-     * RxJava composite subscription unsubscribe helper.
-     *
-     * @param compositeSubscription {@link CompositeSubscription}
-     */
-    public static void unsubscribeComposite(CompositeSubscription compositeSubscription) {
-        if (compositeSubscription != null && !compositeSubscription.isUnsubscribed() && compositeSubscription.hasSubscriptions()) {
-            compositeSubscription.unsubscribe();
-        }
     }
 
     private static LocalDate getStartYear() {

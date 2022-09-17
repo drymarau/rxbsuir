@@ -8,7 +8,6 @@ import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.components.SingletonComponent;
 import okhttp3.OkHttpClient;
-import retrofit2.CallAdapter;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
@@ -20,13 +19,10 @@ public class RetrofitModule {
 
     @Provides
     @Singleton
-    Retrofit provide(OkHttpClient client,
-                     @Named("rxjava") CallAdapter.Factory callAdapterFactory,
-                     @Named("gson") Converter.Factory converterFactory) {
+    Retrofit provide(OkHttpClient client, @Named("gson") Converter.Factory converterFactory) {
         return new Retrofit.Builder()
                 .baseUrl(URL)
                 .client(client)
-                .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(converterFactory)
                 .build();
     }

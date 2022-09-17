@@ -61,11 +61,7 @@ dependencies {
     implementation(libs.okhttp.logginginterceptor)
 
     implementation(libs.retrofit)
-    implementation(libs.retrofit.adapter.rxjava)
     implementation(libs.retrofit.converter.gson)
-
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
 
     implementation(libs.dagger.hilt.android.runtime)
     annotationProcessor(libs.dagger.hilt.compiler)
