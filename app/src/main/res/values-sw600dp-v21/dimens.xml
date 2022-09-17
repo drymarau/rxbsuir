@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <!-- FAB dimens -->
-    <dimen name="fab_margin">24dp</dimen>
-    <dimen name="fab_margin_mini">32dp</dimen>
-    <dimen name="fab_margin_top">@dimen/fab_margin</dimen>
-
-</resources>

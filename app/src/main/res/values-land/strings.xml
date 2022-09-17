@@ -1,6 +1,0 @@
-<resources>
-
-    <!-- Title format landscape (Awesome Chad Thompson)-->
-    <string name="title_format" translatable="false">%s %s %s</string>
-
-</resources>

@@ -49,11 +49,6 @@ dependencies {
     coreLibraryDesugaring(libs.android.desugar)
 
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.cardview)
-    implementation(libs.androidx.preference)
-    implementation(libs.androidx.recyclerview)
-
-    implementation(libs.material)
 
     implementation(libs.dagger.hilt.android.runtime)
     annotationProcessor(libs.dagger.hilt.compiler)

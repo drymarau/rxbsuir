@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".RxBsuirApplication"
@@ -16,9 +14,9 @@
         tools:ignore="UnusedAttribute">
 
         <activity
-            android:name=".activity.WeekScheduleActivity"
+            android:name=".RxBsuirActivity"
             android:exported="true"
-            android:theme="@style/AppTheme.Drawer">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

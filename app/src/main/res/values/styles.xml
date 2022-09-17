@@ -1,11 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="Base.V0.AppTheme" parent="Theme.Material3.DayNight.NoActionBar" />
-
-    <style name="Base.V0.AppTheme.Drawer" parent="Base.V0.AppTheme" />
+    <style name="Base.V0.AppTheme" parent="Theme.AppCompat.DayNight" />
 
     <style name="AppTheme" parent="Base.V0.AppTheme" />
-
-    <style name="AppTheme.Drawer" parent="Base.V0.AppTheme.Drawer" />
 </resources>
