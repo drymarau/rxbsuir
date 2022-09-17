@@ -1,7 +1,0 @@
-<resources>
-
-    <!-- Base application theme. -->
-    <style name="Base.V0.AppTheme" parent="Theme.AppCompat.DayNight" />
-
-    <style name="AppTheme" parent="Base.V0.AppTheme" />
-</resources>

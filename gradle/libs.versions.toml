@@ -1,13 +1,13 @@
 [versions]
 android = "7.3.0"
-androidx-appcompat = "1.5.1"
+androidx-activity = "1.5.1"
 dagger = "2.43.2"
 kotlin = "1.7.10"
 ktlint = "11.0.0"
 
 [libraries]
 android = { module = "com.android.tools.build:gradle", version.ref = "android" }
-androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 dagger-hilt-android-runtime = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }

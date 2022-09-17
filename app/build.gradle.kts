@@ -26,7 +26,7 @@ hilt {
 }
 
 dependencies {
-    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
 
     implementation(libs.dagger.hilt.android.runtime)
     kapt(libs.dagger.hilt.compiler)
