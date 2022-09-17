@@ -32,14 +32,10 @@ import javax.inject.Inject;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RateAppDialog;
 import by.toggi.rxbsuir.Utils;
-import by.toggi.rxbsuir.fragment.AddEmployeeDialogFragment;
-import by.toggi.rxbsuir.fragment.AddGroupDialogFragment;
 import by.toggi.rxbsuir.fragment.OnButtonClickListener;
 
 public abstract class ScheduleActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
 
-    private static final String TAG_ADD_GROUP_DIALOG = "add_group_dialog";
-    private static final String TAG_ADD_EMPLOYEE_DIALOG = "add_employee_dialog";
     private static final long ANIMATION_DURATION = 250;
 
     @Inject
@@ -83,12 +79,8 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Navi
         findViews();
 
         mFabGroup.setOnClickListener(view -> {
-            var dialog = AddGroupDialogFragment.newInstance();
-            dialog.show(getSupportFragmentManager(), TAG_ADD_GROUP_DIALOG);
         });
         mFabEmployee.setOnClickListener(view -> {
-            var dialog = AddEmployeeDialogFragment.newInstance();
-            dialog.show(getSupportFragmentManager(), TAG_ADD_EMPLOYEE_DIALOG);
         });
         mFloatingActionButton.setOnClickListener(view -> {
             if (Utils.hasNetworkConnection(view.getContext())) {

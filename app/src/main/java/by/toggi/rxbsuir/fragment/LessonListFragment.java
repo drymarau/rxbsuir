@@ -18,7 +18,6 @@ import javax.inject.Inject;
 
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.SubheaderItemDecoration;
-import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.model.Lesson;
 import dagger.Provides;
@@ -102,7 +101,6 @@ public class LessonListFragment extends Fragment implements LessonAdapter.OnItem
 
     @Override
     public void onItemClicked(Lesson lesson) {
-        LessonActivity.start(getContext(), lesson);
     }
 
     @dagger.Module
