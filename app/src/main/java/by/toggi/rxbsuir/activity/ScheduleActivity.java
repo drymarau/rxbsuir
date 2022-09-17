@@ -29,9 +29,8 @@ import com.google.android.material.snackbar.Snackbar;
 import by.toggi.rxbsuir.R;
 import by.toggi.rxbsuir.RateAppDialog;
 import by.toggi.rxbsuir.Utils;
-import by.toggi.rxbsuir.fragment.OnButtonClickListener;
 
-public abstract class ScheduleActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnButtonClickListener {
+public abstract class ScheduleActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final long ANIMATION_DURATION = 250;
 
@@ -114,11 +113,6 @@ public abstract class ScheduleActivity extends AppCompatActivity implements Navi
 
     @LayoutRes
     protected abstract int getLayoutRes();
-
-    @Override
-    public void onPositiveButtonClicked(int id, String name, boolean isGroupSchedule) {
-        toggleFloatingActionMenu(false);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
