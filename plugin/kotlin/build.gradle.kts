@@ -11,4 +11,5 @@ kotlin {
 dependencies {
     implementation(project(":android"))
     implementation(libs.kotlin)
+    implementation(libs.ktlint)
 }

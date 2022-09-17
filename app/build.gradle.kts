@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId = "by.toggi.rxbsuir"
         versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
-        versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
+        versionName = "$versionMajor.$versionMinor.$versionPatch"
     }
 }
 
