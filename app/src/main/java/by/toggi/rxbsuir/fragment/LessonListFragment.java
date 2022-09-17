@@ -21,7 +21,6 @@ import by.toggi.rxbsuir.SubheaderItemDecoration;
 import by.toggi.rxbsuir.activity.LessonActivity;
 import by.toggi.rxbsuir.adapter.LessonAdapter;
 import by.toggi.rxbsuir.model.Lesson;
-import by.toggi.rxbsuir.model.LessonListType;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -36,7 +35,7 @@ public class LessonListFragment extends Fragment implements LessonAdapter.OnItem
     @Inject
     SharedPreferences mSharedPreferences;
 
-    private LessonListType mType;
+    private Type mType;
     private LinearLayoutManager mLayoutManager;
 
     /**
@@ -45,7 +44,7 @@ public class LessonListFragment extends Fragment implements LessonAdapter.OnItem
      * @param type view type of the presenter
      * @return the week fragment
      */
-    public static LessonListFragment newInstance(LessonListType type) {
+    public static LessonListFragment newInstance(Type type) {
         var args = new Bundle();
         args.putSerializable(ARGS_VIEW_TYPE, type);
         var fragment = new LessonListFragment();
@@ -58,7 +57,7 @@ public class LessonListFragment extends Fragment implements LessonAdapter.OnItem
         super.onAttach(context);
         var args = getArguments();
         if (args != null) {
-            mType = (LessonListType) args.getSerializable(ARGS_VIEW_TYPE);
+            mType = (Type) args.getSerializable(ARGS_VIEW_TYPE);
         }
     }
 
@@ -111,8 +110,13 @@ public class LessonListFragment extends Fragment implements LessonAdapter.OnItem
     public static class Module {
 
         @Provides
-        LessonListType provide(Fragment fragment) {
-            return (LessonListType) fragment.getArguments().getSerializable(ARGS_VIEW_TYPE);
+        Type provide(Fragment fragment) {
+            return (Type) fragment.getArguments().getSerializable(ARGS_VIEW_TYPE);
         }
+    }
+
+    public enum Type {
+
+        TODAY, TOMORROW, WEEK_ONE, WEEK_TWO, WEEK_THREE, WEEK_FOUR;
     }
 }

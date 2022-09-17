@@ -16,7 +16,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 
 import by.toggi.rxbsuir.R;
-import by.toggi.rxbsuir.rest.model.StudentGroup;
+import by.toggi.rxbsuir.model.StudentGroup;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint

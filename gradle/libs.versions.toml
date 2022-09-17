@@ -8,10 +8,6 @@ androidx-recyclerview = "1.2.1"
 dagger = "2.43.2"
 material = "1.6.1"
 okhttp = "3.9.0"
-retrofit = "2.3.0"
-rxandroid = "1.2.1"
-rxjava = "1.2.7"
-rxpreferences = "1.0.2"
 timber = "4.5.1"
 
 [libraries]
@@ -25,11 +21,6 @@ dagger-hilt-android-runtime = { module = "com.google.dagger:hilt-android", versi
 material = { module = "com.google.android.material:material", version.ref = "material" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-logginginterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-retrofit-adapter-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava", version.ref = "retrofit" }
-retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
-rxandroid = { module = "io.reactivex:rxandroid", version.ref = "rxandroid" }
-rxjava = { module = "io.reactivex:rxjava", version.ref = "rxjava" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]

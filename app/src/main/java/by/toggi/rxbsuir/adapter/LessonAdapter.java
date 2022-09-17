@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.toggi.rxbsuir.R;
+import by.toggi.rxbsuir.fragment.LessonListFragment;
 import by.toggi.rxbsuir.model.Lesson;
-import by.toggi.rxbsuir.model.LessonListType;
 
 public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> {
 
@@ -25,11 +25,11 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     private static final int VIEW_TYPE_LESSON_TWO_LINE = 1;
     private static final int VIEW_TYPE_LESSON_THREE_LINE = 2;
 
-    private final LessonListType mType;
+    private final LessonListFragment.Type mType;
     private final OnItemClickListener mListener;
     private final List<Lesson> mLessonList;
 
-    public LessonAdapter(OnItemClickListener listener, LessonListType type) {
+    public LessonAdapter(OnItemClickListener listener, LessonListFragment.Type type) {
         mListener = listener;
         mLessonList = new ArrayList<>();
         mType = type;

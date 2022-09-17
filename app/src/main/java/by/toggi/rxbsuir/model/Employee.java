@@ -1,4 +1,4 @@
-package by.toggi.rxbsuir.rest.model;
+package by.toggi.rxbsuir.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -16,21 +16,9 @@ public class Employee implements Parcelable {
     public String lastName;
     public boolean isCached;
 
-    Employee() {
-    }
-
-    public static Employee newInstance(int id, List<String> academicDepartmentList, String firstName, String middleName, String lastName, boolean isCached) {
-        var employee = new Employee();
-        employee.id = id;
-        employee.academicDepartment = academicDepartmentList;
-        employee.firstName = firstName;
-        employee.middleName = middleName;
-        employee.lastName = lastName;
-        employee.isCached = isCached;
-        return employee;
-    }
-
-    @Override @NonNull public String toString() {
+    @Override
+    @NonNull
+    public String toString() {
         if (middleName == null) {
             return String.format("%s %s", lastName, firstName);
         } else {
