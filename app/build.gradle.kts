@@ -19,6 +19,9 @@ android {
         versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName = "$versionMajor.$versionMinor.$versionPatch"
     }
+    buildFeatures {
+        compose = true
+    }
 }
 
 hilt {
@@ -26,7 +29,10 @@ hilt {
 }
 
 dependencies {
-    implementation(libs.androidx.activity)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.accompanist.systemuicontroller)
 
     implementation(libs.dagger.hilt.android.runtime)
     kapt(libs.dagger.hilt.compiler)

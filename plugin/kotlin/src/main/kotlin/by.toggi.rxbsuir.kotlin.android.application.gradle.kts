@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     id("by.toggi.rxbsuir.android.application")
     id("org.jetbrains.kotlin.android")
@@ -11,6 +13,9 @@ pluginManager.withPlugin("org.jetbrains.kotlin.kapt") {
 }
 
 android {
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.1"
+    }
     kotlinOptions {
         jvmTarget = "${compileOptions.targetCompatibility}"
     }
