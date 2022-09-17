@@ -57,9 +57,6 @@ dependencies {
 
     implementation(libs.timber)
 
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logginginterceptor)
-
     implementation(libs.dagger.hilt.android.runtime)
     annotationProcessor(libs.dagger.hilt.compiler)
 }
