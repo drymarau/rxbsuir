@@ -1,0 +1,33 @@
+[
+  {
+    "firstName": "Татьяна",
+    "lastName": "Боброва",
+    "middleName": "Сергеевна",
+    "degree": "",
+    "rank": null,
+    "photoLink": "https://iis.bsuir.by/api/v1/employees/photo/505998",
+    "calendarId": "fuk02stp6lfuc6ed1vm2agnlpc@group.calendar.google.com",
+    "academicDepartment": [
+      "каф.ИТАС"
+    ],
+    "id": 505998,
+    "urlId": "t-bobrova",
+    "fio": "Боброва Т. С."
+  },
+  {
+    "firstName": "Василий",
+    "lastName": "Бондарик",
+    "middleName": "Михайлович",
+    "degree": "к.т.н.",
+    "rank": "доцент",
+    "photoLink": "https://iis.bsuir.by/api/v1/employees/photo/500089",
+    "calendarId": "5g288ss84smd52v50gtme4f6uo@group.calendar.google.com",
+    "academicDepartment": [
+      "каф.ЭТТ",
+      "каф.ПИКС"
+    ],
+    "id": 500089,
+    "urlId": "v-bondarik",
+    "fio": "Бондарик В. М. (доцент)"
+  }
+]

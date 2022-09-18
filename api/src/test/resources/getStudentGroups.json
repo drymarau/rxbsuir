@@ -1,0 +1,26 @@
+[
+  {
+    "name": "010101",
+    "facultyId": 20017,
+    "facultyAbbrev": "ФКП",
+    "specialityDepartmentEducationFormId": 20011,
+    "specialityName": "Информационные системы и технологии (по направлениям)",
+    "specialityAbbrev": "ИСиТ(в ОПБ)",
+    "course": 3,
+    "id": 23277,
+    "calendarId": "j7v9s1pqj8e82t57gg1i8fvo4s@group.calendar.google.com",
+    "educationDegree": 1
+  },
+  {
+    "name": "010201",
+    "facultyId": 20017,
+    "facultyAbbrev": "ФКП",
+    "specialityDepartmentEducationFormId": 20139,
+    "specialityName": "Проектирование и производство программно-управляемых электронных средств",
+    "specialityAbbrev": "ПиППУЭС",
+    "course": 3,
+    "id": 23288,
+    "calendarId": "i66i333kqbneqr8lnpqu0ltti8@group.calendar.google.com",
+    "educationDegree": 1
+  }
+]

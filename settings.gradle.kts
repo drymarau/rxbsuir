@@ -1,3 +1,7 @@
+@file:Suppress("UnstableApiUsage")
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -14,4 +18,6 @@ dependencyResolutionManagement {
     }
 }
 
+rootProject.name = "rxbsuir"
+include(":api")
 include(":app")

@@ -29,11 +29,15 @@ hilt {
 }
 
 dependencies {
+    implementation(projects.api)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.compose.material3)
     implementation(libs.accompanist.systemuicontroller)
 
-    implementation(libs.dagger.hilt.android.runtime)
+    implementation(libs.okhttp.logginginterceptor)
+
+    implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)
 }
