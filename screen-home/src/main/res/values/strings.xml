@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_title" translatable="false">RxBSUIR</string>
+    <string name="home_item_student_groups">Student groups</string>
+    <string name="home_item_employees">Employees</string>
+</resources>

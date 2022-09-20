@@ -1,7 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
-    id("by.toggi.rxbsuir.android.application")
+    id("by.toggi.rxbsuir.android.library")
     id("org.jetbrains.kotlin.android")
     id("org.jlleitschuh.gradle.ktlint")
 }
@@ -18,6 +18,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "${compileOptions.targetCompatibility}"
+        freeCompilerArgs += "-Xexplicit-api=strict"
     }
     sourceSets.configureEach {
         java.srcDirs("src/$name/kotlin")

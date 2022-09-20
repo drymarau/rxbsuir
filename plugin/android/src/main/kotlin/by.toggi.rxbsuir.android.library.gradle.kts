@@ -1,7 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
 }
 
 android {
@@ -9,16 +9,10 @@ android {
     defaultConfig {
         minSdk = Android.minSdk
         targetSdk = Android.targetSdk
-        testInstrumentationRunner = Android.testInstrumentationRunner
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
-        buildConfig = true
-    }
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-        }
+        buildConfig = false
     }
     compileOptions {
         sourceCompatibility = Android.sourceCompatibility
@@ -28,10 +22,6 @@ android {
         unitTests {
             isIncludeAndroidResources = true
         }
-    }
-    lint {
-        checkDependencies = true
-        ignoreTestSources = true
     }
 }
 

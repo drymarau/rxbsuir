@@ -57,14 +57,14 @@ internal class OkHttpClientBsuirClient(
     @OptIn(ExperimentalSerializationApi::class)
     private fun handleGetStudentGroupsResponse(response: Response): List<StudentGroup> =
         when (response.code) {
-            200 -> json.decodeFromBufferedSource(response.body!!.source())
+            200 -> response.body!!.source().use(json::decodeFromBufferedSource)
             else -> throw IllegalStateException()
         }
 
     @OptIn(ExperimentalSerializationApi::class)
     private fun handleGetEmployeesResponse(response: Response): List<Employee> =
         when (response.code) {
-            200 -> json.decodeFromBufferedSource(response.body!!.source())
+            200 -> response.body!!.source().use(json::decodeFromBufferedSource)
             else -> throw IllegalStateException()
         }
 }

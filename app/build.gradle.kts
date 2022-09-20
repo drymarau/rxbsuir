@@ -4,6 +4,7 @@ plugins {
     id("by.toggi.rxbsuir.kotlin.android.application")
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 // Manifest version information
@@ -29,14 +30,18 @@ hilt {
 }
 
 dependencies {
-    implementation(projects.api)
+    implementation(projects.screenHome)
+    implementation(projects.screenStudentGroups)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.compose.material3)
     implementation(libs.accompanist.systemuicontroller)
 
+    implementation(libs.okhttp)
     implementation(libs.okhttp.logginginterceptor)
+
+    implementation(libs.workflow.ui.compose)
 
     implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)

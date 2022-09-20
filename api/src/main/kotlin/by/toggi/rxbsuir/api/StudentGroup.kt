@@ -9,4 +9,4 @@ import kotlinx.serialization.Serializable
  * @property course a course of this student group
  */
 @Serializable
-public data class StudentGroup(val name: String, val course: Int)
+public data class StudentGroup(val name: String, val course: Int?)

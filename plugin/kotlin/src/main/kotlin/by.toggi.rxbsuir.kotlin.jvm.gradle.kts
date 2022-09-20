@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     id("org.jlleitschuh.gradle.ktlint")
+    id("com.android.lint")
 }
 
 pluginManager.withPlugin("org.jetbrains.kotlin.kapt") {

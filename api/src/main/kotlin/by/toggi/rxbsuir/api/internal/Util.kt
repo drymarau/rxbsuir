@@ -12,22 +12,25 @@ import java.io.IOException
 import kotlin.coroutines.resumeWithException
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal suspend fun Call.await(): Response = suspendCancellableCoroutine {
-    it.invokeOnCancellation { cancel() }
-    val callback = object : Callback {
+internal suspend inline fun <R> Call.await(crossinline block: (Response) -> R): R =
+    suspendCancellableCoroutine {
+        it.invokeOnCancellation { cancel() }
+        val callback = object : Callback {
 
-        override fun onResponse(call: Call, response: Response) {
-            it.resume(response) { response.close() }
-        }
+            override fun onResponse(call: Call, response: Response) {
+                try {
+                    it.resume(response.use(block)) { response.close() }
+                } catch (t: Throwable) {
+                    it.resumeWithException(t)
+                }
+            }
 
-        override fun onFailure(call: Call, e: IOException) {
-            it.resumeWithException(e)
+            override fun onFailure(call: Call, e: IOException) {
+                it.resumeWithException(e)
+            }
         }
+        enqueue(callback)
     }
-    enqueue(callback)
-}
-
-internal suspend inline fun <R> Call.await(block: (Response) -> R) = await().use(block)
 
 internal inline fun HttpUrl(block: HttpUrl.Builder.() -> Unit) =
     HttpUrl.Builder().apply(block).build()
