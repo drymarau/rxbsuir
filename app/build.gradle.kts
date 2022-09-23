@@ -32,6 +32,7 @@ hilt {
 dependencies {
     implementation(projects.screenHome)
     implementation(projects.screenStudentGroups)
+    implementation(projects.workflow)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
@@ -40,8 +41,6 @@ dependencies {
 
     implementation(libs.okhttp)
     implementation(libs.okhttp.logginginterceptor)
-
-    implementation(libs.workflow.ui.compose)
 
     implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)

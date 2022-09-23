@@ -1,4 +1,4 @@
-package by.toggi.rxbsuir.screen.studentgroups.internal
+package by.toggi.rxbsuir.screen.studentgroups
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
@@ -17,9 +17,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import by.toggi.rxbsuir.api.StudentGroup
 
+public data class StudentGroupsScreen(
+    val studentGroups: List<StudentGroup>,
+    val onBackClick: () -> Unit
+)
+
+@Composable
+public fun StudentGroupsScreen(screen: StudentGroupsScreen, modifier: Modifier = Modifier) {
+    StudentGroupsScreen(
+        studentGroups = screen.studentGroups,
+        onBackClick = screen.onBackClick,
+        modifier = modifier
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun StudentGroupsScreenRenderer(
+internal fun StudentGroupsScreen(
     studentGroups: List<StudentGroup>,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier

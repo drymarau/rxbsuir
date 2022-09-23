@@ -1,4 +1,4 @@
-package by.toggi.rxbsuir.screen.home.internal
+package by.toggi.rxbsuir.screen.home
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
@@ -12,11 +12,26 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import by.toggi.rxbsuir.screen.home.R
+
+public data class HomeScreen(
+    val onStudentGroupsClick: () -> Unit,
+    val onEmployeesClick: () -> Unit,
+    val onBackClick: () -> Unit
+)
+
+@Composable
+public fun HomeScreen(screen: HomeScreen, modifier: Modifier = Modifier) {
+    HomeScreen(
+        onStudentGroupsClick = screen.onStudentGroupsClick,
+        onEmployeesClick = screen.onEmployeesClick,
+        onBackClick = screen.onBackClick,
+        modifier = modifier
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun HomeScreenRenderer(
+internal fun HomeScreen(
     onStudentGroupsClick: () -> Unit,
     onEmployeesClick: () -> Unit,
     onBackClick: () -> Unit,

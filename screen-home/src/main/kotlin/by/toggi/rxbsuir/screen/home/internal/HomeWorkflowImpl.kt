@@ -1,25 +1,25 @@
 package by.toggi.rxbsuir.screen.home.internal
 
+import androidx.compose.runtime.Composable
 import by.toggi.rxbsuir.screen.home.HomeOutput
 import by.toggi.rxbsuir.screen.home.HomeScreen
 import by.toggi.rxbsuir.screen.home.HomeWorkflow
-import com.squareup.workflow1.StatelessWorkflow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class HomeWorkflowImpl @Inject constructor() :
-    HomeWorkflow, StatelessWorkflow<Unit, HomeOutput, HomeScreen>() {
+internal class HomeWorkflowImpl @Inject constructor() : HomeWorkflow {
 
-    override fun render(renderProps: Unit, context: RenderContext): HomeScreen = HomeScreen(
+    @Composable
+    override fun render(props: Unit, onOutput: (HomeOutput) -> Unit): HomeScreen = HomeScreen(
         onStudentGroupsClick = {
-            context.actionSink.send(OnStudentGroupsClick)
+            onOutput(HomeOutput.OnStudentGroups)
         },
-        onEmployeesClick = context.eventHandler {
-            context.actionSink.send(OnEmployeesClick)
+        onEmployeesClick = {
+            onOutput(HomeOutput.OnEmployees)
         },
-        onBackClick = context.eventHandler {
-            context.actionSink.send(OnBackClick)
+        onBackClick = {
+            onOutput(HomeOutput.OnBack)
         }
     )
 }

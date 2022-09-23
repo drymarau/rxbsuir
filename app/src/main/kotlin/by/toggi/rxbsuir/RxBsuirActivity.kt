@@ -3,42 +3,37 @@ package by.toggi.rxbsuir
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.lifecycleScope
-import com.squareup.workflow1.ui.ViewEnvironment
-import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
-import com.squareup.workflow1.ui.compose.WorkflowRendering
+import by.toggi.rxbsuir.screen.home.HomeScreen
+import by.toggi.rxbsuir.screen.studentgroups.StudentGroupsScreen
+import by.toggi.rxbsuir.workflow.render
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-@OptIn(WorkflowUiExperimentalApi::class)
 @AndroidEntryPoint
 class RxBsuirActivity : ComponentActivity() {
 
     @Inject
-    lateinit var viewEnvironment: ViewEnvironment
-
-    private val viewModel by viewModels<RxBsuirViewModel>()
+    lateinit var workflow: RxBsuirWorkflow
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        viewModel.output
-            .onEach(::handle)
-            .launchIn(lifecycleScope)
         setContent {
-            val rendering by viewModel.rendering.collectAsState()
+            val rendering = workflow.render(::handle)
             RxBsuirTheme {
-                WorkflowRendering(
-                    rendering = rendering,
-                    viewEnvironment = viewEnvironment
-                )
+                render(rendering)
             }
+        }
+    }
+
+    @Composable
+    private fun render(screen: Any, modifier: Modifier = Modifier) {
+        when (screen) {
+            is HomeScreen -> HomeScreen(screen, modifier)
+            is StudentGroupsScreen -> StudentGroupsScreen(screen, modifier)
         }
     }
 
