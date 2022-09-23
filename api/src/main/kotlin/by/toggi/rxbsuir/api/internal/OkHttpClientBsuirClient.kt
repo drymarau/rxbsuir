@@ -3,9 +3,7 @@ package by.toggi.rxbsuir.api.internal
 import by.toggi.rxbsuir.api.BsuirClient
 import by.toggi.rxbsuir.api.Employee
 import by.toggi.rxbsuir.api.StudentGroup
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.okio.decodeFromBufferedSource
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -41,7 +39,7 @@ internal class OkHttpClientBsuirClient(
             }
             accept(ApplicationJson)
         }
-        .await(::handleGetStudentGroupsResponse)
+        .await(::getStudentGroupsResponse)
 
     override suspend fun getEmployees(): List<Employee> = client
         .newCall {
@@ -52,19 +50,16 @@ internal class OkHttpClientBsuirClient(
             }
             accept(ApplicationJson)
         }
-        .await(::handleGetEmployeesResponse)
+        .await(::getEmployeesResponse)
 
-    @OptIn(ExperimentalSerializationApi::class)
-    private fun handleGetStudentGroupsResponse(response: Response): List<StudentGroup> =
+    private fun getStudentGroupsResponse(response: Response): List<StudentGroup> =
         when (response.code) {
-            200 -> response.body!!.source().use(json::decodeFromBufferedSource)
+            200 -> json.decodeFromResponseBody(response.body!!)
             else -> throw IllegalStateException()
         }
 
-    @OptIn(ExperimentalSerializationApi::class)
-    private fun handleGetEmployeesResponse(response: Response): List<Employee> =
-        when (response.code) {
-            200 -> response.body!!.source().use(json::decodeFromBufferedSource)
-            else -> throw IllegalStateException()
-        }
+    private fun getEmployeesResponse(response: Response): List<Employee> = when (response.code) {
+        200 -> json.decodeFromResponseBody(response.body!!)
+        else -> throw IllegalStateException()
+    }
 }

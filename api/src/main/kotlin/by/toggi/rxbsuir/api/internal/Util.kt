@@ -2,12 +2,16 @@ package by.toggi.rxbsuir.api.internal
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.okio.decodeFromBufferedSource
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.ResponseBody
 import java.io.IOException
 import kotlin.coroutines.resumeWithException
 
@@ -48,5 +52,9 @@ internal fun Request.Builder.accept(mimeType: String) = addHeader("Accept", mime
 
 internal inline fun OkHttpClient.newCall(block: Request.Builder.() -> Unit) =
     newCall(Request(block))
+
+@OptIn(ExperimentalSerializationApi::class)
+internal inline fun <reified T> Json.decodeFromResponseBody(body: ResponseBody): T =
+    body.source().use(::decodeFromBufferedSource)
 
 internal const val ApplicationJson = "application/json"
