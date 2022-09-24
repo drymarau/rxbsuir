@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import by.toggi.rxbsuir.api.BsuirClient
@@ -22,20 +23,28 @@ internal class StudentGroupsWorkflowImpl @Inject constructor(private val client:
     StudentGroupsWorkflow {
 
     @Composable
-    override fun render(
-        props: Unit,
-        onOutput: (StudentGroupsOutput) -> Unit
-    ): StudentGroupsScreen {
+    override fun render(props: Unit, onOutput: (StudentGroupsOutput) -> Unit): StudentGroupsScreen {
         var state by rememberSaveable { mutableStateOf(StudentGroupsState()) }
-        LaunchedEffect(client) {
-            state = StudentGroupsState(client.getStudentGroups())
-        }
+        GetStudentGroupsEffect { state = StudentGroupsState(it) }
         return StudentGroupsScreen(
             studentGroups = state.studentGroups,
             onBackClick = {
                 onOutput(StudentGroupsOutput.OnBack)
             }
         )
+    }
+
+    @Composable
+    private fun GetStudentGroupsEffect(onStudentGroups: (List<StudentGroup>) -> Unit) {
+        val currentOnStudentGroups by rememberUpdatedState(onStudentGroups)
+        LaunchedEffect(client) {
+            val studentGroups = try {
+                client.getStudentGroups()
+            } catch (t: Throwable) {
+                emptyList()
+            }
+            currentOnStudentGroups(studentGroups)
+        }
     }
 }
 
