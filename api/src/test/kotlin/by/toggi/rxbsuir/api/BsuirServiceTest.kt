@@ -52,10 +52,12 @@ class BsuirServiceTest {
         assertEquals(
             expected = listOf(
                 StudentGroup(
+                    id = 23277,
                     name = "010101",
                     course = 3
                 ),
                 StudentGroup(
+                    id = 23288,
                     name = "010201",
                     course = 3
                 )
@@ -81,6 +83,7 @@ class BsuirServiceTest {
         assertEquals(
             expected = listOf(
                 Employee(
+                    id = 505998,
                     urlId = "t-bobrova",
                     lastName = "Боброва",
                     firstName = "Татьяна",
@@ -90,6 +93,7 @@ class BsuirServiceTest {
                     photoLink = "https://iis.bsuir.by/api/v1/employees/photo/505998"
                 ),
                 Employee(
+                    id = 500089,
                     urlId = "v-bondarik",
                     lastName = "Бондарик",
                     firstName = "Василий",

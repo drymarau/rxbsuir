@@ -10,4 +10,7 @@ sealed interface RxBsuirScreen : Parcelable {
 
     @Parcelize
     object StudentGroups : RxBsuirScreen
+
+    @Parcelize
+    object Employees : RxBsuirScreen
 }

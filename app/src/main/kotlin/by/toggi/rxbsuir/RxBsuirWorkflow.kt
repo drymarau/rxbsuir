@@ -6,6 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import by.toggi.rxbsuir.screen.employees.EmployeesOutput
+import by.toggi.rxbsuir.screen.employees.EmployeesWorkflow
 import by.toggi.rxbsuir.screen.home.HomeOutput
 import by.toggi.rxbsuir.screen.home.HomeWorkflow
 import by.toggi.rxbsuir.screen.studentgroups.StudentGroupsOutput
@@ -19,6 +21,7 @@ import javax.inject.Singleton
 @Singleton
 class RxBsuirWorkflow @Inject constructor(
     private val homeWorkflow: HomeWorkflow,
+    private val employeesWorkflow: EmployeesWorkflow,
     private val studentGroupsWorkflow: StudentGroupsWorkflow
 ) : Workflow<Unit, RxBsuirOutput, Any> {
 
@@ -31,8 +34,15 @@ class RxBsuirWorkflow @Inject constructor(
                     is HomeOutput.OnStudentGroups -> {
                         state = RxBsuirState(RxBsuirScreen.StudentGroups)
                     }
-                    is HomeOutput.OnEmployees -> {}
+                    is HomeOutput.OnEmployees -> {
+                        state = RxBsuirState(RxBsuirScreen.Employees)
+                    }
                     is HomeOutput.OnBack -> onOutput(RxBsuirOutput.OnBack)
+                }
+            }
+            is RxBsuirScreen.Employees -> employeesWorkflow.render {
+                when (it) {
+                    EmployeesOutput.OnBack -> state = RxBsuirState(RxBsuirScreen.Home)
                 }
             }
             is RxBsuirScreen.StudentGroups -> studentGroupsWorkflow.render {

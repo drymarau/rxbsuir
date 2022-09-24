@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.screen.studentgroups.internal
 
+import android.os.Parcel
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,6 +14,7 @@ import by.toggi.rxbsuir.api.StudentGroup
 import by.toggi.rxbsuir.screen.studentgroups.StudentGroupsOutput
 import by.toggi.rxbsuir.screen.studentgroups.StudentGroupsScreen
 import by.toggi.rxbsuir.screen.studentgroups.StudentGroupsWorkflow
+import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.TypeParceler
 import javax.inject.Inject
@@ -53,3 +55,21 @@ internal class StudentGroupsWorkflowImpl @Inject constructor(private val client:
 @JvmInline
 private value class StudentGroupsState(val studentGroups: List<StudentGroup> = emptyList()) :
     Parcelable
+
+private object StudentGroupParceler : Parceler<StudentGroup> {
+
+    override fun create(parcel: Parcel): StudentGroup = StudentGroup(
+        id = parcel.readLong(),
+        name = parcel.readString()!!,
+        course = when (val course = parcel.readInt()) {
+            -1 -> null
+            else -> course
+        }
+    )
+
+    override fun StudentGroup.write(parcel: Parcel, flags: Int) {
+        parcel.writeLong(id)
+        parcel.writeString(name)
+        parcel.writeInt(course ?: -1)
+    }
+}

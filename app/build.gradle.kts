@@ -30,6 +30,7 @@ hilt {
 }
 
 dependencies {
+    implementation(projects.screenEmployees)
     implementation(projects.screenHome)
     implementation(projects.screenStudentGroups)
     implementation(projects.workflow)
@@ -38,6 +39,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.compose.material3)
     implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.coil.compose)
 
     implementation(libs.okhttp)
     implementation(libs.okhttp.logginginterceptor)

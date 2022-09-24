@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 /**
  * A BSUIR employee.
  *
+ * @property id a unique ID of this employee
  * @property urlId a unique URL id to query other resources
  * @property lastName a last name of this employee
  * @property firstName a first name of this employee
@@ -15,6 +16,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class Employee(
+    val id: Long,
     val urlId: String,
     val lastName: String,
     val firstName: String,

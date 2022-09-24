@@ -26,10 +26,10 @@ internal class StudentGroupsWorkflowTest {
     }
 
     @Test
-    fun `studentGroups gets updated`() = runTest {
+    fun `studentGroups get updated`() = runTest {
         val studentGroups = listOf(
-            StudentGroup(name = "711801", course = 5),
-            StudentGroup(name = "011801", course = 2)
+            StudentGroup(id = 1, name = "711801", course = 5),
+            StudentGroup(id = 2, name = "011801", course = 2)
         )
         val workflow = StudentGroupsWorkflow { studentGroups }
         workflow.test {

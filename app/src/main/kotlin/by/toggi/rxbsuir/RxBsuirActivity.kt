@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import by.toggi.rxbsuir.screen.employees.EmployeesScreen
 import by.toggi.rxbsuir.screen.home.HomeScreen
 import by.toggi.rxbsuir.screen.studentgroups.StudentGroupsScreen
 import by.toggi.rxbsuir.workflow.render
@@ -24,14 +25,15 @@ class RxBsuirActivity : ComponentActivity() {
         setContent {
             val rendering = workflow.render(::handle)
             RxBsuirTheme {
-                render(rendering)
+                Render(rendering)
             }
         }
     }
 
     @Composable
-    private fun render(screen: Any, modifier: Modifier = Modifier) {
+    private fun Render(screen: Any, modifier: Modifier = Modifier) {
         when (screen) {
+            is EmployeesScreen -> EmployeesScreen(screen, modifier)
             is HomeScreen -> HomeScreen(screen, modifier)
             is StudentGroupsScreen -> StudentGroupsScreen(screen, modifier)
         }
