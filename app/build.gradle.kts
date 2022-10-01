@@ -30,6 +30,8 @@ hilt {
 }
 
 dependencies {
+    implementation(projects.api)
+    implementation(projects.screenAnnouncements)
     implementation(projects.screenEmployees)
     implementation(projects.screenHome)
     implementation(projects.screenStudentGroups)

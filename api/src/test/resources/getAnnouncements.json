@@ -1,0 +1,52 @@
+[
+  {
+    "id": 799,
+    "employee": "Кракасевич С. В.",
+    "urlId": "s-krakasevich",
+    "content": "Организационное собрание, ауд. 112-3",
+    "date": "26.09.2022",
+    "startTime": "11:00",
+    "endTime": "12:00",
+    "employeeDepartments": [
+      "Деканат ФКП",
+      "Каф.ЭТТ"
+    ],
+    "studentGroups": [
+      {
+        "id": 23847,
+        "name": "213871",
+        "zaochOrDist": true
+      },
+      {
+        "id": 23843,
+        "name": "214371",
+        "zaochOrDist": true
+      }
+    ]
+  },
+  {
+    "id": 800,
+    "employee": "Кракасевич С. В.",
+    "urlId": "s-krakasevich",
+    "content": "Организационное собрание, ауд. 112-3",
+    "date": "26.09.2022",
+    "startTime": "11:00",
+    "endTime": "12:00",
+    "employeeDepartments": [
+      "Деканат ФКП",
+      "Каф.ЭТТ"
+    ],
+    "studentGroups": [
+      {
+        "id": 23923,
+        "name": "210271",
+        "zaochOrDist": true
+      },
+      {
+        "id": 23844,
+        "name": "213371",
+        "zaochOrDist": true
+      }
+    ]
+  }
+]

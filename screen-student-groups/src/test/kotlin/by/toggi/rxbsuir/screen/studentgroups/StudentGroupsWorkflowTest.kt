@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.screen.studentgroups
 
+import by.toggi.rxbsuir.api.Announcement
 import by.toggi.rxbsuir.api.BsuirClient
 import by.toggi.rxbsuir.api.Employee
 import by.toggi.rxbsuir.api.StudentGroup
@@ -46,6 +47,8 @@ internal class StudentGroupsWorkflowTest {
             override suspend fun getStudentGroups(): List<StudentGroup> = getStudentGroups()
 
             override suspend fun getEmployees(): List<Employee> = TODO()
+
+            override suspend fun getAnnouncements(urlId: String): List<Announcement> = TODO()
         }
         return StudentGroupsWorkflowImpl(client)
     }

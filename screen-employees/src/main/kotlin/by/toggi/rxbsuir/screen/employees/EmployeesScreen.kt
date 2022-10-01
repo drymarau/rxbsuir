@@ -2,6 +2,7 @@ package by.toggi.rxbsuir.screen.employees
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,12 +26,17 @@ import androidx.compose.ui.unit.dp
 import by.toggi.rxbsuir.api.Employee
 import coil.compose.AsyncImage
 
-public data class EmployeesScreen(val employees: List<Employee>, val onBackClick: () -> Unit)
+public data class EmployeesScreen(
+    val employees: List<Employee>,
+    val onEmployeeClick: (Employee) -> Unit,
+    val onBackClick: () -> Unit,
+)
 
 @Composable
 public fun EmployeesScreen(screen: EmployeesScreen, modifier: Modifier = Modifier) {
     EmployeesScreen(
         employees = screen.employees,
+        onEmployeeClick = screen.onEmployeeClick,
         onBackClick = screen.onBackClick,
         modifier = modifier
     )
@@ -40,8 +46,9 @@ public fun EmployeesScreen(screen: EmployeesScreen, modifier: Modifier = Modifie
 @Composable
 internal fun EmployeesScreen(
     employees: List<Employee>,
+    onEmployeeClick: (Employee) -> Unit,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     BackHandler(onBack = onBackClick)
     Scaffold(
@@ -64,7 +71,12 @@ internal fun EmployeesScreen(
     ) {
         LazyColumn(modifier = Modifier.padding(it)) {
             items(employees, Employee::id) { employee ->
-                Employee(employee)
+                Employee(
+                    employee = employee,
+                    onClick = {
+                        onEmployeeClick(employee)
+                    }
+                )
             }
         }
     }
@@ -72,7 +84,7 @@ internal fun EmployeesScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Employee(employee: Employee, modifier: Modifier = Modifier) {
+private fun Employee(employee: Employee, onClick: () -> Unit, modifier: Modifier = Modifier) {
     ListItem(
         leadingContent = {
             AsyncImage(
@@ -91,6 +103,6 @@ private fun Employee(employee: Employee, modifier: Modifier = Modifier) {
                 overflow = TextOverflow.Ellipsis
             )
         },
-        modifier = modifier
+        modifier = modifier.clickable(onClick = onClick)
     )
 }

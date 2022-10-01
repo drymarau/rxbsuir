@@ -18,4 +18,11 @@ public interface BsuirClient {
      * @return a list of employees
      */
     public suspend fun getEmployees(): List<Employee>
+
+    /**
+     * Requests a list of announcements for an employee
+     *
+     * @return a list of announcements
+     */
+    public suspend fun getAnnouncements(urlId: String): List<Announcement>
 }

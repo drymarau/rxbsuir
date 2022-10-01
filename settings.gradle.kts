@@ -21,6 +21,7 @@ dependencyResolutionManagement {
 rootProject.name = "rxbsuir"
 include(":api")
 include(":app")
+include(":screen-announcements")
 include(":screen-employees")
 include(":screen-home")
 include(":screen-student-groups")

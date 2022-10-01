@@ -5,6 +5,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.okio.decodeFromBufferedSource
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.contextual
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.HttpUrl
@@ -58,3 +60,10 @@ internal inline fun <reified T> Json.decodeFromResponseBody(body: ResponseBody):
     body.source().use(::decodeFromBufferedSource)
 
 internal const val ApplicationJson = "application/json"
+
+internal val DefaultJson = Json {
+    ignoreUnknownKeys = true
+    serializersModule = SerializersModule {
+        contextual(LocalDateSerializer)
+    }
+}

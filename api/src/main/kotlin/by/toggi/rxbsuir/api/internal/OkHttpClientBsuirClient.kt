@@ -1,5 +1,6 @@
 package by.toggi.rxbsuir.api.internal
 
+import by.toggi.rxbsuir.api.Announcement
 import by.toggi.rxbsuir.api.BsuirClient
 import by.toggi.rxbsuir.api.Employee
 import by.toggi.rxbsuir.api.StudentGroup
@@ -14,15 +15,13 @@ import javax.inject.Singleton
 internal class OkHttpClientBsuirClient(
     private val client: OkHttpClient,
     private val json: Json,
-    private val url: HttpUrl
+    private val url: HttpUrl,
 ) : BsuirClient {
 
     @Inject
     constructor(client: OkHttpClient) : this(
         client = client,
-        json = Json {
-            ignoreUnknownKeys = true
-        },
+        json = DefaultJson,
         url = HttpUrl {
             scheme("https")
             host("iis.bsuir.by")
@@ -52,6 +51,18 @@ internal class OkHttpClientBsuirClient(
         }
         .await(::getEmployeesResponse)
 
+    override suspend fun getAnnouncements(urlId: String): List<Announcement> = client
+        .newCall {
+            get()
+            url(url) {
+                addPathSegment("announcements")
+                addPathSegment("employees")
+                addQueryParameter("url-id", urlId)
+            }
+            accept(ApplicationJson)
+        }
+        .await(::getAnnouncements)
+
     private fun getStudentGroupsResponse(response: Response): List<StudentGroup> =
         when (response.code) {
             200 -> json.decodeFromResponseBody(response.body!!)
@@ -59,6 +70,11 @@ internal class OkHttpClientBsuirClient(
         }
 
     private fun getEmployeesResponse(response: Response): List<Employee> = when (response.code) {
+        200 -> json.decodeFromResponseBody(response.body!!)
+        else -> throw IllegalStateException()
+    }
+
+    private fun getAnnouncements(response: Response): List<Announcement> = when (response.code) {
         200 -> json.decodeFromResponseBody(response.body!!)
         else -> throw IllegalStateException()
     }

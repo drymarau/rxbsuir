@@ -9,6 +9,7 @@ coil = "2.2.1"
 dagger = "2.44"
 kotlin = "1.7.10"
 kotlinx-coroutines = "1.6.4"
+kotlinx-datetime = "0.4.0"
 kotlinx-serialization = "1.4.0"
 ktlint = "11.0.0"
 molecule = "0.4.0"
@@ -30,6 +31,7 @@ kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-serialization-json-okio = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-okio", version.ref = "kotlinx-serialization" }
 ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
 molecule = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }

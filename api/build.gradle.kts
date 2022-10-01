@@ -8,6 +8,8 @@ plugins {
 
 dependencies {
     api(libs.okhttp)
+    api(libs.kotlinx.datetime)
+
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json.okio)
     implementation(libs.dagger.hilt.core)

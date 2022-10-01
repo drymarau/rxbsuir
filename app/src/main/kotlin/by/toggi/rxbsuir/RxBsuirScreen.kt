@@ -1,7 +1,10 @@
 package by.toggi.rxbsuir
 
 import android.os.Parcelable
+import by.toggi.rxbsuir.api.Employee
+import by.toggi.rxbsuir.screen.employees.EmployeeParceler
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.TypeParceler
 
 sealed interface RxBsuirScreen : Parcelable {
 
@@ -13,4 +16,9 @@ sealed interface RxBsuirScreen : Parcelable {
 
     @Parcelize
     object Employees : RxBsuirScreen
+
+    @TypeParceler<Employee, EmployeeParceler>
+    @Parcelize
+    @JvmInline
+    value class Announcements(val employee: Employee) : RxBsuirScreen
 }

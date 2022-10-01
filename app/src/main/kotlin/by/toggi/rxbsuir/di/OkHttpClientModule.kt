@@ -16,8 +16,8 @@ object OkHttpClientModule {
     @Provides
     @Singleton
     fun provide(): OkHttpClient {
-        val interceptor = HttpLoggingInterceptor { Log.d("OkHttpClient", it) }
-        interceptor.level = HttpLoggingInterceptor.Level.HEADERS
+        val interceptor = HttpLoggingInterceptor { Log.v("OkHttpClient", it) }
+        interceptor.level = HttpLoggingInterceptor.Level.BASIC
         return OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .build()

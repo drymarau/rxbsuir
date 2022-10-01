@@ -1,6 +1,5 @@
 package by.toggi.rxbsuir.screen.employees.internal
 
-import android.os.Parcel
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -11,10 +10,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import by.toggi.rxbsuir.api.BsuirClient
 import by.toggi.rxbsuir.api.Employee
+import by.toggi.rxbsuir.screen.employees.EmployeeParceler
 import by.toggi.rxbsuir.screen.employees.EmployeesOutput
 import by.toggi.rxbsuir.screen.employees.EmployeesScreen
 import by.toggi.rxbsuir.screen.employees.EmployeesWorkflow
-import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.TypeParceler
 import javax.inject.Inject
@@ -30,6 +29,9 @@ internal class EmployeesWorkflowImpl @Inject constructor(private val client: Bsu
         GetEmployeesEffect { state = EmployeesState(it) }
         return EmployeesScreen(
             employees = state.employees,
+            onEmployeeClick = {
+                onOutput(EmployeesOutput.OnEmployee(it))
+            },
             onBackClick = {
                 onOutput(EmployeesOutput.OnBack)
             }
@@ -54,28 +56,3 @@ internal class EmployeesWorkflowImpl @Inject constructor(private val client: Bsu
 @Parcelize
 @JvmInline
 private value class EmployeesState(val employees: List<Employee> = emptyList()) : Parcelable
-
-private object EmployeeParceler : Parceler<Employee> {
-
-    override fun create(parcel: Parcel): Employee = Employee(
-        id = parcel.readLong(),
-        urlId = parcel.readString()!!,
-        lastName = parcel.readString()!!,
-        firstName = parcel.readString()!!,
-        middleName = parcel.readString()!!,
-        photoLink = parcel.readString()!!,
-        degree = parcel.readString()!!,
-        rank = parcel.readString()
-    )
-
-    override fun Employee.write(parcel: Parcel, flags: Int) {
-        parcel.writeLong(id)
-        parcel.writeString(urlId)
-        parcel.writeString(lastName)
-        parcel.writeString(firstName)
-        parcel.writeString(middleName)
-        parcel.writeString(photoLink)
-        parcel.writeString(degree)
-        parcel.writeString(rank)
-    }
-}

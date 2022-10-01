@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import by.toggi.rxbsuir.screen.announcements.AnnouncementsScreen
 import by.toggi.rxbsuir.screen.employees.EmployeesScreen
 import by.toggi.rxbsuir.screen.home.HomeScreen
 import by.toggi.rxbsuir.screen.studentgroups.StudentGroupsScreen
@@ -33,9 +34,10 @@ class RxBsuirActivity : ComponentActivity() {
     @Composable
     private fun Render(screen: Any, modifier: Modifier = Modifier) {
         when (screen) {
-            is EmployeesScreen -> EmployeesScreen(screen, modifier)
             is HomeScreen -> HomeScreen(screen, modifier)
+            is EmployeesScreen -> EmployeesScreen(screen, modifier)
             is StudentGroupsScreen -> StudentGroupsScreen(screen, modifier)
+            is AnnouncementsScreen -> AnnouncementsScreen(screen, modifier)
         }
     }
 
