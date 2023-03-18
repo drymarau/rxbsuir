@@ -6,20 +6,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint")
 }
 
-pluginManager.withPlugin("org.jetbrains.kotlin.kapt") {
-    configure<org.jetbrains.kotlin.gradle.plugin.KaptExtension> {
-        correctErrorTypes = true
-    }
-}
-
 android {
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.1"
-    }
-    kotlinOptions {
-        jvmTarget = "${compileOptions.targetCompatibility}"
-        freeCompilerArgs += "-Xexplicit-api=strict"
-    }
     sourceSets.configureEach {
         java.srcDirs("src/$name/kotlin")
     }
@@ -28,6 +15,12 @@ android {
 dependencies {
     testImplementation(kotlin("test-junit"))
     androidTestImplementation(kotlin("test-junit"))
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        freeCompilerArgs.add("-Xexplicit-api=strict")
+    }
 }
 
 tasks.withType<Test>().configureEach {

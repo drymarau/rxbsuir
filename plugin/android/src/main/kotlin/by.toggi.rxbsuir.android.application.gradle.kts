@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import gradle.kotlin.dsl.accessors._80a2ae57395e1362b61311ead0eb480f.java
+
 plugins {
     id("com.android.application")
 }
@@ -24,6 +26,9 @@ android {
         sourceCompatibility = Android.sourceCompatibility
         targetCompatibility = Android.targetCompatibility
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Android.kotlinCompilerExtensionVersion
+    }
     testOptions {
         unitTests {
             isReturnDefaultValues = true
@@ -33,6 +38,12 @@ android {
     lint {
         checkDependencies = true
         ignoreTestSources = true
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
 

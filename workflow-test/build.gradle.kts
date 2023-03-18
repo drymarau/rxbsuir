@@ -1,7 +1,8 @@
-@file:Suppress("DSL_SCOPE_VIOLATION")
+@file:Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 
 plugins {
     id("by.toggi.rxbsuir.kotlin.android.library")
+    alias(libs.plugins.molecule)
 }
 
 android {
@@ -15,6 +16,5 @@ dependencies {
     api(projects.workflow)
     api(kotlin("test"))
     api(libs.kotlinx.coroutines.test)
-    api(libs.molecule)
     api(libs.turbine)
 }

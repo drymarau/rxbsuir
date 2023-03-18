@@ -1,8 +1,8 @@
-@file:Suppress("DSL_SCOPE_VIOLATION")
+@file:Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 
 plugins {
     id("by.toggi.rxbsuir.kotlin.android.library")
-    alias(libs.plugins.kotlin.kapt)
+    id("by.toggi.rxbsuir.kotlin.kapt")
 }
 
 android {

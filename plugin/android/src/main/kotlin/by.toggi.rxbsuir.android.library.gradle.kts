@@ -17,11 +17,20 @@ android {
         sourceCompatibility = Android.sourceCompatibility
         targetCompatibility = Android.targetCompatibility
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Android.kotlinCompilerExtensionVersion
+    }
     testOptions {
         unitTests {
             isReturnDefaultValues = true
             isIncludeAndroidResources = true
         }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
 

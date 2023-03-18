@@ -2,7 +2,7 @@
 
 plugins {
     id("by.toggi.rxbsuir.kotlin.jvm")
-    alias(libs.plugins.kotlin.kapt)
+    id("by.toggi.rxbsuir.kotlin.kapt")
     alias(libs.plugins.kotlin.serialization)
 }
 

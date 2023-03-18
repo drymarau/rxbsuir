@@ -40,7 +40,7 @@ public suspend fun <Props, Output, Rendering> Workflow<Props, Output, Rendering>
         val rendering = render(p) { output -> outputFlow.tryEmit(Event.Output(output)) }
         Event.Rendering(rendering)
     }
-    merge(outputFlow, renderingFlow).test(timeout, validate)
+    merge(outputFlow, renderingFlow).test(timeout = timeout, validate = validate)
 }
 
 public suspend fun <Output, Rendering> ReceiveTurbine<Event<Output, Rendering>>.awaitOutput(): Output =
